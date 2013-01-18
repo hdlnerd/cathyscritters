@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension version="2.5" type="plugin" group="system">
+	<name>System - ShareThisBar</name>
+	<author>Dusanka ilic</author>
+	<creationDate>May 2012</creationDate>
+	<copyright>Copyright (C) 2012 Dusanka Ilic. All rights reserved.</copyright>
+	<license>GNU/GPLv3 http://www.gnu.org/licenses/gpl-3.0.html</license>
+	<authorEmail>gog27.mail@gmail.com</authorEmail>
+	<authorUrl>www.extensionshub.com</authorUrl>
+	<version>3.1</version>
+	<description>
+	ShareThisBar plugin enable your web site users to easily share your content and consequently boost your site promotion. 
+	</description>
+	<files>
+                <folder>images</folder>
+		<filename plugin="sharethisbar">sharethisbar.php</filename>
+                <filename>index.html</filename>	   
+	</files>
+	<config>
+	<fields name="params">
+	<fieldset name="basic">  
+	  <field name="position" type="text" default="" label="Bar position" description="Bar position in relation to the reference div. Enter left or right. If nothing is entered, default is left - bar is positioned on the left side of the reference div." />
+          <field name="swidth" type="text" default="" label="Bar Width" description="Width of the bar in pixels. If nothing is entered, default is 0, therefore width will be automatically defined." />
+          <field name="sheight" type="text" default="" label="Bar Height" description="Height of the bar in pixels. If nothing is entered, default is 0, therefore height will be automatically defined." />
+         <field name="corrtop" type="text" default="" label="Bar Top position Correction" description="Bar top position correction relative to the top of the browser window, in pixels. Enter positive number, eg. 70. If nothing is entered, default is 50, meaning maximum bar top scrolling position will be set 50 pixels from the top of the window." />
+          <field name="corrbottom" type="text" default="" label="Bar Bottom position Correction" description="Bar bottom position correction relative to the bottom of the browser window, in pixels. Enter negative number, eg. -10. If nothing is entered, default is 0, meaning maximum bar bottom scrolling position will be set 0 pixels distant from the bottom of the window." />
+          <field name="corleft" type="text" default="" label="Bar Left position Correction" description="Bar distance, in pixels, from the left edge of the browser window, when bar is on the left side. Enter positive number eg. 120. If nothing is entered, default is 100, meaning bar will be positioned 100 pixels from the left edge of the window." />
+          <field name="corright" type="text" default="" label="Bar Right position Correction" description="Bar distance, in pixels, from the right edge of the browser window when bar is on the right side. Enter negative number eg. -120. If nothing is entered, default is -100, meaning bar will be positioned 100 pixels from the right edge of the window." />
+          <field name="minresshow" type="text" default="" label="Minimum screen resolution to show the bar" description="Minimum screeen resolution to show the ShareThisBar, in pixels. Default is 1292 px. When the screen width is less than 1292 px the bar will not show up." />
+          <field name="spacer1" type="spacer" class="text" label="Appearance" />
+          <field name="spacer11" type="spacer" hr="true" />
+          <field name="backcolor" type="text" default="" label="Bar Background Color" description="If nothing is entered, default is: #fefefe. You can enter color you want in various css forms: #color-no, color-name." />
+          <field name="border" type="text" default="" label="Bar Border" description="If nothing is entered, default is: 1px solid #cbcbcb. Schema is :  border-thickness type color." />
+          <field name="boxshadow" type="text" default="" label="Box Shadow" description="If nothing is entered, default is: 1px 1px 3px #dbdbdb. Schema is . +/-hor.offset +/-vert.offset blur-radius color." />
+          <field name="borderradius" type="text" default="" label="Border Radius" description="If nothing is entered, default is: 5px 5px 5px 5px. You can enter only one number that represents radius of all corners or each corner can be specified separately: top-left, top-right, bottom-right, bottom-left." /> 
+          <field name="spreadword" type="radio" default="0" label="Show Spread the Word text" description="Show Spread the Word text">
+			<option value="0">No</option>
+			<option value="1">Yes</option>
+	  </field>
+          <field name="spreadwordpic" type="list" default="0" label="Spread the Word picture" description="Spread the Word picture.">
+			<option value="spread-the-word-1.gif">Please spread the word 1</option>
+                        <option value="spread-the-word-2.png">Share this post 1</option>
+                        <option value="spread-the-word-3.png">Please spread the word 2</option>
+                        <option value="spread-the-word-4.gif">Please share this 1</option>
+                        <option value="spread-the-word-sr-blue.gif">Delite ovo - plavo</option>
+                        <option value="spread-the-word-en-blue.gif">Please share this - blue</option>
+                        
+	  </field>
+          <field name="spacer2" type="spacer" class="text" label="Delay ShareThisBar box show up." />
+          <field name="spacer21" type="spacer" hr="true" />
+          <field name="fb_delay" type="text" default="" label="Delay ShareThisBar appearance" description="Delay ShareThisBar show up to give impression that social buttons appear in the approximately same time. If nothing is entered, default is 0 seconds. If zero is entered, buttons appearance depends on FB button appearance." />
+          <field name="spacer3" type="spacer" class="text" label="Allow/Disallow ShareThisBar transition effects and tune effect parameters." />
+          <field name="spacer31" type="spacer" hr="true" />
+          <field name="effectson" type="radio" default="1" label="Allow effects" description="If Yes transition effects are allowed.">
+			<option value="0">No</option>
+			<option value="1">Yes</option>
+	  </field>
+          <field name="transitioneff" type="list" default="0" label="Transition effect" description="Choose transition effect.">
+			<option value="0">linear</option>
+			<option value="1">bounce:in</option>
+			<option value="2">bounce:out</option>
+                        <option value="3">elastic:in</option>
+                        <option value="4">elastic:out</option>
+	  </field>
+          <field name="transitiondur" type="text" default="1000" label="Transition duration in ms" description="Default is 1000 ms." />
+          <field name="spacer4" type="spacer" class="text" label="ShareThisBar link and Google analytics." />
+          <field name="spacer41" type="spacer" hr="true" />
+          <field name="sharethisbarlink" type="radio" default="1" label="ShareThisBar link" description="You can remove the link to my site, ExtensionsHub.com, although I would be extremely grateful if you let it stay.">
+			<option value="0">No</option>
+			<option value="1">Yes</option>
+	  </field>
+	  <field name="googleanalyt" type="radio" default="0" label="Google Analytics for Social Buttons" description="Only if You have Google Analytics code on your web site, You can enable this option and track clicks on social buttons in Google Analytics, section Traffic Sources &gt; Social &gt; Social Plugins.">
+			<option value="0">No</option>
+			<option value="1">Yes</option>
+	  </field>
+          <field name="spacer5" type="spacer" class="text" label="Social Buttons Order.&lt;br /&gt;Note: If you omit Facebook share button you must enter value in &lt;br /&gt; &quot;Delay ShareThisBar appearance&quot; parameter for the ShareThisBar to show up." />
+          <field name="spacer51" type="spacer" hr="true" />
+          <field name="order_1" type="list" default="fb" label="Position 1" description="Choose social button on first position. Choose: &quot;empty&quot; if you want to omit social share button.">
+			<option value="fb">Facebook</option>
+			<option value="go">Google +</option>
+			<option value="tw">Twitter</option>
+                        <option value="li">LinkedIn</option>
+			<option value="pi">Pinterest</option>
+			<option value="no">empty</option>
+	  </field>
+          <field name="order_2" type="list" default="go" label="Position 2" description="Choose social button on second position. Choose: &quot;empty&quot; if you want to omit social share button.">
+			<option value="fb">Facebook</option>
+			<option value="go">Google +</option>
+			<option value="tw">Twitter</option>
+                        <option value="li">LinkedIn</option>
+			<option value="pi">Pinterest</option>
+			<option value="no">empty</option>
+	  </field>
+          <field name="order_3" type="list" default="tw" label="Position 3" description="Choose social button on third position. Choose: &quot;empty&quot; if you want to omit social share button.">
+			<option value="fb">Facebook</option>
+			<option value="go">Google +</option>
+			<option value="tw">Twitter</option>
+                        <option value="li">LinkedIn</option>
+			<option value="pi">Pinterest</option>
+			<option value="no">empty</option>
+	  </field>
+          <field name="order_4" type="list" default="li" label="Position 4" description="Choose social button on fourth position. Choose: &quot;empty&quot; if you want to omit social share button.">
+			<option value="fb">Facebook</option>
+			<option value="go">Google +</option>
+			<option value="tw">Twitter</option>
+                        <option value="li">LinkedIn</option>
+			<option value="pi">Pinterest</option>
+			<option value="no">empty</option>
+	  </field>
+          <field name="order_5" type="list" default="pi" label="Position 5" description="Choose social button on fifth position. Choose: &quot;empty&quot; if you want to omit social share button.">
+			<option value="fb">Facebook</option>
+			<option value="go">Google +</option>
+			<option value="tw">Twitter</option>
+                        <option value="li">LinkedIn</option>
+			<option value="pi">Pinterest</option>
+			<option value="no">empty</option>
+	  </field>
+          <field name="spacer6" type="spacer" class="text" label="Facebook parameters." />
+          <field name="spacer61" type="spacer" hr="true" />
+          <field name="fb_locale" type="text" default="en_US" label="Facebook Locale" description="Facebook Locale eg. en_US or sr_RS" />
+          <field name="fb_appkey" type="text" default="" label="Facebook app key" description="Facebook app key if you obtained one." /> 
+          <field name="fb_datawidth" type="text" default="" label="Facebook button data-width" description="Facebook button data-width. Default is 62px. If your locale Like phrase is too wide, here you can adjust width of the button containing text Like." />
+          <field name="hreffb" type="text" size="60" default="" label="Facebook href parameter" description="If blank, href is current url or you can enter url, like http://www.yoursite.com" />
+          <field name="fb_xmlns" type="radio" default="0" label="Facebook xmlns schemas" description="Include Facebook xmlns schemas xmlns:fb and xmlns:og.">
+			<option value="0">No</option>
+			<option value="1">Yes</option>
+	  </field>
+	  <field name="fb_ogimg" type="text" size="60" default="" label="Facebook og:image meta tag" description="Image showing on the FB wall of your fans. Enter web address of your logo in format http://www.yoursite.com/.../yourimage.jpg" /> 
+          <field name="spacer7" type="spacer" class="text" label="Google parameters." />
+          <field name="spacer71" type="spacer" hr="true" />
+          <field name="hrefgoogle" type="text" size="60" default="" label="Google href parameter" description="If blank, href is current url or you can enter url, like http://www.yoursite.com" />
+          <field name="google_loc" type="text" default="en-US" label="Google Plus Locale" description="Google Plus locale eg. en-US" />
+          <field name="spacer8" type="spacer" class="text" label="Twitter parameters." />
+          <field name="spacer81" type="spacer" hr="true" />
+	  <field name="hreftwitter" type="text" size="60" default="" label="Twitter href parameter" description="If blank, href is current url or you can enter url, like http://www.yoursite.com" />  
+          <field name="twitter_locale" type="text" default="en" label="Twitter Locale" description="Twitter Locale eg. en or sr" />
+          <field name="twitter_datarelated" type="text" default="" label="Related Accounts" description="You can suggest accounts for a user to follow once they have sent a Tweet using your Tweet Button. You can add your own summary of a related user by adding some text after their screen name, separated using a colon. For example, to add a summary: The ShareThisBar extension - to the related user @dusankai you would use: dusankai:The ShareThisBar extension. You can enter more than one account eg. dusankai,johnm" />
+          <field name="twitter_text" type="text" default="" label="data-text parameter" description="eg. Check this out ... Default is content of the title tag." />      
+          <field name="twitter_via" type="text" default="" label="data-via parameter" description="Your screen name." />       
+	  <field name="spacer9" type="spacer" class="text" label="LinkedIn parameters." /> 
+          <field name="spacer91" type="spacer" hr="true" />
+	  <field name="hreflinkedin" type="text" size="60" default="" label="LinkedIn href parameter" description="If blank, href is current url or you can enter url, like http://www.yoursite.com" />  
+	  <field name="spacer10" type="spacer" class="text" label="Pinterest parameters - all must be entered for the pinterest share button to show up.&lt;br /&gt;Urls must start with http://" /> 
+          <field name="spacer101" type="spacer" hr="true" />
+	  <field name="hrefpinterest" type="text" size="60" default="" label="Url of the page to pin" description="Enter url of the page to pin, like http://www.yoursite.com/" />  
+	  <field name="picturepinterest" type="text" size="60" default="" label="Url of the image to pin" description="Enter url of the image to pin, like http://www.yoursite.com/imagefolder/myimage1" />
+	  <field name="descpinterest" type="text" size="60" default="" label="Description of the page to be pinned" description="Enter description of the page to be pinned" />           
+	</fieldset>
+	</fields>
+	</config>
+</extension>
