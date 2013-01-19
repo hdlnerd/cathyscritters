@@ -1,0 +1,116 @@
+@charset "utf-8";
+/* CSS Document Copyright © */
+body.-Dark,
+body.-Dark .module_ms1 .pad3,
+body.-Dark .module_ms2 .pad3,
+body.-Dark .module_ms3 .pad3{
+	background-color: black;
+}
+body.-Dark .module_ms1 .pad3{
+	border: 2px solid #666666;
+}
+body.-Dark .module_ms2 .pad3{
+	border: 0 none;
+}
+body.-Dark .module_ms3 .pad3{
+	border-radius: 10px;
+	box-shadow: 0 0 10px #666 inset;
+}
+body.-Dark div.content-wrapp{
+	background-image: url(../images/bg-content-wrapp.jpg);
+	background-color: black;
+}
+body.-Dark #main{
+	background-color: black;
+	border-radius: 10px;
+}
+body.-Dark .readmore a,body.-Dark .readon a{
+	background-color: #666;
+	border-right:2px ridge #666;
+	border-bottom:2px ridge #666;
+	color:white; 
+}
+body.-Dark h3{
+	color: white;
+}
+body.-Dark div.categories-list li{
+	box-shadow: 0 0 10px #666 inset;
+	background-color: transparent;
+	border: 0 none;
+}
+body.-Dark div.categories-list li:hover,
+body.-Dark div.categories-list li li{
+    background-image: url(../images/bg-content-wrapp.jpg);
+}
+body.-Dark div.categories-list li li:hover{
+	box-shadow: 0 0 20px #666 inset;
+}     
+body.-Dark div.categories-list li:hover li{
+	background-image: none;
+	background-color: black;
+}
+body.-Dark #sidebar1 a:hover,
+body.-Dark #sidebar2 a:hover{
+	color: white;
+}
+body.-Dark div.cat-children li{
+	border: 0;
+	background-color: #333;
+}
+body.-Dark div.cat-children li:hover{
+	background-color:#000;	
+}
+body.-Dark #menu{
+	background: rgb(51,51,51); /* Old browsers */
+	background: -moz-linear-gradient(top,  rgba(102,102,102,1) 25%, rgba(51,51,51,1) 81%, rgba(51,51,51,1) 84%, rgba(51,51,51,1) 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(25%,rgba(102,102,102,1)), color-stop(81%,rgba(51,51,51,1)), color-stop(84%,rgba(51,51,51,1)), color-stop(100%,rgba(51,51,51,1))); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top,  rgba(102,102,102,1) 25%,rgba(51,51,51,1) 81%,rgba(51,51,51,1) 84%,rgba(51,51,51,1) 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top,  rgba(102,102,102,1) 25%,rgba(51,51,51,1) 81%,rgba(51,51,51,1) 84%,rgba(51,51,51,1) 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top,  rgba(102,102,102,1) 25%,rgba(51,51,51,1) 81%,rgba(51,51,51,1) 84%,rgba(51,51,51,1) 100%); /* IE10+ */
+	background: linear-gradient(top,  rgba(102,102,102,1) 25%,rgba(51,51,51,1) 81%,rgba(51,51,51,1) 84%,rgba(51,51,51,1) 100%); /* W3C */
+	-ms-filter: "progid:DXImageTransform.Microsoft.gradient"( startColorstr='#666666', endColorstr='#333333',GradientType=0 ); /* IE6-9 */
+	border: 1px solid #666;
+}
+body.-Dark #menu ul li{
+	border-left: 1px solid #888;
+}
+body.-Dark #menu ul li:hover{
+	background-color: #666;
+	border-top: 1px solid #666;
+}
+body.-Dark #menu ul li:hover a{
+	color:white;
+}
+body.-Dark #menu ul li ul li:hover{
+	background-color: transparent;
+}
+body.-Dark #menu ul li ul li{
+	border-left: 0; 
+	border-top: 1px solid #666;
+}
+body.-Dark #menu ul ul li a, body.-Dark #menu ul ul li span{
+	color: white;
+}
+body.-Dark #menu ul li ul {
+	background-color: #333;
+	border-bottom:1px solid #666;
+	border-left: 1px solid #666;
+	border-right:1px solid #666; 
+}
+body.-Dark #menu ul li ul li:hover{
+	box-shadow:0 5px 5px -5px white;
+	border-top: 1px solid #666;
+}
+body.-Dark #menu ul li ul li:first-child{
+	border-top:0;
+	border-left:0;
+}
+body.-Dark blockquote{
+	background-image:url(../images/quote_up.png);
+	
+}
+body.-Dark blockquote p{
+	background-image:url(../images/quote_down.png);
+    margin:0 4px 4px 0px;
+    padding-bottom: 10px;
+}

@@ -1,0 +1,44 @@
+body .shackSliderslider {
+	border-radius:20px;
+	margin: 0 auto;
+	background-image: none;     
+	background-color: transparent;
+}
+body .shackSliderslider *{
+	border-radius:20px;
+}
+body .shackSliderslider #sliderContainerslider,
+body .shackSliderslider #sliderContainer {
+	box-shadow: 0px 0px 10px #bbb;
+	border: 1px solid #aaa;
+}
+
+body .shackSliderslider .slideTitle {
+    color: #333333;
+    font-size: 13px;
+    border-radius:0 0 0 0;
+    margin: 16px 0 0 0;
+    overflow: hidden;
+}
+
+body .slideTitle h3{
+	font-size: 30px;
+	color:white;
+	font-weight:bold;
+	text-transform: capitalize;
+	margin: 1% 0;
+	padding: 0;
+	float: left;
+	display: block;
+	width: 30%
+}
+body .slideTitle p{
+	float: left;
+	display: block;
+	width: auto;
+	width: 70%;
+}
+#sliderNav {
+   margin: 5px 0 0 0;
+  
+}
