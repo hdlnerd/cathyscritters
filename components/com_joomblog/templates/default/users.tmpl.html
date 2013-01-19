@@ -1,0 +1,93 @@
+<?php
+/**
+* JoomBlog component for Joomla
+* @version $Id: users.tmpl.html 2011-03-16 17:30:15
+* @package JoomBlog
+* @subpackage users.tmpl.html
+* @author JoomPlace Team
+* @Copyright Copyright (C) JoomPlace, www.joomplace.com
+* @license GNU/GPL http://www.gnu.org/copyleft/gpl.html
+*/
+
+defined('_JEXEC') or die('Restricted access');
+global $_JB_CONFIGURATION;
+$user = $man[0];
+$bloggers = $recent[0];
+
+//check if user is blogger
+$db			=& JFactory::getDBO();
+$query = "SELECT COUNT(*) FROM #__joomblog_posts WHERE `created_by`='" . $user->user_id . "'";				
+$db->setQuery($query);
+$check_user_posts = $db->loadResult();
+
+if ($user->site){
+	$user->site = (preg_match("/http:\/\//", $user->site, $match)) ? $user->site : "http://".$user->site;
+}
+if ($check_user_posts != 0)
+{?>
+
+<div class="profile" id="profile-<?php echo $user->user_id;?>">
+	<div class="profile-head">
+        <?php if ($_JB_CONFIGURATION->get('avatar')!= "none"){?>
+		<div class="profile-avatar">
+            <img class="avatar" alt="<?php echo $user->name;?>" src="<?php echo $user->src;?>">
+        </div>
+		<?php }else 
+		{
+		?>
+		<div class="profile-avatar">
+            <img class="avatar" alt="<?php echo $user->name;?>" width="64" src="<?php echo JURI::root().'components/com_joomblog/images/user.png';?>">
+        </div>
+		<?php
+		} ?>  
+                <div class="profile-info tablecell">
+                    <h3 class="profile-title rip">
+                        <a href="<?php echo $user->link;?>"><?php if ($_JB_CONFIGURATION->get('useFullName')) 
+                        { 
+                        	echo $user->name;
+                        }	
+                        else echo $user->username; ?></a>
+                    </h3>
+					<?php if ($user->site){ ?>
+                    <div class="profile-connect">
+                        <a class="ico link-globe" target="_blank" href="<?php echo $user->site;?>"><?php echo $user->site;?></a> 
+					</div>
+					<?php } ?>
+					<?php if ($user->description){ ?>
+                    <div class="profile-bio"><?php echo $user->description;?></div>
+					<?php } ?>
+                </div><!--end: .profile-info-->
+    </div>
+	<div class="profile-main">
+	<h5 class="mbm"><?php echo JText::_('COM_JOOMBLOG_RECENT_POST');?></h5>
+	<ul class="post-list ulrest">
+<?php 
+if (!empty($bloggers))
+{
+	foreach($bloggers as $blogger)
+	{
+		$blogLink = JRoute::_('index.php?option=com_joomblog&blogid='.$blogger->bid.'&Itemid='.$Itemid.'&view=blogger');
+		$articleLink = JRoute::_('index.php?option=com_joomblog&show='.$blogger->id.'&Itemid='.$Itemid);
+?>
+	<li>
+	<h3 class="recent-entry">
+		<a href="<?php echo $blogLink;?>"><?php echo $blogger->btitle;?></a> <span class="blog-sep">→</span> <a href="<?php echo $articleLink; ?>" class="blog"><?php echo $blogger->title?></a>
+	</h3>
+	<div class="blogger-tags"><span><?php echo JText::_('COM_JOOMBLOG_LISTTAGS').$blogger->categories;?></span></div>
+	<small class="created-bgk"><?php echo $blogger->created;?></small>
+	<small class="joomBlog-category-bgk"><?php if( $categoryDisplay ){echo ($blogger->multicats?JText::_('COM_JOOMBLOG_CATEGORIES'):JText::_('COM_JOOMBLOG_CATEGORY')).$blogger->jcategory; }?></small>
+	</li>
+<?php 
+	}
+?>
+	</ul>
+	
+	<small class="show-all"><a href="<?php echo JRoute::_('index.php?option=com_joomblog&user='.$user->username.'&Itemid='.$Itemid);?>"><?php echo JText::_('COM_JOOMBLOG_SHOW_ALL');?> (<?php echo $totalArticle;?>)</a></small>
+<?php	
+} else {
+	echo $user->name.' '.JText::_('COM_JOOMBLOG_HAS_NOT_CREATED_ANY_BLOG_POST');
+}
+?>
+	</div>
+</div>
+<?php } ?>

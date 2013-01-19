@@ -1,0 +1,208 @@
+﻿<?php
+/**
+* JoomBlog component for Joomla
+* @version $Id: entry.tmpl.html 2011-03-16 17:30:15
+* @package JoomBlog
+* @subpackage entry.tmpl.html
+* @author JoomPlace Team
+* @Copyright Copyright (C) JoomPlace, www.joomplace.com
+* @license GNU/GPL http://www.gnu.org/copyleft/gpl.html
+*/
+
+$e = $entry;
+global $_JB_CONFIGURATION;
+if ($_JB_CONFIGURATION->get('useNewYearStyleh3'))
+	{
+		$e['text'] = str_replace('<h3>','<h3 id="h3-new-year">',$e['text']);
+	}
+?>
+<!-- Entry -->
+
+<a name="startOfPage" id="startOfPage"></a>
+<div class="postContent" id="post-<?php echo $e['id']; ?>">
+	<!-- Display onBeforeDisplayContent mambots -->
+	<?php
+		if(isset($entry['beforeContent']) && $entry['beforeContent'])
+		{
+			echo $entry['beforeContent'];
+		}
+	?>
+	<!-- End display -->
+	<!-- Post Top Summary -->
+	
+	<h2 class="joomBlog-entry-title">
+		<a class="blog" href="<?php echo $e['permalink']; ?>"><?php echo $e['title']; ?></a> 
+		<?php
+          if($entry['created_by'] == $userId){
+            echo $entry['editLink'];
+          }
+        ?>
+	</h2>
+
+    <?php jbShowSocialButtons($entry, 'top'); ?>
+    <!-- Post Teaser Text -->
+    <div class="postContent-text">
+		<div class="joomBlog-content">
+			<?php
+                echo JHTML::_('content.prepare', $e['text']);
+
+                // Meta data for open graph
+				
+				$fbadmin = $_JB_CONFIGURATION->get('fbadmin');
+				$fbappid = $_JB_CONFIGURATION->get('fbappid');
+				$permalink = $e['permalink'];
+				$meta_title = $e['title'];
+				$metadata_json = json_decode($e['metadata']);
+				$page_image = $metadata_json->page_image;
+				$meta_description = $metadata_json->ogdesc;
+				$meta_author = 'http://' . $_SERVER['HTTP_HOST'] . $e['authorLink'];
+				$meta_articletags = array ();
+				$publish_time_array = explode(" ", $e['publish_up']); 
+				$meta_articlepublish = $publish_time_array[0];
+				foreach ($e['tagobj'] as $article_tag)
+				{
+					array_push ($meta_articletags, $article_tag['name']);
+				}
+				$default_blogpost_image = $_JB_CONFIGURATION->get('page_image');
+				if (empty($page_image) AND !empty($default_blogpost_image))
+				{
+				$page_image = JURI::base().'images/'.$default_blogpost_image ;
+				}
+				if (!empty($page_image))
+				{
+					list($width, $height) = @getimagesize($page_image);
+				}
+				if ($width > 199 AND $height > 199)
+				{
+					$meta_image = $page_image;
+				}
+				else
+				{
+					$meta_image = JURI::root() . 'media/com_joomblog/images/spacer.png';	
+				}
+				$meta_updated_time = $e['modified'];
+				
+				function getMetatags($permalink, $meta_title, $meta_image, $meta_description, $meta_updated_time, $fbadmin, $fbappid, $meta_author, $meta_articletags, $meta_articlepublish) {
+					if ($fbadmin !=='') $metatags = "<meta property=\"fb:admins\" content=\"$fbadmin\" />\n";
+					if ($fbappid !=='') $metatags .= "<meta property=\"fb:app_id\" content=\"$fbappid\" />\n";
+					$metatags .= "<meta property=\"og:url\" content=\"$permalink\" />\n";
+					$metatags .= "<meta property=\"og:title\" content=\"$meta_title\" />\n";
+					$metatags .= "<meta property=\"og:image\" content=\"$meta_image\" />\n";
+					$metatags .= "<meta property=\"og:description\" content=\"$meta_description\" />\n";
+					$metatags .= "<meta property=\"og:updated_time\" content=\"$meta_updated_time\" />\n";
+					$metatags .= "<meta property=\"og:type\" content=\"article\" />\n";
+					$metatags .= "<meta property=\"article:author\" content=\"$meta_author\" />\n";
+					$metatags .= "<meta property=\"article:published_time\" content=\"$meta_articlepublish\" />\n";
+					if (!empty($meta_articletags))
+					{
+						for ($i = 0; $i < count($meta_articletags); $i++)
+						  {
+						    $metatags .= "<meta property=\"article:tag\" content=\"$meta_articletags[$i]\" />\n";
+						  } 
+					}
+					return $metatags;
+				}
+				
+                $doc = JFactory::getDocument();
+    			$doc->addCustomTag(getMetatags($permalink, $meta_title, $meta_image, $meta_description, $meta_updated_time, $fbadmin, $fbappid, $meta_author, $meta_articletags, $meta_articlepublish));
+           
+			?>
+		</div>
+		
+		<?php jbShowSocialButtons($entry, 'bottom'); ?>
+		
+		<div id="nav-panel">
+			<ul class="blog-navi">
+				<li class="entry-prev">
+					<?php echo $prev;?>
+				</li>
+ 
+				<li class="entry-next">
+					<?php echo $next;?>
+				</li>
+			</ul>
+            <?php if ($_JB_CONFIGURATION->get('showRandomPost') == '1')
+			{ ?>
+            <ul>
+                <li class="entry-random">
+                    <?php
+                        $query = '
+                            SELECT *
+                            FROM #__joomblog_posts
+                            INNER JOIN #__assets ON #__assets.id = #__joomblog_posts.asset_id
+                            WHERE #__joomblog_posts.state = "1"
+                            AND #__assets.name LIKE "%com_joomblog%"
+                        ';
+                        $db = JFactory::getDbo();
+                        $db->setQuery($query);
+                        $result = $db->loadResultArray();
+                        $random_id = $result[array_rand($result)];
+						$random_path = 'http://' . $_SERVER['HTTP_HOST'] . '/blog/index.php?option=com_joomblog&show=' . $random_id . '&Itemid=155';
+						$random = '<input type="button" class="jbbutton" value="'. JText::_('COM_JOOMBLOG_RANDOM_POST') .'" onclick="document.location=\''. $random_path .'\'">';
+                        echo $random; 
+                    ?>
+                </li>
+            </ul>
+            <?php } ?>
+		</div>
+		<div class="clear"></div>
+		<?php if($_JB_CONFIGURATION->get('ShowUntaggedWithoutTags')) { ?>
+		<div class="joomBlog-tagslinks"><?php echo $e['categories']; ?></div>
+		<?php } else if ($e['categories']!="<em>". JText::_('COM_JOOMBLOG_BLOG_UNTAGGED') ."</em>&nbsp;"){?>	
+		<div class="joomBlog-tagslinks"><?php echo $e['categories']; ?></div>
+		<?php } ?>	
+		<div class="joomBlog-bottom">
+
+			<div class="joomBlog-votes">
+				<a onclick="sendVote(<?php echo $e['id']; ?>,-1)" href="javascript:void(0)" class="vote_down"></a>
+				<span class="sumvote <?php if($e['sumvote']>0){ echo "green"; }elseif($e['sumvote']<0){ echo "red"; } ?>"><?php echo $e['sumvote']; ?></span>
+				<a onclick="sendVote(<?php echo $e['id']; ?>,1)" href="javascript:void(0)" class="vote_up"></a>
+			</div>
+
+			<div class="joomBlog-dateposted"><?php echo $e['createdFormatted']; ?></div>
+			
+			<?php if ($_JB_CONFIGURATION->get('showUserLink')) { ?>
+			<div class="joomBlog-authoricon"><a href="<?php echo $e['authorLink']; ?>"><?php echo $e['author']; ?></a></div>
+			<?php } ?>
+			
+			<?php if($entry['addPosition']==1) echo $add; ?>
+
+
+			<div class="printicon">
+			<?php
+			  if($enablePrintLink){
+					echo jbGetPrintLink($entry['id'],jbGetItemId());
+			  }
+			?>
+			</div>
+			<div class="pdficon">
+			<?php
+			  if($enablePdfLink){
+				echo jbGetPDFLink($entry['id'],jbGetItemId());
+			  }
+			?>
+			</div>
+			
+		</div> 
+      <!-- Post Footer -->						
+    </div>
+    <div class="clear"></div>
+    <div>
+        <?php echo $entry['comments']; ?>
+    </div>
+    <!-- Display onAfterDisplayContent mambots -->
+    <?php
+      if(isset($entry['afterContent']) && $entry['afterContent']){
+        echo $entry['afterContent'];
+      }
+    ?>
+</div>
+<span class="article_separator">&nbsp;</span>
+<!-- End display -->
+<!-- Post Divider -->
+<hr class="postEntry-divider" />
+
+
+
+
+

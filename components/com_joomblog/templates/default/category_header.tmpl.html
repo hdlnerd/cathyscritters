@@ -1,0 +1,32 @@
+<?php
+/**
+* JoomBlog component for Joomla
+* @version $Id: category_list.tmpl.html 2011-03-16 17:30:15
+* @package JoomBlog
+* @subpackage category_list.tmpl.html
+* @author JoomPlace Team
+* @Copyright Copyright (C) JoomPlace, www.joomplace.com
+* @license GNU/GPL http://www.gnu.org/copyleft/gpl.html
+*/
+
+defined('_JEXEC') or die('Restricted access');
+global $_JB_CONFIGURATION;
+$category = $category[0];
+
+?>
+<div id="categories">
+<div class="category-item" id="item-<?php echo $category->id;?>">
+	<div class="category-head-list">
+        <div class="category-avatar">
+            <img alt="<?php echo $category->title;?>" src="<?php echo JURI::root();?>components/com_joomblog/templates/default/images/document_pencil_64.png">
+        </div>
+        
+        <div class="category-info tablecell">
+            <h3 class="category-title rip">
+                <a href="<?php echo $category->link;?>"><?php echo $category->title;?></a>
+            </h3>
+		</div>
+        <div class="category-count"><?php echo $category->count;?>&nbsp;<?php echo JText::_('COM_JOOMBLOG_POSTS_IN_CAT');?></div>
+	</div>
+</div>
+</div>

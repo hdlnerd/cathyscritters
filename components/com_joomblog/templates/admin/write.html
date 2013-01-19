@@ -1,0 +1,275 @@
+<?php
+/**
+ * JoomBlog component for Joomla
+ * @version $Id: write.html 2011-03-16 17:30:15
+ * @package JoomBlog
+ * @subpackage write.html
+ * @author JoomPlace Team
+ * @Copyright Copyright (C) JoomPlace, www.joomplace.com
+ * @license GNU/GPL http://www.gnu.org/copyleft/gpl.html
+ */
+
+$editor = &JFactory::getEditor();
+//$editor = $editor->getInstance('tinymce');
+
+?>
+
+<div id="joomBlog-wrap" class="edit">
+	<script language="javascript" type="text/javascript">
+		function sendForm(pressbutton) {
+			var form = document.adminForm;
+			if (pressbutton == 'cancelblog') {
+				submitform( pressbutton );
+				return;
+			}
+
+			var text = <?php echo $this->vars['use_mce'] == 'true' ? $editor->getContent('fulltext') :
+"form.fulltext.value"; ?>;
+			
+			if ( form.title.value == "" ) {
+				alert("<?php echo JText::_('COM_JOOMBLOG_ALERT_BLOG_MUST_HAVE_A_TITLE', true); ?>");
+				form.title.focus();
+			}else
+			if ( form.catid.value == "" ) {
+				alert("<?php echo JText::_('COM_JOOMBLOG_ALERT_BLOG_MUST_HAVE_A_CATS', true); ?>");
+			}
+			else 
+			if (form.blog_id.value =="")
+			{
+				alert("<?php echo JText::_('COM_JOOMBLOG_ALERT_POST_SELECT_BLOG', true); ?>");
+			}
+			
+			/*
+			<?php
+if ($this->vars['userCreateTag']) { ?>
+			 else if ( form.tags.value == "" ) {
+				alert("<?php echo JText::_('COM_JOOMBLOG_ALERT_BLOG_MUST_HAVE_A_TAGS', true); ?>");
+				form.tags.focus();
+			} 
+			<?php }
+?>*/
+			else			
+			if ( text == "" ) {
+				alert("<?php echo JText::_('COM_JOOMBLOG_ALERT_BLOG_MUST_HAVE_A_CONTENT', true); ?>");
+			} else {
+				<?php
+echo $this->vars['use_mce'] == 'true' ? $editor->save('fulltext') : "";
+?>
+				submitform(pressbutton);
+			}
+		}
+	</script>
+
+	<div class="formelm-buttons">
+	  <input type="button" onclick="sendForm('saveblog')" id="save" class="jbbutton" value="<?php echo
+JText::_('COM_JOOMBLOG_FORM_SAVE'); ?>" />
+	  <input type="button" onclick="sendForm('cancelblog')" id="cancel" class="jbbutton" value="<?php echo
+JText::_('COM_JOOMBLOG_FORM_CANCEL'); ?>" />
+	</div>
+	<form action="<?php echo JRoute::_('index.php?option=com_joomblog&task=write&id=' .
+$this->vars['id'] . '&Itemid=' . jbGetItemId(), false) ?>" method="post" name="adminForm" id="adminForm">
+    <?php
+foreach ($this->vars['validation_msg'] as $msg) {
+    echo '<div class="error">' . $msg . '</div>';
+}
+?>
+		
+					<fieldset>
+						<legend><?php echo JText::_('COM_JOOMBLOG_FORM_DETAILS'); ?></legend>
+						
+						<div class="formelm">
+									<label for="title" width="100">
+										<?php echo JText::_('COM_JOOMBLOG_FORM_TITLE'); ?>:
+									</label>
+
+									<input type="text" class="inputbox" size="60" name="title" value="<?php echo
+$this->vars['title']; ?>" />
+								</div>
+							
+							<?php
+if ($this->vars['publishRights']) {
+?>
+							<div class="formelm">
+                  <label for="published" width="100">
+									<?php echo JText::_('COM_JOOMBLOG_FORM_PUBLISHED'); ?>:
+                  </label>
+									<?php echo $this->vars['state']; ?>
+								</div>
+							<?php
+}
+?>
+							
+            <div class="formelm">
+                <label for="publish_up" width="100">
+                    <?php echo JText::_('COM_JOOMBLOG_FORM_PUBLISH_DATE'); ?>:
+				</label>
+				<?php echo JHTML::calendar(date('Y-m-d H:i', strtotime($this->vars['publish_up'])),
+'publish_up', 'publish_up', '%Y-%m-%d %H:%M', ''); ?>
+            </div>
+
+            <div class="formelm">
+            	<label for="publish_down" width="100">
+            		<?php echo JText::_('COM_JOOMBLOG_FORM_EXPIRE_DATE'); ?>:
+            	</label>
+            	<?php
+                    if ($publish_down == '' or $publish_down == '0000-00-00 00:00:00') 
+                    {
+                    	echo JHTML::calendar('', 'publish_down', 'publish_down', '%Y-%m-%d %H:%M', '');
+                    }
+                    else
+                    {
+                    	echo JHTML::calendar(date('Y-m-d H:i', strtotime($this->vars['publish_down'])),
+                        'publish_down', 'publish_down', '%Y-%m-%d %H:%M', '');
+                	}
+                ?>
+            </div>
+						<div class="formelm">
+							<label for="title" width="100">
+										<?php echo JText::_('COM_JOOMBLOG_FORM_SELECT_A_BLOG'); ?>:
+							</label>
+							<?php
+//echo $this->vars['blogs'];
+echo $this->vars['blogslist'];
+?>	
+						</div>
+						<div class="formelm">
+									<label for="title" width="100">
+										<?php echo JText::_('COM_JOOMBLOG_FORM_SELECT_A_CAT'); ?>:
+									</label>
+									<?php //echo $this->vars['cats'];
+
+echo $this->vars['catform']['input'];
+?>
+              </div>
+							<?php if ($this->vars['userCreateTag']) { ?>
+							<div class="formelm">
+									<label for="title" width="100">
+										<?php echo JText::_('COM_JOOMBLOG_FORM_TAGS'); ?>:
+									</label>
+									<textarea name="tags" cols="40" rows="1" ><?php echo $this->vars['tags']; ?></textarea>
+              </div>
+							<?php } ?>
+							<?php if ($this->vars['jcDashboard']) { ?>
+                        <div class="formelm-area">
+                          <label for="title" width="100">
+                            <?php echo JText::_('COM_JOOMBLOG_DASHBOARD_COMMENTS'); ?>:
+                          </label>
+                          <input name="jcState" type="radio" <?php if ($jcState ==
+'enabled')
+        echo 'checked="checked"'; ?> value="enabled" />
+                           <?php echo JText::_('COM_JOOMBLOG_DASHBOARD_ENABLE_COMMENTS'); ?><br />
+                          <input name="jcState" type="radio" <?php if ($jcState ==
+'disabled')
+        echo 'checked="checked"'; ?>value="disabled" />
+                           <?php echo JText::_('COM_JOOMBLOG_DASHBOARD_DISABLE_COMMENTS'); ?><br />
+                          <input name="jcState" type="radio" <?php if ($jcState ==
+'default')
+        echo 'checked="checked"'; ?> value="default" />
+                           <?php echo JText::_('COM_JOOMBLOG_DASHBOARD_DEFAULT_COMMENTS'); ?><br />
+                        </div>
+              <?php } ?>
+							
+							<div class="formelm">
+                  <label for="readmoretext" width="100">
+                    <?php echo JText::_('COM_JOOMBLOG_READMORE_TEXT'); ?>:
+									</label>
+									<input type="text"  class="inputbox" size="60" name="alternative_readmore" value="<?php echo
+$this->vars['alternative_readmore']; ?>" />
+              </div>
+							
+					</fieldset>
+				
+					<fieldset>
+						<legend><?php echo JText::_('COM_JOOMBLOG_FORM_CONTENT'); ?></legend>
+						<div class="formelm">
+						<?php
+// parameters : areaname, content, width, height, cols, rows
+/*$params = array('article');
+if(!$this->vars['imageUpload']){
+$params[] = 'image';
+}*/
+echo $this->vars['use_mce'] == 'true' ? $editor->display('fulltext', $this->
+    vars['fulltext'], '100%', '400', '75', '20', count($this->vars['editorsxtd']) >
+    0 ? $this->vars['editorsxtd'] : true, null, $this->vars['assets'], $this->vars['author']) :
+    '<textarea  style="width: 100%; height: 400px;" rows="20" cols="75" name="fulltext" id="text">' .
+    $this->vars['fulltext'] . '</textarea>';
+?>
+						</div>
+					</fieldset>						
+
+					<fieldset>
+						<legend><?php echo JText::_('COM_JOOMBLOG_PRIVACY'); ?></legend>
+						<div class="formelm">
+							<label style="float:left" for="title" width="100">
+                 				 <?php echo JText::_('COM_JOOMBLOG_PRIVACY_POSTAV_LABEL'); ?>:
+                			</label>
+						<?php echo $this->vars['postprivacy']; ?>
+						<div style="clear:both"></div>
+						</div>
+						<div class="formelm">
+						<label style="float:left"  for="title" width="100">
+                 				 <?php echo JText::_('COM_JOOMBLOG_PRIVACY_COMMENT_LABEL'); ?>:
+                			</label>
+						<?php echo $this->vars['commentprivacy']; ?>
+						<div style="clear:both"></div>
+						</div>
+					</fieldset>
+					
+					<fieldset>
+						<legend><?php echo JText::_('JFIELD_LANGUAGE_LABEL'); ?></legend>
+						<div class="formelm">
+						<?php echo $this->vars['form']['label']; ?>
+						<?php echo $this->vars['form']['input']; ?>
+						</div>
+					</fieldset>
+					
+					<fields name="metadata">
+					<fieldset name="metadata" label="COM_JOOMBLOG_FIELDSET_METADATA">
+						<legend><?php echo JText::_('COM_JOOMBLOG_FORM_META_PARAMETERS'); ?></legend>
+						<div class="formelm">
+                			<label for="title" width="100">
+                 			 <?php echo JText::_('COM_JOOMBLOG_FORM_METAKEY'); ?>:
+                			</label>
+                			<textarea class="meta_key" style="height:60px;" name="metakey" rows="3" cols="40" ><?php echo $this->
+							vars['metakey']; ?></textarea>
+           				</div>
+							
+						<div class="formelm">
+                			<label for="title" width="100">
+                  			 <?php echo JText::_('COM_JOOMBLOG_FORM_METADESC'); ?>:
+               				</label>
+                			<textarea class="meta_description" style="height:60px;" name="metadesc" cols="40" rows="3" ><?php echo $this->
+							vars['metadesc']; ?></textarea>
+						</div>
+						<div class="formelm">
+                			<label for="title" width="100">
+                  			 <?php echo JText::_('COM_JOOMBLOG_FORM_META_IMAGE'); ?>:
+               				</label>
+               				<input type="text" class="inputbox" size="60" name="page_image" value="<?php echo
+							$this->vars['page_image']; ?>" />
+						</div>
+						<div class="formelm">
+                			<label for="title" width="100">
+                  			 <?php echo JText::_('COM_JOOMBLOG_OG_DESC'); ?>:
+               				</label>
+                			<textarea class="og_description" style="height:60px;" name="ogdesc" cols="40" rows="3" ><?php echo $this->
+							vars['ogdesc']; ?></textarea>
+						</div>
+					</fieldset>
+					</fields>
+				
+
+		<input type="hidden" name="id" value="<?php echo $this->vars['id']; ?>" />
+		<input type="hidden" name="option" value="com_joomblog" />
+		<input type="hidden" name="task" value="write" />
+		<input type="hidden" name="Itemid" value="<?php echo jbGetItemId(); ?>" />
+		
+		<div class="formelm-buttons">
+		 <input type="button" onclick="sendForm('saveblog')" id="save" class="jbbutton" value="<?php echo
+JText::_('COM_JOOMBLOG_FORM_SAVE'); ?>" />
+	  <input type="button" onclick="sendForm('cancelblog')" id="cancel" class="jbbutton" value="<?php echo
+JText::_('COM_JOOMBLOG_FORM_CANCEL'); ?>" />
+		</div>
+		<?php echo JHTML::_('form.token'); ?>
+	</form>
+</div>

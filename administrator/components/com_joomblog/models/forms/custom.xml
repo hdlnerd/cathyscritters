@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form addfieldpath="/administrator/components/com_joomblog/models/fields">
+	<fields name="custom">
+		<fieldset name="custom" label="COM_JOOMBLOG_FIELDSET_PROFILE">
+			<field name="title" type="text" label="COM_JOOMBLOG_FIELD_HEADING_BLOG_TITLE" description="JFIELD_TITLE_DESC" size="40" class="inputbox" required="false" default=""/>
+			<field name="description" type="textarea" label="COM_JOOMBLOG_FIELD_HEADING_DESCRIPTION" cols="40" rows="8" class="inputbox" required="false" default=""/>
+			<field name="sp1" type="spacer" hr="true"/>
+			<field name="avatar" type="avatar" class="inputbox" default="" label="COM_JOOMBLOG_FIELD_HEADING_AVATAR" required="false"/>
+			<field name="about" type="textarea" label="COM_JOOMBLOG_FIELD_HEADING_ABOUT" class="inputbox" cols="40" rows="8" required="false" default=""/>
+			<field name="birthday" type="birthday" class="inputbox" default="" label="COM_JOOMBLOG_FIELD_HEADING_BIRTHDAY" required="false"/>
+			<field name="twitter" type="text" label="COM_JOOMBLOG_FIELD_HEADING_TWITTER" size="40" class="inputbox" required="false" default=""/>
+			<field name="site" type="text" label="COM_JOOMBLOG_FIELD_HEADING_SITE" size="40" class="inputbox" required="false" default=""/>
+		</fieldset>
+	</fields>
+</form>

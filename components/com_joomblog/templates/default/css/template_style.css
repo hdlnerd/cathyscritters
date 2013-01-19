@@ -1,0 +1,1455 @@
+#joomBlog-wrap {
+  padding: 10px 10px 10px 10px;
+}
+
+.description
+{
+	clear:both;
+}
+#joomBlog-wrap h1,
+#joomBlog-wrap h2,
+#joomBlog-wrap h3,
+#joomBlog-wrap p,
+#joomBlog-wrap #joomBlog-head ul,
+#joomBlog-wrap #joomBlog-head li,
+#joomBlog-wrap hr {
+	margin: 0;
+	padding: 0;
+}
+
+#joomBlog-wrap h3 {
+	padding:0 0 10px 0;
+	font-size: 24px;
+}
+
+#joomBlog-wrap .desc {
+	padding: 0 0 10px 0;
+	background: none;
+}
+#joomBlog-wrap #joomBlog-head {
+	margin-bottom: 10px;
+	position: relative;
+
+}
+
+/* Toolbar */
+#joomBlog-wrap #joomBlog-toolbar li.blogActive a {
+  text-decoration: none;
+}
+
+#joomBlog-wrap #joomBlog-toolbar ul, #joomBlog-head ul {
+  margin-top: -15px;
+  padding: 30px 0 25px 35px;
+  text-transform: lowercase;
+}
+
+#joomBlog-wrap #joomBlog-toolbar li {
+	list-style: none none none;
+	display: inline;
+	padding-right: 25px;
+	font-size:30px;
+}
+
+#joomBlog-wrap #joomBlog-toolbar li a {
+	/*padding: 3px 10px 2px 10px;*/
+}
+
+#joomBlog-wrap #joomBlog-toolbar li#toolbarWrite {}
+
+#joomBlog-wrap #joomBlog-toolbar li#toolbarWrite a {
+	overflow: hidden;
+}
+
+#joomBlog-wrap #joomBlog-toolbar li#toolbarWrite a:hover {
+	
+}
+
+#joomBlog-wrap #joomBlog-toolbar li#toolbarWrite a span {
+	display: inline-table;
+}
+
+#joomBlog-wrap .postSummary-top .userAvatar{
+	float:right;
+	margin-top:-40px;
+}
+
+.postContent-top .userAvatar {
+	float:right;
+	margin-top:-40px;
+}
+
+/* Entries Divider */
+#joomBlog-wrap hr {
+	border: 0;
+	background: #ccc;
+	height: 1px;
+	margin: 10px 0;
+	display: none;
+}
+
+/* Entries Content */
+#joomBlog-wrap #joomBlog-content {
+	padding: 0px;
+}
+
+#joomBlog-wrap #joomBlog-content p, 
+#joomBlog-wrap .postContent p{
+	padding-top: 4px;
+	padding-bottom: 4px;
+}
+
+#joomBlog-wrap .postSummary h2,  
+#joomBlog-wrap .postContent h2{
+	font-size:24px;
+	font-family: inherit;
+	color: #777;
+}
+
+#joomBlog-wrap .postSummary .category  {
+	color: #777;
+}
+
+#joomBlog-wrap .postSummary-top  {
+	padding: 0 5px 5px 0px;
+	border-bottom: 1px dotted #ccc;
+}
+
+#joomBlog-wrap .postSummary-top > p{
+	margin-bottom:0px;
+}
+
+#joomBlog-wrap .postSummary-top h3{
+	padding-top:4px;
+	padding-bottom:4px;
+}
+	
+#joomBlog-wrap .postSummary-top h3 a{
+	text-decoration: none;
+	color: #333;
+	font-size: 19px;
+}
+#joomBlog-wrap .postSummary-top a{
+
+}
+#joomBlog-wrap .postSummary-top a:hover{
+	text-decoration: none;
+}
+#joomBlog-wrap .postSummary-teaser ,
+#joomBlog-wrap .postContent-text {
+	padding: 5px 0 25px;
+}
+/*
+#joomBlog-wrap .postSummary-teaser .content{
+	overflow: auto;
+}
+
+#joomBlog-wrap .postContent-text .content{
+	overflow: auto;
+}
+*/
+#joomBlog-wrap .postSummary-footer {
+	margin-top: 10px;
+	margin-bottom: 4px;
+	text-align: right;
+}
+#joomBlog-wrap .postSummary-footer a {
+	text-decoration: none;
+	color: #999;
+	margin-right: 10px;
+	padding-left: 20px;
+	padding: 2px 0 2px 18px;
+}
+#joomBlog-wrap .postSummary-footer a:hover {
+	text-decoration: underline;
+	color: #666;
+}
+
+
+#joomBlog-wrap div.jb-pagenav {
+	text-align:center;
+	padding-top:4px;
+	padding-bottom:4px;
+	font-size:22px;
+}
+
+#joomBlog-wrap div.jb-pagenav ul li{
+  display: inline;
+  margin-left:8px;
+  margin-right:8px;
+}
+
+#joomBlog-wrap div.jb-pagenav ul{
+  margin:0;
+  padding:0;
+}
+
+#joomBlog-wrap .jb-pagenav .pagination-start, #joomBlog-wrap .jb-pagenav .pagination-end{
+  font-family: arial,helvetica,sans-serif;
+}
+
+#joomBlog-wrap div.clear{
+	clear:both;
+	padding:0px;
+	margin:0px;
+	height:1px;
+	line-height:1px;
+}
+
+.joomBlog-tagslinks 
+{
+  background: url("../../../../../media/com_joomblog/images/icon_tags.gif") no-repeat scroll 0 0 transparent;
+  display: inline-block;
+  font-size: 10px;
+  height: 16px;
+  padding: 0 0 5px 18px;
+  margin-top: 10px;
+}
+
+#joomBlog-wrap .postSummary-teaser .joomBlog-tagslinks, 
+#joomBlog-wrap .postContent-text .joomBlog-tagslinks{
+  background: url("../../../../../media/com_joomblog/images/icon_tags.gif") no-repeat scroll 0 0 transparent;
+  display: inline-block;
+  font-size: 10px;
+  height: 16px;
+  padding: 0 0 5px 18px;
+  margin-top: 10px;
+}
+
+#joomBlog-wrap .postSummary-teaser .joomBlog-readmorelink,
+#joomBlog-wrap .postContent-text .joomBlog-readmorelink{
+  padding-bottom:15px;
+}
+
+.postSummary-readmore {
+    border-radius: 5px 5px 5px 5px;
+    background: none repeat scroll 0 0 #EAECEA !important;
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.4) inset, 0 1px 1px rgba(0, 0, 0, 0.2);
+    border: 1px solid #AAAAAA;
+    padding:  5px 5px 5px 5px;
+}
+
+#joomblogSearch label {
+	clear:both;
+	float:left;
+	margin-bottom: 10px;
+	width:100px;
+	color:#676767;
+}
+
+#joomblogSearch .joomblogSearchInput{
+	float: left;
+	margin-bottom: 10px;
+	width: 50%;
+}
+
+#joomblogSearch #joomblogSearchSubmit{
+	clear: both;
+	width: 250px;
+}
+
+#joomBlog-wrap .postContent span.editLink {
+	color: #f00;
+	cursor: pointer;
+}
+
+#joomBlog-wrap .joomBlog-bottom {
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  background: none repeat scroll 0 0 #F8F9FA;
+  border: 1px solid #C8C8C8;
+  width: 99%;
+  font-size: 11px;
+  color:#777;
+  clear: both;
+  margin-top: 20px;
+  padding: 6px 1px 0;
+  overflow: hidden;
+  height: 22px;
+}
+
+#joomBlog-wrap .joomBlog-bottom div {
+  padding-left: 5px;
+  float:left;
+}
+
+#joomBlog-wrap #joomBlog-toolbar-admin {
+  padding:0;
+}
+
+#joomBlog-wrap #joomBlog-toolbar-admin li{
+  display: inline;
+  font-size: 18px;
+  background-image:none;
+}
+
+#joomBlog-wrap #joomBlog-toolbar-admin li a{
+  padding-right:5px;
+}
+
+#joomBlog-wrap .joomBlog-bottom .joomBlog-commenticon,
+#joomBlog-wrap .joomBlog-bottom .joomBlog-authoricon,
+#joomBlog-wrap .joomBlog-bottom .joomBlog-dateposted,
+#joomBlog-wrap .joomBlog-bottom .joomBlog-facebookicon,
+#joomBlog-wrap .joomBlog-bottom .joomBlog-votes {
+  padding-right: 15px;
+}
+
+#joomBlog-wrap .joomBlog-bottom .joomBlog-votes .green {
+  color:green;
+}
+
+#joomBlog-wrap .joomBlog-bottom .joomBlog-votes .red {
+  color:red;
+}
+
+#joomBlog-wrap .joomBlog-bottom .joomBlog-votes span {
+  position: relative;
+  top: -2px;
+}
+
+#joomBlog-wrap .joomBlog-bottom a:hover, #joomBlog-wrap .joomBlog-bottom a:focus {
+  color:#777;
+}
+
+#joomBlog-wrap .joomBlog-bottom .joomBlog-votes a.vote_down {
+  background: url("../../../../../media/com_joomblog/images/arrow_down.png") no-repeat scroll 0 0 transparent;
+  display:inline-block;
+  height: 14px;
+  width: 16px;
+}
+
+#joomBlog-wrap .joomBlog-bottom .joomBlog-votes a.vote_up {
+  background: url("../../../../../media/com_joomblog/images/arrow_up.png") no-repeat scroll 0 0 transparent;
+  display:inline-block;
+  height: 14px;
+  width: 16px;
+}
+
+#joomBlog-wrap .joomBlog-bottom .joomBlog-twittericon a {
+  background: url("../../../../../media/com_joomblog/images/icontw.gif") no-repeat scroll 0 0 transparent;
+  display:inline-block;
+  height: 16px;
+  width: 14px;
+}
+
+#joomBlog-wrap .joomBlog-bottom .joomBlog-facebookicon a {
+  background: url("../../../../../media/com_joomblog/images/iconfb.png") no-repeat scroll 0 0 transparent;
+  display:inline-block;
+  height: 16px;
+  width: 14px;
+}
+
+#joomBlog-wrap .joomBlog-bottom .joomBlog-commenticon a {
+	background: url("../../../../../administrator/templates/bluestork/images/menu/icon-16-help-forum.png") no-repeat scroll 0 0 transparent;
+  display:inline-block;
+  height: 16px;
+  padding: 1px 0 0 18px;
+  text-decoration: none;
+}
+
+#joomBlog-wrap .joomBlog-bottom .joomBlog-authoricon a {
+  background: url("../../../../../administrator/templates/bluestork/images/menu/icon-16-user.png") no-repeat scroll 0 0 transparent;
+  display:inline-block;
+  height: 16px;
+  padding: 1px 0 0 18px !important;
+}
+
+.joomBlog-gogleplusicon{
+  padding: 2px;
+}
+
+#joomBlog-wrap .joomBlog-bottom .joomBlog-dateposted {
+  padding: 2px 10px 0;
+}
+ 
+#joomBlog-wrap .contentpaneopen  {margin-left:80px;}
+#joomBlog-wrap .contentheading, .componentheading, h1, h2 {
+  font-size:24px;
+  font-weight:normal;
+  line-height:100%;
+  padding-bottom:7px;
+}
+
+#joomBlog-wrap .searchresults h2 {
+  font-size:16px;
+}
+
+#joomBlog-wrap .contentpaneopen h2 a {
+  text-decoration:none;
+}
+
+#joomBlog-wrap .inputbox {
+	border:1px solid #777;
+}
+
+#joomBlog-wrap #joomblog .profileDivForm,
+#joomBlog-wrap #joomblogSearch{
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  background: none repeat scroll 0 0 #F8F9FA;
+  border: 1px solid #C8C8C8;
+  padding: 12px 12px 12px 12px;
+}
+
+
+#joomBlog-wrap #joomblog .profileDivForm .adminForm label{
+	display: block;
+    font-weight: bold;
+    padding:6px 4px 2px 0;
+}
+
+#joomBlog-wrap #joomblog .profileDivForm .adminForm h2{
+	display: block;
+    font-weight: bold;
+    padding: 8px 4px 2px 0;
+	font-family: inherit;
+}
+
+#joomBlog-wrap .jbbutton{
+	border:1px solid #777;
+	/*padding:4px 4px 4px 4px;*/
+	margin:1px 1px 1px 1px;
+	margin-top:25px;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+	cursor:pointer;
+}
+
+#joomBlog-wrap .jbbutton:hover{
+	background-color:#BBB;
+}
+
+#joomBlog-wrap .jbsmallbutton{
+	border:1px solid #777;
+	padding:1px 1px 1px 1px;
+	margin:1px 1px 1px 1px;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+	cursor:pointer;
+}
+
+#joomBlog-wrap .jbsmallbutton:hover{
+	background-color:#BBB;
+}
+
+#joomBlog-wrap #comments #commentFormDiv{
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  background: none repeat scroll 0 0 transparent;
+  border: 1px solid #C8C8C8;
+  width: 99%;
+  clear: both;
+  padding-bottom: 12px;
+  padding-left: 12px;
+  width: auto;
+  overflow: hidden;
+}
+
+#joomBlog-wrap #comments #commentListFormDiv{
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  background: none repeat scroll 0 0 #F8F9FA;
+  border: 1px solid #C8C8C8;
+  width: 99%;
+  clear: both;
+  width: auto;
+  overflow: hidden; 
+  padding: 12px 12px 12px 12px;
+}
+
+#joomBlog-wrap #comments #commentFormDiv #commentForm label{
+	display:block;
+	font-weight:bold;
+	padding:8px 4px 2px 0;
+}
+
+#joomBlog-wrap #comments  #editcomment{
+	width:98%;
+}
+
+#joomBlog-wrap #comments  #comment_codes .code{
+	border:1px solid;
+	padding:4px 4px 4px 4px;
+	margin:1px 1px 1px 1px;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+}
+
+#joomBlog-wrap #comments  #comment_codes{
+	padding-bottom:8px;
+	padding-top:4px;
+}
+
+#joomBlog-wrap #comments  #comment_codes a{ 
+	text-decoration:none;
+}
+
+#joomBlog-wrap #comments  #comment_codes .code_b{
+	font-weight:bold;
+}
+
+#joomBlog-wrap #comments  #comment_codes .code_i{
+	font-style:italic;
+}
+
+#joomBlog-wrap #comments  #comment_codes .code_u{
+	text-decoration:underline;
+}
+
+#joomBlog-wrap #comments  #comment_codes .code_s{
+	text-decoration:line-through;
+}
+
+#joomBlog-wrap #comments #commentFormDiv #commentForm #comment{
+	width:70%;
+}
+
+#joomBlog-wrap #comments #commentFormDiv #commentForm #comment.author-comment, .date-comment{
+	color:#666;
+	font-size:11px;
+}
+#joomBlog-wrap #comments #commentListFormDiv #commentListForm  #pageNavComment{
+	text-align:center;
+}
+
+#joomBlog-wrap #comments #commentListFormDiv #commentListForm .save-comment{
+	display:none;
+}
+
+#joomBlog-wrap #comments #commentListFormDiv #commentListForm .post-comment{
+  clear: both;
+  width: auto;
+}
+
+#joomBlog-wrap #comments #commentListFormDiv #commentListForm .post-comment .comment-info{
+  position: relative;
+}
+
+#joomBlog-wrap #comments #commentListFormDiv #commentListForm .post-comment .comment-info .folding-dot-holder {
+  display: none;
+  height: 1px;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 1px;
+}
+
+#joomBlog-wrap #comments #commentListFormDiv #commentListForm .post-comment .comment-info ul .avatar{
+  float: left;
+  /*
+height: 24px;
+width: 24px;
+*/
+  list-style: none outside none;
+  margin-right: 10px;
+  position: relative;
+}
+
+#joomBlog-wrap #comments #commentListFormDiv #commentListForm .post-comment .comment-info ul .username a{
+  font-weight: bold;
+}
+
+#joomBlog-wrap #comments #commentListFormDiv #commentListForm .post-comment .comment-info ul .bookmark, 
+#joomBlog-wrap #comments #commentListFormDiv #commentListForm .post-comment .comment-info ul .username,  
+#joomBlog-wrap #comments #commentListFormDiv #commentListForm .post-comment .comment-info ul .date,
+#joomBlog-wrap #comments #commentListFormDiv #commentListForm .post-comment .comment-info ul .edit{
+  color: #666666;
+  float: left;
+  font-family: tahoma;
+  margin-right: 10px;
+  padding-top: 2px;
+  font-size:10px;
+}
+ 
+#joomBlog-wrap #comments #commentListFormDiv #commentListForm .post-comment  ul{
+  list-style: none outside none;
+  margin:0;
+  padding:0;
+}
+
+#joomBlog-wrap #comments #commentListFormDiv #commentListForm .post-comment  ul li{
+  line-height: 18px;
+}
+
+
+#joomBlog-wrap #comments #commentListFormDiv #commentListForm .post-comment .comment-info .author {
+  overflow: hidden;
+}
+
+#joomBlog-wrap #comments #commentListFormDiv #commentListForm .post-comment .comment-info .author li {
+  vertical-align: baseline !important;
+}
+
+#joomBlog-wrap #comments #commentListFormDiv #commentListForm .post-comment .comment-info ul li .comment-vote {
+  float: right;
+  margin-top: 0.4em;
+}
+
+#joomBlog-wrap #comments #commentListFormDiv #commentListForm .post-comment .comment-info ul li .comment-vote .sumcommentvote {
+  font-size:13px;
+  font-weight: bold;
+}
+
+#joomBlog-wrap #comments #commentListFormDiv #commentListForm .post-comment .desc-comment {
+  font-size: 12px;
+  padding-bottom: 5px;
+  padding-top: 5px;
+}
+
+#joomBlog-wrap #comments #commentListFormDiv #commentListForm .post-comment .comment-vote .vote-comment-plus,
+#joomBlog-wrap #comments #commentListFormDiv #commentListForm .post-comment .comment-vote .vote-comment-minus{
+	text-decoration: none;
+	color:#777;
+	font-size:13px;
+}
+
+#joomBlog-wrap #comments #commentListFormDiv #commentListForm .post-comment .comment-vote .vote-comment-plus span,
+#joomBlog-wrap #comments #commentListFormDiv #commentListForm .post-comment .comment-vote .vote-comment-minus span{
+	font-size:14px;
+	font-weight: bold;
+}
+
+#joomBlog-wrap #comments #commentListFormDiv #commentListForm .post-comment .comment-vote .vote-comment-plus{
+	background: url("../../../../../media/com_joomblog/images/voteup.gif") no-repeat scroll 0 0 transparent;
+	display:inline-block;
+	height: 15px;
+	width: 15px;
+}
+
+#joomBlog-wrap #comments #commentListFormDiv #commentListForm .post-comment .comment-vote .vote-comment-minus{
+	background: url("../../../../../media/com_joomblog/images/votedown.gif") no-repeat scroll 0 0 transparent;
+	display:inline-block;
+	height: 15px;
+	width: 15px;
+}
+
+#joomBlog-wrap #comments #commentListFormDiv #commentListForm .post-comment .comment-info ul li .comment-vote .green {
+  color:green;
+}
+
+#joomBlog-wrap #comments #commentListFormDiv #commentListForm .post-comment .comment-info ul li .comment-vote .red {
+  color:red;
+}
+
+#joomBlog-wrap .module{
+	float:left;
+	padding:7px;
+}
+
+#joomBlog-wrap .module h3{
+	font-size: 14px;
+}
+
+#joomBlog-wrap .blog-profile dl.user {
+    clear: both;
+    float: none;
+    margin: 0 0 0 125px;
+}
+
+#joomBlog-wrap .blog-profile dl dt {
+    color: #777777;
+    float: left;
+    font-weight: bold;
+    margin: 0;
+    padding: 0 15px 0 0;
+    text-align: right;
+   
+}
+
+#joomBlog-wrap .blog-profile dl.user dt,
+#joomBlog-wrap .blog-profile dl.user dd {
+    color: #777777;
+    display: block;
+    float: none;
+    margin: 0;
+    padding: 0;
+    text-align: left;
+    width: auto;
+}
+
+#joomBlog-wrap .blog-profile dl {
+    clear: left;
+    margin: 0 8px 3px 20px;
+    padding: 0;
+}
+
+#joomBlog-wrap .blogsblock li, 
+#joomBlog-wrap .categoriesblock li{
+	list-style: none outside none;
+}
+
+#joomBlog-wrap .blogsblock li h2, 
+#joomBlog-wrap .categoriesblock li h2{
+	margin:0;
+	font-family: inherit;
+}
+
+#joomBlog-wrap .blogsblock .author{
+	background-image: url("../../../../../administrator/templates/bluestork/images/menu/icon-16-user.png");
+	background-repeat: no-repeat;
+    display: inline-block;
+    line-height: 12px;
+    padding-left: 20px;
+	height:14px;
+}
+
+#joomBlog-wrap .blogsblock-header
+{
+	margin: 10px 0 20px;
+    overflow: visible !important;
+	background: none repeat scroll 0 0 transparent;
+    border: 1px solid #C8C8C8;
+    border-radius: 4px 4px 4px 4px;
+	padding: 0px 10px 10px;
+}
+
+#joomBlog-wrap .blogsblock-header .author{
+	background-image: url("../../../../../administrator/templates/bluestork/images/menu/icon-16-user.png");
+	background-repeat: no-repeat;
+    display: inline-block;
+    line-height: 12px;
+    padding-left: 20px;
+	height:14px;
+}
+
+.latestpostsmonth{
+  padding-left:15px;
+}
+
+/* blog separator (arrow) */
+.blog-sep {font-family:Verdana;font-weight:normal;font-size:120%;/* line-height:0.8em; */
+/*
+vertical-align: sub;
+*/
+vertical-align:baseline;
+color:#AAA;text-shadow:none;}
+
+/* toolbar styles */
+/* icons */
+#joomBlog-head .tools
+{
+	position:relative;
+	z-index:2;
+}
+
+#joomBlog-head .hidden-tools
+{
+	position:relative;
+	z-index:1;
+}
+
+#joomBlog-wrap #joomBlog-toolbar.jb-icons {margin:10px 0 20px;}
+#joomBlog-wrap #joomBlog-toolbar.jb-icons li a {padding-left:32px;font-size:21px;}
+#joomBlog-wrap #joomBlog-toolbar.jb-icons .toolbarHome a {background: transparent url(../images/24-posts.png) 0 50% no-repeat;}
+#joomBlog-wrap #joomBlog-toolbar.jb-icons .toolbarBlogs a {background: transparent url(../images/24-blogs.png) 0 50% no-repeat;}
+#joomBlog-wrap #joomBlog-toolbar.jb-icons .toolbarSearch a {background: transparent url(../images/24-search.png) 0 50% no-repeat;}
+#joomBlog-wrap #joomBlog-toolbar.jb-icons .toolbarFeed a {background: transparent url(../images/24-feed.png) 0 50% no-repeat;}
+#joomBlog-wrap #joomBlog-toolbar.jb-icons .toolbarProfile a {background: transparent url(../images/24-profile.png) 0 50% no-repeat;}
+#joomBlog-wrap #joomBlog-toolbar.jb-icons .toolbarWrite a {background: transparent url(../images/24-write.png) 0 50% no-repeat;}
+#joomBlog-wrap #joomBlog-toolbar.jb-icons .toolbarBloggers a {background: transparent url(../images/24-user.png) 0 50% no-repeat;}
+#joomBlog-wrap #joomBlog-toolbar.jb-icons .toolbarCategories a {background: transparent url(../images/24-categories.png) 0 50% no-repeat;}
+#joomBlog-wrap #joomBlog-toolbar.jb-icons .toolbarArchive a {background: transparent url(../images/24-archive.png) 0 50% no-repeat;}
+#joomBlog-wrap #joomBlog-toolbar.jb-icons .toolbarTags a {background: transparent url(../images/24-tags.png) 0 50% no-repeat;}
+#joomBlog-wrap #joomBlog-toolbar.jb-icons .toolbarNewblog a {background: transparent url(../images/document_new.png) 0 50% no-repeat;}
+
+#joomBlog-wrap #joomBlog-toolbar li.dropdown-menu {float:right !important;padding:25px 5px 10px !important;width:16px !important;}
+#joomBlog-wrap #joomBlog-toolbar li.dropdown-menu a {background: transparent url(../images/down_16.png) 0 50% no-repeat;width:16px; height:16px;font-size:21px;display:block;padding:0 !important;}
+.hidden-menu{display:none;position: absolute;top: -15px;right:0px;border:1px solid #ccc;border-radius:4px 4px 4px 4px;z-index:1000;background: none repeat scroll 0 0 #F8F9FA;float:right;}
+
+#joomBlog-wrap .hidden-menu li {list-style:none;margin:7px !important;background-image:none;}
+#joomBlog-wrap .hidden-menu.jb-icons li a {padding-left:32px;font-size:21px;outline:none;}
+#joomBlog-wrap .hidden-menu li a {font-size:21px;outline:none;}
+#joomBlog-wrap .hidden-menu.jb-icons .toolbarHome a {background: transparent url(../images/24-posts.png) 0 50% no-repeat;}
+#joomBlog-wrap .hidden-menu.jb-icons .toolbarBlogs a {background: transparent url(../images/24-blogs.png) 0 50% no-repeat;}
+#joomBlog-wrap .hidden-menu.jb-icons .toolbarSearch a {background: transparent url(../images/24-search.png) 0 50% no-repeat;}
+#joomBlog-wrap .hidden-menu.jb-icons .toolbarFeed a {background: transparent url(../images/24-feed.png) 0 50% no-repeat;}
+#joomBlog-wrap .hidden-menu.jb-icons .toolbarProfile a {background: transparent url(../images/24-profile.png) 0 50% no-repeat;}
+#joomBlog-wrap .hidden-menu.jb-icons .toolbarWrite a {background: transparent url(../images/24-write.png) 0 50% no-repeat;}
+#joomBlog-wrap .hidden-menu.jb-icons .toolbarBloggers a {background: transparent url(../images/24-user.png) 0 50% no-repeat;}
+#joomBlog-wrap .hidden-menu.jb-icons .toolbarCategories a {background: transparent url(../images/24-categories.png) 0 50% no-repeat;}
+#joomBlog-wrap .hidden-menu.jb-icons .toolbarArchive a {background: transparent url(../images/24-archive.png) 0 50% no-repeat;}
+#joomBlog-wrap .hidden-menu.jb-icons .toolbarTags a {background: transparent url(../images/24-tags.png) 0 50% no-repeat;}
+
+/* panel */	
+#joomBlog-wrap #joomBlog-toolbar.jb-panel {background:#F8F9FA;border:1px solid #C8C8C8;overflow:hidden;margin:10px 0 20px;
+	-webkit-border-radius:4px;
+	   -moz-border-radius:4px;
+	        border-radius:4px;
+}
+#joomBlog-wrap #joomBlog-toolbar.jb-panel li {padding:10px 10px 10px;float:left;margin:0 6px;line-height:1em;font-size:23px;}
+
+/* tabs */
+#joomBlog-wrap #joomBlog-toolbar.jb-tabs {border-bottom:1px solid #C8C8C8;overflow:visible !important;display:table;width:100%;margin:10px 0 20px;}
+#joomBlog-wrap #joomBlog-toolbar.jb-tabs li {padding:15px 5px 10px;float:left;margin:0 6px;line-height:1em;font-size:23px;background-image: none !important;}
+#joomBlog-wrap #joomBlog-toolbar.jb-tabs li.blogActive {padding-top:10px;margin-top:6px;background:#FFF;border:1px solid #C8C8C8;border-bottom-color:#FFF;position:relative;bottom:-1px;
+	-webkit-border-radius:4px 4px 0 0;
+	   -moz-border-radius:4px 4px 0 0;
+	        border-radius:4px 4px 0 0;
+			overflow: hidden;
+			
+	}
+/* inner round corner left */	
+#joomBlog-wrap #joomBlog-toolbar.jb-tabs li.blogActive:before {content:'';position:absolute;left:-5px;bottom:-1px;width:4px;height:8px;
+	border:1px solid #C8C8C8;
+	border-width:0 1px 1px 0;
+	-webkit-border-radius:0px 0px 8px 0;
+	   -moz-border-radius:0px 0px 8px 0;
+	        border-radius:0px 0px 8px 0;
+	-webkit-box-shadow: 0px 4px 0px #FFF;
+	   -moz-box-shadow: 0px 4px 0px #FFF;
+	        box-shadow: 0px 4px 0px #FFF;
+	clip:rect(4px auto 9px auto);
+	}
+/* inner round corner right */
+#joomBlog-wrap #joomBlog-toolbar.jb-tabs li.blogActive:after {content:'';position:absolute;right:-5px;bottom:-1px;width:4px;height:8px;
+	border:1px solid #C8C8C8;
+	border-width:0 0 1px 1px;
+	-webkit-border-radius:0px 0px 0px 8px;
+	   -moz-border-radius:0px 0px 0px 8px;
+	        border-radius:0px 0px 0px 8px;
+	-webkit-box-shadow: 0px 4px 0px #FFF;
+	   -moz-box-shadow: 0px 4px 0px #FFF;
+	        box-shadow: 0px 4px 0px #FFF;
+	clip:rect(4px auto 9px auto);
+	}
+	
+#joomBlog-wrap #joomBlog-toolbar.jb-tabs li a:hover
+{
+	color:#333333 !important;
+}
+
+#joomBlog-wrap #joomBlog-toolbar.jb-tabs li a:focus
+{
+	color:#333333 !important;
+}
+.fordiv
+{
+	/*
+height:32px;
+*/
+}
+
+#dsq-content ul, #dsq-content li {
+    list-style: none outside none !important;
+    margin: 0;
+    padding: 0;
+}
+
+#joomBlog-wrap .dsq-post-tools .dsq-post-as .dsq-button {
+	background: url("../../images/themes/houdini/backgrounds-sprite.png") repeat-x scroll 0 -250px transparent;
+    border: 1px solid #ACB2B8;
+    border-radius: 0 0 4px 0;
+    box-shadow: 0 1px 2px rgba(72, 76, 80, 0.25);
+    color: #585C60;
+    font-size: 12px;
+    font-weight: 600;
+    height: 34px;
+    line-height: 14px;
+    margin: 0;
+    padding: 8px 20px;
+    position: absolute;
+    right: -1px;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.9);
+    top: -1px;
+    z-index: 2;
+}
+
+#joomBlog-wrap button.dsq-button {
+    border-radius: 4px 4px 4px 4px;
+    font-size: 12px;
+    font-weight: bold;
+    padding: 6px 8px;
+}
+
+#joomBlog-wrap button.dsq-button, #joomBlog-wrap button.dsq-button-small {
+    background: url("../../images/themes/narcissus/button-large.png") repeat-x scroll left bottom transparent;
+    border: 1px solid #999999;
+    color: inherit;
+    font-family: Arial,Helvetica,Calibri,sans-serif;
+    margin: 0;
+    overflow: visible;
+}
+#joomBlog-wrap .joomBlog-bottom div.jbBackToTop
+{
+	float:right;
+}
+.joomBlog-category-bgk
+{
+	background: url(../images/10-category.png) no-repeat 0;
+	padding-left:13px;
+}
+
+.created-bgk
+{
+	background: url(../images/clock-small.png) no-repeat 0;
+	padding-left:15px;
+}
+
+.blog-row {overflow:hidden}
+.thumb-avatar {
+  border: 1px solid #CCCCCC;
+  float: left;
+  margin-right: 10px;
+  padding: 1px;
+}
+.avatar
+{
+	border: 5px solid #E4E3D1;
+	margin-top:10px;
+	margin-bottom:10px;
+}
+
+.back_button
+{
+	background: url("../images/back-16.png") no-repeat scroll left bottom transparent;
+}
+
+.back_button a
+{
+	padding-left: 20px;
+}
+
+.entry-prev
+{
+	list-style:none !important;
+	
+	border-left: 0 none !important;
+    margin: 0 -1px 0 0;
+    width: 50%;
+	float: left;
+}
+
+.entry-random {
+    list-style: none;
+    border-right: 1px solid #DDDDDD;
+    border-left:  0 none !important;
+    margin: 0 -1px 0 0;
+    text-align: center;
+    width: 100%;
+}
+
+.entry-next
+{
+	list-style:none !important;
+	border-left: 0 none !important;
+    border-right: 0 none !important;
+    margin: 0 -1px 0 0;
+    text-align: right;
+}
+
+.blog-navi li a, .blog-navi li a:hover
+{
+	background: url("../images/navi-prev.png") no-repeat scroll 0 center transparent;
+    padding: 5px 5px 5px 25px;
+}
+
+.blog-navi li + li a, .blog-navi li + li a:hover
+{
+	background: url("../images/navi-next.png") no-repeat scroll 99% center transparent;
+    margin-right: 1px;
+    padding: 5px 25px 5px 5px;
+}
+
+#bloggers .profile-head {
+    border-bottom: 1px solid #CCCCCC;
+    margin: 0 0 15px;
+    padding: 10px 10px 100px;
+	clear:both;
+}
+
+#bloggers .profile-head .profile-avatar {
+    margin-right: 10px;
+	display:table-cell;
+	float:left;
+}
+
+#bloggers .tablecell {
+   display:table-cell;
+   float:left;
+   padding-top:20px;
+}
+
+#bloggers .rip {
+    margin: 0;
+    padding: 0;
+}
+
+#bloggers .link-globe {
+    background: url("../images/globe.png") no-repeat scroll 0 0 transparent;
+	padding-left:18px;
+	padding-bottom:10px;
+}
+
+#bloggers .profile-connect
+{
+	padding-top:5px;
+}
+
+#bloggers .profile-main .mbm
+{
+	font-size: 14px;
+    text-transform: uppercase;
+	margin-left:10px;
+}
+
+#bloggers .profile-main.ulrest li {
+    background: none repeat scroll 0 0 transparent;
+    border: medium none;
+    clear: none;
+    list-style: none outside none !important;
+    margin: 0;
+    overflow: visible;
+    padding: 0;
+    width: auto;
+}
+
+#bloggers .post-list li + li {
+    border-top: 1px dashed #CCCCCC;
+    margin-top: 10px;
+    padding-top: 10px;
+	list-style:none !important;
+}
+
+#bloggers .post-list li{
+	list-style:none !important;
+}
+
+#bloggers .profile
+{
+    margin: 10px 0 20px;
+    overflow: visible !important;
+	background: none repeat scroll 0 0 transparent;
+    border: 1px solid #C8C8C8;
+    border-radius: 4px 4px 4px 4px;
+	padding: 5px 10px 22px;
+}
+
+#bloggers .show-all
+{
+	font-size:13px;
+	display:block;
+	float:right;
+	padding: 1px 4px 7px 2px;
+}
+
+#bloggers .profile-head-list {
+    clear: both;
+    margin: 0 0 15px;
+    padding: 8px 10px 69px;
+}
+
+#bloggers .profile-head-list .profile-avatar {
+    display: table-cell;
+    float: left;
+    margin-right: 10px;
+}
+
+.recent-entry
+{
+	font-size:16px !important;
+	color:blue;
+}
+
+
+
+.blogger-tags
+{
+	margin-top: 5px;
+	color:#999999;
+}
+
+#jblog-section
+{
+	font-size: 24px;
+    font-weight: 700;
+    height: 48px;
+    line-height: 48px;
+}
+
+
+#categories .show-all
+{
+	font-size:13px;
+	display:block;
+	float:right;
+	padding: 1px 4px 7px 2px;
+}
+
+#categories .post-list li + li {
+    border-top: 1px dashed #CCCCCC;
+    margin-top: 10px;
+    padding-top: 10px;
+	list-style:none !important;
+}
+
+#categories .post-list li{
+	list-style:none !important;
+}
+
+#categories .category-title, #categories .category-title a
+{
+	margin:0;
+	clear:none;
+}
+
+
+#categories .category-head {
+    border-bottom: 1px solid #CCCCCC;
+    clear: both;
+    margin: 0 0 15px;
+    padding: 10px 10px 40px;
+}
+
+#categories .category-head .category-avatar {
+    margin-right: 10px;
+	display:table-cell;
+	float:left;
+}
+
+#categories .category-count {
+    background: url("../images/document-list.png") no-repeat scroll 0 0 transparent;
+	display:block;
+	float:left;
+	padding-left:20px;
+	padding-bottom:10px;
+}
+
+#categories .category-item
+{
+    margin: 10px 0 20px;
+    overflow: visible !important;
+	background: none repeat scroll 0 0 transparent;
+    border: 1px solid #C8C8C8;
+    border-radius: 4px 4px 4px 4px;
+	padding: 5px 12px 22px;
+}
+
+
+#categories .category-head-list {
+    clear: both;
+    margin: 0 0 15px;
+    padding: 10px 10px 16px;
+}
+
+#categories .category-head-list .category-avatar {
+    display: table-cell;
+    float: left;
+    margin-right: 10px;
+}
+
+.category-main .mbm
+{
+	font-size: 14px;
+    text-transform: uppercase;
+	margin-left:10px;
+}
+
+.category-tags
+{
+	margin-top: 5px;
+	color:#999999;
+}
+
+#categories .joomBlog-authoricon a {
+  background: url("../../../../../administrator/templates/bluestork/images/menu/icon-16-user.png") no-repeat scroll 0 0 transparent;
+  display:inline-block;
+  height: 16px;
+  padding: 1px 0 0 18px !important;
+}
+
+.rc_container {
+    height: auto !important;
+    overflow: hidden;
+    padding: 39px 0 5px !important;
+    position: relative;
+	width:100% !important;
+}
+
+.rc_container .rc_container_inner {
+    -moz-border-bottom-colors: none;
+    -moz-border-image: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    border-color: #DEE1E2;
+    border-style: solid;
+    border-width: 0 1px;
+    padding: 10px 20px;
+}
+
+.rc_container .tl {
+    left: -6px;
+    top: -5px;
+    width: 100%;
+}
+
+.rc_container .tr {
+    left: -6px;
+    margin-left: 100%;
+    top: -5px;
+    width: 6px;
+}
+
+.rc_container .cn {
+    background: url("../images/rc_container.png") no-repeat scroll left top transparent;
+    height: 44px;
+    position: absolute;
+}
+
+.rc_container_inner .container_heading {
+    color: #808080;
+    font-size: 1.2em;
+    height: 39px;
+    left: 0;
+    line-height: 39px;
+    margin: 0;
+    padding-left: 14px;
+    position: absolute;
+    top: 0;
+	width:100%;
+}
+
+.rc_container .bl {
+    height: 5px;
+    left: -6px;
+    overflow: hidden;
+    width: 100%;
+}
+
+.rc_container .br {
+    height: 5px;
+    left: -6px;
+    margin-left: 100%;
+    overflow: hidden;
+    width: 6px;
+}
+
+.jbtip-title
+{
+	background: url("../images/calendar.png") no-repeat scroll 0 center transparent;
+    border-bottom: 1px solid #CCCCCC;
+    line-height: 20px;
+    margin: 0 0 5px;
+    padding: 0 0 0 20px;
+}
+
+.jbtip-title-small
+{
+	margin-left:0;
+}
+
+.qtip-content {text-align:left !important}
+.ulrest {font-size:12px;margin-top:5px;}
+.ulrest li a
+{
+	padding:0 !important;
+	margin:0 !important;
+}
+.amount-posts
+{
+	font-size:10px;
+	color:#999999;
+}
+
+#tags-list
+{
+	border-top: 2px solid #EEEEEE;
+	padding-top:10px;
+}
+
+#tags-list .jbtags
+{
+	 background: none repeat scroll 0 0 #F8F9FA;
+	 border: 1px solid #C8C8C8;
+     border-radius: 4px 4px 4px 4px;
+     overflow: hidden;
+     padding: 5px 10px 10px;
+	 margin: 10px;
+}
+
+#tags-list .jbtags li
+{
+	float:left;
+	line-height: 16px;
+    margin: 5px 0;
+    min-height: 16px;
+	list-style:none !important;
+	width: 33%;
+}
+
+#tags-list .tag-sort-order li a {
+    background: none no-repeat scroll 0 center transparent;
+    display: inline-block;
+    font-weight: 700;
+    height: 18px;
+    line-height: 18px;
+    padding-left: 20px !important;
+}
+
+#tags-list .fright, #tags-list .fleft, #tags-list .flist li {
+    display: inline-block;
+}
+
+
+#tags-list .reset, #tags-list .reset li, #tags-list .ulrest, #tags-list .ulrest li {
+    background: none repeat scroll 0 0 transparent;
+    border: medium none;
+    clear: none;
+    list-style: none outside none;
+    margin: 0;
+    overflow: visible;
+    padding: 0;
+    width: auto;
+}
+
+#tags-list .tag-sort-order li + li {
+    border-left: 1px dotted #CCCCCC;
+    margin-left: 8px;
+    padding-left: 8px;
+}
+
+#tags-list .tag-sort-order li.sorting-item.title a {
+    background-image: url("../images/10-tagname.png");
+}
+
+#tags-list .tag-sort-order li.sorting-item.posts a {
+    background-image: url("../images/10-tagweight.png");
+}
+#tags-list .tag-sort-order li.ordering-item.asc a {
+    background-image: url("../images/10-tagasc.png");
+}
+
+#tags-list .tag-sort-order li.ordering-item.des a {
+    background-image: url("../images/10-tagdesc.png");
+}
+
+#tags-list .post-tags.column3 li {
+    width: 33%;
+}
+
+#jbtags a {text-decoration:none;}
+#jbtags a span {text-decoration:underline;}
+#jbtags a sup {text-decoration:none;color:#AAA;}
+#jbtags li a:hover {text-decoration:none;background:none;color:#000;}
+#jbtags li a:hover span {text-decoration:underline;}
+#jbtags li a:hover sup {text-decoration:none;color:#666;}
+
+#blog-entries a img
+{
+	margin:0;
+}
+
+#joomBlog-wrap .blog-row .blog h2, #joomBlog-wrap .blog-row .blog h2 a
+{
+	clear:none;
+}
+
+.ulrest .tag-search #filter-tags
+{
+	width:150px;
+}
+
+.ulrest .tag-search .jbbutton
+{
+	width:130px !important;
+}
+
+.blogcreatelink
+{
+	/*background: none repeat scroll 0 0 #F8F9FA;*/
+    border: 1px solid #C8C8C8;
+    border-radius: 4px 4px 4px 4px;
+	padding: 5px 5px 5px 25px;
+	background: url("../images/newblogpost.png") no-repeat scroll 3px 50% transparent;
+}
+
+.joomBlog-crlnk
+{
+	padding-bottom: 10px;
+}
+
+.topFeed a {background: transparent url(../images/15-feed.png) 0 50% no-repeat;}
+
+.topFeed a:hover
+{
+	color:#333333 !important;
+}
+
+.jbBackToTop a
+{
+	background: none !important;
+	/*background-color:#fff !important;*/
+	text-decoration: none !important;
+	
+}
+
+.topFeed {
+  float: right;
+  padding: 3px;
+  position: relative;
+  z-index: 3;
+}
+.topFeed a {
+	background: transparent url(../images/15-feed.png) 0 50% no-repeat !important;
+    text-decoration: none !important;
+	padding-left: 16px;
+	
+}
+
+.jb_social_buttons_top, .jb_social_buttons_bottom 
+{
+	width:100%;
+	padding:3px;
+	/*
+float: right;
+*/
+}
+
+.fb_reset
+{
+	float:left !important;
+}
+
+.jb_gpsocial_button, .jb_twsocial_button, .jb_fbsocial_button, .jb_lnsocial_button, .jb_atsocial_button, .pi_atsocial_button
+{
+	float:left;
+	padding:4px;
+} 
+
+.joomblog-soc
+{
+	/*width:200px;*/
+}
+#joomBlog-wrap .header-new-year {
+    background:url(../images/xmas_jb_santa_top.png) 50% 0 no-repeat;
+  margin-bottom: 10px;
+  position: relative;
+}
+
+#h3-new-year {background:url(../images/xmas_ball.png) 0 0 no-repeat; padding:10px 0 10px 70px !important;}
+
+.jb_gpsocial_button_new_year, .jb_twsocial_button_new_year, 
+.jb_lnsocial_button_new_year, .jb_fbsocial_button_new_year, 
+.pi_atsocial_button_new_year {
+background:url(../images/xmas_jb_scbtns_bg.png) bottom center no-repeat;
+padding:10px 15px;
+min-width:65px;
+min-height:65px;
+text-align:center;
+float:left;
+}
+
+.footer-new-year {
+    background:url(../images/xmas_jb_childrens_btm.png) 50% 100% no-repeat;
+    padding:10px 10px 100px 10px !important;
+}
+#joomBlog-wrap .header-new-year .tools {
+    margin-top: 70px;
+}

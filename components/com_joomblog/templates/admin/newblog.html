@@ -1,0 +1,104 @@
+<?php
+/**
+* JoomBlog component for Joomla
+* @version $Id: newblog.html 2011-03-16 17:30:15
+* @package JoomBlog
+* @subpackage write.html
+* @author JoomPlace Team
+* @Copyright Copyright (C) JoomPlace, www.joomplace.com
+* @license GNU/GPL http://www.gnu.org/copyleft/gpl.html
+*/
+
+	$editor = &JFactory::getEditor(); 
+
+?>
+
+<div id="joomBlog-wrap" class="edit">
+	<script language="javascript" type="text/javascript">
+		function sendForm(pressbutton) {
+			var form = document.adminForm;
+			if (pressbutton == 'cancelblog') {
+				submitform( pressbutton );
+				return;
+			}
+
+			var text = form.description.value;
+			
+			if ( form.title.value == "" ) {
+				form.title.focus();
+				alert("<?php echo JText::_( 'COM_JOOMBLOG_ALERT_BLOG_MUST_HAVE_A_TITLE', true ); ?>");
+			}
+			else {	submitform(pressbutton);}
+		}
+	</script>
+
+	<div class="formelm-buttons">
+	  <input type="button" onclick="sendForm('savenewblog')" id="save" class="jbbutton" value="<?php echo JText::_( 'COM_JOOMBLOG_FORM_SAVE' ); ?>" />
+	  <input type="button" onclick="sendForm('cancelblog')" id="cancel" class="jbbutton" value="<?php echo JText::_('COM_JOOMBLOG_FORM_CANCEL' ); ?>" />
+	</div>
+	<form action="<?php echo JRoute::_('index.php?option=com_joomblog&task=newblog&Itemid='.jbGetItemId(),false) ?>" method="post" name="adminForm" id="adminForm">	
+					<fieldset>
+						<legend><?php echo JText::_( 'COM_JOOMBLOG_FORM_DETAILS' ); ?></legend>
+						
+						<div class="formelm">
+									<label for="title" width="100">
+										<?php echo JText::_( 'COM_JOOMBLOG_FORM_TITLE' ); ?>:
+									</label>
+
+									<input type="text" size="70" name="title" value="" />
+						</div>
+						<div class="formelm">
+									<label for="title" width="100">
+										<?php echo JText::_( 'COM_JOOMBLOG_FORM_DESCRIPTION' ); ?>:
+									</label>
+									<textarea  style="width: 100%; height: 200px;" rows="15" cols="85" name="description" id="text"></textarea>
+						</div>
+						
+					</fieldset>
+
+					<fieldset>
+						<legend><?php echo JText::_('COM_JOOMBLOG_PRIVACY'); ?></legend>
+						<div class="formelm">
+							<label style="float:left" for="title" width="100">
+                 				 <?php echo JText::_( 'COM_JOOMBLOG_PRIVACY_POSTFORUSERS_LABEL' ); ?>:
+                			</label>
+						<?php echo $this->vars['postprivacy']; ?>
+						<div style="clear:both"></div>
+						</div>
+						<div class="formelm">
+						<label style="float:left" for="title" width="100">
+                 				 <?php echo JText::_( 'COM_JOOMBLOG_PRIVACY_VIEWFORUSERS_LABEL' ); ?>:
+                			</label>
+						<?php echo $this->vars['viewprivacy']; ?>
+						<div style="clear:both"></div>
+						</div>
+					</fieldset>
+					<fieldset>
+						<legend><?php echo JText::_( 'COM_JOOMBLOG_FORM_META_PARAMETERS' ); ?></legend>
+						<div class="formelm">
+                <label for="title" width="100">
+                  <?php echo JText::_( 'COM_JOOMBLOG_FORM_METAKEY' ); ?>:
+                </label>
+                <textarea name="metakey" cols="40" rows="3" ></textarea>
+            </div>
+							
+						<div class="formelm">
+                <label for="title" width="100">
+                  <?php echo JText::_( 'COM_JOOMBLOG_FORM_METADESC' ); ?>:
+                </label>
+                <textarea name="metadesc" cols="40" rows="3" ></textarea>
+						 </div>
+						
+					</fieldset>
+				
+		<input type="hidden" name="option" value="com_joomblog" />
+		<input type="hidden" name="task" value="newblog" />
+		<input type="hidden" name="Itemid" value="<?php echo jbGetItemId(); ?>" />
+		
+		<div class="formelm-buttons">
+	<input type="button" onclick="sendForm('savenewblog')" id="save" class="jbbutton" value="<?php echo JText::_( 'COM_JOOMBLOG_FORM_SAVE' ); ?>" />
+	  <input type="button" onclick="sendForm('cancelblog')" id="cancel" class="jbbutton" value="<?php echo JText::_('COM_JOOMBLOG_FORM_CANCEL' ); ?>" />
+		</div>
+		<?php echo JHTML::_( 'form.token' ); ?>
+	</form>
+</div>

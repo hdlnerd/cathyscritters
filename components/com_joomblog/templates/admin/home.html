@@ -1,0 +1,175 @@
+<!-- 
+
+* JoomBlog component for Joomla
+* @version $Id: index.html 2011-03-16 17:30:15
+* @package JoomBlog
+* @subpackage index.html
+* @author JoomPlace Team
+* @Copyright Copyright (C) JoomPlace, www.joomplace.com
+* @license GNU/GPL http://www.gnu.org/copyleft/gpl.html
+
+
+start JoomBlog wrapper -->
+<div id="joomblog">
+	<br/>
+    <div class="componentheading"><?php echo JText::_('COM_JOOMBLOG_ADMIN_MY_ENTRIES');?></div>
+	<!-- start tab navigation -->
+	<div id="joomblogTabNav">
+		<div id="jbheadnav">
+			<ul id="joomBlog-toolbar-admin">
+			  <li>
+				<a href="<?php echo JRoute::_('index.php?option=com_joomblog&task=adminhome&Itemid='.jbGetAdminItemId());?>"><?php echo JText::_('COM_JOOMBLOG_ADMIN_MY_ENTRIES');?></a>|
+			  </li>
+			  <li>
+				<a href="<?php echo JRoute::_('index.php?option=com_joomblog&task=bloggerpref&Itemid='.jbGetAdminItemId() );?>"><?php echo JText::_('COM_JOOMBLOG_ADMIN_MENU_PREFERENCES');?></a>|
+			  </li>
+			  <li>
+				<a href="<?php echo JRoute::_('index.php?option=com_joomblog&task=bloggerstats&Itemid='.jbGetAdminItemId() );?>"><?php echo JText::_('COM_JOOMBLOG_ADMIN_MENU_STATS');?></a>|
+			  </li>
+				<?php
+					global $_JB_CONFIGURATION;
+					if($_JB_CONFIGURATION->get('useComment'))
+					{
+					?>
+					 <li><a href="<?php echo JRoute::_('index.php?option=com_joomblog&task=showcomments&Itemid='.jbGetAdminItemId());?>"><?php echo JText::_('COM_JOOMBLOG_ADMIN_COMMENTS');?></a></li>
+					<?php
+					}
+				?>
+			</ul>
+		</div>
+	</div>
+	<!-- end tab navigation -->
+	<!-- start New Entry button -->
+	<!-- end New Entry button -->
+	<div id="savestatus" style="background: #006699 none repeat scroll 0 0;color: #FFF; font-weight:700;padding: 5px;display: none;" ></div>
+	<!-- start show all entries -->
+	<div id="joomblogEntryList">
+	<form method="POST" action="<?php echo JRoute::_("index.php?option=com_joomblog&task=adminhome"); ?>">
+		<br/>
+		<div class="filter-search">
+			<label for="filter_search" class="filter-search-lbl">Filter:</label>
+			<input class="inputbox" type="text" title="<?php echo JText::_('COM_CONTENT_FILTER_SEARCH_DESC');?>" value="<?php echo $filter_search; ?>" id="filter_search" name="filter_search">
+			<button class="jbsmallbutton" type="submit">Search</button>
+			<button class="jbsmallbutton" onclick="document.getElementById('filter_search').value='';this.form.submit();" type="button">Clear</button>
+		</div>
+		<div class="clear"></div>
+		<table class="category" border="0" cellpadding="4" cellspacing="0" width="100%" id="blog-entries">
+			<thead>
+				<tr>
+					<th><?php echo JText::_('COM_JOOMBLOG_BLOG_ADMIN_LIST_TITLE_HEADER');?></th>
+					<th><?php echo JText::_('COM_JOOMBLOG_BLOG_ADMIN_LIST_CATEGORY_TITLE_HEADER');?></th>
+					<th><?php echo JText::_('COM_JOOMBLOG_BLOG_ADMIN_LIST_DATE_HEADER');?></th>
+					<th><?php echo JText::_('COM_JOOMBLOG_BLOG_ADMIN_LIST_HITS_HEADER');?></th>
+					<th><?php echo JText::_('COM_JOOMBLOG_BLOG_ADMIN_LIST_COMMENTS_HEADER');?></th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+			<?php
+			if( $jbentries )
+			{
+				$count = 0;
+				foreach( $jbentries as $row )
+				{
+					if($publishRights || $row->canEditState)
+					{
+	
+						$onClick = JRoute::_('index.php?option=com_joomblog&task=togglepublish&id='.$row->id.'&Itemid='.jbGetAdminItemId());
+						if ($row->state == 1)
+							$published = "<a href=\"$onClick\" ><img id=\"pubImg{$row->id}\" src=\"". JURI::base() ."administrator/templates/bluestork/images/admin/publish_g.png\" border=\"0\" alt=''/></a>";
+						else
+							$published = "<a href=\"$onClick\" ><img id=\"pubImg{$row->id}\" src=\"". JURI::base() ."administrator/templates/bluestork/images/admin/publish_x.png\" border=\"0\" alt=''/></a>";
+					}
+					else
+					{
+	
+						if ($row->state == 1)
+							$published = "<img src=\"". JURI::base() ."administrator/templates/bluestork/images/admin/publish_g.png\" border=\"0\" alt=''/>";
+						else
+							$published = "<img src=\"". JURI::base() ."administrator/templates/bluestork/images/admin/publish_x.png\" border=\"0\" alt=''/>";
+			
+					}
+	
+					$mainframe =& JFactory::getApplication();
+					$date = JFactory::getDate( $row->created );
+					
+					//$date->setOffset( $mainframe->getCfg('offset') );
+					$row->created = $date->toFormat( '%Y-%m-%d %H:%M');
+			?>
+			<tr>
+				<td>
+					<div>
+						<?php
+						if( $row->state == 1 ){
+							?>
+							<a href="<?php echo jbGetPermalinkURL( $row->id );?>"><?php echo $row->title;?></a>
+							<?php
+						}else{
+							?>
+							<?php echo $row->title; ?>
+							<?php
+						}
+						?>
+					</div>
+				</td>
+				<td width="100">
+					<?php //echo $row->cattitle;
+					
+					if (sizeof($row->cats))
+								{
+								
+									foreach ( $row->cats as $cat ) 
+										{
+											?>
+												<span class="joomBlog-category-bgk"></span>
+												<?php echo $cat->title; ?><br />
+											<?php
+											}
+										} 
+					?>
+				</td>
+				<td width="100">
+					<?php echo $row->created;?>
+				</td>
+				<td align="right">
+					<?php echo $row->hits;?>
+				</td>
+				<td align="right">
+					<?php if(isset($row->commentCount)) {echo $row->commentCount;} else {echo 0;} ?>
+				</td>
+				<td width="70">
+					<?php echo $published;?>&nbsp;
+					<?php if ($row->canEdit) { ?>
+					<a title="Edit" href="<?php echo JRoute::_('index.php?option=com_joomblog&task=write&id=' . $row->id.'&Itemid='.jbGetAdminItemId());?>"><img border="0" src="<?php echo JURI::base(); ?>media/system/images/edit.png"></a>&nbsp;
+					<?php } if ($row->canDelete) { ?>
+					<a title="Delete" href="<?php echo JRoute::_('index.php?option=com_joomblog&task=delete&id=' . $row->id.'&Itemid='.jbGetAdminItemId());?>" onclick="if(!confirm( '<?php echo JText::_('COM_JOOMBLOG_BLOG_ADMIN_CONFIRM_DELETE');?>' ) ) return false;">
+						<img border="0"   src="<?php echo JURI::base(); ?>administrator/templates/bluestork/images/admin/trash.png" id="pubImg200">
+					</a>
+					<?php } ?>
+				</td>
+			</tr>
+			<?php
+					$count++;
+				}
+			}
+			else
+			{
+			?>
+			<tr>
+				<td align="center" colspan="5"><?php echo JText::_('COM_JOOMBLOG_BLOG_ADMIN_NO_ENTRIES');?></td>
+			</tr>
+			<?php
+			}
+			?>
+			</tbody>
+		</table>
+		<?php 
+			$tmpl = JRequest::getVar('tmpl');
+			if ($tmpl=='component') echo "<input type='hidden' name='tmpl' value='component' />"; ?> 
+		</form>
+	</div>
+	
+	<!-- end show all entries -->
+	<div class="jb-pagenav"><?php echo $pagination; ?></div>
+</div>
+<!-- end JoomBlog wrapper -->

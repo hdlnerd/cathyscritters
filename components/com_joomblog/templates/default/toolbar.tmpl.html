@@ -1,0 +1,61 @@
+<?php 
+/**
+* JoomBlog component for Joomla
+* @version $Id: toolbar.tmpl.html 2011-03-16 17:30:15
+* @package JoomBlog
+* @subpackage toolbar.tmpl.html
+* @author JoomPlace Team
+* @Copyright Copyright (C) JoomPlace, www.joomplace.com
+* @license GNU/GPL http://www.gnu.org/copyleft/gpl.html
+*/
+
+global $_JB_CONFIGURATION; 
+
+$menuArray = array($toolbar['homeLink'], $toolbar['blogsLink'], $toolbar['searchLink'], $toolbar['addBlogLink'], $toolbar['accountLink'], $toolbar['write'], $toolbar['bloggersLink'], $toolbar['categoriesLink'], $toolbar['archiveLink'], $toolbar['tagsLink']);
+$classArray = array('Home', 'Blogs', 'Search', 'Newblog', 'Profile', 'Write', 'Bloggers', 'Categories', 'Archive', 'Tags');
+$activeArray = array($active['home'], @$active['blogs'], $active['search'], '', $active['account'], '', $active['blogger'], $active['category'], $active['archive'], $active['tags']);
+$titleArray = array($_JB_CONFIGURATION->get('titlePosts'), $_JB_CONFIGURATION->get('titleBlogs'), $_JB_CONFIGURATION->get('titleSearch'), $_JB_CONFIGURATION->get('titleAddBlog'), $_JB_CONFIGURATION->get('titleProfile'), $_JB_CONFIGURATION->get('titleAddPost'), $_JB_CONFIGURATION->get('titleBloggers'), $_JB_CONFIGURATION->get('titleCategories'), $_JB_CONFIGURATION->get('titleArchive'), $_JB_CONFIGURATION->get('titleTags'));
+$showsArray = array($_JB_CONFIGURATION->get('showPosts'), $_JB_CONFIGURATION->get('showBlogs'), $_JB_CONFIGURATION->get('showSearch'), $_JB_CONFIGURATION->get('showAddBlog'), $_JB_CONFIGURATION->get('showProfile'), $_JB_CONFIGURATION->get('showAddPost'), $_JB_CONFIGURATION->get('showBloggers'), $_JB_CONFIGURATION->get('showCategories'), $_JB_CONFIGURATION->get('showArchive'), $_JB_CONFIGURATION->get('showTags'));
+$orderArray = array($_JB_CONFIGURATION->get('firstPosition'), $_JB_CONFIGURATION->get('secondPosition'), $_JB_CONFIGURATION->get('thirdPosition'), $_JB_CONFIGURATION->get('fourthPosition'), $_JB_CONFIGURATION->get('fifthPosition'), $_JB_CONFIGURATION->get('sixthPosition'), $_JB_CONFIGURATION->get('seventhPosition'), $_JB_CONFIGURATION->get('eighthPosition'), $_JB_CONFIGURATION->get('ninthPosition'), $_JB_CONFIGURATION->get('tenthPosition'));
+if ($_JB_CONFIGURATION->get('useNewYearStyleheader'))
+	{
+		$header_class = 'class="header-new-year"';
+	}
+
+?>
+<!-- Blog Header -->
+<div <?php echo $header_class;?> id="joomBlog-head">
+    <h3><?php echo $title; ?></h3>
+    <div class="desc"><?php echo $summary; ?></div>
+    <!-- Blog Toolbar Navigation -->
+	<div class="tools">
+    <ul id="joomBlog-toolbar" class="<?php if($_JB_CONFIGURATION->get('showIcons')){echo "jb-icons";} ?> <?php if($_JB_CONFIGURATION->get('showTabs')){echo "jb-tabs";} ?> <?php if($_JB_CONFIGURATION->get('showPanel')){echo "jb-panel";} ?>">
+      
+	  
+	  <?php
+	  $menuHTML = '';
+	  foreach($orderArray as $order)
+	  {
+			if ($showsArray[$order - 1]) 
+			{
+				//if (!$show['feed'] && $order == 4) continue;
+				if (!jbCanBlogCreate() && $order == 4) continue;
+				if (!jbGetUserCanPost() && ($order == 5 || $order == 6)) continue;
+				
+				$menuHTML .= '<li class="toolbar'.$classArray[$order - 1].$activeArray[$order - 1].'" id="toolbar'.$classArray[$order - 1].'">';
+				$menuHTML .= '<a href="'.$menuArray[$order - 1].'"><span>'.$titleArray[$order - 1].'</span></a>';
+				$menuHTML .= '</li>';
+			}
+	  }
+	  	  
+	  echo $menuHTML;
+	 
+	  ?>
+	  
+    </ul>
+	</div>
+	<div class="hidden-tools">
+	<ul class="hidden-menu <?php if($_JB_CONFIGURATION->get('showIcons')){echo "jb-icons";} ?>"></ul>
+	</div>
+	<div style="clear: left;"></div>		
+</div>

@@ -1,0 +1,34 @@
+/*** Google + ***/
+		$usegp = $_JB_CONFIGURATION->get('usegp');
+		$row->gp_button = null;
+		$row->gpposition = $_JB_CONFIGURATION->get('positiongpInList');
+
+		if ($usegp)
+		{
+			$showGpInList = $_JB_CONFIGURATION->get('showgpInList');
+			$gpLang 	= $_JB_CONFIGURATION->get('gp_language');
+			if (isset($gpLang)) $gpLang="{lang: '".$gpLang."'}"; else $gpLang='';
+
+			if ($showGpInList)
+			{
+				$gpStyle 		= $_JB_CONFIGURATION->get('gp_style_list');
+				$gpUrl 	= $row->permalink;
+
+				//$row->gp_button='<script type="text/javascript" src="https://apis.google.com/js/plusone.js">'.$gpLang.'</script>';
+
+					switch ( $gpStyle )
+					{
+						case 'none':
+							$row->gp_button.='<g:plusone size="small" href="'.urlencode($gpUrl).'"></g:plusone>';
+						break;
+						case 'horizontal':
+							$row->gp_button.='<g:plusone count="false" href="'.urlencode($gpUrl).'"></g:plusone>';
+						break;
+						case 'vertical':
+							$row->gp_button.='<g:plusone size="tall" href="'.urlencode($gpUrl).'"></g:plusone>';
+						break;
+					}
+
+			}
+
+		}

@@ -1,0 +1,63 @@
+<?php
+/**
+* JoomBlog component for Joomla
+* @version $Id: category_list.tmpl.html 2011-03-16 17:30:15
+* @package JoomBlog
+* @subpackage category_list.tmpl.html
+* @author JoomPlace Team
+* @Copyright Copyright (C) JoomPlace, www.joomplace.com
+* @license GNU/GPL http://www.gnu.org/copyleft/gpl.html
+*/
+
+defined('_JEXEC') or die('Restricted access');
+global $_JB_CONFIGURATION;
+$category = $category[0];
+$articles = $articles[0];
+
+?>
+
+<div class="category-item" id="item-<?php echo $category->id;?>">
+	<div class="category-head">
+        <div class="category-avatar">
+            <img alt="<?php echo $category->title;?>" src="<?php echo JURI::root();?>components/com_joomblog/templates/default/images/document_pencil_64.png">
+        </div>
+        
+        <div class="category-info tablecell">
+            <h3 class="category-title rip">
+                <a href="<?php echo $category->link;?>"><?php echo $category->title;?></a>
+            </h3>
+		</div>
+        <div class="category-count"><?php echo $category->count;?>&nbsp;<?php echo JText::_('COM_JOOMBLOG_POSTS_IN_CAT');?></div>
+	</div>
+	<div class="category-main">
+	<h5 class="mbm"><?php echo JText::_('COM_JOOMBLOG_RECENT_POST');?></h5>
+	<ul class="post-list ulrest">
+<?php 
+if (!empty($articles))
+{
+	foreach($articles as $article)
+	{
+		$user = JFactory::getUser($article->created_by);
+		$articleLink = JRoute::_('index.php?option=com_joomblog&show='.$article->id.'&Itemid='.$Itemid);
+		$authorLink = JRoute::_('index.php?option=com_joomblog&task=profile&id='.$user->id.'&Itemid='.$Itemid);
+?>
+	<li>
+	<h3 class="recent-entry">
+		<a href="<?php echo $articleLink; ?>" class="blog"><?php echo $article->title?></a>
+	</h3>
+	<div class="category-tags"><span><?php echo JText::_('COM_JOOMBLOG_LISTTAGS').$article->categories;?></span></div>
+	<small class="created-bgk"><?php echo $article->created;?></small>
+	<?php if ($_JB_CONFIGURATION->get('showUserLink')) { ?><small class="authoricon"><a href="<?php echo $authorLink;?>" target="_blank"><?php echo $user->name;?></a></small><?php } ?>
+	</li>
+<?php 
+	}
+?>
+	</ul>
+	<small class="show-all"><a href="<?php echo $category->link;?>"><?php echo JText::_('COM_JOOMBLOG_SHOW_ALL');?></a></small>
+<?php	
+} else {
+	echo JText::_('COM_JOOMBLOG_NO_POSTS');
+}
+?>
+	</div>
+</div>

@@ -1,0 +1,1059 @@
+<?xml version="1.0" encoding="utf-8"?>
+<config>
+	<form 
+		addfieldpath="/administrator/components/com_joomblog/models/fields"
+	>
+		<field name="asset_id" type="hidden" filter="unset" />
+
+		<fieldset
+			name="main"
+			label="COM_JOOMBLOG_SETTINGS_GLOBAL"
+		>
+			<field
+				type="spacer"
+				label="Title and Description"
+				class="strong"
+			/>
+			<field
+				name="mainBlogTitle"
+				type="text"
+				label="COM_JOOMBLOG_SETTINGS_GLOBAL_TITLE"
+				description="COM_JOOMBLOG_SETTINGS_GLOBAL_TITLE_DESC"
+				class="inputbox"
+				default="JoomBlog"
+			/>
+			<field
+				name="mainBlogDesc"
+				type="textarea"
+				label="COM_JOOMBLOG_SETTINGS_GLOBAL_TITLE"
+				description="COM_JOOMBLOG_SETTINGS_GLOBAL_TITLE_DESC"
+				class="inputbox"
+				default="Description of joomblog"
+				cols="40"
+				rows="8"
+			/>
+			<field
+				type="spacer"
+				hr="true"
+			/>
+			<field
+				type="spacer"
+				label="Recent Posts"
+				class="strong"
+			/>
+			<field
+				name="BloggerRecentPosts"
+				type="text"
+				label="COM_JOOMBLOG_SETTINGS_GLOBAL_RECENT_BLOGGER"
+				description="COM_JOOMBLOG_SETTINGS_GLOBAL_RECENT_BLOGGER_DESC"
+				class="inputbox"
+				default="5"
+				size="5"
+			/>
+			<field
+				name="CategoriesRecentPosts"
+				type="text"
+				label="COM_JOOMBLOG_SETTINGS_GLOBAL_RECENT_CATEGORY"
+				description="COM_JOOMBLOG_SETTINGS_GLOBAL_RECENT_CATEGORY_DESC"
+				class="inputbox"
+				default="5"
+				size="5"
+			/>
+			<field
+				type="spacer"
+				hr="true"
+			/>
+			<field
+				type="spacer"
+				label="RSS Feeds"
+				class="strong"
+			/>
+			<field
+				name="useRSSFeed"
+				type="radio"
+				default="0"
+				class="inputbox"
+				label="COM_JOOMBLOG_SETTINGS_GLOBAL_RSS_ENABLE"
+				description="COM_JOOMBLOG_SETTINGS_GLOBAL_RSS_ENABLE_DESC">
+				<option
+					value="0">JNO</option>
+				<option
+					value="1">JYES</option>
+			</field>
+			<field
+				name="rssFeedLimit"
+				type="text"
+				label="COM_JOOMBLOG_SETTINGS_GLOBAL_RSS_LIMIT"
+				description="COM_JOOMBLOG_SETTINGS_GLOBAL_RSS_LIMIT_DESC"
+				class="inputbox"
+				default="10"
+				size="5"
+			/>
+			<field
+				name="titleFeed"
+				type="text"
+				label="COM_JOOMBLOG_SETTINGS_MENU_TITLE_FEED"
+				class="inputbox"
+				default="Feed"
+			/>
+			<field
+				type="spacer"
+				hr="true"
+			/>
+			<field
+				type="spacer"
+				label="Tags"
+				class="strong"
+			/>
+				<field name="allowDefaultTags" type="radio" default="0"	class="inputbox" 
+						label="COM_JOOMBLOG_SETTINGS_GLOBAL_TAGS_DEFAULT" 	description="COM_JOOMBLOG_SETTINGS_GLOBAL_TAGS_DEFAULT_DESC">
+					<option	value="0">JNO</option>
+					<option	value="1">JYES</option>
+				</field>
+			<field
+				type="spacer"
+				hr="true"
+			/>
+			<field
+				type="spacer"
+				label="Notification"
+				class="strong"
+			/>
+			<field name="allowNotification" type="radio" default="0"	class="inputbox" 
+						label="COM_JOOMBLOG_SETTINGS_GLOBAL_NOTIFICATION_ENABLE" 	description="COM_JOOMBLOG_SETTINGS_GLOBAL_NOTIFICATION_ENABLE_DESC">
+					<option	value="0">JNO</option>
+					<option	value="1">JYES</option>
+				</field>
+			<field
+				name="adminEmail"
+				type="text"
+				label="COM_JOOMBLOG_SETTINGS_GLOBAL_NOTIFICATION_EMAIL"
+				description="COM_JOOMBLOG_SETTINGS_GLOBAL_NOTIFICATION_EMAIL_DESC"
+				class="inputbox"
+				default=""
+			/>
+			<field
+				type="spacer"
+				hr="true"
+			/>
+			<field
+				type="spacer"
+				label="Comments"
+				class="strong blank"
+			/>
+			<field name="useComment" type="radio" default="1"	class="inputbox" label="COM_JOOMBLOG_SETTINGS_GLOBAL_COMMENT_ENABLE">
+					<option	value="0">JNO</option>
+					<option	value="1">JYES</option>
+			</field>
+			<field name="allowModerateComment" type="radio" default="0"	class="inputbox" label="COM_JOOMBLOG_SETTINGS_GLOBAL_COMMENT_MODERATE">
+					<option	value="0">JNO</option>
+					<option	value="1">JYES</option>
+			</field>
+			<field name="useCommentCaptcha" type="radio" default="1"	class="inputbox" label="COM_JOOMBLOG_SETTINGS_GLOBAL_COMMENT_CAPTCHA">
+					<option	value="0">JNO</option>
+					<option	value="1">JYES</option>
+			</field>
+						
+			<field name="notifyCommentAdmin" type="radio" default="0"	class="inputbox" 
+			label="COM_JOOMBLOG_SETTINGS_GLOBAL_COMMENT_NOTIFY_ADMIN" description="COM_JOOMBLOG_SETTINGS_GLOBAL_COMMENT_NOTIFY_ADMIN_DESC">
+					<option	value="0">JNO</option>
+					<option	value="1">JYES</option>
+			</field>
+			<field name="notifyCommentAuthor" type="radio" default="0"	class="inputbox" 
+			label="COM_JOOMBLOG_SETTINGS_GLOBAL_COMMENT_NOTIFY_AUTHOR" description="COM_JOOMBLOG_SETTINGS_GLOBAL_COMMENT_NOTIFY_AUTHOR_DESC">
+					<option	value="0">JNO</option>
+					<option	value="1">JYES</option>
+			</field>
+			
+			<field name="useCommentCaptchaRegisteredUsers" type="radio" default="0"	class="inputbox" label="COM_JOOMBLOG_SETTINGS_GLOBAL_COMMENT_CAPTCHA_REGISTERED">
+					<option	value="0">JNO</option>
+					<option	value="1">JYES</option>
+			</field>
+			<field name="useCommentOnlyRegisteredUsers" type="radio" default="0"	class="inputbox" label="COM_JOOMBLOG_SETTINGS_GLOBAL_COMMENT_REGISTERED_ONLY">
+					<option	value="0">JNO</option>
+					<option	value="1">JYES</option>
+			</field>
+			
+			<field
+				name="limitComment"
+				type="text"
+				label="COM_JOOMBLOG_SETTINGS_GLOBAL_COMMENT_LIMIT"
+				description="COM_JOOMBLOG_SETTINGS_GLOBAL_COMMENT_LIMIT_DESC"
+				class="inputbox"
+				default="10"
+				size="5"
+			/>
+			
+			<field name="useDisqus" type="radio" default="0"	class="inputbox" label="COM_JOOMBLOG_SETTINGS_GLOBAL_COMMENT_DISQUS">
+					<option	value="0">JNO</option>
+					<option	value="1">JYES</option>
+			</field>
+			
+			<field
+				name="disqusSubDomain"
+				type="text"
+				label="COM_JOOMBLOG_SETTINGS_GLOBAL_COMMENT_DISQUS_SUBDOMAIN"
+				description="COM_JOOMBLOG_SETTINGS_GLOBAL_COMMENT_DISQUS_SUBDOMAIN_DESC"
+				class="inputbox"
+				default=""
+			/>
+			<field
+				type="spacer"
+				hr="true"
+			/>
+			<field
+				type="spacer"
+				label="Integration"
+				class="strong"
+			/>
+			
+			<field	name="integrJoomSoc"	type="radio"	label="COM_JOOMBLOG_SETTINGS_INTEGRJOOMSOC"
+			description="COM_JOOMBLOG_SETTINGS_INTEGRJOOMSOC_DESC"
+				class="inputbox"	default="0"
+			>
+					<option	value="0">JNO</option>
+					<option	value="1">JYES</option>
+			</field>
+			
+		</fieldset>
+		<fieldset
+			name="layout"
+			label="COM_JOOMBLOG_SETTINGS_LAYOUT"
+		>
+			<field
+				type="spacer"
+				label="Main Page"
+				class="strong"
+			/>
+			<field
+				name="template"
+				type="hidden"
+				class="inputbox"
+				default="default"
+			/>
+			<field
+				name="numEntry"
+				type="text"
+				label="COM_JOOMBLOG_SETTINGS_LAYOUT_ENTRY_NUM"
+				class="inputbox"
+				default="10"
+			/>
+				<field name="categoryDisplay" type="radio" default="1"	class="inputbox" 
+						label="COM_JOOMBLOG_SETTINGS_LAYOUT_CATEGORY_DISPLAY"
+				description="COM_JOOMBLOG_SETTINGS_LAYOUT_CATEGORY_DISPLAY_DESC"
+				>
+					<option	value="0">JNO</option>
+					<option	value="1">JYES</option>
+				</field>
+				
+				<field name="frontpageToolbar" type="radio" default="1"	class="inputbox" 
+				label="COM_JOOMBLOG_SETTINGS_LAYOUT_TOOLBAR_DISPLAY"
+				description="COM_JOOMBLOG_SETTINGS_LAYOUT_TOOLBAR_DISPLAY_DESC"
+				>
+					<option	value="0">JNO</option>
+					<option	value="1">JYES</option>
+				</field>
+			<field
+				name="dateFormat"
+				type="text"
+				label="COM_JOOMBLOG_SETTINGS_LAYOUT_DATE_FORMAT"
+				description="COM_JOOMBLOG_SETTINGS_LAYOUT_DATE_FORMAT_DESC"
+				class="inputbox"
+				default="%d %B %Y, %H:%M"
+			/>
+			<field name="enableBackLink" type="radio" default="1"	class="inputbox" 
+				label="COM_JOOMBLOG_SETTINGS_LAYOUT_BACK_LINK" description="COM_JOOMBLOG_SETTINGS_LAYOUT_BACK_LINK_DESC"
+				>
+					<option	value="0">JNO</option>
+					<option	value="1">JYES</option>
+				</field>
+			<field name="enablePrintLink" type="radio" default="1"	class="inputbox" 
+				label="COM_JOOMBLOG_SETTINGS_LAYOUT_PRINT_LINK"
+				>
+					<option	value="0">JNO</option>
+					<option	value="1">JYES</option>
+				</field>
+			<field name="modulesDisplay" type="radio" default="0"	class="inputbox" 
+				label="COM_JOOMBLOG_SETTINGS_LAYOUT_MODULES_SHOW"
+				>
+					<option	value="0">JNO</option>
+					<option	value="1">JYES</option>
+				</field>
+				
+			<field name="mambotFrontpage" type="radio" default="0"	class="inputbox" 
+				label="COM_JOOMBLOG_SETTINGS_LAYOUT_PLUGINS_FRONTPAGE"
+				>
+					<option	value="0">JNO</option>
+					<option	value="1">JYES</option>
+				</field>
+			<field	type="spacer" hr="true"	/>
+			
+			<field
+				type="spacer"
+				label="Author Settings"
+				class="strong"
+			/>
+			<field
+				name="avatar"
+				type="list"
+				label="COM_JOOMBLOG_SETTINGS_LAYOUT_USER_AVATAR"
+				description="COM_JOOMBLOG_SETTINGS_LAYOUT_USER_AVATAR_DESC"
+				class="inputbox"
+				default="juser"
+			>
+				<option value="none">None</option>
+				<option value="juser">Joomblog</option>
+				<option value="jomsocial">JomSocial</option>
+			</field>
+			<field name="showUserLink" type="radio" default="1"	class="inputbox" 
+				label="COM_JOOMBLOG_SETTINGS_LAYOUT_USER_LINK"
+				>
+					<option	value="0">JNO</option>
+					<option	value="1">JYES</option>
+			</field>
+			<field
+				name="avatarWidth"
+				type="text"
+				label="COM_JOOMBLOG_SETTINGS_LAYOUT_USER_AVATAR_WIDTH"
+				description="COM_JOOMBLOG_SETTINGS_LAYOUT_USER_AVATAR_WIDTH_DESC"
+				class="inputbox"
+				default="160"
+			/>
+			<field
+				name="maxFileSize"
+				type="text"
+				label="COM_JOOMBLOG_SETTINGS_LAYOUT_MAX_FILE_SIZE"
+				description="COM_JOOMBLOG_SETTINGS_LAYOUT_MAX_FILE_SIZE_DESC"
+				class="inputbox"
+				default="2"
+			/>
+			<field name="linkAvatar" type="radio" default="0"	class="inputbox" 
+				label="COM_JOOMBLOG_SETTINGS_LAYOUT_USER_AVATAR_LINK"
+				description="COM_JOOMBLOG_SETTINGS_LAYOUT_USER_AVATAR_LINK_DESC"
+				>
+					<option	value="0">JNO</option>
+					<option	value="1">JYES</option>
+			</field>
+			<field
+				type="spacer"
+				hr="true"
+			/>
+			<field
+				type="spacer"
+				label="Read More Settings"
+				class="strong"
+			/>
+			<field name="useIntrotext" type="radio" default="0"	class="inputbox" 
+				label="COM_JOOMBLOG_SETTINGS_LAYOUT_INTROTEXT"
+				description="COM_JOOMBLOG_SETTINGS_LAYOUT_INTROTEXT_DESC"
+				>
+					<option	value="0">JNO</option>
+					<option	value="1">JYES</option>
+			</field>
+			
+			<field
+				name="autoReadmorePCount"
+				type="text"
+				label="COM_JOOMBLOG_SETTINGS_LAYOUT_INTROTEXT_AUTO"
+				description="COM_JOOMBLOG_SETTINGS_LAYOUT_INTROTEXT_AUTO_DESC"
+				class="inputbox"
+				default="3"
+			/>
+			<field
+				name="readMoreLink"
+				type="text"
+				label="COM_JOOMBLOG_SETTINGS_LAYOUT_READMORE"
+				description="COM_JOOMBLOG_SETTINGS_LAYOUT_READMORE_DESC"
+				class="inputbox"
+				default="read more ..."
+			/>
+			<field name="disableReadMoreTag" type="radio" default="0"	class="inputbox" 
+				label="COM_JOOMBLOG_SETTINGS_LAYOUT_READMORE_TAG_DIS"
+				description="COM_JOOMBLOG_SETTINGS_LAYOUT_READMORE_TAG_DIS_DESC"
+				>
+					<option	value="0">JNO</option>
+					<option	value="1">JYES</option>
+			</field>
+			<field name="necessaryReadmore" type="radio" default="0"	class="inputbox" 
+				label="COM_JOOMBLOG_SETTINGS_LAYOUT_READMORE_NESS"
+				description="COM_JOOMBLOG_SETTINGS_LAYOUT_READMORE_NESS_DESC"
+				>
+					<option	value="0">JNO</option>
+					<option	value="1">JYES</option>
+			</field>
+			<field name="anchorReadmore" type="radio" default="0"	class="inputbox" 
+				label="COM_JOOMBLOG_SETTINGS_LAYOUT_READMORE_ANCHOR"
+				description="COM_JOOMBLOG_SETTINGS_LAYOUT_READMORE_ANCHOR_DESC"
+				>
+					<option	value="0">JNO</option>
+					<option	value="1">JYES</option>
+			</field>
+		</fieldset>
+		<fieldset
+			name="dashboard"
+			label="COM_JOOMBLOG_SETTINGS_DASHBOARD"
+		>
+			<field
+				type="spacer"
+				label="Configurations"
+				class="strong"
+			/>
+			<field name="autoapproveblogs" type="radio" default="1"	class="inputbox" 
+				label="COM_JOOMBLOG_SETTINGS_AUTOAPPROVEBLOGS_STATUS"
+				description="COM_JOOMBLOG_SETTINGS_AUTOAPPROVEBLOGS_STATUS_DESCR"
+				>
+					<option	value="0">JNO</option>
+					<option	value="1">JYES</option>
+			</field>
+			<field name="defaultPublishStatus" type="radio" default="1"	class="inputbox" 
+				label="COM_JOOMBLOG_SETTINGS_DASHBOARD_PUBLISH_STATUS"
+				description="COM_JOOMBLOG_SETTINGS_DASHBOARD_PUBLISH_STATUS_DESCR"
+				>
+					<option	value="0">JNO</option>
+					<option	value="1">JYES</option>
+			</field>
+			<field name="useMCEeditor" type="radio" default="1"	class="inputbox" 
+				label="COM_JOOMBLOG_SETTINGS_DASHBOARD_USE_EDITOR"
+				description="COM_JOOMBLOG_SETTINGS_DASHBOARD_USE_EDITOR_DESC"
+				>
+					<option	value="0">JNO</option>
+					<option	value="1">JYES</option>
+			</field>
+			<field
+				type="spacer"
+				hr="true"
+			/>
+			<field
+				type="spacer"
+				label="Tags"
+				class="strong"
+			/>
+			<field name="enableUserCreateTags" type="radio" default="0"	class="inputbox" 
+				label="COM_JOOMBLOG_SETTINGS_DASHBOARD_USER_TAGS"
+				>
+					<option	value="0">JNO</option>
+					<option	value="1">JYES</option>
+			</field>
+		</fieldset>
+		<fieldset
+			name="menu"
+			label="COM_JOOMBLOG_SETTINGS_MENU"
+		>
+			<field
+				type="spacer"
+				label="Basic Configuration"
+				class="strong"
+			/>
+			<field
+				name="showIcons"
+				type="radio"
+				value="1"
+				label="COM_JOOMBLOG_SETTINGS_MENU_ICONS"
+				class="inputbox"
+				default="1"
+			>
+					<option	value="0">JNO</option>
+					<option	value="1">JYES</option>
+			</field>
+			<field
+				name="showTabs"
+				type="radio"
+				value="1"
+				label="COM_JOOMBLOG_SETTINGS_MENU_TABS"
+				class="inputbox"
+				default="1"
+			>
+					<option	value="0">JNO</option>
+					<option	value="1">JYES</option>
+			</field>
+			<field
+				name="showPanel"
+				type="radio"
+				value="1"
+				label="COM_JOOMBLOG_SETTINGS_MENU_PANEL"
+				class="inputbox"
+				default="1"
+			>
+					<option	value="0">JNO</option>
+					<option	value="1">JYES</option>
+			</field>
+			<field
+				type="spacer"
+				hr="true"
+			/>
+			<field
+				type="spacer"
+				label="Show Menu Items"
+				class="strong"
+			/>
+			<field
+				name="showPosts"
+				type="radio"
+				value="1"
+				label="COM_JOOMBLOG_SETTINGS_MENU_SHOW_POSTS"
+				class="inputbox"
+				default="1"
+			>
+					<option	value="0">JNO</option>
+					<option	value="1">JYES</option>
+			</field>
+			<field
+				name="showBlogs"
+				type="radio"
+				value="1"
+				label="COM_JOOMBLOG_SETTINGS_MENU_SHOW_BLOGS"
+				class="inputbox"
+				default="1"
+			>
+					<option	value="0">JNO</option>
+					<option	value="1">JYES</option>
+			</field>
+			<field
+				name="showSearch"
+				type="radio"
+				value="1"
+				label="COM_JOOMBLOG_SETTINGS_MENU_SHOW_SEARCH"
+				class="inputbox"
+				default="1"
+			>
+					<option	value="0">JNO</option>
+					<option	value="1">JYES</option>
+			</field>
+			<field
+				name="showFeed"
+				type="radio"
+				value="1"
+				label="COM_JOOMBLOG_SETTINGS_MENU_SHOW_FEED"
+				class="inputbox"
+				default="1"
+			>
+					<option	value="0">JNO</option>
+					<option	value="1">JYES</option>
+			</field>
+			<field
+				name="showAddBlog"
+				type="radio"
+				value="1"
+				label="COM_JOOMBLOG_SETTINGS_MENU_SHOW_ADDBLOG"
+				class="inputbox"
+				default="1"
+			>
+					<option	value="0">JNO</option>
+					<option	value="1">JYES</option>
+			</field>
+			<field
+				name="showProfile"
+				type="radio"
+				value="1"
+				label="COM_JOOMBLOG_SETTINGS_MENU_SHOW_PROFILE"
+				class="inputbox"
+				default="1"
+			>
+					<option	value="0">JNO</option>
+					<option	value="1">JYES</option>
+			</field>
+			<field
+				name="showAddPost"
+				type="radio"
+				value="1"
+				label="COM_JOOMBLOG_SETTINGS_MENU_SHOW_ADD"
+				class="inputbox"
+				default="1"
+			>
+					<option	value="0">JNO</option>
+					<option	value="1">JYES</option>
+			</field>
+			<field
+				name="showBloggers"
+				type="radio"
+				value="1"
+				label="COM_JOOMBLOG_SETTINGS_MENU_SHOW_BLOGGERS"
+				class="inputbox"
+				default="1"
+			>
+					<option	value="0">JNO</option>
+					<option	value="1">JYES</option>
+			</field>
+			<field
+				name="showCategories"
+				type="radio"
+				value="1"
+				label="COM_JOOMBLOG_SETTINGS_MENU_SHOW_CATEGORIES"
+				class="inputbox"
+				default="1"
+			>
+					<option	value="0">JNO</option>
+					<option	value="1">JYES</option>
+			</field>
+			<field
+				name="showArchive"
+				type="radio"
+				value="1"
+				label="COM_JOOMBLOG_SETTINGS_MENU_SHOW_ARCHIVE"
+				class="inputbox"
+				default="1"
+			>
+					<option	value="0">JNO</option>
+					<option	value="1">JYES</option>
+			</field>
+			<field
+				name="showTags"
+				type="radio"
+				value="1"
+				label="COM_JOOMBLOG_SETTINGS_MENU_SHOW_TAGS"
+				class="inputbox"
+				default="1"
+			>
+					<option	value="0">JNO</option>
+					<option	value="1">JYES</option>
+			</field>
+			<field
+				type="spacer"
+				hr="true"
+			/>
+			<field
+				type="spacer"
+				label="Titles of Menu Items"
+				class="strong"
+			/>
+			<field
+				name="titlePosts"
+				type="text"
+				label="COM_JOOMBLOG_SETTINGS_MENU_TITLE_POSTS"
+				class="inputbox"
+				default="Posts"
+			/>
+			<field
+				name="titleBlogs"
+				type="text"
+				label="COM_JOOMBLOG_SETTINGS_MENU_TITLE_BLOGS"
+				class="inputbox"
+				default="Blogs"
+			/>
+			<field
+				name="titleSearch"
+				type="text"
+				label="COM_JOOMBLOG_SETTINGS_MENU_TITLE_SEARCH"
+				class="inputbox"
+				default="Search"
+			/>
+			<field
+				name="titleAddBlog"
+				type="text"
+				label="COM_JOOMBLOG_SETTINGS_MENU_SHOW_ADDBLOG"
+				class="inputbox"
+				default="Add Blog"
+			/>
+			<field
+				name="titleProfile"
+				type="text"
+				label="COM_JOOMBLOG_SETTINGS_MENU_TITLE_PROFILE"
+				class="inputbox"
+				default="Profile"
+			/>
+			<field
+				name="titleAddPost"
+				type="text"
+				label="COM_JOOMBLOG_SETTINGS_MENU_TITLE_ADD"
+				class="inputbox"
+				default="Add Post"
+			/>
+			<field
+				name="titleBloggers"
+				type="text"
+				label="COM_JOOMBLOG_SETTINGS_MENU_TITLE_BLOGGERS"
+				class="inputbox"
+				default="Bloggers"
+			/>
+			<field
+				name="titleCategories"
+				type="text"
+				label="COM_JOOMBLOG_SETTINGS_MENU_TITLE_CATEGORIES"
+				class="inputbox"
+				default="Categories"
+			/>
+			<field
+				name="titleArchive"
+				type="text"
+				label="COM_JOOMBLOG_SETTINGS_MENU_TITLE_ARCHIVE"
+				class="inputbox"
+				default="Archive"
+			/>
+			<field
+				name="titleTags"
+				type="text"
+				label="COM_JOOMBLOG_SETTINGS_MENU_TITLE_TAGS"
+				class="inputbox"
+				default="Tags"
+			/>
+			<field
+				type="spacer"
+				hr="true"
+			/>
+			<field
+				type="spacer"
+				label="Order of Menu Items"
+				class="strong"
+			/>
+			<field
+				name="firstPosition"
+				type="position"
+				label="COM_JOOMBLOG_SETTINGS_MENU_ORDER_1"
+				class="inputbox"
+				default="1"
+			/>
+			<field
+				name="secondPosition"
+				type="position"
+				label="COM_JOOMBLOG_SETTINGS_MENU_ORDER_2"
+				class="inputbox"
+				default="2"
+			/>
+			<field
+				name="thirdPosition"
+				type="position"
+				label="COM_JOOMBLOG_SETTINGS_MENU_ORDER_3"
+				class="inputbox"
+				default="3"
+			/>
+			<field
+				name="fourthPosition"
+				type="position"
+				label="COM_JOOMBLOG_SETTINGS_MENU_ORDER_4"
+				class="inputbox"
+				default="4"
+			/>
+			<field
+				name="fifthPosition"
+				type="position"
+				label="COM_JOOMBLOG_SETTINGS_MENU_ORDER_5"
+				class="inputbox"
+				default="5"
+			/>
+			<field
+				name="sixthPosition"
+				type="position"
+				label="COM_JOOMBLOG_SETTINGS_MENU_ORDER_6"
+				class="inputbox"
+				default="6"
+			/>
+			<field
+				name="seventhPosition"
+				type="position"
+				label="COM_JOOMBLOG_SETTINGS_MENU_ORDER_7"
+				class="inputbox"
+				default="7"
+			/>
+			<field
+				name="eighthPosition"
+				type="position"
+				label="COM_JOOMBLOG_SETTINGS_MENU_ORDER_8"
+				class="inputbox"
+				default="8"
+			/>
+			<field
+				name="ninthPosition"
+				type="position"
+				label="COM_JOOMBLOG_SETTINGS_MENU_ORDER_9"
+				class="inputbox"
+				default="9"
+			/>
+			<field
+				name="tenthPosition"
+				type="position"
+				label="COM_JOOMBLOG_SETTINGS_MENU_ORDER_10"
+				class="inputbox"
+				default="10"
+			/>
+		</fieldset>
+		
+		<fieldset name="bookmarks"
+			label="COM_JOOMBLOG_SETTINGS_BOOKMARKS">
+
+			<field name="useAddThis" type="radio" default="0"	class="inputbox" 
+						label="COM_JOOMBLOG_SETTINGS_GLOBAL_ADDTHIS" >
+					<option	value="0">JNO</option>
+					<option	value="1">JYES</option>
+				</field>
+				
+			<field
+				name="addThisName"
+				type="text"
+				label="Profile ID"
+				description="Profile ID https://www.addthis.com/settings/publisher"
+				class="inputbox"
+				default=""
+			/>
+			
+			<field name="addthis_language" size="1" type="list" default="en" label="AddThis language"  description="Language in which the button and menu has to be shown">
+	            <option value="en">English</option>
+	            <option value="af">Afrikaans</option>
+	            <option value="sq">Albanian</option>
+	            <option value="ar">Arabic</option>
+	            <option value="az">Azerbaijani</option>
+	            <option value="eu">Basque</option>
+	            <option value="be">Belarusian</option>
+	            <option value="bn">Bengali</option>
+	            <option value="bs">Bosnian</option>
+	            <option value="bg">Bulgarian</option>
+	            <option value="ca">Catalan; Valencian</option>
+	            <option value="zh">Chinese</option>
+	            <option value="hr">Croatian</option>
+	            <option value="cs">Czech</option>
+	            <option value="da">Danish</option>
+	            <option value="nl">Dutch; Flemish</option>
+	            <option value="et">Estonian</option>
+	            <option value="fo">Faroese</option>
+	            <option value="fi">Finnish</option>
+	            <option value="fr">French</option>
+	            <option value="gl">Galician</option>
+	            <option value="de">German</option>
+	            <option value="dl">Greek (Modern)</option>
+	            <option value="he">Hebrew</option>
+	            <option value="hi">Hindi</option>
+	            <option value="hu">Hungarian</option>
+	            <option value="is">Icelandic</option>
+	            <option value="id">Indonesian</option>
+	            <option value="ga">Irish</option>
+	            <option value="it">Italian</option>
+	            <option value="ja">Japanese</option>
+	            <option value="ko">Korean</option>
+	            <option value="lv">Latvian</option>
+	            <option value="lt">Lithuanian</option>
+	            <option value="lb">Luxembourgish</option>
+	            <option value="mk">Macedonian</option>
+	            <option value="ml">Malayalam</option>
+	            <option value="mn">Mongolian</option>
+	            <option value="ms">Malay</option>
+	            <option value="nb">Norwegian Bokmal</option>
+	            <option value="no">Norwegian</option>
+	            <option value="oc">Occitan</option>
+	            <option value="fa">Persian</option>
+	            <option value="pl">Polish</option>
+	            <option value="pt">Portuguese</option>
+	            <option value="ro">Romanian</option>
+	            <option value="ru">Russian</option>
+	            <option value="se">Northern Sami</option>
+	            <option value="sr">Serbian</option>
+	            <option value="sk">Slovak</option>
+	            <option value="sl">Slovenian</option>
+	            <option value="sw">Swahili</option>
+	            <option value="es">Spanish</option>
+	            <option value="su">Sundanese</option>
+	            <option value="sv">Swedish</option>
+	            <option value="tl">Tagalog</option>
+	            <option value="ta">Tamil</option>
+	            <option value="te">Telugu</option>
+	            <option value="th">Thai</option>
+	            <option value="tr">Turkish</option>
+	            <option value="uk">Ukrainian</option>
+	            <option value="ur">Urdu</option>
+	            <option value="vi">Vietnamese</option>
+	            <option value="cy">Welsh</option>
+	       </field>
+			
+			<field
+				type="spacer"
+				hr="true"
+			/>
+			<field name="showAddThisInList" type="radio" default="0"	class="inputbox" 
+						label="Show addthis in lists of posts" >
+					<option	value="0">JNO</option>
+					<option	value="1">JYES</option>
+				</field>
+			<field name="list_button_style" type="radio" default="st-share" label="Style (in blog list):" description="">
+	            <option value="style1"><![CDATA[<!-- AddThis Button BEGIN --> <style>.hide{clear: both !important;margin: 0 !important;  min-width: 0 !important;}</style><div class="addthis_toolbox addthis_default_style " style="display:inline-block;"><a class="addthis_button_preferred_1"></a><a class="addthis_button_preferred_2"></a><a class="addthis_button_preferred_3"></a><a class="addthis_button_preferred_4"></a><a class="addthis_button_compact"></a>
+	<a class="addthis_counter addthis_bubble_style"></a></div><script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid=xa-4e4ba2380273722f"></script>
+	<!-- AddThis Button END --></label><br/><br/><label class="hide">]]></option>
+	            <option value="style3"><![CDATA[ <!-- AddThis Button BEGIN --><div class="addthis_toolbox addthis_default_style " style="display:inline-block;"><a class="addthis_button_facebook_like" fb:like:layout="button_count"></a><a class="addthis_button_tweet"></a><a class="addthis_counter addthis_pill_style"></a></div><script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid=xa-4e4ba3d130ca37a5"></script><!-- AddThis Button END --></label><br/><br/><label class="hide">]]></option>
+	            <option value="style4"><![CDATA[<!-- AddThis Button BEGIN --><div class="addthis_toolbox addthis_default_style " style="display:inline-block;"><a class="addthis_button_google_plusone"></a>
+	<a class="addthis_counter addthis_pill_style"></a></div><script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid=xa-4e4ba42e1e137b29"></script><!-- AddThis Button END --></label><br/><br/><label class="hide">]]></option>
+	            <option value="style5"><![CDATA[<!-- AddThis Button BEGIN --><div class="addthis_toolbox addthis_default_style " style="display:inline-block;"><a href="http://www.addthis.com/bookmark.php?v=250&amp;pubid=ra-4db6687d67e055e1" class="addthis_button_compact">Share</a><span class="addthis_separator">|</span>
+	<a class="addthis_button_preferred_1"></a><a class="addthis_button_preferred_2"></a><a class="addthis_button_preferred_3"></a><a class="addthis_button_preferred_4"></a>
+	</div><script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid=ra-4db6687d67e055e1"></script><!-- AddThis Button END --></label><br/><br/><label class="hide">]]></option>
+	           <option value="style8"><![CDATA[<!-- AddThis Button BEGIN --><div class="addthis_toolbox addthis_default_style " style="display:inline-block;"><a class="addthis_counter addthis_pill_style"></a></div><script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid=xa-4e4ba4a20d110706"></script><!-- AddThis Button END --></label><br/><br/><br/><label class="hide">]]></option>
+				  <option value="style9"><![CDATA[<!-- AddThis Button BEGIN --><a class="addthis_button" href="http://www.addthis.com/bookmark.php?v=250&amp;pubid=xa-4e4ba4c412dee61f"><img src="http://s7.addthis.com/static/btn/v2/lg-share-en.gif" width="125" height="16" alt="Bookmark and Share" style="border:0"/></a><script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid=xa-4e4ba4c412dee61f"></script><!-- AddThis Button END --></label><br/><br/><br/><label class="hide">]]></option>
+				 <option value="custom"><![CDATA[Custom Button]]></option>
+	       </field>	
+	<field name="@spacer" type="spacer" default="" label="Only for custom buttons" description="Only for custom buttons" />
+			<field name="list_custom_services" label="Custom Button Services(Only for Custom Button)" type="text"  default="fb,tw,gp,sh" description="Services to be shown. fb - facebook, gp - google+1, tw - tweeter, sh - share button (separated by commas)"/>
+			<field name="list_fb_button_style" type="radio" default="fb-style1" label="Facebook Like Configurations" description="Facebook Like Configurations">
+				<option value="fb-style1"><![CDATA[<!-- AddThis Button BEGIN --> <div class="addthis_toolbox addthis_default_style " style="display:inline-block;"><a class="addthis_button_facebook_like" fb:like:layout="button_count" fb:like:action="recommend"></a></div><script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid=xa-4e4ba2380273722f"></script>
+	<!-- AddThis Button END --><br/>]]></option>
+	          <option value="fb-style3"><![CDATA[ <!-- AddThis Button BEGIN --><div class="addthis_toolbox addthis_default_style " style="display:inline-block;"><a class="addthis_button_facebook_like" fb:like:layout="standard"></a></div><script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid=xa-4e4ba3d130ca37a5"></script><!-- AddThis Button END -->]]></option>
+			</field>
+			<field name="list_tw_button_style" type="radio" default="tw-style2" label="Tweet Configurations" description="Tweet Configurations">
+	            <option value="tw-style2"><![CDATA[<!-- AddThis Button BEGIN --> <div class="addthis_toolbox addthis_default_style" style="display:inline-block;"><a class="addthis_button_tweet" tw:via="addthis"></a></div><script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid=xa-4e4ba2f137540036"></script><!-- AddThis Button END --><br/>]]></option>
+				 <option value="twf-style1"><![CDATA[<!-- AddThis Button BEGIN --><div class="addthis_toolbox addthis_default_style" style="display:inline-block;">
+	    		<a class="addthis_button_twitter_follow_native"></a></div><script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid=xa-4e4ba2f137540036"></script><!-- AddThis Button END --><br/>]]></option>
+			</field>
+			<field name="list_gp_button_style" type="radio" default="gp-style3" label="Google +1 Configurations" description="Google +1 Configurations">
+	           <option value="gp-style3"><![CDATA[ <!-- AddThis Button BEGIN --><div class="addthis_toolbox addthis_default_style " style="display:inline-block;"><a class="addthis_button_google_plusone" g:plusone:count="false"></a></a></div><script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid=xa-4e4ba3d130ca37a5"></script><!-- AddThis Button END -->]]></option>
+			   <option value="gp-style1"><![CDATA[<!-- AddThis Button BEGIN --> <div class="addthis_toolbox addthis_default_style " style="display:inline-block;"><a class="addthis_button_google_plusone" g:plusone:size="medium"></a></a></div><script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid=xa-4e4ba2380273722f"></script>
+	<!-- AddThis Button END --><br/>]]></option>
+			</field>
+			
+			<field name="list_sh_button_style" type="radio" default="sh-style3" label="Share button Configurations" description="Share button Configurations">
+				<option value="sh-style3"><![CDATA[<!-- AddThis Button BEGIN --><div class="addthis_toolbox addthis_default_style " style="display:inline-block;"><a href="http://www.addthis.com/bookmark.php?v=250&amp;pubid=xa-4e4ba467773ffa44" class="addthis_button_compact">Share</a></div>
+	<script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid=xa-4e4ba467773ffa44"></script><!-- AddThis Button END --><br/><br/>]]></option>
+				<option value="sh-style2"><![CDATA[<!-- AddThis Button BEGIN --><div class="addthis_toolbox addthis_default_style " style="display:inline-block;"><a class="addthis_counter addthis_pill_style"></a></div><script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid=xa-4e4ba4a20d110706"></script><!-- AddThis Button END --><br/><br/>]]></option>
+	           </field>
+	
+		
+	<field	type="spacer"		hr="true"	/>
+		<field name="showAddThisInPost" type="radio" default="0"	class="inputbox" 
+						label="Show addthis in post content" >
+					<option	value="0">JNO</option>
+					<option	value="1">JYES</option>
+				</field>
+	
+		<field name="post_button_style" type="radio" default="st-share" label="Style (in post):" description="">
+	            <option value="style2"><![CDATA[<!-- AddThis Button BEGIN --> <div class="addthis_toolbox addthis_default_style addthis_32x32_style" style="display:inline-block;"><a class="addthis_button_preferred_1"></a>
+	<a class="addthis_button_preferred_2"></a><a class="addthis_button_preferred_3"></a><a class="addthis_button_preferred_4"></a><a class="addthis_button_compact"></a><a class="addthis_counter addthis_bubble_style"></a></div><script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid=xa-4e4ba2f137540036"></script><!-- AddThis Button END --></label><br/><br/><label class="hide">]]></option>
+			    <option value="style1"><![CDATA[<!-- AddThis Button BEGIN --> <div class="addthis_toolbox addthis_default_style " style="display:inline-block;"><a class="addthis_button_preferred_1"></a><a class="addthis_button_preferred_2"></a><a class="addthis_button_preferred_3"></a><a class="addthis_button_preferred_4"></a><a class="addthis_button_compact"></a>
+	<a class="addthis_counter addthis_bubble_style"></a></div><script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid=xa-4e4ba2380273722f"></script>
+	<!-- AddThis Button END --></label><br/><br/><label class="hide">]]></option>
+	            <option value="style3"><![CDATA[ <!-- AddThis Button BEGIN --><div class="addthis_toolbox addthis_default_style " style="display:inline-block;"><a class="addthis_button_facebook_like" fb:like:layout="button_count"></a><a class="addthis_button_tweet"></a><a class="addthis_counter addthis_pill_style"></a></div><script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid=xa-4e4ba3d130ca37a5"></script><!-- AddThis Button END --></label><br/><br/><label class="hide">]]></option>
+	            <option value="style4"><![CDATA[<!-- AddThis Button BEGIN --><div class="addthis_toolbox addthis_default_style " style="display:inline-block;"><a class="addthis_button_google_plusone"></a>
+	<a class="addthis_counter addthis_pill_style"></a></div><script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid=xa-4e4ba42e1e137b29"></script><!-- AddThis Button END --></label><br/><br/><label class="hide">]]></option>
+	            <option value="style5"><![CDATA[<!-- AddThis Button BEGIN --><div class="addthis_toolbox addthis_default_style " style="display:inline-block;"><a href="http://www.addthis.com/bookmark.php?v=250&amp;pubid=ra-4db6687d67e055e1" class="addthis_button_compact">Share</a><span class="addthis_separator">|</span>
+	<a class="addthis_button_preferred_1"></a><a class="addthis_button_preferred_2"></a><a class="addthis_button_preferred_3"></a><a class="addthis_button_preferred_4"></a>
+	</div><script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid=ra-4db6687d67e055e1"></script><!-- AddThis Button END --></label><br/><br/><label class="hide">]]></option>
+	            <option value="style7"><![CDATA[<!-- AddThis Button BEGIN --><div class="addthis_toolbox addthis_default_style " style="display:inline-block;"><a class="addthis_counter"></a></div><script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid=xa-4e4ba47e7d0acba4"></script><!-- AddThis Button END --></label><br/><br/><label class="hide">]]></option>
+				 <option value="style8"><![CDATA[<!-- AddThis Button BEGIN --><div class="addthis_toolbox addthis_default_style " style="display:inline-block;"><a class="addthis_counter addthis_pill_style"></a></div><script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid=xa-4e4ba4a20d110706"></script><!-- AddThis Button END --></label><br/><br/><label class="hide">]]></option>
+				 <option value="style9"><![CDATA[<!-- AddThis Button BEGIN --><a class="addthis_button" href="http://www.addthis.com/bookmark.php?v=250&amp;pubid=xa-4e4ba4c412dee61f"><img src="http://s7.addthis.com/static/btn/v2/lg-share-en.gif" width="125" height="16" alt="Bookmark and Share" style="border:0"/></a><script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid=xa-4e4ba4c412dee61f"></script><!-- AddThis Button END --></label><br/><br/><label class="hide">]]></option>
+				 <option value="custom"><![CDATA[Custom Button]]></option>
+	       </field>			
+	<field name="@spacer" type="spacer" default="" label="Only for custom buttons" description="Only for custom buttons" />
+	<field name="custom_services" label="Custom Button Services(Only for Custom Button)" type="text" default="" description="Services to be shown. fb - facebook, gp - google+1, tw - tweeter, sh - share button (separated by commas)"/>		   
+			<field name="@spacer" type="spacer" default="fb,tw,gp,sh" label="Only for custom buttons" description="Only for custom buttons" />
+			<field name="list_custom_services" label="Custom Button Services(Only for Custom Button)" type="text" default="" description="Services to be shown. fb - facebook, gp - google+1, tw - tweeter, sh - share button (separated by commas)"/>
+			<field name="fb_button_style" type="radio" default="fb-style2" label="Facebook Like Configurations" description="Facebook Like Configurations">
+				<option value="fb-style2"><![CDATA[<!-- AddThis Button BEGIN --> <div class="addthis_toolbox addthis_default_style" style="display:inline-block;"> <a class="addthis_button_facebook_like" fb:like:layout="box_count"></a></div><script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid=xa-4e4ba2f137540036"></script><!-- AddThis Button END --><br/>]]></option>
+				<option value="fb-style1"><![CDATA[<!-- AddThis Button BEGIN --> <div class="addthis_toolbox addthis_default_style " style="display:inline-block;"><a class="addthis_button_facebook_like" fb:like:layout="button_count" fb:like:action="recommend"></a></div><script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid=xa-4e4ba2380273722f"></script>
+	<!-- AddThis Button END --><br/>]]></option>
+	            <option value="fb-style3"><![CDATA[ <!-- AddThis Button BEGIN --><div class="addthis_toolbox addthis_default_style " style="display:inline-block;"><a class="addthis_button_facebook_like" fb:like:layout="standard"></a></div><script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid=xa-4e4ba3d130ca37a5"></script><!-- AddThis Button END -->]]></option>
+			</field>
+			<field name="tw_button_style" type="radio" default="tw-style1" label="Tweet Configurations" description="Tweet Configurations">
+				<option value="tw-style1"><![CDATA[<!-- AddThis Button BEGIN --> <div class="addthis_toolbox addthis_default_style " style="display:inline-block;"><a class="addthis_button_tweet" tw:count="vertical"></a></div><script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid=xa-4e4ba2380273722f"></script>
+	<!-- AddThis Button END --><br/>]]></option>
+	            <option value="tw-style2"><![CDATA[<!-- AddThis Button BEGIN --> <div class="addthis_toolbox addthis_default_style" style="display:inline-block;"><a class="addthis_button_tweet" tw:via="addthis"></a></div><script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid=xa-4e4ba2f137540036"></script><!-- AddThis Button END --><br/>]]></option>
+				 <option value="twf-style1"><![CDATA[<!-- AddThis Button BEGIN --><div class="addthis_toolbox addthis_default_style" style="display:inline-block;">
+	    <a class="addthis_button_twitter_follow_native"></a></div><script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid=xa-4e4ba2f137540036"></script><!-- AddThis Button END --><br/>]]></option>
+			</field>
+			<field name="gp_button_style" type="radio" default="gp-style2" label="Google +1 Configurations" description="Google +1 Configurations">
+				 <option value="gp-style2"><![CDATA[<!-- AddThis Button BEGIN --> <div class="addthis_toolbox addthis_default_style" style="display:inline-block;"><a class="addthis_button_google_plusone" g:plusone:size="tall"></a></a></div><script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid=xa-4e4ba2f137540036"></script><!-- AddThis Button END --><br/>]]></option>
+				<option value="gp-style1"><![CDATA[<!-- AddThis Button BEGIN --> <div class="addthis_toolbox addthis_default_style " style="display:inline-block;"><a class="addthis_button_google_plusone" g:plusone:size="medium"></a></a></div><script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid=xa-4e4ba2380273722f"></script>
+	<!-- AddThis Button END --><br/>]]></option>
+	           <option value="gp-style3"><![CDATA[ <!-- AddThis Button BEGIN --><div class="addthis_toolbox addthis_default_style " style="display:inline-block;"><a class="addthis_button_google_plusone" g:plusone:count="false"></a></a></div><script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid=xa-4e4ba3d130ca37a5"></script><!-- AddThis Button END -->]]></option>
+			</field>
+			
+			<field name="sh_button_style" type="radio" default="sh-style1" label="Share button Configurations" description="Share button Configurations">
+				<option value="sh-style1"><![CDATA[<!-- AddThis Button BEGIN --><div class="addthis_toolbox addthis_default_style " style="display:inline-block;"><a class="addthis_counter"></a></div><script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid=xa-4e4ba47e7d0acba4"></script><!-- AddThis Button END --><br/><br/>]]></option>
+				 <option value="sh-style2"><![CDATA[<!-- AddThis Button BEGIN --><div class="addthis_toolbox addthis_default_style " style="display:inline-block;"><a class="addthis_counter addthis_pill_style"></a></div><script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid=xa-4e4ba4a20d110706"></script><!-- AddThis Button END --><br/><br/>]]></option>
+	            <option value="sh-style3"><![CDATA[<!-- AddThis Button BEGIN --><div class="addthis_toolbox addthis_default_style " style="display:inline-block;"><a href="http://www.addthis.com/bookmark.php?v=250&amp;pubid=xa-4e4ba467773ffa44" class="addthis_button_compact">Share</a></div>
+	<script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid=xa-4e4ba467773ffa44"></script><!-- AddThis Button END --><br/><br/>]]></option>
+				<option value="sh-style4"><![CDATA[<!-- AddThis Button BEGIN --><a class="addthis_button" href="http://www.addthis.com/bookmark.php?v=250&amp;pubid=xa-4e4ba4c412dee61f"><img src="http://s7.addthis.com/static/btn/v2/lg-share-en.gif" width="125" height="16" alt="Bookmark and Share" style="border:0"/></a><script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid=xa-4e4ba4c412dee61f"></script><!-- AddThis Button END --><br/><br/>]]></option>
+			</field>
+			
+		 <field name="addThisPosition" type="radio" default="0"	class="inputbox" label="Position" >
+					<option	value="0">Top</option>
+					<option	value="1">Bottom</option>
+		</field>
+		   </fieldset>
+		
+		
+		<fieldset
+			name="rules"
+			label="COM_JOOMBLOG_SETTINGS_RULES"
+		>
+			<field
+				type="spacer"
+				label="General Permissions"
+				class="strong"
+			/>
+
+			<field
+				name="allowedPosters"
+				type="textarea"
+				label="COM_JOOMBLOG_SETTINGS_RULES_POST_FROM_USERS"
+				description="COM_JOOMBLOG_SETTINGS_RULES_POST_FROM_USERS_DESC"
+				class="inputbox"
+				default=""
+				cols="31"
+				rows="3"
+			/>
+			<field	type="spacer"	/>
+			<field
+				name="disallowedPosters"
+				type="textarea"
+				label="COM_JOOMBLOG_SETTINGS_RULES_POST_FROM_USERS_DIS"
+				description="COM_JOOMBLOG_SETTINGS_RULES_POST_FROM_USERS_DIS_DESC"
+				class="inputbox"
+				default=""
+				cols="29"
+				rows="3"
+			/>
+			
+			<field
+				name="allowedPublishers"
+				type="textarea"
+				label="COM_JOOMBLOG_SETTINGS_RULES_PUBLISH_FROM_USERS"
+				description="COM_JOOMBLOG_SETTINGS_RULES_PUBLISH_FROM_USERS_DESC"
+				class="inputbox"
+				default=""
+				cols="24"
+				rows="3"
+			/>
+			<field
+				name="viewIntro"
+				type="list"
+				label="COM_JOOMBLOG_SETTINGS_RULES_VIEW_INTRO"
+				class="inputbox"
+				default=""
+			>
+				<option value="1" >All</option>
+				<option value="2" >Members Only</option>
+			</field>
+			<field
+				name="viewEntry"
+				type="list"
+				label="COM_JOOMBLOG_SETTINGS_RULES_VIEW_ENTRY"
+				class="inputbox"
+				default=""
+			>
+				<option value="1" >All</option>
+				<option value="2" >Members Only</option>
+			</field>
+			<field
+				name="viewComments"
+				type="list"
+				label="COM_JOOMBLOG_SETTINGS_RULES_VIEW_COMMENTS"
+				class="inputbox"
+				default=""
+			>
+				<option value="1" >All</option>
+				<option value="2" >Members Only</option>
+			</field>
+		</fieldset>
+
+		<fieldset
+			name="permissions"
+			label="JCONFIG_PERMISSIONS_LABEL"
+			descriptionription="JCONFIG_PERMISSIONS_DESC"
+		>			
+			<field
+				name="rules"
+				type="rules"
+				label="JCONFIG_PERMISSIONS_LABEL"
+				class="inputbox"
+				validate="rules"
+				filter="rules"
+				component="com_joomblog"
+				section="component"
+			/>
+		</fieldset>
+		
+	</form>
+</config>
+

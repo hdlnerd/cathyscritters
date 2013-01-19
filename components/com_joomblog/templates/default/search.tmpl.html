@@ -1,0 +1,68 @@
+﻿<!--
+* JoomBlog component for Joomla
+* @version $Id: search.tmpl.html 2011-03-16 17:30:15
+* @package JoomBlog
+* @subpackage search.tmpl.html
+* @author JoomPlace Team
+* @Copyright Copyright (C) JoomPlace, www.joomplace.com
+* @license GNU/GPL http://www.gnu.org/copyleft/gpl.html
+-->
+
+<div id="joomBlog-content">
+  <form action="<?php echo $searchURL; ?>" method="POST">
+    <div id="joomblogSearch">
+      <label><?php echo JText::_('COM_JOOMBLOG_SEARCH_BLOG_KEYWORDS'); ?></label>
+        <input class="inputbox joomblogSearchInput" name="keyword" type="text" id="keyword" size="38" value="<?php echo $keyword; ?>" />
+      <label><?php echo JText::_('COM_JOOMBLOG_SEARCH_BLOG_BLOGGER'); ?></label>
+        <input class="inputbox joomblogSearchInput" name="blogger" type="text" id="blogger" size="38" value="<?php echo $blogger;?>"/>
+      <label><?php echo JText::_('COM_JOOMBLOG_SEARCH_BLOG_TAG'); ?></label>
+        <input class="inputbox joomblogSearchInput" name="tags" type="text" id="category" size="38" value="<?php echo $tags;?>" />
+      <input type="hidden" name="option" value="com_joomblog" />
+      <input type="hidden" name="Itemid" value="<?php echo $Itemid; ?>" />
+      <div id="joomblogSearchSubmit">
+        <input type="submit" class="jbbutton" value="<?php echo JText::_('COM_JOOMBLOG_SEARCH_BUTTON'); ?>" id="submit" />
+      </div>
+    </div>
+    <div style="clear: both;"></div>
+  
+
+  <?php
+  if($results)
+  {
+  ?>
+
+    <br/>
+    <div class="componentheading">
+      <?php echo JText::_("COM_JOOMBLOG_SEARCH_RESULT"); ?>
+    </div>
+    <br/>
+    <?php foreach($results as $row) { ?>		
+      <!-- Entry -->
+      <div class="postSummary" id="post-<?php echo $row->id; ?>" >
+        <!-- Post Top Summary -->
+        <h2 class="entry-title">
+          <a href="<?php echo JRoute::_('index.php?option=com_joomblog&blogid='.$row->blogid.'&view=blogger');?>"><?php echo $row->blogtitle;?></a><?php echo " → ";?><a class="blog" href="<?php echo $row->link; ?>"><?php echo $row->title; ?></a>
+        </h2>
+        <small class="category-bgk"><?php if( $categoryDisplay ){echo $row->jcategory;} ?></small>
+        <!-- Post Teaser Text -->
+        <div class="postSummary-teaser">
+          <?php echo $row->text; ?>
+          <!-- Post Footer -->						
+        </div>
+        
+        <span class="article_separator">&nbsp;</span>
+        <hr class="postEntry-divider" />
+      </div>
+      
+      <div class="clear"></div>
+    <?php
+      }
+    ?>
+    <div class="jb-pagenav"><?php echo $pagination; ?>	</div>
+
+  <?php
+  }
+  ?>
+    <input type="hidden" name="limitstart" value="<?php echo $limitstart; ?>" />
+  </form>
+</div>

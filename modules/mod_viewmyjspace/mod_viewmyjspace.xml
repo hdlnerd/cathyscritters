@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="module" version="1.6" client="site" method="upgrade">
+	<name>BS ViewMyJspace</name>
+	<author>Bernard Saulme</author>
+	<creationDate>21/10/2012</creationDate>
+	<authorEmail>bernard@wanadoo.fr</authorEmail>
+	<authorUrl>http://softs.saulme.fr</authorUrl>
+	<copyright>Copyright (C) 2010-2011-2012 - Bernard Saulme</copyright>
+    <license>GNU/GPLv3 http://www.gnu.org/licenses/gpl-3.0.html</license>
+	<version>2.0.3</version>
+	<build>51</build>
+	<description>MOD_VIEWMYJSPACE_XML_DESCRIPTION</description>
+
+	<scriptfile>install.php</scriptfile>
+		
+	<files>
+		<filename module="mod_viewmyjspace">mod_viewmyjspace.php</filename>
+		<filename>COPYRIGHT.php</filename>
+		<filename>index.html</filename>
+		<filename>helper.php</filename>
+		<folder>assets</folder>
+		<folder>tmpl</folder>
+		<folder>images</folder>		
+	</files>
+
+	<languages folder="language">
+		<language tag="en-GB">en-GB.mod_viewmyjspace.ini</language>
+		<language tag="en-GB">en-GB.mod_viewmyjspace.sys.ini</language>
+		<language tag="fr-FR">fr-FR.mod_viewmyjspace.ini</language>
+		<language tag="fr-FR">fr-FR.mod_viewmyjspace.sys.ini</language>
+	</languages>	
+
+	<config>
+		<fields name="params">
+			<fieldset name="basic">
+				<field name="showmode" type="list" default="1" label="MOD_VIEWMYJSPACE_SHOWMODE_LABEL" description="MOD_VIEWMYJSPACE_SHOWMODE_DESC">
+					<option value="0">MOD_VIEWMYJSPACE_SHOWMODE_COUNT</option>
+					<option value="1">MOD_VIEWMYJSPACE_SHOWMODE_NAMES</option>
+					<option value="2">MOD_VIEWMYJSPACE_SHOWMODE_BOTH</option>
+				</field>
+				<field name="showmode1" type="text" size="4" default="1" label="MOD_VIEWMYJSPACE_SHOWMODE1_LABEL" description="MOD_VIEWMYJSPACE_SHOWMODE1_DESC" />
+				<field name="showmode2" type="list" default="1" label="MOD_VIEWMYJSPACE_SHOWMODE2_LABEL" description="MOD_VIEWMYJSPACE_SHOWMODE2_DESC">
+					<option value="0">MOD_VIEWMYJSPACE_SHOWMODE2_LIST</option>
+					<option value="1">MOD_VIEWMYJSPACE_SHOWMODE2_TEXT</option>
+				</field>
+				<field name="showmode0" type="list" default="inherit" label="MOD_VIEWMYJSPACE_SHOWMODE0_LABEL" description="MOD_VIEWMYJSPACE_SHOWMODE0_DESC">
+					<option value="left">MOD_VIEWMYJSPACE_SHOWMODE0_LEFT</option>
+					<option value="center">MOD_VIEWMYJSPACE_SHOWMODE0_CENTER</option>
+					<option value="right">MOD_VIEWMYJSPACE_SHOWMODE0_RIGHT</option>
+					<option value="justify">MOD_VIEWMYJSPACE_SHOWMODE0_INHERIT</option>
+					<option value="inherit">MOD_VIEWMYJSPACE_SHOWMODE0_INHERIT</option>
+				</field>
+				<field name="preview_width" type="text" size="6" default="100px" label="MOD_VIEWMYJSPACE_PREVIEW_WIDTH_LABEL" description="MOD_VIEWMYJSPACE_PREVIEW_WIDTH_DESC" />
+				<field name="preview_height" type="text" size="6" default="100px" label="MOD_VIEWMYJSPACE_PREVIEW_HEIGHT_LABEL" description="MOD_VIEWMYJSPACE_PREVIEW_HEIGHT_DESC" />
+				<field name="date_fmt" type="text" size="6" default="Y-m-d" label="MOD_VIEWMYJSPACE_DATE_FMT_LABEL" description="MOD_VIEWMYJSPACE_DATE_FMT_DESC" />
+				<field name="showmode3" type="list" default="1" label="MOD_VIEWMYJSPACE_SHOWMODE3_LABEL" description="MOD_VIEWMYJSPACE_SHOWMODE3_DESC">
+					<option value="0">MOD_VIEWMYJSPACE_SHOWMODE3_FOLDER</option>
+					<option value="1">MOD_VIEWMYJSPACE_SHOWMODE3_JOOMLA</option>
+				</field>
+				<field name="affimgcon" type="list" default="1" label="MOD_VIEWMYJSPACE_AFFIMGCON_LABEL" description="MOD_VIEWMYJSPACE_AFFIMGCON_DESC">
+					<option value="0">MOD_VIEWMYJSPACE_NO</option>
+					<option value="1">MOD_VIEWMYJSPACE_YES</option>
+				</field>
+				<field name="triemode" type="list" default="2" label="MOD_VIEWMYJSPACE_TRIEMODE_LABEL" description="MOD_VIEWMYJSPACE_TRIEMODE_DESC">
+					<option value="0">MOD_VIEWMYJSPACE_TRIEMODE_0</option>
+					<option value="1">MOD_VIEWMYJSPACE_TRIEMODE_1</option>
+					<option value="2">MOD_VIEWMYJSPACE_TRIEMODE_2</option>
+					<option value="3">MOD_VIEWMYJSPACE_TRIEMODE_3</option>
+					<option value="4">MOD_VIEWMYJSPACE_TRIEMODE_4</option>
+					<option value="5">MOD_VIEWMYJSPACE_TRIEMODE_5</option>
+					<option value="6">MOD_VIEWMYJSPACE_TRIEMODE_6</option>
+				</field>
+				<field name="emptymode" type="list" default="0" label="MOD_VIEWMYJSPACE_EMPTYMODE_LABEL" description="MOD_VIEWMYJSPACE_EMPTYMODE_DESC">
+					<option value="0">MOD_VIEWMYJSPACE_NO</option>
+					<option value="1">MOD_VIEWMYJSPACE_YES</option>
+				</field>	
+				<field name="nonvisiblemode" type="list" default="0" label="MOD_VIEWMYJSPACE_NONVISIBLEMODE_LABEL" description="MOD_VIEWMYJSPACE_NONVISIBLEMODE_DESC">
+					<option value="0">MOD_VIEWMYJSPACE_NO</option>
+					<option value="1">MOD_VIEWMYJSPACE_YES</option>
+				</field>		
+				<field type="text" name="delais" size="6" default="604800" label="MOD_VIEWMYJSPACE_DELAIS_LABEL" description="MOD_VIEWMYJSPACE_DELAIS_DESC" />
+				<field type="text" name="affmax" size="4" default="20" label="MOD_VIEWMYJSPACE_AFFMAX_LABEL" description="MOD_VIEWMYJSPACE_AFFMAX_DESC" />
+				<field type="text" name="select_itemid" size="4" default="" label="MOD_VIEWMYJSPACE_SELECT_ITEMID_LABEL" description="MOD_VIEWMYJSPACE_SELECT_ITEMID_DESC" />
+				<field type="list" name="use_com_acl" default="0" label="MOD_VIEWMYJSPACE_USE_COM_ACL_LABEL" description="MOD_VIEWMYJSPACE_USE_COM_ACL_DESC">
+					<option value="0">MOD_VIEWMYJSPACE_NO</option>
+					<option value="1">MOD_VIEWMYJSPACE_YES</option>
+				</field>				
+				<field type="text" name="catid_list" size="20" default="" label="MOD_VIEWMYJSPACE_CATID_LIST_LABEL" description="MOD_VIEWMYJSPACE_CATID_LIST_DESC" />
+			</fieldset>
+			
+			<fieldset name="advanced">
+				<field name="layout" type="modulelayout" label="JFIELD_ALT_LAYOUT_LABEL" description="JFIELD_ALT_MODULE_LAYOUT_DESC" />
+				<field name="moduleclass_sfx" type="text" label="COM_MODULES_FIELD_MODULECLASS_SFX_LABEL" description="COM_MODULES_FIELD_MODULECLASS_SFX_DESC" />
+				<field name="cache" type="list" default="1" label="COM_MODULES_FIELD_CACHING_LABEL" description="COM_MODULES_FIELD_CACHING_DESC">
+					<option value="1">JGLOBAL_USE_GLOBAL</option>
+					<option value="0">COM_MODULES_FIELD_VALUE_NOCACHING</option>
+				</field>
+				<field name="cache_time" type="text" default="900" label="COM_MODULES_FIELD_CACHE_TIME_LABEL" description="COM_MODULES_FIELD_CACHE_TIME_DESC" />
+				<field name="cachemode" type="hidden" default="itemid"> 
+					<option value="itemid"></option>
+				</field>
+			</fieldset>
+
+		</fields>
+	</config>
+
+</extension>

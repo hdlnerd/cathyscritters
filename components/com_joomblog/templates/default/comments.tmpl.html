@@ -1,0 +1,175 @@
+<!--
+* JoomBlog component for Joomla
+* @version $Id: comments.tmpl.html 2011-03-16 17:30:15
+* @package JoomBlog
+* @subpackage comments.tmpl.html
+* @author JoomPlace Team
+* @Copyright Copyright (C) JoomPlace, www.joomplace.com
+* @license GNU/GPL http://www.gnu.org/copyleft/gpl.html
+-->
+<div id="comments">
+    <?php if(!$e['onlyregisteredusers']) { ?>
+    <div id="write_comment_title" class="contentheading"><?php echo JText::_('COMMENT ADD COMMENT'); ?></div>
+    <div id="commentFormDiv">
+      <form name="commentForm" id="commentForm" action="" method="post">
+        <div class="fordiv">
+          <label for="name"><?php echo JText::_('Name'); ?></label>
+          <input type="text" class="inputbox" value="<?php echo $e['name']; ?>" id="name" name="name">
+          <span id="err_name" class="err"></span>
+        </div>
+
+        <div class="fordiv">
+          <label for="email"><?php echo JText::_('Email'); ?></label>
+          <input type="text" class="inputbox" value="<?php echo $e['email']; ?>" id="email" name="email">
+        </div>
+
+
+        <div>
+          <label for="comment"><?php echo JText::_('Comment'); ?></label>
+          <div>
+            <div id="comment_codes">
+              <a class="code" onclick="closeTag('[b]', '[/b]', getdom('comment')); return false;" title="Bold"  href="javascript:void(0);">
+                <span class="code_b">B</span>
+              </a>
+              <a class="code" onclick="closeTag('[i]', '[/i]', getdom('comment')); return false;" title="Italicize"  href="javascript:void(0);">
+                <span class="code_i">I</span>
+              </a>
+              <a class="code" onclick="closeTag('[u]', '[/u]', getdom('comment')); return false;" title="Underline"  href="javascript:void(0);">
+                <span class="code_u">U</span>
+              </a>
+              <a class="code" onclick="closeTag('[s]', '[/s]', getdom('comment')); return false;" title="Strikethrough"  href="javascript:void(0);">
+                 <span class="code_s">S</span>
+              </a>
+              <a class="code" onclick="closeTag('[url]', '[/url]', getdom('comment')); return false;" title="URL"  href="javascript:void(0);">
+                <span class="code_url"><?php echo JText::_('URL'); ?></span>
+              </a>
+              <a class="code" onclick="closeTag('[img]', '[/img]', getdom('comment')); return false;" title="Image"  href="javascript:void(0);">
+                <span class="code_image"><?php echo JText::_('Image'); ?></span>
+              </a>
+              <a class="code" onclick="closeTag('[quote]', '[/quote]', getdom('comment')); return false;" title="Quote"  href="javascript:void(0);">
+                <span class="code_quote"><?php echo JText::_('Quote'); ?></span>
+              </a>
+            </div>
+          </div>
+          <textarea id="comment" class="inputbox" rows="10" cols="40" name="comment"></textarea>
+          <br/>
+			<div>
+        <?php 
+        $_JB_CONFIGURATION = new JB_Configuration();
+        $use_recatcha  = $_JB_CONFIGURATION->get('useCommentreCaptcha');
+        $publickey = $_JB_CONFIGURATION->get('recaptcha_publickey');
+        if ($use_recatcha == 1)
+        { 
+          ?>
+          <label for="captchacode"><?php echo JText::_('Security code'); ?>:</label>
+          <div class="captcha">
+          <?php require_once( JB_LIBRARY_PATH . DS . 'recaptchalib.php' );
+          if (empty($publickey))
+          {
+            $publickey = "6LefN9USAAAAAHVCVvvaIXxEDcsJ4_YKqLcb3FC_"; 
+          }
+          echo recaptcha_get_html($publickey);
+          echo '</div>';
+        }
+        elseif($e['captcha']){ ?>
+        <label for="captchacode"><?php echo JText::_('Security code'); ?></label>
+        <div class="captcha"><img alt="" class="imcap" src='<?php echo JURI::base()."index.php?option=com_joomblog&task=captcha"; ?>'  /></div>
+        <input type="text" class="inputbox" value="" id="captchacode" name="captchacode">
+        <?php } ?>
+      </div>
+        </div>
+        <div>
+        <button class="jbbutton" onclick="Addcomment(document.commentForm); return false;" id="submit"><?php echo JText::_('COMMENT ADD COMMENT'); ?></button>
+        <input type="hidden" value="<?php echo $e['id']; ?>" id="contentid" name="contentid">
+        <input type="hidden" value="addcomment" id="task" name="task">
+		<input type="hidden" value="com_joomblog" id="option" name="option">
+		</div>
+      </form>
+    </div>
+    <!-- Input form end -->
+    <br/>
+
+    <?php }else{ ?>
+
+    <div id="write_comment_title" class="contentheading"><?php echo JText::_('COMMENT NEED TO REGISTER TO LEAVE A COMMENT'); ?></div>
+    <br>
+    <?php } ?>
+
+    <div class="contentheading">
+      <?php echo JText::_('COMMENT COMMENTS'); ?>
+      <span id="numComment">(<?php echo $e['total']; ?>)</span>
+    </div>
+
+    <?php if($e['comment']){ ?>
+		<div id="commentListFormDiv">
+		  <form name="commentListForm" id="commentListForm" action="" method="post">
+			  <?php foreach($e['comment'] as $value){ ?>
+
+			<div class="post-comment" id="comment<?php echo $value->id; ?>">
+				<div class="comment-info">
+				  <ul class="info author hcard">
+					<li class="avatar">
+						<?php echo $value->avatar; ?>
+						<b></b>
+					</li>
+					<li class="username">
+					<?php if($value->username){ ?>
+					  <a href="<?php echo JRoute::_('index.php?option=com_joomblog&user='.$value->username); ?>"><?php echo $value->name; ?></a>,
+					<?php }else{ ?>
+					<a href="javascript:void(0)"><?php echo $value->name; ?></a>,
+					<?php } ?>
+					</li>
+					<li class="date">
+					  <span><?php echo $value->createdFormatted; ?></span>
+					</li>
+					<li class="bookmark">
+					  <a rel="bookmark" title="<?php echo JText::_('COMMENT REFFERENCE');?>" href="#comment<?php echo $value->id; ?>">#</a>
+					</li>
+					<li class="edit">
+					  <?php if($value->isedit){ ?>
+
+					  <span class="save-comment" id="save-comment-<?php echo $value->id; ?>"><a onclick="Savecomment()" href="javascript:void(0)"><?php echo JText::_('COMMENT SAVE'); ?></a> | </span>
+					  <span class="edit-comment" id="edit-comment-<?php echo $value->id; ?>"><a onclick="Editcomment(<?php echo $value->id; ?>)" href="javascript:void(0)"><?php echo JText::_('COMMENT EDIT'); ?></a>  </span>
+
+					  <?php } ?>
+            <?php if(jbGetUserCanPublish()){?>
+					  <? echo '|'; ?>
+					  <span><a onclick="Publishedcomment(<?php echo $value->id; ?>,<?php echo $value->published?'0':'1'; ?>)" href="javascript:void(0)">
+            <?php echo $value->published?JText::_('COMMENT UNPUBLISHED'):JText::_('COMMENT PUBLISHED'); ?></a></span>
+					  <?php } ?>
+
+
+					</li>
+
+					<li>
+					  <ul class="comment-vote">
+						<li class="comment-vote-block">
+							<a href="javascript:void(0)" onclick="sendCommentVote(<?php echo $value->id; ?>,1)" title="<?php echo JText::_("COM_JOOMBLOG_LIKE"); ?>" class="vote-comment-plus" ></a>
+							<span class="sumcommentvote <?php if($value->voted>0){ echo "green"; }elseif($value->voted<0){ echo "red"; } ?>" ><?php echo $value->voted;/*($value->voted>0?"+".$value->voted:$value->voted);*/ ?></span>
+							<a href="javascript:void(0)" onclick="sendCommentVote(<?php echo $value->id; ?>,-1)" title="<?php echo JText::_("COM_JOOMBLOG_DISLIKE"); ?>" class="vote-comment-minus" ></a>
+						</li>
+					  </ul>
+					</li>
+
+				  </ul>
+				</div>
+
+            <div class="desc-comment" id="desc-comment-<?php echo $value->id; ?>" ><?php echo trim($value->comment); ?></div>
+
+            <div class="reply_form" id="reply_form"></div>
+            <ul class="hentry"></ul>
+		</div>
+
+			  <?php } ?>
+
+			  <div id="pageNavComment">
+			  <?php echo $e['page']; ?>
+			  </div>
+				<input type="hidden" value="" id="task" name="task">
+				<input type="hidden" value="0" id="id" name="id">
+				<input type="hidden" value="<?php echo $e['id']; ?>" id="contentid" name="contentid">
+				<input type="hidden" value="" id="params" name="params">
+		  </form>
+	  </div>
+    <?php } ?>
+</div>

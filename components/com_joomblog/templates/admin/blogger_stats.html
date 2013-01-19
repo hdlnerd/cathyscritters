@@ -1,0 +1,67 @@
+<!--
+
+* JoomBlog component for Joomla
+* @version $Id: blogger_stats.html 2011-03-16 17:30:15
+* @package JoomBlog
+* @subpackage blogger_stats.html
+* @author JoomPlace Team
+* @Copyright Copyright (C) JoomPlace, www.joomplace.com
+* @license GNU/GPL http://www.gnu.org/copyleft/gpl.html
+
+-->
+
+<br/>
+<div class="componentheading"><?php echo JText::_('COM_JOOMBLOG_ADMIN_MENU_STATS');?></div>
+<!-- start tab navigation -->
+<div id="joomblogTabNav">
+  <div id="jbheadnav">
+    <ul id="joomBlog-toolbar-admin">
+      <li>
+        <a href="<?php echo JRoute::_('index.php?option=com_joomblog&task=adminhome&Itemid='.jbGetAdminItemId());?>"><?php echo JText::_('COM_JOOMBLOG_ADMIN_MY_ENTRIES');?></a>|
+      </li>
+      <li>
+        <a href="<?php echo JRoute::_('index.php?option=com_joomblog&task=bloggerpref&Itemid='.jbGetAdminItemId() );?>"><?php echo JText::_('COM_JOOMBLOG_ADMIN_MENU_PREFERENCES');?></a>|
+      </li>
+      <li>
+        <a href="<?php echo JRoute::_('index.php?option=com_joomblog&task=bloggerstats&Itemid='.jbGetAdminItemId() );?>"><?php echo JText::_('COM_JOOMBLOG_ADMIN_MENU_STATS');?></a>|
+      </li>
+      <?php
+        global $_JB_CONFIGURATION;
+        if($_JB_CONFIGURATION->get('useComment'))
+        {
+        ?>
+         <li><a href="<?php echo JRoute::_('index.php?option=com_joomblog&task=showcomments&Itemid='.jbGetAdminItemId());?>"><?php echo JText::_('COM_JOOMBLOG_ADMIN_COMMENTS');?></a></li>
+        <?php
+        }
+      ?>
+    </ul>
+  </div>
+</div>
+<!-- end tab navigation -->
+
+<div>
+  <?php echo JText::sprintf('COM_JOOMBLOG_BLOG_ADMIN_STATS_TOTAL_ENTRIES' , $num_entries );?><br />
+  <?php
+  if(isset($jomcomment))
+  {
+    echo JText::sprintf( 'COM_JOOMBLOG_BLOG_ADMIN_STATS_TOTAL_COMMENTS' , $num_comments ) . '<br />';
+  }
+  ?>
+  <div><?php echo JText::sprintf( 'COM_JOOMBLOG_BLOG_ADMIN_STATS_TOTAL_HITS' , $num_hits ); ?></div>
+  <?php
+    $total	= count( $tags );
+    $i		= 1;
+    $html	= '';
+    
+    foreach($tags as $tag)
+    { 
+      $url	= JRoute::_('index.php?option=com_joomblog&task=tag&tag=' . $tag->name.'&Itemid='.jbGetItemId());
+      $html	.= '<a href="' . $url . '">' . $tag->name . '</a>';
+      $html	.= ( $i == $total ) ? '.' : ', ';
+      
+      $i++;
+    }
+  ?>
+  <div><?php echo JText::sprintf( 'COM_JOOMBLOG_BLOG_ADMIN_STATS_TAGS_USED' , $html );?></div>
+</div>
+

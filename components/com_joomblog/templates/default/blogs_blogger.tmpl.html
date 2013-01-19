@@ -1,0 +1,38 @@
+<?php
+/**
+* JoomBlog component for Joomla
+* @version $Id: blogs_blogger.tmpl.html 2011-03-16 17:30:15
+* @package JoomBlog
+* @subpackage blogs_blogger.tmpl.html
+* @author JoomPlace Team
+* @Copyright Copyright (C) JoomPlace, www.joomplace.com
+* @license GNU/GPL http://www.gnu.org/copyleft/gpl.html
+*/
+
+defined('_JEXEC') or die('Restricted access');
+global $_JB_CONFIGURATION;
+$blog	=& $blogs[0];
+?>
+
+<div class="blogsblock">
+	<ul class="blogs">
+		<li class="blog-row">
+			<?php if ($_JB_CONFIGURATION->get('avatar')!='none'){?>
+				<div><?php if($_JB_CONFIGURATION->get('linkAvatar')){?><a href="<?php echo $blog->authorLink;?>"><?php } ?><img src="<?php echo $blog->src;?>" border="0" class="thumb-avatar" /><?php if($_JB_CONFIGURATION->get('linkAvatar')){?></a><?php } ?></div>
+			<?php } ?>
+			<div class="blog"><h2><a href="<?php echo $blog->blogLink;?>" class="title"><?php echo $blog->title;?></h2></a></div>
+			<?php if ($_JB_CONFIGURATION->get('showUserLink')) { ?><div class="author"><a href="<?php echo $blog->authorLink;?>"><?php  if ($_JB_CONFIGURATION->get('useFullName')) 
+                        { 
+                        	echo $blog->name;
+                        }	
+                        else 
+                        {
+                        	echo $blog->username;
+                        } ?></a></div><?php } ?>
+			<div class="description"><?php echo $blog->description;?></div>
+		</li>
+	</ul>
+</div>
+
+<div style="clear:both;"></div>
+

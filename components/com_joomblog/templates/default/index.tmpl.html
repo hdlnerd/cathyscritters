@@ -1,0 +1,144 @@
+﻿<!-- Blog Entries Start 
+/**
+* JoomBlog component for Joomla
+* @version $Id: index.tmpl.html 2011-03-16 17:30:15
+* @package JoomBlog
+* @subpackage index.tmpl.html
+* @author JoomPlace Team
+* @Copyright Copyright (C) JoomPlace, www.joomplace.com
+* @license GNU/GPL http://www.gnu.org/copyleft/gpl.html
+*/
+-->
+<script language="javascript" src="<?php echo JURI::root();?>components/com_joomblog/js/scroll.js"></script>
+
+<div id="joomBlog-content">
+<?php echo $headerHTML;?>
+<?php
+
+global $_JB_CONFIGURATION;
+jimport( 'joomla.filesystem.file' );
+
+$tmpl = JRequest::getVar('tmpl');
+if ($tmpl=='component') $tmpl='&tmpl=component'; else $tmpl='';
+
+if($useDraganddrop && $modulesDisplay && $isHome){
+	if(JFile::exists(JPATH_SITE.DS."components".DS."com_joomdragdrop".DS."joomdragdrop.php")){
+		require_once (JPATH_SITE.DS."components".DS."com_joomdragdrop".DS."joomdragdrop.php");
+	}else{
+		echo JText::_('<strong><font color="red">Component drag&drop not found.<font></strong>');
+	}
+}elseif($modulesDisplay && $isHome ){
+  foreach ($modules as $value){
+    echo "<div class='module'><div><div><div><h3>".$value['title']."</h3>".$value['text']."</div></div></div></div>";
+  }
+  echo "<div class='clr clear'></div>";
+}
+//else
+{
+	if ($entry and is_array($entry) and count($entry) != 0)
+	{
+	
+		foreach ($entry as $e)
+		{
+		$sefUrl = $e['permalink'];
+							if (strpos($sefUrl, 'http') === false) 
+							{
+								$sefUrl = str_replace('/blog/','',$sefUrl);
+								$sefUrl = JURI::root().$sefUrl;
+							}
+		$e['permalink']=$sefUrl;
+
+	?>
+		<!-- Entry -->
+		<div class="postSummary" id="post-<?php echo $e['id']; ?>" >
+			<!-- Post Top Summary -->
+			<h2 class="joomBlog-entry-title">
+			<?php if ($_JB_CONFIGURATION->get('showBlogTitle') == '1')
+			{ ?>
+				<a href="<?php echo JRoute::_('index.php?option=com_joomblog&blogid='.$e['blogid'].'&view=blogger'.$tmpl);?>"><?php echo $e['blogtitle']."</a> <span class='blog-sep'>". urldecode('&rarr;')."</span> ";
+			} ?><a class="blog" href="<?php echo $e['permalink']; ?>"><?php echo $e['title']; ?></a>
+			</h2>
+			<?php if( $categoryDisplay ){?><small class="joomBlog-category-bgk"><?php echo ($e['multicats']?JText::_('COM_JOOMBLOG_CATEGORIES'):JText::_('COM_JOOMBLOG_CATEGORY')).$e['jcategory']; ?></small><?php }?>
+			<?php jbShowSocialButtons($e, 'top');	?>
+			<!-- Post Teaser Text -->
+			<div class="postSummary-teaser">
+				<div class="joomBlog-content">
+					<?php if ($_JB_CONFIGURATION->get('useNewYearStyleh3'))
+						{
+							$e['text'] = str_replace('<h3>','<h3 id="h3-new-year">',$e['text']);
+						}
+					echo JHTML::_('content.prepare', $e['text']); ?>
+				</div>
+				<div class="clear"></div>
+				<?php
+				if ($e['readmore']=="1"){
+				?>
+				<div class="joomBlog-readmorelink"><br /><a href="<?php echo $e['permalink']; ?><?php echo $showAnchor; ?>" class="postSummary-readmore"><?php echo $e['readmorelink']?$e['readmorelink']:JText::_('COM_JOOMBLOG_READMORE');?></a></div>
+				<?php
+				}
+				?>
+				
+				<?php jbShowSocialButtons($e); ?>
+				<?php if($_JB_CONFIGURATION->get('ShowUntaggedWithoutTags')) { ?>
+				<div class="joomBlog-tagslinks"><?php echo $e['categories']; ?></div>
+				<?php } else if ($e['categories']!="<em>". JText::_('COM_JOOMBLOG_BLOG_UNTAGGED') ."</em>&nbsp;"){?>	
+				<div class="joomBlog-tagslinks"><?php echo $e['categories']; ?></div>
+				<?php } ?>			
+				<div class="joomBlog-bottom">
+<?php JRoute::_('index.php?option=com_joomblog&task=addvote&id='.$e['id'].'&format=raw&Itemid=379&vote=1');?>
+<?php JRoute::_('index.php?option=com_joomblog&task=addvote&id='.$e['id'].'&format=raw&Itemid=379&vote=-1');?>
+					<div class="joomBlog-votes">
+						<a onclick="sendVote(<?php echo $e['id']; ?>,-1)" href="javascript:void(0)" class="vote_down"></a>
+						<span class="sumvote <?php if($e['sumvote']>0){ echo "green"; }elseif($e['sumvote']<0){ echo "red"; } ?>"><?php echo $e['sumvote']; ?></span>
+						<a onclick="sendVote(<?php echo $e['id']; ?>,1)" href="javascript:void(0)" class="vote_up"></a>
+					</div>
+				
+					<div class="joomBlog-dateposted"><?php echo $e['createdFormatted']; ?></div>
+				
+					<?php
+						if ($e['comments']!="" && $_JB_CONFIGURATION->get('useComment') == "1" && $_JB_CONFIGURATION->get('useDisqus') == "0"){
+					?>
+						<div class="joomBlog-commenticon"><a href="<?php echo $e['permalink']; ?>#comments" ><span><?php echo $e['comments']; ?></span></a></div>
+					<?php
+						} else if($_JB_CONFIGURATION->get('useComment') == "1" && $_JB_CONFIGURATION->get('useDisqus') == "1"){
+							echo '<div class="commenticon">'.$e['comments'].'</div>';
+						}
+					?>
+					<?php
+					if ($_JB_CONFIGURATION->get('showUserLink')) { ?>
+					<div class="joomBlog-authoricon"><a target="_blank" href="<?php echo $e['authorLink']; ?>"><?php echo $e['author']; ?></a></div>
+										
+					<?php } ?>
+					<!---
+					<div class="joomBlog-gogleplusicon"><g:plusone size="small" count="false" href="<?php echo urlencode($e['permalink']); ?>"></g:plusone></div>
+					<div class="joomBlog-twittericon"><a target="_blank" href="http://twitter.com/home/?status=<?php echo urlencode($e['permalink']); ?>" ></a></div>
+					<div class="joomBlog-facebookicon"><a href="http://www.facebook.com/sharer.php?u=<?php echo urlencode($e['permalink']); ?>" ></a></div>
+					--->
+					<div class="jbBackToTop">
+						<a href="#joomBlog-wrap"><?php echo JText::_('COM_JOOMBLOG_BACKTOTOP');?></a>
+						<div class="clr"></div>
+					</div>
+				</div>
+				<!-- Post Footer -->						
+			</div>
+			
+			<span class="article_separator">&nbsp;</span>
+			<hr class="postEntry-divider" />
+		</div>
+		
+		<div class="clear"></div>
+	<?php
+		}
+	}
+	else
+	{
+	?>
+		<div><?php echo JText::_('COM_JOOMBLOG_NO_BLOG_ENTRY_CREATED');?></div>
+	<?php
+	}
+	?>
+
+<?php 
+}
+?>
+</div>

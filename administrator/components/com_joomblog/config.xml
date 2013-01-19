@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<config>
+	<form>
+			<fieldset	name="main"		label="COM_JOOMBLOG_SETTINGS"	>
+			<field
+				type="spacer"
+				label="COM_JOOMBLOG_SETTINGS_HERE"
+				class="strong"
+			/>	
+			</fieldset>
+	</form>
+</config>
+

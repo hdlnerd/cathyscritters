@@ -1,0 +1,131 @@
+[25-Jan-2012 17:08:05] PHP Fatal error:  Call to a member function log() on a non-object in /home/critters/public_html/Joomla_1.7.3-Stable-Full_Package/libraries/import.php on line 15
+[26-Jan-2012 11:27:21] PHP Warning:  fopen(/Users/kebm/public_html/Joomla_1.7.3-Stable-Full_Package/logs/error.php) [<a href='function.fopen'>function.fopen</a>]: failed to open stream: No such file or directory in /home/critters/public_html/Joomla_1.7.3-Stable-Full_Package/libraries/joomla/log/loggers/formattedtext.php on line 237
+[26-Jan-2012 11:27:21] PHP Warning:  fputs(): supplied argument is not a valid stream resource in /home/critters/public_html/Joomla_1.7.3-Stable-Full_Package/libraries/joomla/log/loggers/formattedtext.php on line 241
+[26-Jan-2012 13:31:39] PHP Warning:  mysqli_real_escape_string() expects parameter 1 to be mysqli, boolean given in /home/critters/public_html/Joomla_1.7.3-Stable-Full_Package/libraries/joomla/database/database/mysqli.php on line 165
+[26-Jan-2012 13:31:39] PHP Warning:  mysqli_real_escape_string() expects parameter 1 to be mysqli, boolean given in /home/critters/public_html/Joomla_1.7.3-Stable-Full_Package/libraries/joomla/database/database/mysqli.php on line 165
+[26-Jan-2012 13:48:08] PHP Warning:  mysqli_real_escape_string() expects parameter 1 to be mysqli, boolean given in /home/critters/public_html/Joomla_1.7.3-Stable-Full_Package/libraries/joomla/database/database/mysqli.php on line 165
+[26-Jan-2012 14:47:18] PHP Fatal error:  Out of memory (allocated 69206016) (tried to allocate 57149441 bytes) in /home/critters/public_html/Joomla_1.7.3-Stable-Full_Package/libraries/joomla/environment/request.php on line 332
+[26-Jan-2012 14:47:31] PHP Fatal error:  Out of memory (allocated 69206016) (tried to allocate 57149441 bytes) in /home/critters/public_html/Joomla_1.7.3-Stable-Full_Package/libraries/joomla/environment/request.php on line 332
+[26-Jan-2012 14:50:28] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/public_html/Joomla_1.7.3-Stable-Full_Package/libraries/joomla/environment/request.php on line 332
+[26-Jan-2012 14:50:28] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/public_html/Joomla_1.7.3-Stable-Full_Package/libraries/joomla/environment/request.php on line 332
+[26-Jan-2012 14:50:28] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/public_html/Joomla_1.7.3-Stable-Full_Package/libraries/joomla/environment/request.php on line 332
+[26-Jan-2012 14:50:28] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/public_html/Joomla_1.7.3-Stable-Full_Package/libraries/joomla/environment/request.php on line 332
+[26-Jan-2012 14:50:28] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/public_html/Joomla_1.7.3-Stable-Full_Package/libraries/joomla/environment/request.php on line 332
+[26-Jan-2012 14:50:28] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/public_html/Joomla_1.7.3-Stable-Full_Package/libraries/joomla/environment/request.php on line 332
+[26-Jan-2012 14:50:28] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/public_html/Joomla_1.7.3-Stable-Full_Package/libraries/joomla/environment/request.php on line 332
+[26-Jan-2012 14:50:28] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/public_html/Joomla_1.7.3-Stable-Full_Package/libraries/joomla/environment/request.php on line 332
+[26-Jan-2012 14:50:28] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/public_html/Joomla_1.7.3-Stable-Full_Package/libraries/joomla/environment/request.php on line 332
+[26-Jan-2012 14:50:28] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/public_html/Joomla_1.7.3-Stable-Full_Package/libraries/joomla/environment/request.php on line 332
+[26-Jan-2012 14:50:28] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/public_html/Joomla_1.7.3-Stable-Full_Package/libraries/joomla/environment/request.php on line 332
+[26-Jan-2012 14:50:28] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/public_html/Joomla_1.7.3-Stable-Full_Package/libraries/joomla/environment/request.php on line 332
+[26-Jan-2012 14:50:28] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/public_html/Joomla_1.7.3-Stable-Full_Package/libraries/joomla/environment/request.php on line 332
+[26-Jan-2012 14:50:28] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/public_html/Joomla_1.7.3-Stable-Full_Package/libraries/joomla/environment/request.php on line 332
+[26-Jan-2012 14:50:28] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/public_html/Joomla_1.7.3-Stable-Full_Package/libraries/joomla/environment/request.php on line 332
+[26-Jan-2012 14:50:28] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/public_html/Joomla_1.7.3-Stable-Full_Package/libraries/joomla/environment/request.php on line 332
+[26-Jan-2012 14:50:28] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/public_html/Joomla_1.7.3-Stable-Full_Package/libraries/joomla/environment/request.php on line 332
+[26-Jan-2012 14:50:28] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/public_html/Joomla_1.7.3-Stable-Full_Package/libraries/joomla/environment/request.php on line 332
+[26-Jan-2012 14:50:28] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/public_html/Joomla_1.7.3-Stable-Full_Package/libraries/joomla/environment/request.php on line 332
+[26-Jan-2012 14:50:28] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/public_html/Joomla_1.7.3-Stable-Full_Package/libraries/joomla/environment/request.php on line 332
+[26-Jan-2012 14:50:28] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/public_html/Joomla_1.7.3-Stable-Full_Package/libraries/joomla/environment/request.php on line 332
+[26-Jan-2012 14:50:28] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/public_html/Joomla_1.7.3-Stable-Full_Package/libraries/joomla/environment/request.php on line 332
+[26-Jan-2012 14:50:28] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/public_html/Joomla_1.7.3-Stable-Full_Package/libraries/joomla/environment/request.php on line 332
+[26-Jan-2012 14:50:28] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/public_html/Joomla_1.7.3-Stable-Full_Package/libraries/joomla/environment/request.php on line 332
+[26-Jan-2012 14:50:59] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/public_html/Joomla_1.7.3-Stable-Full_Package/libraries/joomla/environment/request.php on line 332
+[26-Jan-2012 14:50:59] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/public_html/Joomla_1.7.3-Stable-Full_Package/libraries/joomla/environment/request.php on line 332
+[26-Jan-2012 14:50:59] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/public_html/Joomla_1.7.3-Stable-Full_Package/libraries/joomla/environment/request.php on line 332
+[26-Jan-2012 14:50:59] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/public_html/Joomla_1.7.3-Stable-Full_Package/libraries/joomla/environment/request.php on line 332
+[26-Jan-2012 14:50:59] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/public_html/Joomla_1.7.3-Stable-Full_Package/libraries/joomla/environment/request.php on line 332
+[26-Jan-2012 14:50:59] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/public_html/Joomla_1.7.3-Stable-Full_Package/libraries/joomla/environment/request.php on line 332
+[26-Jan-2012 14:50:59] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/public_html/Joomla_1.7.3-Stable-Full_Package/libraries/joomla/environment/request.php on line 332
+[26-Jan-2012 14:50:59] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/public_html/Joomla_1.7.3-Stable-Full_Package/libraries/joomla/environment/request.php on line 332
+[26-Jan-2012 14:50:59] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/public_html/Joomla_1.7.3-Stable-Full_Package/libraries/joomla/environment/request.php on line 332
+[26-Jan-2012 14:50:59] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/public_html/Joomla_1.7.3-Stable-Full_Package/libraries/joomla/environment/request.php on line 332
+[26-Jan-2012 14:50:59] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/public_html/Joomla_1.7.3-Stable-Full_Package/libraries/joomla/environment/request.php on line 332
+[26-Jan-2012 14:50:59] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/public_html/Joomla_1.7.3-Stable-Full_Package/libraries/joomla/environment/request.php on line 332
+[26-Jan-2012 14:50:59] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/public_html/Joomla_1.7.3-Stable-Full_Package/libraries/joomla/environment/request.php on line 332
+[26-Jan-2012 14:50:59] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/public_html/Joomla_1.7.3-Stable-Full_Package/libraries/joomla/environment/request.php on line 332
+[26-Jan-2012 14:50:59] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/public_html/Joomla_1.7.3-Stable-Full_Package/libraries/joomla/environment/request.php on line 332
+[26-Jan-2012 14:50:59] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/public_html/Joomla_1.7.3-Stable-Full_Package/libraries/joomla/environment/request.php on line 332
+[26-Jan-2012 14:50:59] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/public_html/Joomla_1.7.3-Stable-Full_Package/libraries/joomla/environment/request.php on line 332
+[26-Jan-2012 14:50:59] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/public_html/Joomla_1.7.3-Stable-Full_Package/libraries/joomla/environment/request.php on line 332
+[26-Jan-2012 14:50:59] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/public_html/Joomla_1.7.3-Stable-Full_Package/libraries/joomla/environment/request.php on line 332
+[26-Jan-2012 14:50:59] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/public_html/Joomla_1.7.3-Stable-Full_Package/libraries/joomla/environment/request.php on line 332
+[26-Jan-2012 14:50:59] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/public_html/Joomla_1.7.3-Stable-Full_Package/libraries/joomla/environment/request.php on line 332
+[26-Jan-2012 14:50:59] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/public_html/Joomla_1.7.3-Stable-Full_Package/libraries/joomla/environment/request.php on line 332
+[26-Jan-2012 14:50:59] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/public_html/Joomla_1.7.3-Stable-Full_Package/libraries/joomla/environment/request.php on line 332
+[26-Jan-2012 14:50:59] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/public_html/Joomla_1.7.3-Stable-Full_Package/libraries/joomla/environment/request.php on line 332
+[26-Jan-2012 14:51:40] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/public_html/Joomla_1.7.3-Stable-Full_Package/libraries/joomla/environment/request.php on line 332
+[26-Jan-2012 14:51:40] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/public_html/Joomla_1.7.3-Stable-Full_Package/libraries/joomla/environment/request.php on line 332
+[26-Jan-2012 14:51:40] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/public_html/Joomla_1.7.3-Stable-Full_Package/libraries/joomla/environment/request.php on line 332
+[26-Jan-2012 14:51:40] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/public_html/Joomla_1.7.3-Stable-Full_Package/libraries/joomla/environment/request.php on line 332
+[26-Jan-2012 14:51:40] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/public_html/Joomla_1.7.3-Stable-Full_Package/libraries/joomla/environment/request.php on line 332
+[26-Jan-2012 14:51:40] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/public_html/Joomla_1.7.3-Stable-Full_Package/libraries/joomla/environment/request.php on line 332
+[26-Jan-2012 14:51:40] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/public_html/Joomla_1.7.3-Stable-Full_Package/libraries/joomla/environment/request.php on line 332
+[26-Jan-2012 14:51:40] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/public_html/Joomla_1.7.3-Stable-Full_Package/libraries/joomla/environment/request.php on line 332
+[26-Jan-2012 14:51:40] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/public_html/Joomla_1.7.3-Stable-Full_Package/libraries/joomla/environment/request.php on line 332
+[26-Jan-2012 14:51:40] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/public_html/Joomla_1.7.3-Stable-Full_Package/libraries/joomla/environment/request.php on line 332
+[26-Jan-2012 14:51:40] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/public_html/Joomla_1.7.3-Stable-Full_Package/libraries/joomla/environment/request.php on line 332
+[26-Jan-2012 14:51:40] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/public_html/Joomla_1.7.3-Stable-Full_Package/libraries/joomla/environment/request.php on line 332
+[26-Jan-2012 14:51:40] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/public_html/Joomla_1.7.3-Stable-Full_Package/libraries/joomla/environment/request.php on line 332
+[26-Jan-2012 14:51:40] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/public_html/Joomla_1.7.3-Stable-Full_Package/libraries/joomla/environment/request.php on line 332
+[26-Jan-2012 14:51:40] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/public_html/Joomla_1.7.3-Stable-Full_Package/libraries/joomla/environment/request.php on line 332
+[26-Jan-2012 14:51:40] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/public_html/Joomla_1.7.3-Stable-Full_Package/libraries/joomla/environment/request.php on line 332
+[26-Jan-2012 14:51:40] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/public_html/Joomla_1.7.3-Stable-Full_Package/libraries/joomla/environment/request.php on line 332
+[26-Jan-2012 14:51:40] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/public_html/Joomla_1.7.3-Stable-Full_Package/libraries/joomla/environment/request.php on line 332
+[26-Jan-2012 14:51:40] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/public_html/Joomla_1.7.3-Stable-Full_Package/libraries/joomla/environment/request.php on line 332
+[26-Jan-2012 14:51:40] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/public_html/Joomla_1.7.3-Stable-Full_Package/libraries/joomla/environment/request.php on line 332
+[26-Jan-2012 14:51:40] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/public_html/Joomla_1.7.3-Stable-Full_Package/libraries/joomla/environment/request.php on line 332
+[26-Jan-2012 14:51:40] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/public_html/Joomla_1.7.3-Stable-Full_Package/libraries/joomla/environment/request.php on line 332
+[26-Jan-2012 14:51:40] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/public_html/Joomla_1.7.3-Stable-Full_Package/libraries/joomla/environment/request.php on line 332
+[26-Jan-2012 14:51:40] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/public_html/Joomla_1.7.3-Stable-Full_Package/libraries/joomla/environment/request.php on line 332
+[26-Jan-2012 15:31:15] PHP Parse error:  syntax error, unexpected T_IF, expecting T_FUNCTION in /home/critters/public_html/Joomla_1.7.3-Stable-Full_Package/components/com_fabrik/models/list.php on line 351
+[26-Jan-2012 16:19:45] PHP Fatal error:  Call to undefined method FabrikFEModelList::getItem() in /home/critters/public_html/Joomla_1.7.3-Stable-Full_Package/components/com_fabrik/models/list.php on line 2119
+[26-Jan-2012 16:33:10] PHP Fatal error:  Call to undefined method FabrikFEModelConnection::getErrorNum() in /home/critters/public_html/Joomla_1.7.3-Stable-Full_Package/components/com_fabrik/helpers/parent.php on line 938
+[26-Jan-2012 16:34:08] PHP Parse error:  syntax error, unexpected T_OBJECT_OPERATOR in /home/critters/public_html/Joomla_1.7.3-Stable-Full_Package/components/com_fabrik/helpers/parent.php on line 938
+[26-Jan-2012 16:34:55] PHP Fatal error:  Call to undefined method FabrikFEModelConnection::getErrorNum() in /home/critters/public_html/Joomla_1.7.3-Stable-Full_Package/components/com_fabrik/helpers/parent.php on line 939
+[26-Jan-2012 17:04:37] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/public_html/Joomla_1.7.3-Stable-Full_Package/components/com_fabrik/views/list/tmpl/admin/default_row.php on line 3
+[26-Jan-2012 17:10:52] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/public_html/Joomla_1.7.3-Stable-Full_Package/components/com_fabrik/views/list/tmpl/admin/default_row.php on line 3
+[26-Jan-2012 17:12:45] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/public_html/Joomla_1.7.3-Stable-Full_Package/components/com_fabrik/views/list/tmpl/admin/default_row.php on line 3
+[26-Jan-2012 22:42:39] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/public_html/Joomla_1.7.3-Stable-Full_Package/components/com_fabrik/views/list/tmpl/admin/default_row.php on line 3
+[26-Jan-2012 23:11:58] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/public_html/Joomla_1.7.3-Stable-Full_Package/administrator/components/com_fabrik/models/group.php on line 108
+[26-Jan-2012 23:12:55] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/public_html/Joomla_1.7.3-Stable-Full_Package/administrator/components/com_fabrik/models/group.php on line 108
+[26-Jan-2012 23:13:40] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/public_html/Joomla_1.7.3-Stable-Full_Package/administrator/components/com_fabrik/models/group.php on line 108
+[26-Jan-2012 23:14:09] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/public_html/Joomla_1.7.3-Stable-Full_Package/administrator/components/com_fabrik/models/group.php on line 108
+[26-Jan-2012 23:14:41] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/public_html/Joomla_1.7.3-Stable-Full_Package/administrator/components/com_fabrik/models/group.php on line 108
+[26-Jan-2012 23:15:14] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/public_html/Joomla_1.7.3-Stable-Full_Package/administrator/components/com_fabrik/models/group.php on line 108
+[26-Jan-2012 23:16:15] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/public_html/Joomla_1.7.3-Stable-Full_Package/administrator/components/com_fabrik/models/group.php on line 108
+[26-Jan-2012 23:18:28] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/public_html/Joomla_1.7.3-Stable-Full_Package/administrator/components/com_fabrik/models/group.php on line 108
+[26-Jan-2012 23:18:33] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/public_html/Joomla_1.7.3-Stable-Full_Package/administrator/components/com_fabrik/models/group.php on line 108
+[26-Jan-2012 23:18:50] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/public_html/Joomla_1.7.3-Stable-Full_Package/administrator/components/com_fabrik/models/group.php on line 108
+[26-Jan-2012 23:24:14] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/public_html/Joomla_1.7.3-Stable-Full_Package/administrator/components/com_fabrik/models/group.php on line 108
+[26-Jan-2012 23:25:22] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/public_html/Joomla_1.7.3-Stable-Full_Package/administrator/components/com_fabrik/models/group.php on line 108
+[26-Jan-2012 23:28:07] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/public_html/Joomla_1.7.3-Stable-Full_Package/administrator/components/com_fabrik/models/group.php on line 108
+[26-Jan-2012 23:28:57] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/public_html/Joomla_1.7.3-Stable-Full_Package/administrator/components/com_fabrik/models/group.php on line 108
+[29-Jan-2012 23:26:47] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/public_html/Joomla_1.7.3-Stable-Full_Package/components/com_fabrik/views/list/tmpl/admin/default_row.php on line 3
+[18-Feb-2012 11:43:11] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/public_html/Joomla_1.7.3-Stable-Full_Package/components/com_fabrik/views/list/tmpl/admin/default_row.php on line 3
+[18-Feb-2012 12:14:01] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/public_html/Joomla_1.7.3-Stable-Full_Package/components/com_fabrik/views/list/tmpl/admin/default_row.php on line 3
+[18-Feb-2012 12:28:05] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/public_html/Joomla_1.7.3-Stable-Full_Package/components/com_fabrik/views/list/tmpl/admin/default_row.php on line 3
+[18-Feb-2012 12:30:38] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/public_html/Joomla_1.7.3-Stable-Full_Package/components/com_fabrik/views/list/tmpl/admin/default_row.php on line 3
+[18-Feb-2012 15:22:45] PHP Warning:  file_put_contents(/Users/kebm/public_html/Joomla_1.7.3-Stable-Full_Package/tmp/GreenLeaves) [<a href='function.file-put-contents'>function.file-put-contents</a>]: failed to open stream: No such file or directory in /home/critters/public_html/Joomla_1.7.3-Stable-Full_Package/libraries/joomla/filesystem/file.php on line 359
+[18-Feb-2012 15:23:01] PHP Warning:  file_put_contents(/Users/kebm/public_html/Joomla_1.7.3-Stable-Full_Package/tmp/GreenLeaves.zip) [<a href='function.file-put-contents'>function.file-put-contents</a>]: failed to open stream: No such file or directory in /home/critters/public_html/Joomla_1.7.3-Stable-Full_Package/libraries/joomla/filesystem/file.php on line 359
+[19-Feb-2012 00:48:22] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/public_html/administrator/components/com_fabrik/models/group.php on line 108
+[19-Feb-2012 00:49:38] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/public_html/administrator/components/com_fabrik/models/group.php on line 108
+[19-Feb-2012 08:37:02] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/public_html/administrator/components/com_fabrik/models/group.php on line 108
+[19-Feb-2012 08:39:19] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/public_html/administrator/components/com_fabrik/models/group.php on line 108
+[24-Feb-2012 18:56:28] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/public_html/components/com_fabrik/views/list/tmpl/admin/default_row.php on line 3
+[27-Feb-2012 09:37:26] PHP Fatal error:  Call to undefined function  debugmsg() in /home/critters/public_html/libraries/import.php on line 11
+[27-Feb-2012 09:51:26] PHP Fatal error:  Call to undefined function  debugmsg() in /home/critters/public_html/libraries/import.php on line 11
+[27-Feb-2012 10:05:26] PHP Fatal error:  Call to undefined function  debugmsg() in /home/critters/public_html/libraries/import.php on line 11
+[27-Feb-2012 10:19:26] PHP Fatal error:  Call to undefined function  debugmsg() in /home/critters/public_html/libraries/import.php on line 11
+[27-Feb-2012 12:08:25] PHP Fatal error:  Call to undefined function  debugmsg() in /home/critters/public_html/libraries/import.php on line 11
+[27-Feb-2012 12:09:16] PHP Warning:  require_once(debug.php) [<a href='function.require-once'>function.require-once</a>]: failed to open stream: No such file or directory in /home/critters/public_html/libraries/import.php on line 13
+[27-Feb-2012 12:09:16] PHP Fatal error:  require_once() [<a href='function.require'>function.require</a>]: Failed opening required 'debug.php' (include_path='.:/usr/lib/php:/usr/local/lib/php') in /home/critters/public_html/libraries/import.php on line 13
+[07-Mar-2012 08:57:51] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/public_html/administrator/components/com_fabrik/models/group.php on line 108
+[07-Mar-2012 08:57:59] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/public_html/administrator/components/com_fabrik/models/group.php on line 108
+[07-Mar-2012 09:00:30] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/public_html/administrator/components/com_fabrik/models/group.php on line 108
+[07-Mar-2012 09:38:20] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/public_html/components/com_fabrik/views/list/tmpl/admin/default_row.php on line 3
+[07-Mar-2012 10:14:00] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/public_html/components/com_fabrik/views/list/tmpl/admin/default_row.php on line 3
+[07-Mar-2012 10:54:35] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/public_html/components/com_fabrik/views/list/tmpl/admin/default_row.php on line 3
+[07-Mar-2012 13:03:12] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/public_html/administrator/components/com_fabrik/models/group.php on line 108
+[07-Mar-2012 14:46:24] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/public_html/administrator/components/com_fabrik/models/group.php on line 108
+[07-Mar-2012 14:58:42] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/public_html/administrator/components/com_fabrik/models/group.php on line 108

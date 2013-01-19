@@ -1,0 +1,65 @@
+﻿<?php
+/**
+* JoomBlog component for Joomla
+* @version $Id: profile.tmpl.html 2011-03-16 17:30:15
+* @package JoomBlog
+* @subpackage profile.tmpl.html
+* @author JoomPlace Team
+* @Copyright Copyright (C) JoomPlace, www.joomplace.com
+* @license GNU/GPL http://www.gnu.org/copyleft/gpl.html
+*/
+$user = $user[0];
+global $_JB_CONFIGURATION;
+$tmpl = JRequest::getVar('tmpl');
+		if ($tmpl=='component') $tmpl='&tmpl=component'; else $tmpl='';
+?>
+
+<div class="blog-profile" >
+	<dl>
+		<dt>
+		<img src="<?php echo $user->src;?>" border="0" class="avatar" align="right" />
+		</dt>
+		<dd><h3>
+		<?php echo jbGetAuthorName($user->user_id, $_JB_CONFIGURATION->get('useFullName')); ?>
+		</h3></dd>
+	</dl>
+	<dl>
+		<dt><?php echo JText::_("COM_JOOMBLOG_USER_PROFILE_BIRTHDAY");  ?>:</dt>
+		<dd><?php echo date("d F Y",strtotime($user->birthday." 00:00")); ?></dd>
+	</dl>
+	<?php if($user->about) { ?>
+		<dl>
+			<dt><?php echo JText::_("COM_JOOMBLOG_USER_PROFILE_ABOUT_ME");  ?>:</dt>
+			<dd><?php echo $user->about; ?>&nbsp;</dd>
+		</dl>
+	<?php } ?>
+	<?php if($user->site) { ?>
+		<dl>
+			<dt><?php echo JText::_("COM_JOOMBLOG_USER_PROFILE_SITE");  ?>:</dt>
+			<dd><a href="http://<?php echo $user->site; ?>" ><?php echo $user->site; ?></a></dd>
+		</dl>
+	<?php } ?>
+	<?php if($user->twitter) { ?>
+		<dl>
+			<dt><?php echo JText::_("COM_JOOMBLOG_USER_PROFILE_TWITTER");  ?>:</dt>
+			<dd><a href="http://twitter.com/<?php echo $user->twitter; ?>"><?php echo $user->twitter; ?></a></dd>
+		</dl>
+	<?php } ?>
+	<dl>
+		<dt><?php echo JText::_("COM_JOOMBLOG_USER_PROFILE_REGISTERED");  ?>:</dt>
+		<dd><?php echo date("d F Y, H:i",strtotime($user->registered)); ?></dd>
+	</dl>
+	<dl>
+		<dt><?php echo JText::_("COM_JOOMBLOG_USER_PROFILE_LAST_VISIT");  ?>:</dt>
+		<dd><?php echo date("d F Y, H:i",strtotime($user->lastvisit)); ?></dd>
+	</dl>
+	<dl>
+		<dt><?php echo JText::_("COM_JOOMBLOG_USER_PROFILE_POSTS");  ?>:</dt>
+		<dd><a href="<?php echo JRoute::_("index.php?option=com_joomblog&user=".$user->username).$tmpl; ?>"><?php echo JText::_("USER PROFILE SEE USER BLOG POSTS");  ?></a></dd>
+	</dl>
+</div>
+
+
+
+
+

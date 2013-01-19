@@ -1,0 +1,128 @@
+<!-- 
+
+/**
+* JoomBlog component for Joomla
+* @version $Id: blogger_profile.html 2011-03-16 17:30:15
+* @package JoomBlog
+* @subpackage blogger_profile.html
+* @author JoomPlace Team
+* @Copyright Copyright (C) JoomPlace, www.joomplace.com
+* @license GNU/GPL http://www.gnu.org/copyleft/gpl.html
+*/
+
+some header stuff -->
+<div id="joomblog">
+<br/>
+<div class="componentheading"><?php echo JText::_('COM_JOOMBLOG_ADMIN_MENU_PREFERENCES');?></div>
+<!-- start tab navigation -->
+<div id="joomblogTabNav">
+	<div id="jbheadnav">
+		<ul id="joomBlog-toolbar-admin">
+			  <li>
+				<a href="<?php echo JRoute::_('index.php?option=com_joomblog&task=adminhome&Itemid='.jbGetAdminItemId());?>"><?php echo JText::_('COM_JOOMBLOG_ADMIN_MY_ENTRIES');?></a>|
+			  </li>
+			  <li>
+				<a href="<?php echo JRoute::_('index.php?option=com_joomblog&task=bloggerpref&Itemid='.jbGetAdminItemId() );?>"><?php echo JText::_('COM_JOOMBLOG_ADMIN_MENU_PREFERENCES');?></a>|
+			  </li>
+			  <li>
+				<a href="<?php echo JRoute::_('index.php?option=com_joomblog&task=bloggerstats&Itemid='.jbGetAdminItemId() );?>"><?php echo JText::_('COM_JOOMBLOG_ADMIN_MENU_STATS');?></a>|
+			  </li>
+				<?php
+					global $_JB_CONFIGURATION;
+					if($_JB_CONFIGURATION->get('useComment'))
+					{
+					?>
+					 <li><a href="<?php echo JRoute::_('index.php?option=com_joomblog&task=showcomments&Itemid='.jbGetAdminItemId());?>"><?php echo JText::_('COM_JOOMBLOG_ADMIN_COMMENTS');?></a></li>
+					<?php
+					}
+				?>
+    </ul>
+	</div>
+</div>
+<!-- end tab navigation -->
+
+<?php
+$user	= $user[0];
+global $_JB_CONFIGURATION;
+
+?>
+	<div class="profileDivForm">
+		<form id="adminForm" class="adminForm" name="blogger-info" action="<?php echo JRequest::getURI();?>" method="POST" enctype="multipart/form-data">
+			<h2><?php echo JText::_('COM_JOOMBLOG_BLOG_ADMIN_PREFERENCES_LEGEND');?></h2>
+			<div>
+				<label class="blog-title"><?php echo JText::_('COM_JOOMBLOG_BLOG_ADMIN_PREFERENCES_TITLE');?></label>
+				<input name="blog-title" type="text" class="inputbox" id="blog-title" style="width: 100%" value="<?php echo $user->title; ?>" />
+			</div>
+			<div>
+				<label class="blog-subtitle"><?php echo JText::_('COM_JOOMBLOG_BLOG_ADMIN_PREFERENCES_DESCRIPTION');?></label>
+				<textarea name="blog-subtitle" cols="47" rows="6" class="inputbox" id="blog-subtitle" style="width: 100%"><?php echo stripslashes( $user->description ); ?></textarea>
+			</div>
+
+			<?php
+			if ( $showFeedburner ) {
+			?>
+			<h2><?php echo JText::_('COM_JOOMBLOG_BLOG_ADMIN_PREFERENCES_FEEDBURNER');?></h2>
+			<div>
+				<label class="blog-feedburner"><?php echo JText::_('COM_JOOMBLOG_BLOG_ADMIN_PREFERENCES_FEEDBURNER_URL');?></label>
+				<input type="text" class="inputbox" value="<?php echo $user->feedburner; ?>" name="feedburnerURL" size="40" />
+			</div>	
+			<?php
+			}
+			?>
+			
+			<br/>
+			<h2><?php echo JText::_('COM_JOOMBLOG_BLOG_ADMIN_PREFERENCES_USER_DETAILS');?></h2>
+			<?php if (($_JB_CONFIGURATION->get('avatar') != 'none') && ($_JB_CONFIGURATION->get('avatar') != 'jomsocial')){?>
+			<div>
+				<label class="blog-name"><?php echo JText::_('COM_JOOMBLOG_BLOG_ADMIN_AVATAR');?></label>
+				<input type="file" value="" name="Filedata" size="50" />
+				<br/>
+				<img src="<?php if($user->avatar){ echo JUri::root().'images/joomblog/avatar/'.$user->avatar;} else { echo JUri::root().'components/com_joomblog/images/user.png';}?>" border="0" class="avatar" />
+			</div>
+			<?php } ?>
+			<div>
+				<label class="blog-aboutme"><?php echo JText::_('COM_JOOMBLOG_BLOG_ADMIN_PREFERENCES_ABOUT_ME');?></label>
+				<textarea name="blog-aboutme" cols="47" rows="6" class="inputbox" id="blog-aboutme" style="width: 100%"><?php echo stripslashes( $user->about ); ?></textarea>
+			</div>
+			<div>
+				<label class="blog-birthday"><?php echo JText::_('COM_JOOMBLOG_BLOG_ADMIN_PREFERENCES_BIRTHDAY');?></label>
+				<select class="inputbox" id="day" name="blog-day" >
+					<option value="0"><?php echo JText::_('COM_JOOMBLOG_DAY'); ?>&nbsp</option>
+					<?php for($i = 1; $i < 32 ;$i++){ ?>
+						<option <?php if( $user->day == $i ){echo "selected"; } ?> value="<?php echo $i; ?>"><?php echo $i; ?></option>
+					<?php } ?>
+				</select>
+				<?php //echo  date("Y",strtotime($user->birthday." 00:00:00")); ?>
+				<select class="inputbox" id="month" name="blog-month" >
+					<option value="0"><?php echo JText::_('COM_JOOMBLOG_MONTH'); ?>&nbsp;</option>
+					<?php for($i = 1; $i <= 12 ;$i++){ ?>
+					<option  <?php if( $user->month == $i ){echo "selected";} ?> value="<?php echo $i; ?>"><?php echo JText::_(date("F",strtotime("1970-".sprintf("%02d",$i)."-00 00:00:00"))); ?></option>
+					<?php } ?>
+				</select>
+
+				<select class="inputbox" id="year" name="blog-year" >
+					<option value="0"><?php echo JText::_('COM_JOOMBLOG_YEAR'); ?>&nbsp</option>
+					<?php for($i = 10; $i >= 0 ;$i--){ ?>
+						<option <?php if( $user->year == "20".$i ){echo "selected"; } ?> value="20<?php echo sprintf("%02d",$i); ?>">20<?php echo sprintf("%02d",$i); ?>&nbsp</option>
+					<?php } ?>
+					<?php for($i = 99; $i > 9 ;$i--){ ?>
+						<option <?php if($user->year == "19".$i ){echo "selected"; } ?> value="19<?php echo sprintf("%02d",$i); ?>">19<?php echo sprintf("%02d",$i); ?>&nbsp</option>
+					<?php } ?>
+				</select>
+			</div>
+			<div>
+				<label class="blog-site"><?php echo JText::_('COM_JOOMBLOG_BLOG_ADMIN_PREFERENCES_SITE');?></label>
+				<input type="text" class="inputbox" value="<?php echo $user->site; ?>" name="blog-site" size="50" />
+			</div>
+			<div>
+				<label class="blog-twitter"><?php echo JText::_('COM_JOOMBLOG_BLOG_ADMIN_PREFERENCES_TWITTER');?></label>
+				<input type="text" class="inputbox" value="<?php echo $user->twitter; ?>" name="blog-twitter" size="50" />
+			</div>	
+			
+			<br/>
+			<div>
+				<input type="submit" class="jbbutton" name="submit-blogger" id="submit-blogger" value="<?php echo JText::_('SUBMIT BUTTON PROFILE DETAILS');?>" />
+			</div>
+		</form>
+	</div>
+</div>

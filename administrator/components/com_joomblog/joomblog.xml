@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="component" version="1.0.9" method="upgrade">
+	<name>com_joomblog</name>
+	<creationDate>January 2012</creationDate>
+	<author>Joomplace Team</author>
+	<authorEmail> </authorEmail>
+	<authorUrl> </authorUrl>
+	<copyright>Copyright 2008 - 2010. All rights reserved</copyright>
+	<license>License Info</license>
+	<version>1.0.9</version>
+	<description>Blog system for Joomla</description>
+	<scriptfile>install.joomblog.php</scriptfile>
+	<files>
+	</files>
+	<media destination="com_joomblog" folder="media">
+		<filename>index.html</filename>
+		<folder>images</folder>
+	</media>
+	<administration>
+		<menu img="../media/com_joomblog/images/joomblog-16.png" alt="Joomblog">COM_JOOMBLOG</menu>
+		<submenu>
+			<menu link="option=com_categories&amp;view=categories&amp;extension=com_joomblog" alt="Joomblog/Categories" img="components/com_joomblog/assets/images/icon16-jbcategories.png" >COM_JOOMBLOG_SUBMENU_CATEGORIES</menu>
+			<menu link="option=com_joomblog&amp;view=blogs" alt="Joomblog/Manage blog items" img="components/com_joomblog/assets/images/icon16-jbblogs.png" >COM_JOOMBLOG_SUBMENU_BLOGS</menu>
+			<menu link="option=com_joomblog&amp;view=drafts" alt="Joomblog/Manage drafts" img="components/com_joomblog/assets/images/icon16-jbdrafts.png">COM_JOOMBLOG_SUBMENU_DRAFTS</menu>
+            <menu link="option=com_joomblog&amp;view=posts" alt="Joomblog/Manage blogs" img="components/com_joomblog/assets/images/icon16-jbposts.png" >COM_JOOMBLOG_SUBMENU_POSTS</menu>
+            <menu link="option=com_joomblog&amp;view=archives" alt="Joomblog/Manage archives" img="components/com_joomblog/assets/images/icon16-jbarchives.png">COM_JOOMBLOG_SUBMENU_ARCHIVES</menu>
+            <menu link="option=com_joomblog&amp;view=users" alt="Joomblog/Manage bloggers" img="components/com_joomblog/assets/images/icon16-jbusers.png" >COM_JOOMBLOG_SUBMENU_USERS</menu>
+			<menu link="option=com_joomblog&amp;view=comments" alt="Joomblog/Manage comment items" img="components/com_joomblog/assets/images/icon16-jbcomments.png" >COM_JOOMBLOG_SUBMENU_COMMENTS</menu>
+			<menu link="option=com_joomblog&amp;view=tags" alt="Joomblog/Manage tag items" img="components/com_joomblog/assets/images/icon16-jbtags.png" >COM_JOOMBLOG_SUBMENU_TAGS</menu>
+			<menu link="option=com_joomblog&amp;view=settings" alt="Joomblog/Settings" img="components/com_joomblog/assets/images/icon16-jbsettings.png" >COM_JOOMBLOG_SUBMENU_SETTINGS</menu>
+			<menu link="option=com_joomblog&amp;view=about" alt="Joomblog/About JoomBlog" img="components/com_joomblog/assets/images/icon16-jbabout.png" >COM_JOOMBLOG_SUBMENU_ABOUT</menu>
+		</submenu>
+		<files>
+			<filename>install.sql.php</filename>
+			<!-- <filename>install/mod_jb_archive.zip</filename>
+			<filename>install/mod_jb_categories.zip</filename>
+			<filename>install/mod_jb_latestposts.zip</filename>
+			<filename>install/mod_jb_popularbloggers.zip</filename>
+			<filename>install/mod_jb_tags.zip</filename>
+			<filename>install/mod_jb_blogs.zip</filename>
+			<filename>install/plg_joomblog.zip</filename>
+			<filename>install/plg_social.zip</filename>
+			<filename>install/plg_joombloguser.zip</filename>
+			<filename>install/plg_joomblogcontent.zip</filename> -->
+			<filename>install/backend.zip</filename>
+			<filename>install/frontend.zip</filename>
+			<filename>install/index.html</filename>
+		</files>
+		<languages folder="languages">
+		  <language tag="en-GB">admin/en-GB.com_joomblog.sys.ini</language>
+		  <language tag="en-GB">admin/en-GB.com_joomblog.ini</language>
+		</languages>
+	</administration>
+	<languages folder="languages">
+		<language tag="en-GB">site/en-GB.com_joomblog.ini</language>
+	</languages>
+</extension>
