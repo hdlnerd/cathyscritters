@@ -1,7 +1,6 @@
 .buildpath
 .project
 .settings/*
-*.txt
 *.jpg
 *.jpa
 *.log
