@@ -7,7 +7,6 @@
 cache/*
 logs
 /tmp
-/images
 libraries/dompdf/lib/fonts/log.htm
 
 # Ignore most hidden files
