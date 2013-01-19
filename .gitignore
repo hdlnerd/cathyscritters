@@ -1,4 +1,5 @@
 .buildpath
+configuration.php
 .project
 .settings/*
 *.jpg
