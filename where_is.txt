@@ -1,0 +1,23 @@
+Contract generator script:
+./plugins/fabrik_form/email/tmpl/contract.php
+
+
+Error log:
+./my_error_log.txt
+
+Javascript, private party form:
+./components/com_fabrik/js/17.js
+
+PHP, Ajax calls:
+./components/com_fabrik/user_ajax.php : class userAjax
+
+PHP, Functions for calling outside of Ajax:
+./components/com_fabrik/user_ajax.php : 
+	function fetchUserProfileValue ( $fieldname )
+		Return value from current user's record in cc1_critters_profile in field $fieldname
+
+	function fetchJUserProfileValue ( $fieldname )
+		Return value from cc1_users (Joomla user database) for current user in field $fieldname
+
+	function payment_method_is ( $method )
+		Return "check" or "paypal"
