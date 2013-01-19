@@ -3,12 +3,11 @@
 .settings/*
 *.txt
 *.jpg
+*.jpa
+*.log
 cache/*
 logs
-robots.txt
 /tmp
-fabrik_build/output/
-/build_config_private.ini
 /images
 libraries/dompdf/lib/fonts/log.htm
 
@@ -16,8 +15,3 @@ libraries/dompdf/lib/fonts/log.htm
 .*
 !.gitignore
 !.htaccess
-
-# petsupervisor and hdlnerd archived separately
-petsupervisor.com
-hdlnerd.com
-

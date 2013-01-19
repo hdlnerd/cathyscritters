@@ -10036,3 +10036,38 @@
 [17-Jan-2013 17:41:44] 1
 [17-Jan-2013 17:41:44] 577
 [17-Jan-2013 17:41:44] --------------
+[19-Jan-2013 12:44:16] Checking condition
+[19-Jan-2013 12:44:16] in PAYMENT_METHOD_IS: returning paypal
+[19-Jan-2013 12:44:16] Dump of database variables.
+[19-Jan-2013 12:44:16] Package #:6
+[19-Jan-2013 12:44:16] start = 3:30pm
+[19-Jan-2013 12:44:16] duration = 1.5
+[19-Jan-2013 12:44:16] 0 ponies
+[19-Jan-2013 12:44:16] Pictures y/n: 0
+[19-Jan-2013 12:44:16] Qty: 0 pictures
+[19-Jan-2013 12:44:16] Concrete=1, grass=0: 0
+[19-Jan-2013 12:44:16] Miles: 
+[19-Jan-2013 12:44:16] Plano fee: 0
+[19-Jan-2013 12:44:16] base: 345
+[19-Jan-2013 12:44:16] photos: 0
+[19-Jan-2013 12:44:16] concrete: 0
+[19-Jan-2013 12:44:16] travel: 0
+[19-Jan-2013 12:44:16] city: 0
+[19-Jan-2013 12:44:16] in PAYMENT_METHOD_IS: returning paypal
+[19-Jan-2013 12:44:16] Dump of database variables.
+[19-Jan-2013 12:44:16] Package #:6
+[19-Jan-2013 12:44:16] start = 3:30pm
+[19-Jan-2013 12:44:16] duration = 1.5
+[19-Jan-2013 12:44:16] 0 ponies
+[19-Jan-2013 12:44:16] Pictures y/n: 0
+[19-Jan-2013 12:44:16] Qty: 0 pictures
+[19-Jan-2013 12:44:16] Concrete=1, grass=0: 0
+[19-Jan-2013 12:44:16] Miles: 
+[19-Jan-2013 12:44:16] Plano fee: 0
+[19-Jan-2013 12:44:16] base: 345
+[19-Jan-2013 12:44:16] photos: 0
+[19-Jan-2013 12:44:16] concrete: 0
+[19-Jan-2013 12:44:16] travel: 0
+[19-Jan-2013 12:44:16] city: 0
+[19-Jan-2013 12:44:16] Checking condition
+[19-Jan-2013 12:44:16] in PAYMENT_METHOD_IS: returning paypal
