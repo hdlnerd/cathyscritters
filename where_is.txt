@@ -3,6 +3,7 @@ Contract generator script:
 
 
 
+
 Error log:
 ./my_error_log.txt
 
