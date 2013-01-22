@@ -50,6 +50,7 @@ function getSelectedRadio(buttonGroup) {
 // This function updates the running total party price and does
 // javascript animations as the user checks and unchecks options.
 function updatePrice () {
+	//alert("Running updatePrice");
 	//
 	//When adding variables to the pricing formula, add a variable, gleaned from the form here...
 	//
@@ -93,6 +94,7 @@ function updatePrice () {
 	var url_mq='http://platform.beta.mapquest.com/directions/v1/route?key='+key;
 	data_mq = 'from='+from_addr+'&to='+to_addr;
 	console.log("Data to mapquest: "+data_mq);
+	//alert("Data to mapquest: "+data_mq);
 
 
 	// This is super-ugly.  I haven't figured out the "correct" way to do chained requests, so
@@ -110,23 +112,15 @@ function updatePrice () {
 			function(r){
 				$('cc1_critters_reservations___distance_one_way').value = Math.round(r.route.distance);
 				$('cc1_critters_reservations___toll-roads').value = r.route.hasTollRoad?5:0;
+//				alert("Mapquest request done.");
 				console.log("Mapquest request done.");
 				console.log("r="+r.route.distance);
 				travel = Math.round(r.route.distance);
 				toll_charge_estimate = r.route.hasTollRoad?5:0;
 				console.log("Setting mileage = "+travel);
-
 				console.log("Returning with "+travel);
-			},
-			onSuccess:
-			function(r){
-				console.log("Mapquest query: Successful request.");
-				$('cc1_critters_reservations___toll-roads').value = r.route.hasTollRoad?5:0;
 				var url_pz='index.php?option=com_fabrik&format=raw&task=plugin.userAjax&method=calcPZBasePrice';
 	
-				//
-				//and here...
-				//
 				data_pz='base_package='+base_package+'&duration='+duration+'&numponies='+numponies+'&pictures='+pictures+'&numpics='+numpics+'&concrete='+concrete+'&travel='+travel+'&cityfee='+cityfee;
 	
 				console.log("Data to calcPZBasePrice= "+url_pz+data_pz);
@@ -139,6 +133,10 @@ function updatePrice () {
 						}
 					}
 				).send(data_pz);
+			},
+			onSuccess:
+			function(r){
+				console.log("Mapquest query: Successful request.");
 			},
 			onFailure:
 			function(r){

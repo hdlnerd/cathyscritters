@@ -49,6 +49,7 @@
 
 	// event_date comes from a date-picker
 	$event_date = substr($this->data['reservations_partydate'], 0, 10);
+	$date_header = date('l, F d Y', strtodate($event_date));
 	$start_time = $this->data['reservations_partytime'];
 	$timespan = "$start_time for $duration hours";
 
@@ -186,7 +187,7 @@ echo <<<EOD
 <TABLE WIDTH=745 BORDER=0 bgcolor="white" cellpadding="13" cellspacing="13">
 	<TR>
 		<TD>
-			<center>Nov&nbsp;3,&nbsp;2012</center>
+			<center>$date_header</center>
 			<div align=right>
 				$surname <br>
 				$timespan <br>
