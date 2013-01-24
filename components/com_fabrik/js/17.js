@@ -62,6 +62,7 @@ function updatePrice () {
 	var numpics      = $('cc1_critters_reservations___reservations_photo_quantity').getValue();
 	var concrete     = $('cc1_critters_reservations___reservations_concrete_checked').getElements('input')[0].checked;
 	var travel       = 0;
+	//alert(String($('cc1_critters_reservations___ishomeaddress').getElements('input')[1].checked));
   var party_elsewhere = $('cc1_critters_reservations___ishomeaddress').getElements('input')[1].checked;
 
 	if (pictures) {
@@ -71,13 +72,13 @@ function updatePrice () {
 	}
 
   if (party_elsewhere) {
-		console.log("party elsewhere");
+		//alert("Party elsewhere");
 		check_addr1 = $('cc1_critters_reservations___reservations_party_address_line1').value;
 		check_city  = $('cc1_critters_reservations___reservations_party_address_city').value;
 		check_state = $('cc1_critters_reservations___reservations_party_address_state').value;
 		check_zip   = $('cc1_critters_reservations___reservations_party_address_zip').value;
   } else {
-		console.log("party at home");
+		//alert("Party at home");
 		check_addr1 = $('cc1_critters_reservations___address1').value;
 		check_city  = $('cc1_critters_reservations___city').value;
 		check_state = $('cc1_critters_reservations___state').value;
@@ -91,11 +92,15 @@ function updatePrice () {
 	var one_way_mileage = 0;
 	var toll_charge_estimate = 0;
 
-	var url_mq='http://platform.beta.mapquest.com/directions/v1/route?key='+key;
-	data_mq = 'from='+from_addr+'&to='+to_addr;
+	//Working copy-and-paste example:
+	//http://platform.beta.mapquest.com/directions/v1/route?key=Fmjtd%7Cluua2lu72h%2C25%3Do5-hyrs0&from=75407&to=75248&ambiguities=ignore
+
+	// Switched from beta to production version of Mapquest API
+	//var url_mq='http://platform.beta.mapquest.com/directions/v1/route?key='+key;
+	var url_mq='http://www.mapquestapi.com/directions/v1/route?key='+key;
+	data_mq = 'from='+from_addr+'&to='+to_addr+'&ambiguities=ignore';
 	console.log("Data to mapquest: "+data_mq);
 	//alert("Data to mapquest: "+data_mq);
-
 
 	// This is super-ugly.  I haven't figured out the "correct" way to do chained requests, so
 	// I embedded one inside the other.  The outer request is the one to query Mapquest for the
@@ -104,21 +109,16 @@ function updatePrice () {
 	// called in the right order.  My problem was that because of the latency, the calcPrice
 	// routine kept running *before* the Mapquest routine, meaning it didn't have all the data
 	// it needed.
-	//
 	// I'm sure there's a smarter way, but this will work for now :-)
 	newreq = new Request.JSONP(
 		{url: url_mq, method: 'post',
-			onComplete:
-			function(r){
-				$('cc1_critters_reservations___distance_one_way').value = Math.round(r.route.distance);
-				$('cc1_critters_reservations___toll-roads').value = r.route.hasTollRoad?5:0;
-//				alert("Mapquest request done.");
-				console.log("Mapquest request done.");
-				console.log("r="+r.route.distance);
+			onSuccess: function(r){
+				//alert(JSON.stringify(r.route))
 				travel = Math.round(r.route.distance);
 				toll_charge_estimate = r.route.hasTollRoad?5:0;
-				console.log("Setting mileage = "+travel);
-				console.log("Returning with "+travel);
+				$('cc1_critters_reservations___distance_one_way').value = travel;
+				$('cc1_critters_reservations___toll-roads').value = toll_charge_estimate;
+
 				var url_pz='index.php?option=com_fabrik&format=raw&task=plugin.userAjax&method=calcPZBasePrice';
 	
 				data_pz='base_package='+base_package+'&duration='+duration+'&numponies='+numponies+'&pictures='+pictures+'&numpics='+numpics+'&concrete='+concrete+'&travel='+travel+'&cityfee='+cityfee;
@@ -134,17 +134,13 @@ function updatePrice () {
 					}
 				).send(data_pz);
 			},
-			onSuccess:
-			function(r){
-				console.log("Mapquest query: Successful request.");
+			onComplete: function(r){
 			},
-			onFailure:
-			function(r){
-				console.log("Mapquest query failed. Bad URL:"+url_mq);
+			onFailure: function(r){
+				alert("Mapquest request failed. Bad URL?"+url_mq);
 			}
 		}
 	);
 
 	newreq.send(data_mq);
-
 }

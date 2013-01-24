@@ -100,18 +100,19 @@ function updatePrice () {
 	// it needed.
 	//
 	// I'm sure there's a smarter way, but this will work for now :-)
+	//alert("Depending on your ZIP code, there may be a travel charge to your event.  Please confirm final price with Lisa at 972-562-0583.");
 	newreq = new Request.JSONP(
 		{url: url_mq, method: 'post',
-			onComplete:
+			onSuccess:
 			function(r){
-				$('cc1_critters_reservations___distance_one_way').value = Math.round(r.route.distance);
-				$('cc1_critters_reservations___toll-roads').value = r.route.hasTollRoad?5:0;
+				//alert(r);
+				$('cc1_critters_reservations___distance_one_way').value = 20; //Math.round(r.route.distance);
+				$('cc1_critters_reservations___toll-roads').value = 0; //r.route.hasTollRoad?5:0;
 				console.log("Mapquest request done.");
-				console.log("r="+r.route.distance);
-				travel = Math.round(r.route.distance);
-				toll_charge_estimate = r.route.hasTollRoad?5:0;
+//				console.log("r="+r.route.distance);
+				travel = 20; //Math.round(r.route.distance);
+				toll_charge_estimate = 0; //r.route.hasTollRoad?5:0;
 				console.log("Setting mileage = "+travel);
-				console.log("Returning with "+travel);
 				var url_pz='index.php?option=com_fabrik&format=raw&task=plugin.userAjax&method=calcPZBasePrice';
 	
 				data_pz='base_package='+base_package+'&duration='+duration+'&numponies='+numponies+'&pictures='+pictures+'&numpics='+numpics+'&concrete='+concrete+'&travel='+travel+'&cityfee='+cityfee;
@@ -127,9 +128,9 @@ function updatePrice () {
 					}
 				).send(data_pz);
 			},
-			onSuccess:
+			onComplete:
 			function(r){
-				console.log("Mapquest query: Successful request.");
+				console.log("Mapquest query: Request complete.");
 			},
 			onFailure:
 			function(r){

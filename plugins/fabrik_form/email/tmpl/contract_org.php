@@ -49,7 +49,7 @@
 
 	// event_date comes from a date-picker
 	$event_date = substr($this->data['reservations_partydate'], 0, 10);
-	$date_header = date('l, F d Y', strtodate($event_date));
+	$date_header = date('l, F d, Y', strtotime($event_date));
 	$start_time = $this->data['reservations_partytime'];
 	$timespan = "$start_time for $duration hours";
 

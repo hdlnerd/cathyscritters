@@ -1,9 +1,6 @@
 Contract generator script:
 ./plugins/fabrik_form/email/tmpl/contract.php
 
-
-
-
 Error log:
 ./my_error_log.txt
 
