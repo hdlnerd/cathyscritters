@@ -1,9 +1,7 @@
 configuration.php
 .buildpath
-configuration.php
 .project
 .settings/*
-*.jpg
 *.jpa
 *.log
 cache/*
