@@ -1,8 +1,8 @@
+configuration.php
 .buildpath
 configuration.php
 .project
 .settings/*
-*.jpg
 *.jpa
 *.log
 cache/*
@@ -14,3 +14,4 @@ libraries/dompdf/lib/fonts/log.htm
 .*
 !.gitignore
 !.htaccess
+temp.sql
