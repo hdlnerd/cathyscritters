@@ -13,3 +13,4 @@ libraries/dompdf/lib/fonts/log.htm
 .*
 !.gitignore
 !.htaccess
+temp.sql
