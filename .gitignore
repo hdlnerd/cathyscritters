@@ -2,13 +2,11 @@ configuration.php
 .buildpath
 .project
 .settings/*
-*.jpg
 *.jpa
 *.log
 cache/*
 logs
 /tmp
-/images
 libraries/dompdf/lib/fonts/log.htm
 
 # Ignore most hidden files
