@@ -26,8 +26,6 @@ function getSelectedRadio(buttonGroup) {
    return -1;
 } // Ends the "getSelectedRadio" function
 
-
-
 function calcPlanoCharges (check_zip) {
 	var plano_zips =["75023", "75024", "75025", "75026", "75074",
 	                 "75075", "75086", "75093", "75094"]
@@ -50,9 +48,8 @@ function calcPlanoCharges (check_zip) {
 	return cityfee
 }
 
-
-// This function is to learn how to do an Ajax request in a called function,
-// returning the result of the Ajax call after the request is complete.
+// This function updates the running total party price and does
+// javascript animations as the user checks and unchecks options.
 function updatePrice () {
 	//
 	//When adding variables to the pricing formula, add a variable, gleaned from the form here...
@@ -86,10 +83,15 @@ function updatePrice () {
 	var one_way_mileage = 0;
 	var toll_charge_estimate = 0;
 
-	var url_mq='http://platform.beta.mapquest.com/directions/v1/route?key='+key;
-	data_mq = 'from='+from_addr+'&to='+to_addr;
-	console.log("Data to mapquest: "+data_mq);
+	//Working copy-and-paste example:
+	//http://platform.beta.mapquest.com/directions/v1/route?key=Fmjtd%7Cluua2lu72h%2C25%3Do5-hyrs0&from=75407&to=75248&ambiguities=ignore
 
+	// Switched from beta to production version of Mapquest API
+	//var url_mq='http://platform.beta.mapquest.com/directions/v1/route?key='+key;
+	var url_mq='http://www.mapquestapi.com/directions/v1/route?key='+key;
+	data_mq = 'from='+from_addr+'&to='+to_addr+'&ambiguities=ignore';
+	console.log("Data to mapquest: "+data_mq);
+	//alert("Data to mapquest: "+data_mq);
 
 	// This is super-ugly.  I haven't figured out the "correct" way to do chained requests, so
 	// I embedded one inside the other.  The outer request is the one to query Mapquest for the
@@ -98,31 +100,17 @@ function updatePrice () {
 	// called in the right order.  My problem was that because of the latency, the calcPrice
 	// routine kept running *before* the Mapquest routine, meaning it didn't have all the data
 	// it needed.
-	//
 	// I'm sure there's a smarter way, but this will work for now :-)
 	newreq = new Request.JSONP(
 		{url: url_mq, method: 'post',
-			onComplete:
-			function(r){
-				$('cc1_critters_reservations___distance_one_way').value = Math.round(r.route.distance);
-				$('cc1_critters_reservations___toll-roads').value = r.route.hasTollRoad?5:0;
-				console.log("Mapquest request done.");
-				console.log("r="+r.route.distance);
+			onSuccess: function(r){
 				travel = Math.round(r.route.distance);
 				toll_charge_estimate = r.route.hasTollRoad?5:0;
-				console.log("Setting mileage = "+travel);
+				$('cc1_critters_reservations___distance_one_way').value = travel;
+				$('cc1_critters_reservations___toll-roads').value = toll_charge_estimate;
 
-				console.log("Returning with "+travel);
-			},
-			onSuccess:
-			function(r){
-				console.log("Mapquest query: Successful request.");
-				$('cc1_critters_reservations___toll-roads').value = r.route.hasTollRoad?5:0;
 				var url_pz='index.php?option=com_fabrik&format=raw&task=plugin.userAjax&method=calcPZBasePrice';
 	
-				//
-				//and here...
-				//
 				data_pz='base_package='+base_package+'&duration='+duration+'&numponies='+numponies+'&pictures='+pictures+'&numpics='+numpics+'&concrete='+concrete+'&travel='+travel+'&cityfee='+cityfee;
 	
 				console.log("Data to calcPZBasePrice= "+url_pz+data_pz);
@@ -136,14 +124,12 @@ function updatePrice () {
 					}
 				).send(data_pz);
 			},
-			onFailure:
-			function(r){
-				console.log("Mapquest query failed. Bad URL:"+url_mq);
+			onComplete: function(r){ },
+			onFailure: function(r){
+				alert("Mapquest request failed. Bad URL?"+url_mq);
 			}
 		}
 	);
 
 	newreq.send(data_mq);
-
 }
-

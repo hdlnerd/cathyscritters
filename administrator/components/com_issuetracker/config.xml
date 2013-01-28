@@ -1,0 +1,453 @@
+<?xml version="1.0" encoding="utf-8"?>
+<config>
+   <fieldset name="component" label="COM_ISSUETRACKER_CONFIG_GENERAL_SETTINGS" 
+      description="COM_ISSUETRACKER_CONFIG_GENERAL_SETTINGS_DESC" 
+      addfieldpath="/administrator/components/com_issuetracker/models/fields">
+
+      <field name="delete" type="list" default="0" label="COM_ISSUETRACKER_CONFIG_DELETE_MODE_LABEL" 
+         description="COM_ISSUETRACKER_CONFIG_DELETE_MODE_DESCRIPTION">
+         <option value="0">JDISABLED</option>
+         <option value="1">COM_ISSUETRACKER_CONFIG_HARD</option>
+         <option value="2">COM_ISSUETRACKER_CONFIG_SOFT</option>
+      </field>
+
+      <field name="deleteUser" type="sql" default="1" label="COM_ISSUETRACKER_CONFIG_DELETED_ISSUES_USERID_LABEL" 
+         description="COM_ISSUETRACKER_CONFIG_DELETED_ISSUES_USERID_DESCRIPTION" 
+         key_field="value" value_field="person"
+         query="SELECT id AS value, person_name AS person FROM #__it_people"/>
+
+      <field name="def_project" type="issuetrackerprojectbe" 
+         section="com_issuetracker" default="1"
+         label="COM_ISSUETRACKER_CONFIG_DEFAULT_PROJECT_LABEL" 
+         description="COM_ISSUETRACKER_CONFIG_DEFAULT_PROJECT_DESCRIPTION"
+         required="false" />
+
+      <field name="def_assignee" type="sql" default="0" label="COM_ISSUETRACKER_CONFIG_DEFAULT_ISSUE_ASSIGNEE_LABEL" 
+         description="COM_ISSUETRACKER_CONFIG_DEFAULT_ISSUE_ASSIGNEE_DESCRIPTION" 
+         key_field="value" value_field="person"
+         query="SELECT 0 AS value, 'None' AS person UNION SELECT user_id AS value, person_name AS person FROM #__it_people WHERE user_id IS NOT NULL AND staff = 1 "/>
+
+      <field name="def_identifiedby" type="sql" default="1" label="COM_ISSUETRACKER_CONFIG_DEFAULT_ISSUE_IDENTIFIEDBY_LABEL" 
+         description="COM_ISSUETRACKER_CONFIG_DEFAULT_ISSUE_IDENTIFIEDBY_DESCRIPTION" 
+         key_field="value" value_field="person"
+         query="SELECT id AS value, person_name AS person FROM #__it_people"/>
+
+      <field name="def_role" type="sql" default="2" label="COM_ISSUETRACKER_CONFIG_DEFAULT_PERSON_ROLE_LABEL" 
+         description="COM_ISSUETRACKER_CONFIG_DEFAULT_PERSON_ROLE_DESCRIPTION" 
+         key_field="value" value_field="role"
+         query="SELECT id AS value, role_name AS role FROM #__it_roles"/>
+
+      <field name="def_status" type="sql" default="4" label="COM_ISSUETRACKER_CONFIG_DEFAULT_STATUS_LABEL" 
+         description="COM_ISSUETRACKER_CONFIG_DEFAULT_STATUS_DESC" 
+         key_field="value" value_field="status"
+         query="SELECT id AS value, status_name AS status FROM #__it_status"/>
+
+      <field name="open_status" type="sql" default="4"
+         label="COM_ISSUETRACKER_CONFIG_FIELD_OPEN_STATUS_LABEL"
+         description="COM_ISSUETRACKER_CONFIG_FIELD_OPEN_STATUS_DESC"
+         key_field="value" value_field="status"
+         query="SELECT id AS value, status_name AS status FROM #__it_status"/>
+    
+      <field name="closed_status" type="sql" default="1"
+         label="COM_ISSUETRACKER_CONFIG_FIELD_CLOSED_STATUS_LABEL"
+         description="COM_ISSUETRACKER_CONFIG_FIELD_CLOSED_STATUS_DESC"
+         key_field="value" value_field="status"
+         query="SELECT id AS value, status_name AS status FROM #__it_status"/>
+
+      <field name="def_priority" type="sql" default="2" label="COM_ISSUETRACKER_CONFIG_DEFAULT_PRIORITY_LABEL" 
+         description="COM_ISSUETRACKER_CONFIG_DEFAULT_PRIORITY_DESC" 
+         key_field="value" value_field="priority"
+         query="SELECT id AS value, priority_name AS priority FROM #__it_priority"/>
+						
+      <field name="def_published" type="radio" default="0" label="COM_ISSUETRACKER_CONFIG_DEFAULT_PUBLISHED_LABEL" 
+	      description="COM_ISSUETRACKER_CONFIG_DEFAULT_PUBLISHED_DESC">
+	      <option value="0">JUNPUBLISHED</option>
+	      <option value="1">JPUBLISHED</option>
+      </field>
+
+      <field name="def_type" type="sql" default="1" label="COM_ISSUETRACKER_CONFIG_DEFAULT_ISSUE_TYPE_LABEL" 
+	      description="COM_ISSUETRACKER_CONFIG_DEFAULT_ISSUE_TYPE_DESC" 
+	      key_field="value" value_field="itype"
+         query="SELECT id AS value, type_name AS itype FROM #__it_types"/>
+         
+      <field name="allow_fe_edit" type="radio" default="1" label="COM_ISSUETRACKER_CONFIG_ALLOW_FE_EDITING_LABEL" 
+         description="COM_ISSUETRACKER_CONFIG_ALLOW_FE_EDITING_DESC">
+         <option value="0">JNO</option>
+         <option value="1">JYES</option>
+      </field>   
+
+      <field name="wysiwyg_editor" type="radio" default="0" label="COM_ISSUETRACKER_CONFIG_WYSIWYG_EDITOR_LABEL" 
+         description="COM_ISSUETRACKER_CONFIG_WYSIWYG_EDITOR_DESC">
+         <option value="0">JNO</option>
+         <option value="1">JYES</option>
+      </field>   
+
+      <field name="initial_admin" type="list" default="A" label="COM_ISSUETRACKER_CONFIG_DEFAULT_INITIAL_ADMIN_LABEL" 
+	      description="COM_ISSUETRACKER_CONFIG_DEFAULT_INITIAL_ADMIN_DESC">
+	      <option value="A">A</option>
+	      <option value="B">B</option>
+	      <option value="C">C</option>
+	      <option value="D">D</option>
+	      <option value="E">E</option>
+	      <option value="F">F</option>
+	      <option value="G">G</option>
+	      <option value="H">H</option>
+	      <option value="I">I</option>
+	      <option value="J">J</option>
+	      <option value="K">K</option>
+	      <option value="L">L</option>
+	      <option value="M">M</option>
+	      <option value="N">N</option>
+	      <option value="O">O</option>
+	      <option value="P">P</option>
+	      <option value="Q">Q</option>
+	      <option value="R">R</option>
+	      <option value="S">S</option>
+	      <option value="T">T</option>
+	      <option value="U">U</option>
+	      <option value="V">V</option>
+	      <option value="W">W</option>
+	      <option value="X">X</option>
+	      <option value="Y">Y</option>
+	      <option value="Z">Z</option>
+       </field>
+
+      <field name="initial_site" type="list" default="Z" label="COM_ISSUETRACKER_CONFIG_DEFAULT_INITIAL_SITE_LABEL" 
+	      description="COM_ISSUETRACKER_CONFIG_DEFAULT_INITIAL_SITE_DESC">
+	      <option value="A">A</option>
+	      <option value="B">B</option>
+	      <option value="C">C</option>
+	      <option value="D">D</option>
+	      <option value="E">E</option>
+	      <option value="F">F</option>
+	      <option value="G">G</option>
+	      <option value="H">H</option>
+	      <option value="I">I</option>
+	      <option value="J">J</option>
+	      <option value="K">K</option>
+	      <option value="L">L</option>
+	      <option value="M">M</option>
+	      <option value="N">N</option>
+	      <option value="O">O</option>
+	      <option value="P">P</option>
+	      <option value="Q">Q</option>
+	      <option value="R">R</option>
+	      <option value="S">S</option>
+	      <option value="T">T</option>
+	      <option value="U">U</option>
+	      <option value="V">V</option>
+	      <option value="W">W</option>
+	      <option value="X">X</option>
+	      <option value="Y">Y</option>
+	      <option value="Z">Z</option>
+      </field>
+	    
+      <field name="show_summary_rep" type="radio" default="0" label="COM_ISSUETRACKER_CONFIG_SHOW_SUMMARY_REP_LABEL" 
+	      description="COM_ISSUETRACKER_CONFIG_SHOW_SUMMARY_REP_DESC">
+	      <option value="0">JNO</option>
+	      <option value="1">JYES</option>
+      </field>
+
+      <field name="show_unassigned_rep" type="radio" default="0" label="COM_ISSUETRACKER_CONFIG_SHOW_UNASSIGNED_REP_LABEL" 
+         description="COM_ISSUETRACKER_CONFIG_SHOW_UNASSIGNED_REP_DESC">
+         <option value="0">JNO</option>
+         <option value="1">JYES</option>
+      </field>
+
+      <field name="show_product_req" type="radio" default="0" label="COM_ISSUETRACKER_CONFIG_SHOW_PRODUCT_REQ_LABEL" 
+	      description="COM_ISSUETRACKER_CONFIG_SHOW_PRODUCT_REQ_DESC">
+	      <option value="0">JNO</option>
+	      <option value="1">JYES</option>
+      </field>
+
+      <field name="create_new_person" type="radio" default="0" label="COM_ISSUETRACKER_CONFIG_CREATE_NEW_PERSON_LABEL" 
+         description="COM_ISSUETRACKER_CONFIG_CREATE_NEW_PERSON_DESC">
+         <option value="0">JNO</option>
+         <option value="1">JYES</option>
+      </field>
+
+      <field name="auto_generate_username" type="radio" default="0" label="COM_ISSUETRACKER_CONFIG_AUTO_GENERATE_USERNAME_LABEL" 
+         description="COM_ISSUETRACKER_CONFIG_AUTO_GENERATE_USERNAME_DESC">
+         <option value="0">JNO</option>
+         <option value="1">JYES</option>
+      </field>
+
+     <field name="create_intro" type="textarea"   
+          default="Please supply a short title that describes your issue, and in the description box provide as much detail as possible to enable us to try and quickly resolve your problem." 
+          label="COM_ISSUETRACKER_CREATE_INTRO_TEXT_LABEL" 
+          description="COM_ISSUETRACKER_CREATE_INTRO_TEXT_DESC" 
+          rows="5" 
+          cols="50" />
+	    
+   </fieldset>
+
+   <fieldset name="spam" 
+      label="COM_ISSUETRACKER_CONFIG_SPAM_TAB_TITLE" 
+      description="COM_ISSUETRACKER_CONFIG_SPAM_TAB_DESC"
+      addrulepath="/administrator/components/com_issuetracker/models/rules" >
+      
+      <field name="link_count" 
+         type="text" 
+         filter="integer" 
+         label="COM_ISSUETRACKER_CONFIG_SPAM_TAB_FIELD_LINKCOUNT_LABEL" 
+    	   description="COM_ISSUETRACKER_CONFIG_SPAM_TAB_FIELD_LINKCOUNT_DESC" 
+    	   default="3" />
+    	    
+      <field name="word_list" 
+         type="textarea" 
+         filter="string" 
+         label="COM_ISSUETRACKER_CONFIG_SPAM_TAB_FIELD_WORDLIST_LABEL" 
+    	   description="COM_ISSUETRACKER_CONFIG_SPAM_TAB_FIELD_WORDLIST_DESC" 
+    	   default="" />
+
+      <field  name="captcha"
+	      type="plugins"
+	      folder="captcha"
+	      default=""
+	      label="COM_ISSUETRACKER_CONFIG_FIELD_CAPTCHA_LABEL"
+	      description="COM_ISSUETRACKER_CONFIG_FIELD_CAPTCHA_DESC"
+	      filter="cmd" >
+	      <option value="">JOPTION_USE_DEFAULT</option>
+	      <option value="0">JOPTION_DO_NOT_USE</option>
+      </field>
+      
+      <field name="site_url"
+         type="text"
+         default=""
+         label="COM_ISSUETRACKER_CONFIG_AKISMET_FIELD_SITE_URL_LABEL"
+         description="COM_ISSUETRACKER_CONFIG_AKISMET_FIELD_SITE_URL_DESC"
+         required="false"
+         validate="url"
+         schemes="http,https"  />
+      
+      <!-- Change label to be plain text because language transation does not seem to want to work with the JRuleForm return.  -->
+      <!--   label="COM_ISSUETRACKER_CONFIG_AKISMET_FIELD_API_KEY_LABEL"  -->
+      <field name="akismet_api_key"
+         default=""
+         type="text"
+         description="COM_ISSUETRACKER_CONFIG_AKISMET_FIELD_API_KEY_DESC"
+         label="Akismet API"
+         required="false"
+         validate="akismetApi" />
+
+   </fieldset>
+
+   <fieldset name="rules" 
+      label="COM_ISSUETRACKER_CONFIG_RULES_TAB_TITLE" 
+      description="COM_ISSUETRACKER_CONFIG_RULES_TAB_DESC">
+      
+      <field name="url_list" type="textarea" filter="string" 
+         label="COM_ISSUETRACKER_CONFIG_RULES_TAB_FIELD_BANNEDURLS_LABEL" 
+         description="COM_ISSUETRACKER_CONFIG_RULES_TAB_FIELD_BANNEDURLS_DESC" 
+         default="" />
+        
+      <field name="email_list" type="textarea" filter="string" 
+         label="COM_ISSUETRACKER_CONFIG_RULES_TAB_FIELD_BANNEDEMAILS_LABEL" 
+         description="COM_ISSUETRACKER_CONFIG_RULES_TAB_FIELD_BANNEDEMAILS_DESC" 
+         default="" />
+           
+      <field name="ip_list" type="textarea" filter="string" 
+         label="COM_ISSUETRACKER_CONFIG_RULES_TAB_FIELD_BANNEDIPS_LABEL" 
+         description="COM_ISSUETRACKER_CONFIG_RULES_TAB_FIELD_BANNEDIPS_DESC" 
+         default="" />
+   </fieldset>
+  
+   <fieldset name="email" label="COM_ISSUETRACKER_CONFIG_EMAIL_SETTINGS" description="COM_ISSUETRACKER_CONFIG_EMAIL_SETTINGS_DESC">
+  	
+      <field name="emailSiteName" type="text"
+       	 default="YOURWEBSITE" label="COM_ISSUETRACKER_CONFIG_EMAIL_SITENAME" 
+  	       size="50"
+       	 description="COM_ISSUETRACKER_CONFIG_EMAIL_SITENAME_DESC" />
+      
+      <field name="emailFrom" type="text" 		
+  	       default="noreply@YOURWEBSITE.com" label="COM_ISSUETRACKER_CONFIG_EMAIL_FROM"
+  	       size="50"
+  	       description="COM_ISSUETRACKER_CONFIG_EMAIL_FROM_DESC" />
+      
+      <field name="emailSender" type="text" 		
+  	       default="YOURWEBSITE.com" label="COM_ISSUETRACKER_CONFIG_EMAIL_SENDER" 
+  	       size="50"
+  	       description="COM_ISSUETRACKER_CONFIG_EMAIL_SENDER_DESC" />
+      
+      <field name="emailLink" type="text" 		
+  	       default="http://www.YOURWEBSITE.com" label="COM_ISSUETRACKER_CONFIG_EMAIL_LINK" 
+  	       size="50"
+  	       description="COM_ISSUETRACKER_CONFIG_EMAIL_LINK_DESC" />
+
+      <field name="emailReplyto" type="text"       
+          default="" label="COM_ISSUETRACKER_CONFIG_REPLYTO_ADDRESS" 
+          size="60"
+          description="COM_ISSUETRACKER_CONFIG_REPLYTO_ADDRESS_DESC" />
+
+      <field name="emailReplyname" type="text"       
+          default="" label="COM_ISSUETRACKER_CONFIG_REPLYTONAME" 
+          size="50"
+          description="COM_ISSUETRACKER_CONFIG_REPLYTONAME_DESC" />
+      
+      <field name="emailADMSubject" type="text" 		
+  	       default="Admin - " label="COM_ISSUETRACKER_CONFIG_EMAIL_ADM_SUBJECT" 
+  	       size="50"
+  	       description="COM_ISSUETRACKER_CONFIG_EMAIL_ADM_SUBJECT_DESC" />
+      
+      <field name="emailMSGSubject" type="text"        
+         default="[YOURWEBSITE] Message Notification" 
+         label="COM_ISSUETRACKER_CONFIG_MESSAGE_EMAIL_NOTIFICATION_SUBJECT_PREFIX" 
+  	      size="50"
+         description="COM_ISSUETRACKER_CONFIG_MESSAGE_EMAIL_NOTIFICATION_SUBJECT_PREFIX_DESC" />
+      
+      <field name="emailMSGMessagePrefix" type="textarea"    
+         default="" 
+         label="COM_ISSUETRACKER_CONFIG_MESSAGE_EMAIL_NOTIFICATION_MESSAGE_PREFIX" 
+         description="COM_ISSUETRACKER_CONFIG_MESSAGE_EMAIL_NOTIFICATION_MESSAGE_PREFIX_DESC" 
+         rows="5" cols="50" filter="safehtml" />
+      
+      <field name="emailMSGMessagePostfix" type="textarea"    
+         default="http://www.YOURWEBSITE.com Thank you YOURWEBSITE" 
+         label="COM_ISSUETRACKER_CONFIG_MESSAGE_EMAIL_NOTIFICATION_MESSAGE_POSTFIX" 
+         description="COM_ISSUETRACKER_CONFIG_MESSAGE_EMAIL_NOTIFICATION_MESSAGE_POSTFIX_DESC" 
+         rows="5" cols="50" filter="safehtml" />
+ 
+       <field name="email_notify" type="radio" default="0" label="COM_ISSUETRACKER_CONFIG_EMAIL_NOTIFICATIONS_LABEL" 
+          description="COM_ISSUETRACKER_CONFIG_EMAIL_NOTIFICATIONS_DESC">
+          <option value="0">JNO</option>
+         <option value="1">JYES</option>
+       </field>
+
+       <field name="def_notify" type="radio" default="0" label="COM_ISSUETRACKER_CONFIG_EMAIL_DEFAULT_NOTIFICATION_SETTING_LABEL" 
+          description="COM_ISSUETRACKER_CONFIG_EMAIL_DEFAULT_NOTIFICATION_SETTING_DESC">
+         <option value="0">JUNPUBLISHED</option>
+         <option value="1">JPUBLISHED</option>
+       </field>
+
+      <field name="send_user_msg_new" type="radio" default="0" label="COM_ISSUETRACKER_CONFIG_USER_NEW_MSG_LABEL" 
+         description="COM_ISSUETRACKER_CONFIG_USER_NEW_MSG_DESC">
+         <option value="0">JNO</option>
+         <option value="1">JYES</option>
+      </field>
+
+      <field name="send_user_msg_update" type="radio" default="0" label="COM_ISSUETRACKER_CONFIG_USER_UPD_MSG_LABEL" 
+         description="COM_ISSUETRACKER_CONFIG_USER_UPD_MSG_DESC">
+         <option value="0">JNO</option>
+         <option value="1">JYES</option>
+      </field>
+ 
+       <field name="send_user_msg_close" type="radio" default="0" label="COM_ISSUETRACKER_CONFIG_USER_CLOSE_MSG_LABEL" 
+          description="COM_ISSUETRACKER_CONFIG_USER_CLOSE_MSG_DESC">
+          <option value="0">JNO</option>
+          <option value="1">JYES</option>
+       </field>
+
+      <field name="send_ass_msg_new" type="radio" default="0" label="COM_ISSUETRACKER_CONFIG_ASS_NEW_MSG_LABEL" 
+         description="COM_ISSUETRACKER_CONFIG_ASS_NEW_MSG_DESC">
+         <option value="0">JNO</option>
+         <option value="1">JYES</option>
+      </field>
+
+      <field name="send_ass_msg_update" type="radio" default="0" label="COM_ISSUETRACKER_CONFIG_ASS_UPD_MSG_LABEL" 
+         description="COM_ISSUETRACKER_CONFIG_ASS_UPD_MSG_DESC">
+         <option value="0">JNO</option>
+         <option value="1">JYES</option>
+      </field>
+ 
+       <field name="send_ass_msg_close" type="radio" default="0" label="COM_ISSUETRACKER_CONFIG_ASS_CLOSE_MSG_LABEL" 
+          description="COM_ISSUETRACKER_CONFIG_ASS_CLOSE_MSG_DESC">
+          <option value="0">JNO</option>
+          <option value="1">JYES</option>
+       </field>
+
+      <field name="send_adm_msg_new" type="radio" default="0" label="COM_ISSUETRACKER_CONFIG_ADM_NEW_MSG_LABEL" 
+         description="COM_ISSUETRACKER_CONFIG_ADM_NEW_MSG_DESC">
+         <option value="0">JNO</option>
+         <option value="1">JYES</option>
+      </field>
+
+      <field name="send_adm_msg_update" type="radio" default="0" label="COM_ISSUETRACKER_CONFIG_ADM_UPD_MSG_LABEL" 
+         description="COM_ISSUETRACKER_CONFIG_ADM_UPD_MSG_DESC">
+         <option value="0">JNO</option>
+         <option value="1">JYES</option>
+      </field>
+ 
+       <field name="send_adm_msg_close" type="radio" default="0" label="COM_ISSUETRACKER_CONFIG_ADM_CLOSE_MSG_LABEL" 
+          description="COM_ISSUETRACKER_CONFIG_ADM_CLOSE_MSG_DESC">
+          <option value="0">JNO</option>
+          <option value="1">JYES</option>
+       </field>
+
+   </fieldset>
+
+   <fieldset name="issues"
+      label="JGLOBAL_LIST_LAYOUT_OPTIONS"
+      description="COM_ISSUETRACKER_FIELD_CONFIG_TABLE_OF_ISSUES_DESC" >
+
+      <field name="show_assigned_to_headings" type="radio"
+         default="1"
+         class="btn-group"
+         label="COM_ISSUETRACKER_FIELD_CONFIG_ASSIGNED_TO_LABEL"
+         description="COM_ISSUETRACKER_FIELD_CONFIG_ASSIGNED_TO_DESC" >
+         <option value="0">JHIDE</option>
+         <option value="1">JSHOW</option>
+      </field>
+
+      <field name="show_identified_by_headings"
+         type="radio"
+         class="btn-group"
+         default="0"
+         label="COM_ISSUETRACKER_FIELD_CONFIG_IDENTIFIED_BY_LABEL"
+         description="COM_ISSUETRACKER_FIELD_CONFIG_IDENTIFIED_BY_DESC" >
+         <option value="0">JHIDE</option>
+         <option value="1">JSHOW</option>
+      </field>
+
+      <field name="show_created_by_headings"
+         type="radio"
+         class="btn-group"
+         default="0"
+         label="COM_ISSUETRACKER_FIELD_CONFIG_CREATED_BY_LABEL"
+         description="COM_ISSUETRACKER_FIELD_CONFIG_CREATED_BY_DESC" >
+         <option value="0">JHIDE</option>
+         <option value="1">JSHOW</option>
+      </field>
+
+      <field name="show_created_on_headings"
+         type="radio"
+         class="btn-group"
+         default="0"
+         label="COM_ISSUETRACKER_FIELD_CONFIG_CREATED_ON_LABEL"
+         description="COM_ISSUETRACKER_FIELD_CONFIG_CREATED_ON_DESC" >
+         <option value="0">JHIDE</option>
+         <option value="1">JSHOW</option>
+      </field>
+
+      <field name="show_modified_by_headings"
+         type="radio"
+         class="btn-group"
+         default="0"
+         label="COM_ISSUETRACKER_FIELD_CONFIG_MODIFIED_BY_LABEL"
+         description="COM_ISSUETRACKER_FIELD_CONFIG_MODIFIED_BY_DESC" >
+         <option value="0">JHIDE</option>
+         <option value="1">JSHOW</option>
+      </field>
+
+      <field name="show_modified_on_headings"
+         type="radio"
+         class="btn-group"
+         default="0"
+         label="COM_ISSUETRACKER_FIELD_CONFIG_MODIFIED_ON_LABEL"
+         description="COM_ISSUETRACKER_FIELD_CONFIG_MODIFIED_ON_DESC" >
+         <option value="0">JHIDE</option>
+         <option value="1">JSHOW</option>
+      </field>
+
+   </fieldset>
+
+   <fieldset name="permissions" label="JCONFIG_PERMISSIONS_LABEL" description="JCONFIG_PERMISSIONS_DESC">
+      
+      <field name="rules" 
+         type="rules" 
+         label="JCONFIG_PERMISSIONS_LABEL" class="inputbox" validate="rules" 
+         filter="rules" 
+         component="com_issuetracker" 
+         section="component" />
+   </fieldset>
+
+</config>

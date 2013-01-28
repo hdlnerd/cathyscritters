@@ -1,0 +1,79 @@
+/*
+@charset "UTF-8";
+@package     Joomla
+@subpackage  com_issuetracker
+@copyright   Copyright (C) 2012 G S Chapman. Macrotone Consulting Ltd. All rights reserved.
+@license     GNU General Public License Version 3, or later http://www.gnu.org/licenses/gpl.html
+*/
+
+/* -- ICON STYLES ----------------------------- */
+.icon-16-issues   	{ background-image: url(../images/16/issues.png); }
+.icon-16-cpanel     	{ background-image: url(../images/16/cpanel.png); }
+.icon-16-documentation 	{ background-image: url(../images/16/documentation.png); }
+.icon-16-projects   	{ background-image: url(../images/16/projects.png); }
+.icon-16-users   	{ background-image: url(../images/16/users.png); }
+.icon-16-roles   	{ background-image: url(../images/16/roles.png); }
+.icon-16-priorities   	{ background-image: url(../images/16/priorities.png); }
+.icon-16-attachments   	{ background-image: url(../images/16/attachments.png); }
+.icon-16-admin	 	{ background-image: url(../images/16/admin.png); }
+.icon-16-deadmin 	{ background-image: url(../images/16/no-administrator.png); }
+.icon-16-notify   	{ background-image: url(../images/16/notification.png); }
+.icon-16-denotify   	{ background-image: url(../images/16/no-notification.png); }
+.icon-16-staff   	{ background-image: url(../images/16/staff.png); }
+.icon-16-notstaff   	{ background-image: url(../images/16/not_staff.png); }
+
+/* -- Panel styles ----------------------------- */
+.icon-32-issues   	{ background-image: url(../images/32/issues.png); }
+.icon-32-documentation 	{ background-image: url(../images/32/documentation.png); }
+.icon-32-projects   	{ background-image: url(../images/32/projects.png); }
+.icon-32-users   	{ background-image: url(../images/32/users.png); }
+.icon-32-roles   	{ background-image: url(../images/32/roles.png); }
+.icon-32-priorities   	{ background-image: url(../images/32/priorities.png); }
+.icon-32-attachments   	{ background-image: url(../images/32/attachments.png); }
+.icon-32-admin	 	{ background-image: url(../images/32/admin.png); }
+.icon-32-deadmin 	{ background-image: url(../images/32/no-administrator.png); }
+.icon-32-notify   	{ background-image: url(../images/32/notification.png); }
+.icon-32-denotify   	{ background-image: url(../images/32/no-notification.png); }
+.icon-32-staff   	{ background-image: url(../images/32/staff.png); }
+.icon-32-notstaff   	{ background-image: url(../images/32/not_staff.png); }
+
+/* -- HEADER ICON STYLES ----------------------------- */
+.icon-48-issues 	{ background-image: url(../images/48/issues.png); }
+.icon-48-issues-add 	{ background-image: url(../images/48/issues.png); }
+.icon-48-issues-edit 	{ background-image: url(../images/48/issues.png); }
+.icon-48-documentation 	{ background-image: url(../images/48/documentation.png); }
+.icon-48-issuetracker 	{ background-image: url(../images/48/issues.png); }
+.icon-48-projects 	{ background-image: url(../images/48/projects.png); }
+.icon-48-projects-add 	{ background-image: url(../images/48/projects.png); }
+.icon-48-projects-edit 	{ background-image: url(../images/48/projects.png); }
+.icon-48-users 		{ background-image: url(../images/48/users.png); }
+.icon-48-users-edit 	{ background-image: url(../images/48/users.png); }
+.icon-48-roles   	{ background-image: url(../images/48/roles.png); }
+.icon-48-priorities   	{ background-image: url(../images/48/priorities.png); }
+.icon-48-status   	{ background-image: url(../images/48/status.png); }
+.icon-48-mail  		{ background-image: url(../images/48/email.png); }
+.icon-48-attachments  	{ background-image: url(../images/48/attachments.png); }
+.icon-48-admin	 	{ background-image: url(../images/48/admin.png); }
+.icon-48-deadmin 	{ background-image: url(../images/48/no-administrator.png); }
+.icon-48-notify   	{ background-image: url(../images/48/notification.png); }
+.icon-48-denotify   	{ background-image: url(../images/48/no-notification.png); }
+.icon-48-staff   	{ background-image: url(../images/48/staff.png); }
+.icon-48-notstaff   	{ background-image: url(../images/48/not_staff.png); }
+ 
+ /*
+ * Changelog
+ */
+h3.tracker-changelog { border-bottom: 2px solid #333; margin-top: 10pt; font-size: 13pt; }
+ul.tracker-changelog { list-style-type: none; padding: 7px; margin: 3px; font-size: 10pt; border: thin solid #ccc; background-color: #fefefe; border-radius: 5px; }
+ul.tracker-changelog li { line-height: 16px; padding: 0; margin: 0 3px 3px; }
+li.tracker-changelog-added { color: green; }
+li.tracker-changelog-removed { color: red; }
+li.tracker-changelog-changed { color: #666; }
+li.tracker-changelog-important { color: #cc8833; }
+li.tracker-changelog-fixed { color: blue; }
+ul.tracker-changelog span { display: inline-block; height: 16px; width: 32px; background: transparent url(../images/changelog.png) top left no-repeat; margin-right: 4px; }
+li.tracker-changelog-removed span { background-position: 0 -16px; }
+li.tracker-changelog-changed span { background-position: 0 -32px; }
+li.tracker-changelog-important span { background-position: 0 -64px; }
+li.tracker-changelog-fixed span	{ background-position: 0 -48px; }
+

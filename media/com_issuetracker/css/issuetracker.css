@@ -1,0 +1,137 @@
+/*
+@package     Joomla
+@subpackage  com_issuetracker
+@copyright   Copyright (C) 2012 G S Chapman. Macrotone Consulting Ltd. All rights reserved.
+@license     GNU General Public License Version 3, or later http://www.gnu.org/licenses/gpl.html
+*/
+
+@media print 
+{
+#toolbartools {display:none; visibility:hidden;}
+td.problemlistbuttonarea { border: none;}
+}
+
+/*************************/
+/* General look and feel */
+/*************************/
+.pagetitle {font-weight: bold; font-size: 150%; padding: 7px 0px;}
+
+/*************************/
+/* Table settings        */
+/*************************/
+
+
+/**********************************/
+/* Look and feel of control panel */
+/**********************************/
+button.cpanel {cursor: pointer; font-size: 10px; border: 1px solid silver; padding: 0px 2px; margin: 0px 1px;}
+span.delete  {background-color: #efefef; height: 12px; cursor: pointer; color: #F00; font-size: 8px; border: 1px solid silver; padding: 1px 3px; margin: 0px; margin-right: 5px !important; vertical-align: top;}
+a.cpanel, select.cpanel, option.cpanel, input.cpanel {font-weight: normal; font-size: 100%;}
+input.cpanel, select.cpanel {border: 1px solid silver;}
+.cpanelicon {vertical-align:middle; height:24px; margin: 5px;}
+/*div.cpanelinfo {width: 300px; float: right; border: 1px solid transparent; padding: 10px 10px; margin: 0px 10px; background-color: #34568E; color: #fff;}*/
+div.cpanelinfobox {width: 300px; float: right; border: 1px solid #aaa; background-color: #fff; margin: 0px 10px;}
+div.cpanelinfoheader {font-size: 150%; padding: 7px; margin-bottom: 5px; border-bottom: 1px solid #aaa; background-color: #efefef;}
+div.cpanelinfo {padding: 10px 7px; margin: 0px 10px; color: #555;}
+div.cpanelinfotext {}
+span.cpanelinfotextlabel {font-weight: bold;}
+
+
+/****************************************/
+/* Look and feel of admin control panel */
+/****************************************/
+table.configCheckTable {border: none; border-collapse: collapse; width: 100%;}
+.greenResult {width: 15px; color: #00FF00; font-weight: bold; font-size: 125%; text-align: center;}
+.redResult     {width: 15px; color: #FF0000; font-weight: bold; font-size: 125%; text-align: center;}
+.warnResult     {width: 15px; color: #0000FF; font-weight: bold; font-size: 125%; text-align: center;}
+.configCheckResultText {}
+.configCheckResultRow {}
+
+/****************************/
+/* Look and feel of toolbar */
+/****************************/
+table.toolbartable {right:0px; border-collapse: collapse;}
+button.toolbar {border: 1px solid transparent; cursor: pointer; font-size: 10px; padding: 0px; margin: 0px 5px; background: none;}
+button.toolbar:hover { border: 1px solid #aaa; background-color: #efefef;}
+.toolbaricon {vertical-align:middle; height:24px;}
+.toolbarmessage{font-weight: bold; vertical-align: bottom; padding: 5px 0px;}
+td.problemlistbuttonarea { /*border: 1px solid #aaa;*/ border-bottom: none; width: 10%; /*background-color: #fff;*/ padding: 1px 10px;}
+
+
+/*********************************/
+/* Look and feel of problem list */
+/*********************************/
+select.list, option.list, input.list {font-weight: normal; font-size: 100%; color: #555;}
+table.problemlist {width: 100%; border: 1px solid #efefef; border-collapse: collapse; background-color: #ffffff; font-size: 12px;}
+table.problemlist th {background-color: #efefef; border-bottom: 1px solid #aaa;}
+div.problemlistwrapper {border: 1px solid #aaa;}
+td.problemlist, th.problemlist {text-align: left; color: #333; padding: 1px 4px;}
+td.problemlist {border: 1px solid #efefef; font-weight: normal;}
+tr.problemlistrow:hover{ background-color: #efefef; cursor: pointer;}
+a.listhead {font-weight: bold; /*text-decoration: underline;*/ color: #333;}
+td.pagination  div  span {text-align:center !important; margin: 5px 0px;}
+td.pagination select {font-weight: normal;}
+.counter{display: none;}
+.sortpointer {width: 10px; margin: 1px 0px; margin-left: 1px;}
+
+
+/********************************/
+/* Look and feel of detail form */
+/********************************/
+#problem_form{width: 100%; }
+div.problemdetailform {width: 100%;}
+div.problemhead {background: #efefef; font-weight: bold; padding: 3px 5px 3px 5px; }
+span.problemheadleft{ float: left; left: 0px;}
+span.problemheadright{ float: right; right: 0px;}
+div.probleminformation {position: relative; width:100%; border: none; margin-bottom: 15px; border: 1px solid silver; background-color: #fff;}
+div.problemcolumn {width: 48%; height: 100%; border: 1px solid silver; margin: 0px; padding: 5px; background-color: #fff;}
+div.problemcolumnleft {float: left;}
+div.problemcolumnright {float: right;}
+div.problemcolumnhead {background-color: #efefef; font-weight: bold; margin-bottom: 5px;}
+div.problemcolumndetail { }
+div.problemcolumndetailfield {width: 100%; margin: 3px;}
+.problemfieldname {font-weight: bold; margin: 3px;}
+a.detail, select.detail, option.detail, input.detail {font-weight: normal; font-size: 100%;}
+input.detail, select.detail {border: 1px solid silver; margin: 0px;}
+div.problemnote{border-top: 1px solid silver; background: #fafafa;}
+.notetext {padding: 5px 10px;}
+.problemtext{width: 99.5%; height: 100px; background: #fff;}
+div.hite {width: 100%; height: 175px; margin-bottom: 30px;}
+div.problemtextunder {height: 2.0em;}
+div.problemtextunderleft {width: 50%; float: left;}
+span.attachtext {float: right; top: -10px; margin-right: 0px;}
+input.fileupload {border: 1px solid silver; background-color: #fff; margin: 0px;}
+/*.phpcode{ white-space: normal;}*/
+
+
+/********************************/
+/* Look and feel of search form */
+/********************************/
+#searchFormId { border: 1px solid silver; background-color: #fff;}
+.searchtable td{padding: 3px 10px;}
+a.hh_search, select.hh_search, option.hh_search, input.hh_search {font-weight: normal; font-size: 100%;}
+input.hh_search, select.hh_search {border: 1px solid silver;}
+
+
+/****************************/
+/* Look and feel of reports */
+/****************************/
+.totals{border-top: 1px solid silver; font-weight: bold;}
+table.reporttable {width: 100%; border: 1px solid silver; border-collapse: collapse;}
+table.reporttable th {background-color: #efefef;}
+.charttitle{ font-weight: bold; margin: 25px 0px; text-align: center; border: 1px solid silver;}
+
+
+/*********************************/
+/* Look and feel of in/out board */
+/*********************************/
+#inouttitle{font-weight: bold; padding: 3px 0px; margin-bottom: 3px;}
+table.userlist {width: 100%; border: 1px solid silver; border-collapse: collapse; background-color: #fff;}
+table.userlist td {text-align: center; border: 1px solid silver; }
+.userstatusicon {vertical-align:middle; height:16px; margin: auto auto;}
+
+
+/**********************/
+/* Template overrides */
+/**********************/
+div.limit {text-align: center;} /*sets the 'Display #' to center over the pagination */

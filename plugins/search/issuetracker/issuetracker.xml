@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension version="2.5" type="plugin" group="search" method="upgrade">
+
+	<name>Search - Issue Tracker</name>
+	<creationDate>January 2012</creationDate>
+	<author>Macrotone Consulting Ltd</author>
+	<authorEmail>info@macrotoneconsulting.co.uk</authorEmail>
+	<authorUrl>http://www.macrotoneconsulting.co.uk</authorUrl>
+	<copyright>All rights reserved.</copyright>
+	<license>GPL 2</license>
+	<version>1.0</version>
+	<description>Search Plugin for Macrotone Issue Tracker</description>
+	
+	<files>
+		<filename plugin="issuetracker">issuetracker.php</filename>
+		<filename>index.html</filename>
+	</files>
+	<config>
+		<fields name="params">
+			<fieldset name="basic">
+				<field name="search_limit" type="text"
+					default="50"
+					description="JFIELD_PLG_SEARCH_SEARCHLIMIT_DESC"
+					label="JFIELD_PLG_SEARCH_SEARCHLIMIT_LABEL"
+					size="5"
+				/>
+
+				<field name="search_issues" type="radio"
+					default="0"
+					description="JFIELD_PLG_SEARCH_ALL_DESC"
+					label="JFIELD_PLG_SEARCH_ALL_LABEL"
+				>
+					<option value="0">JOFF</option>
+					<option value="1">JON</option>
+				</field>
+			</fieldset>
+		</fields>
+	</config>	
+</extension>
