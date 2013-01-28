@@ -1,3 +1,31 @@
+function getSelectedRadio(buttonGroup) {
+	//console.log("Entering getSelectedRadio ");
+	//console.log(buttonGroup);
+	//console.log(buttonGroup.elements[0]);
+	//console.log(buttonGroup.elements[1]);
+   // returns the array number of the selected radio button or -1 if no button is selected
+   if (buttonGroup.elements[0]) { // if the button group is an array (one button is not an array)
+			//console.log("Found button array");
+      for (var i=0; i<buttonGroup.elements.length; i++) {
+					//console.log("Checking button at i=",i);
+         if (buttonGroup.elements[i].checked) {
+						//console.log("Found a set button at i=",i);
+            return i
+         }
+      }
+   } else {
+			//console.log("Found single button");
+      if (buttonGroup.checked) {
+				//console.log("It's checked");
+				return 0;
+			} else {
+				//console.log("It doesn't seem to be checked");
+			} // if the one button is checked, return zero
+   }
+   // if we get to this point, no radio button is selected
+   return -1;
+} // Ends the "getSelectedRadio" function
+
 function calcPlanoCharges (check_zip) {
 	var plano_zips =["75023", "75024", "75025", "75026", "75074",
 	                 "75075", "75086", "75093", "75094"]
@@ -20,37 +48,9 @@ function calcPlanoCharges (check_zip) {
 	return cityfee
 }
 
-function getSelectedRadio(buttonGroup) {
-   // returns the array number of the selected radio button or -1 if no button is selected
-   if (buttonGroup.elements == null) return 0; // If null, return as if button 0 is selected.
-   if (buttonGroup.elements[0]) { // if the button group is an array (one button is not an array)
-			console.log("###butonGroup is:");
-			console.log(buttonGroup);
-			for (var i=0; i<buttonGroup.elements.length; i++) {
-			//console.log("Checking button at i=",i);
-         if (buttonGroup.elements[i].checked) {
-						//console.log("Found a set button at i=",i);
-            return i
-         }
-      }
-   } else {
-			//console.log("Found single button");
-      if (buttonGroup.checked) {
-				//console.log("It's checked");
-				return 0;
-			} else {
-				//console.log("It doesn't seem to be checked");
-			} // if the one button is checked, return zero
-   }
-   // if we get to this point, no radio button is selected
-   return -1;
-} // Ends the "getSelectedRadio" function
-
-
 // This function updates the running total party price and does
 // javascript animations as the user checks and unchecks options.
 function updatePrice () {
-	//alert("Running updatePrice");
 	//
 	//When adding variables to the pricing formula, add a variable, gleaned from the form here...
 	//
@@ -72,13 +72,11 @@ function updatePrice () {
 	}
 
   if (party_elsewhere) {
-		//alert("Party elsewhere");
 		check_addr1 = $('cc1_critters_reservations___reservations_party_address_line1').value;
 		check_city  = $('cc1_critters_reservations___reservations_party_address_city').value;
 		check_state = $('cc1_critters_reservations___reservations_party_address_state').value;
 		check_zip   = $('cc1_critters_reservations___reservations_party_address_zip').value;
   } else {
-		//alert("Party at home");
 		check_addr1 = $('cc1_critters_reservations___address1').value;
 		check_city  = $('cc1_critters_reservations___city').value;
 		check_state = $('cc1_critters_reservations___state').value;
@@ -113,7 +111,6 @@ function updatePrice () {
 	newreq = new Request.JSONP(
 		{url: url_mq, method: 'post',
 			onSuccess: function(r){
-				//alert(JSON.stringify(r.route))
 				travel = Math.round(r.route.distance);
 				toll_charge_estimate = r.route.hasTollRoad?5:0;
 				$('cc1_critters_reservations___distance_one_way').value = travel;
@@ -134,8 +131,7 @@ function updatePrice () {
 					}
 				).send(data_pz);
 			},
-			onComplete: function(r){
-			},
+			onComplete: function(r){ },
 			onFailure: function(r){
 				alert("Mapquest request failed. Bad URL?"+url_mq);
 			}
