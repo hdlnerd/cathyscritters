@@ -213,6 +213,7 @@
 [01-Jan-2013 14:36:43] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/public_html/administrator/components/com_fabrik/models/element.php on line 1231
 [13-Jan-2013 16:44:55] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/public_html/components/com_fabrik/models/list.php on line 9246
 [13-Jan-2013 16:45:01] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/public_html/components/com_fabrik/models/list.php on line 9246
+<<<<<<< HEAD
 [27-Jan-2013 20:15:42] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/sites/cathyscritters.com/components/com_fabrik/models/list.php on line 9246
 [27-Jan-2013 20:15:48] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/sites/cathyscritters.com/components/com_fabrik/models/list.php on line 9246
 [27-Jan-2013 20:18:40] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/sites/cathyscritters.com/components/com_fabrik/models/list.php on line 9246
@@ -222,3 +223,9 @@
 [27-Jan-2013 20:21:27] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/sites/cathyscritters.com/components/com_fabrik/models/list.php on line 9246
 [27-Jan-2013 20:40:55] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/sites/cathyscritters.com/components/com_fabrik/models/list.php on line 9246
 [27-Jan-2013 20:41:02] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/sites/cathyscritters.com/components/com_fabrik/models/list.php on line 9246
+=======
+[27-Jan-2013 20:13:59] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/sites/petsupervisor.com/components/com_fabrik/models/list.php on line 9246
+[27-Jan-2013 20:14:29] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/sites/petsupervisor.com/components/com_fabrik/models/list.php on line 9246
+[27-Jan-2013 20:14:53] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/sites/petsupervisor.com/components/com_fabrik/models/list.php on line 9246
+[27-Jan-2013 20:15:10] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/sites/petsupervisor.com/components/com_fabrik/models/list.php on line 9246
+>>>>>>> 772103f73bec61d47c93e0158d7ec883819950fd
