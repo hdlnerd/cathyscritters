@@ -1,6 +1,6 @@
 -- MySQL dump 10.13  Distrib 5.5.23, for Linux (x86_64)
 --
--- Host: localhost    Database: critters_critterdb
+-- Host: localhost    Database: critters_petsupervisor
 -- ------------------------------------------------------
 -- Server version	5.5.23-55
 
@@ -3630,6 +3630,941 @@ LOCK TABLES `cc1_finder_types` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `cc1_it_emails`
+--
+
+DROP TABLE IF EXISTS `cc1_it_emails`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `cc1_it_emails` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `type` varchar(32) NOT NULL COMMENT 'Short name of the email message type.',
+  `description` mediumtext NOT NULL COMMENT 'Description of the email message type',
+  `subject` varchar(32) NOT NULL COMMENT 'Email subject title for email message type',
+  `body` longtext NOT NULL COMMENT 'Template for the email message itself.',
+  `ordering` int(11) NOT NULL DEFAULT '0' COMMENT 'Order in which issues are presented.',
+  `state` tinyint(4) NOT NULL DEFAULT '0' COMMENT 'State of the specific record.  i.e.  Published, archived, trashed etc.',
+  `checked_out` int(10) unsigned NOT NULL DEFAULT '0',
+  `checked_out_time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `created_on` datetime NOT NULL COMMENT 'Audit Column: Date the record was created.',
+  `created_by` varchar(255) NOT NULL COMMENT 'Audit Column: The user who created the record.',
+  `modified_on` datetime DEFAULT NULL COMMENT 'Audit Column: Date the record was last modified.',
+  `modified_by` varchar(255) DEFAULT NULL COMMENT 'Audit Column: The user who last modified the record.',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8 COMMENT='Email message templates for Issue Tracker notifications.';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `cc1_it_emails`
+--
+
+LOCK TABLES `cc1_it_emails` WRITE;
+/*!40000 ALTER TABLE `cc1_it_emails` DISABLE KEYS */;
+INSERT INTO `cc1_it_emails` VALUES (1,'ass_close','Assignee - Issue Closure','Assigned Issue [issue_id] Closed','<p>The following issue that is assigned to you has been closed.</p>\n<p>You can view the issue at [url]</p>\n<p><span style=\"text-decoration: underline;\">ISSUE DETAILS</span></p>\n<p>ID: [issue_id]</p>\n<p>User: [user_name]</p>\n<p>Date: [startdate]</p>\n<p>Title: [title]</p>\n<p>Priority: [priority]</p>\n<p>Project: [project]</p>\n<p>&nbsp;</p>\n<p><span style=\"text-decoration: underline;\">RESOLUTION</span></p>\n<p>[resolution]</p>',0,1,0,'0000-00-00 00:00:00','0000-00-00 00:00:00','',NULL,NULL);
+INSERT INTO `cc1_it_emails` VALUES (2,'ass_new','Assignee - New Issue assignment.','Assigned Issue [issue_id] Create','<p>The following issue has been assigned to you.</p>\n<p>You can update the issue at [url]</p>\n<p><span style=\"text-decoration: underline;\">&nbsp;</span></p>\n<p><span style=\"text-decoration: underline;\">ISSUE DETAILS</span></p>\n<p>ID: [issue_id]</p>\n<p>Date: [startdate]</p>\n<p>Title: [title]</p>\n<p>Priority: [priority]</p>\n<p>Project: [project]</p>\n<p>&nbsp;</p>\n<p><span style=\"text-decoration: underline;\">USER INFORMATION</span></p>\n<p>Username: [user_name]</p>\n<p>Email: [user_email]</p>\n<p>&nbsp;</p>\n<p><span style=\"text-decoration: underline;\">DESCRIPTION</span></p>\n<p>[description]</p>',0,1,0,'0000-00-00 00:00:00','0000-00-00 00:00:00','',NULL,NULL);
+INSERT INTO `cc1_it_emails` VALUES (3,'ass_update','Assignee - Issue Updated','Assigned Issue [issue_id] Update','<p>The following assigned issue has been updated.</p>\n<p>You can view the issue at [url]</p>\n<p><span style=\"text-decoration: underline;\">ISSUE DETAILS</span></p>\n<p>&nbsp; ID: [issue_id]</p>\n<p>User: [user_name]</p>\n<p>Date: [startdate]</p>\n<p>Title: [title]</p>\n<p>&nbsp;</p>\n<p><span style=\"text-decoration: underline;\">DESCRIPTION</span></p>\n<p>[description]</p>\n<p>&nbsp;</p>\n<p><span style=\"text-decoration: underline;\">PROGRESS</span></p>\n<p>[progress]</p>',0,1,0,'0000-00-00 00:00:00','0000-00-00 00:00:00','',NULL,NULL);
+INSERT INTO `cc1_it_emails` VALUES (4,'user_close','User - Issue Closure Message','Issue [issue_id] Closed','<p>Your raised issue has been closed.</p>\n<p>You can view the issue resolution below or at: [url]</p>\n<p><span style=\"text-decoration: underline;\">&nbsp;</span></p>\n<p><span style=\"text-decoration: underline;\">ISSUE DETAILS</span></p>\n<p>ID: [issue_id]</p>\n<p>User: [user_name]</p>\n<p>Date: [startdate]</p>\n<p>Title: [title]</p>\n<p>&nbsp;</p>\n<p><span style=\"text-decoration: underline;\">RESOLUTION</span></p>\n<p>[resolution]</p>',0,1,0,'0000-00-00 00:00:00','0000-00-00 00:00:00','',NULL,NULL);
+INSERT INTO `cc1_it_emails` VALUES (5,'user_new','User - Issue Creation Message','Issue [issue_id] Created','<p>Thank you for submitting your issue.</p>\n<p>You can view or update [requires login] the issue at: [url]</p>\n<p><span style=\"text-decoration: underline;\">&nbsp;</span></p>\n<p><span style=\"text-decoration: underline;\">ISSUE DETAILS</span></p>\n<p>ID: [issue_id]</p>\n<p>User: [user_name]</p>\n<p>Date: [startdate]</p>\n<p>Title: [title]</p>\n<p>&nbsp;</p>\n<p><span style=\"text-decoration: underline;\">DESCRIPTION</span></p>\n<p>[description]</p>',0,1,0,'0000-00-00 00:00:00','0000-00-00 00:00:00','',NULL,NULL);
+INSERT INTO `cc1_it_emails` VALUES (6,'user_update','User - Issue Update Message','Your Issue [issue_id] Updated','<p>Your raised issue has been updated.</p>\n<p>You can view the issue at: [url]</p>\n<p><span style=\"text-decoration: underline;\">ISSUE DETAILS</span></p>\n<p>ID: [issue_id]</p>\n<p>User: [user_name]</p>\n<p>Date: [startdate]</p>\n<p>Title: [title]</p>\n<p>&nbsp;</p>\n<p><span style=\"text-decoration: underline;\">DESCRIPTION</span></p>\n<p>[description]</p>\n<p>&nbsp;</p>\n<p><span style=\"text-decoration: underline;\">PROGRESS </span></p>\n<p>[progress]</p>',0,1,0,'0000-00-00 00:00:00','0000-00-00 00:00:00','',NULL,NULL);
+INSERT INTO `cc1_it_emails` VALUES (7,'admin_new','Admin - New Issue Message','Issue [issue_id] Created','<p>The following issue has been created and the assignment may need checking.</p>\n<p>You can update the issue at [url]</p>\n<p><span style=\"text-decoration: underline;\">ISSUE DETAILS </span></p>\n<p>ID: [issue_id]</p>\n<p>Date: [startdate]</p>\n<p>Title: [title]</p>\n<p>Priority: [priority]</p>\n<p>Project: [project]</p>\n<p>&nbsp;</p>\n<p><span style=\"text-decoration: underline;\">USER INFORMATION </span></p>\n<p>Fullname: [user_fullname]</p>\n<p>Username: [user_name]</p>\n<p>Email: [user_email]</p>\n<p>&nbsp;</p>\n<p><span style=\"text-decoration: underline;\">DESCRIPTION</span></p>\n<p>[description]</p>',0,1,0,'0000-00-00 00:00:00','0000-00-00 00:00:00','',NULL,NULL);
+INSERT INTO `cc1_it_emails` VALUES (8,'admin_update','Admin - Issue Updated Message','Issue [issue_id] Updated','<p>The following issue has been updated. You can view the issue at [url]</p>\n<p><span style=\"text-decoration: underline;\">ISSUE DETAILS</span></p>\n<p>ID: [issue_id]</p>\n<p>Date: [startdate]</p>\n<p>Title: [title]</p>\n<p>Priority: [priority]</p>\n<p>Project: [project]</p>\n<p>Status: [status]</p>\n<p>&nbsp;</p>\n<p><span style=\"text-decoration: underline;\">USER INFORMATION</span></p>\n<p>Fullname: [user_fullname]</p>\n<p>Username: [user_name]</p>\n<p>Email: [user_email]</p>\n<p>&nbsp;</p>\n<p>&nbsp;</p>\n<p><span style=\"text-decoration: underline;\">DESCRIPTION</span></p>\n<p>[description]</p>',0,1,0,'0000-00-00 00:00:00','0000-00-00 00:00:00','',NULL,NULL);
+INSERT INTO `cc1_it_emails` VALUES (9,'admin_close','Admin - Issue closure','Issue [issue_id] closed','<p>The following issue has been closed.</p>\n<p>You can view the issue at [url]</p>\n<p><span style=\"text-decoration: underline;\">&nbsp;</span></p>\n<p><span style=\"text-decoration: underline;\">ISSUE DETAILS</span></p>\n<p>ID: [issue_id]</p>\n<p>User: [user_name]</p>\n<p>Date: [startdate]</p>\n<p>Title: [title]</p>\n<p>Priority: [priority]</p>\n<p>Project: [project]</p>\n<p><span style=\"text-decoration: underline;\">&nbsp;</span></p>\n<p><span style=\"text-decoration: underline;\">RESOLUTION</span></p>\n<p>[resolution]</p>',1,1,0,'0000-00-00 00:00:00','0000-00-00 00:00:00','',NULL,NULL);
+/*!40000 ALTER TABLE `cc1_it_emails` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = '' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`critters_kevin`@`localhost`*/ /*!50003 TRIGGER `cc1_it_emails_bi` BEFORE INSERT ON `cc1_it_emails` FOR EACH ROW
+BEGIN
+   IF (NEW.ID IS NULL) THEN
+      SET NEW.ID := 0;
+   END IF;
+   IF (NEW.CREATED_ON IS NULL OR NEW.CREATED_ON = '0000-00-00 00:00:00') THEN
+      SET NEW.CREATED_ON := sysdate();
+   END IF; 
+   IF (NEW.CREATED_BY IS NULL  OR NEW.CREATED_BY = '') THEN
+      SET NEW.CREATED_BY := USER();
+   END IF;
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+
+--
+-- Table structure for table `cc1_it_issues`
+--
+
+DROP TABLE IF EXISTS `cc1_it_issues`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `cc1_it_issues` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'The system generated unique identifier for the issue.',
+  `asset_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'ACL permissions field',
+  `alias` varchar(10) DEFAULT NULL COMMENT 'Issue Alias.  Used to mask primary key of issue from random selection.',
+  `issue_summary` varchar(255) NOT NULL COMMENT 'A brief summary of the issue.',
+  `issue_description` varchar(4000) DEFAULT NULL COMMENT 'A full description of the issue.',
+  `identified_by_person_id` int(11) NOT NULL COMMENT 'The person who identified the issue.',
+  `identified_date` datetime NOT NULL COMMENT 'The date the issue was identified.',
+  `related_project_id` int(10) unsigned NOT NULL COMMENT 'The project that the issue is related to.',
+  `assigned_to_person_id` int(11) DEFAULT NULL COMMENT 'The person that the issue is assigned to.',
+  `issue_type` int(11) NOT NULL DEFAULT '1' COMMENT 'The issue type.  i.e. defect etc.',
+  `status` int(11) NOT NULL COMMENT 'The current status of the issue.',
+  `state` tinyint(4) NOT NULL DEFAULT '0' COMMENT 'State of the specific record.  i.e.  Published, archived, trashed etc.',
+  `checked_out` int(11) NOT NULL DEFAULT '0' COMMENT 'Checked out indicator.  User id of user editing the record.',
+  `checked_out_time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT 'Time and date when the record was checked out.',
+  `ordering` int(11) NOT NULL DEFAULT '0' COMMENT 'Order in which issues are presented.',
+  `priority` int(11) NOT NULL COMMENT 'The priority of the issue. How important it is to get resolved.',
+  `target_resolution_date` datetime DEFAULT NULL COMMENT 'The date on which the issue is planned to be resolved.',
+  `progress` varchar(4000) DEFAULT NULL COMMENT 'Any progress notes on the issue resolution.',
+  `actual_resolution_date` datetime DEFAULT NULL COMMENT 'The date the issue was actually resolved.',
+  `resolution_summary` varchar(4000) DEFAULT NULL COMMENT 'The description of the resolution of the issue.',
+  `created_on` datetime NOT NULL COMMENT 'Audit Column: Date the record was created.',
+  `created_by` varchar(255) NOT NULL COMMENT 'Audit Column: The user who created the record.',
+  `modified_on` datetime DEFAULT NULL COMMENT 'Audit Column: Date the record was last modified.',
+  `modified_by` varchar(255) DEFAULT NULL COMMENT 'Audit Column: The user who last modified the record.',
+  PRIMARY KEY (`id`),
+  KEY `cc1_it_issues_identified_by_fk` (`identified_by_person_id`),
+  KEY `cc1_it_issues_assigned_to_fk` (`assigned_to_person_id`),
+  KEY `cc1_it_issues_project_fk` (`related_project_id`),
+  KEY `cc1_it_issues_status_fk` (`status`),
+  KEY `cc1_it_issues_types_fk` (`issue_type`),
+  KEY `cc1_it_issues_priority_fk` (`priority`),
+  CONSTRAINT `cc1_it_issues_priority_fk` FOREIGN KEY (`priority`) REFERENCES `cc1_it_priority` (`id`),
+  CONSTRAINT `cc1_it_issues_assigned_to_fk` FOREIGN KEY (`assigned_to_person_id`) REFERENCES `cc1_it_people` (`user_id`),
+  CONSTRAINT `cc1_it_issues_identified_by_fk` FOREIGN KEY (`identified_by_person_id`) REFERENCES `cc1_it_people` (`id`),
+  CONSTRAINT `cc1_it_issues_project_fk` FOREIGN KEY (`related_project_id`) REFERENCES `cc1_it_projects` (`id`),
+  CONSTRAINT `cc1_it_issues_status_fk` FOREIGN KEY (`status`) REFERENCES `cc1_it_status` (`id`),
+  CONSTRAINT `cc1_it_issues_type_fk` FOREIGN KEY (`issue_type`) REFERENCES `cc1_it_types` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=utf8 COMMENT='All issues related to the company projects being undertaken.';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `cc1_it_issues`
+--
+
+LOCK TABLES `cc1_it_issues` WRITE;
+/*!40000 ALTER TABLE `cc1_it_issues` DISABLE KEYS */;
+INSERT INTO `cc1_it_issues` VALUES (31,79,'AEZMLDCTKU','Contract format change request','<p>Would like to see forms display party time as:</p>\r\n<p>Start: 2:30 PM</p>\r\n<p>End: 4:00 PM</p>\r\n<p><br />Instead of</p>\r\n<p>Start: 2:30 PM 1.5 hours</p>',39,'2013-01-26 11:21:18',1,42,2,4,1,0,'0000-00-00 00:00:00',1,1,'2013-01-31 06:00:00','','0000-00-00 00:00:00','','2013-01-26 17:23:58','headcritter1','2013-01-26 11:23:58','critters_kevin@localhost');
+/*!40000 ALTER TABLE `cc1_it_issues` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = '' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`critters_kevin`@`localhost`*/ /*!50003 trigger `cc1_it_issues_bi`
+before insert on `cc1_it_issues`
+for each row
+begin
+   IF (NEW.ID IS NULL) THEN
+      SET NEW.ID := 0;
+   END IF;
+   IF (NEW.CREATED_ON IS NULL OR NEW.CREATED_ON = '0000-00-00 00:00:00') THEN
+      SET NEW.CREATED_ON := sysdate();
+   END IF; 
+   IF (NEW.CREATED_BY IS NULL  OR NEW.CREATED_BY = '') THEN
+      SET NEW.CREATED_BY := USER();
+   END IF; 
+end */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = '' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`critters_kevin`@`localhost`*/ /*!50003 TRIGGER `cc1_it_issues_bu`
+BEFORE UPDATE ON `cc1_it_issues`
+FOR EACH ROW
+BEGIN
+   IF (NEW.MODIFIED_ON IS NULL OR NEW.MODIFIED_ON = '0000-00-00 00:00:00') THEN
+      SET NEW.MODIFIED_ON := sysdate();
+   END IF; 
+   IF (NEW.MODIFIED_BY IS NULL OR NEW.MODIFIED_BY = '') THEN
+      SET NEW.MODIFIED_BY := USER();
+   END IF; 
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+
+--
+-- Table structure for table `cc1_it_meta`
+--
+
+DROP TABLE IF EXISTS `cc1_it_meta`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `cc1_it_meta` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Primary Key',
+  `version` varchar(100) DEFAULT NULL COMMENT 'Version number of the installed component.',
+  `type` varchar(20) DEFAULT NULL COMMENT 'Type of extension.',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `cc1_it_meta`
+--
+
+LOCK TABLES `cc1_it_meta` WRITE;
+/*!40000 ALTER TABLE `cc1_it_meta` DISABLE KEYS */;
+INSERT INTO `cc1_it_meta` VALUES (1,'1.2.2','component');
+/*!40000 ALTER TABLE `cc1_it_meta` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `cc1_it_people`
+--
+
+DROP TABLE IF EXISTS `cc1_it_people`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `cc1_it_people` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'The system generated unique identifier for the person.',
+  `user_id` int(11) DEFAULT NULL COMMENT 'The user identifier as recorded in the Joomla user table.',
+  `person_name` varchar(255) NOT NULL COMMENT 'The unique name of the person.',
+  `alias` varchar(10) DEFAULT NULL COMMENT 'Person Alias.  Used to mask primary key of person from random selection.',
+  `person_email` varchar(100) NOT NULL COMMENT 'The email address of the person.',
+  `person_role` int(11) NOT NULL COMMENT 'The role the person plays within the company.',
+  `username` varchar(150) NOT NULL COMMENT 'The username of this person. Used to link login to person details.',
+  `assigned_project` int(10) unsigned DEFAULT NULL COMMENT 'The project that the person is currently assigned to.',
+  `issues_admin` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'Indicates that the person is an Issues administrator.',
+  `staff` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'Indicates that the person is a member of staff.',
+  `email_notifications` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'Person has requested email notifications when their raised issues are changed.',
+  `registered` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'Whether user is registered.',
+  `published` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'Whether visible in the front end.',
+  `ordering` int(11) NOT NULL DEFAULT '0' COMMENT 'Order in which people are presented.',
+  `checked_out` int(11) NOT NULL DEFAULT '0' COMMENT 'Checked out indicator.  User id of user editing the record.',
+  `checked_out_time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT 'Time and date when the record was checked out.',
+  `created_on` datetime NOT NULL COMMENT 'Audit Column: Date the record was created.',
+  `created_by` varchar(255) NOT NULL COMMENT 'Audit Column: The user who created the record.',
+  `modified_on` datetime DEFAULT NULL COMMENT 'Audit Column: Date the record was last modified.',
+  `modified_by` varchar(255) DEFAULT NULL COMMENT 'Audit Column: The user who last modified the record.',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `cc1_it_people_name_uk` (`person_name`),
+  UNIQUE KEY `cc1_it_people_username_uk` (`username`),
+  UNIQUE KEY `cc1_it_people_userid_uk` (`user_id`),
+  KEY `cc1_it_people_project_fk` (`assigned_project`),
+  KEY `cc1_it_people_role_fk` (`person_role`),
+  CONSTRAINT `cc1_it_people_project_fk` FOREIGN KEY (`assigned_project`) REFERENCES `cc1_it_projects` (`id`),
+  CONSTRAINT `cc1_it_people_role_fk` FOREIGN KEY (`person_role`) REFERENCES `cc1_it_roles` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=287 DEFAULT CHARSET=utf8 COMMENT='All people within the company.';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `cc1_it_people`
+--
+
+LOCK TABLES `cc1_it_people` WRITE;
+/*!40000 ALTER TABLE `cc1_it_people` DISABLE KEYS */;
+INSERT INTO `cc1_it_people` VALUES (1,NULL,'Anonymous',NULL,'anonymous@bademail.com',2,'anon',1,0,0,0,0,0,0,0,'0000-00-00 00:00:00','2013-01-26 11:15:31','headcritter1','2013-01-26 17:27:48','headcritter1');
+INSERT INTO `cc1_it_people` VALUES (31,42,'Kevin Smith',NULL,'kevin@cathys-critters.com',3,'headcritter1',1,1,1,1,1,1,0,0,'0000-00-00 00:00:00','2011-12-21 20:37:27','headcritter1','2013-01-26 17:19:19','headcritter1');
+INSERT INTO `cc1_it_people` VALUES (32,50,'Cathy Smith',NULL,'cathy@cathys-critters.com',1,'cathysmith',1,1,1,1,1,1,0,0,'0000-00-00 00:00:00','2011-12-30 02:58:43','headcritter1','2013-01-26 17:18:36','headcritter1');
+INSERT INTO `cc1_it_people` VALUES (33,51,'garzarath',NULL,'garzarath@gmail.com',6,'garzarath',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2012-02-01 07:36:07','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (34,52,'Justa User',NULL,'kevin@b.com',6,'anonymous',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2012-02-10 16:08:31','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (35,53,'Ruth Bratton',NULL,'ruthbratton@gmail.com',6,'headcritter2',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2012-02-17 03:00:04','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (36,54,'Kelie Murphy',NULL,'kmurphy@historictrains.org',6,'kmurphy',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2012-02-21 21:14:54','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (37,55,'Keb\'m Smith',NULL,'hdlnerd@gmail.com',6,'kebmsmith',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2012-03-01 03:55:31','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (38,56,'Roselle Halter ',NULL,'rosellehalter@yahoo.com',6,'rosellehalter@yahoo.com',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2012-03-01 17:32:50','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (39,57,'Lisa Cass',NULL,'reservations@cathys-critters.com',6,'headcritter3',1,1,1,1,1,1,0,0,'0000-00-00 00:00:00','2012-03-02 15:59:47','headcritter1','2013-01-26 11:20:05','critters_kevin@localhost');
+INSERT INTO `cc1_it_people` VALUES (40,58,'Carrie Satterfield',NULL,'carrie.satterfield@gmail.com',6,'csatt',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2012-03-03 14:46:54','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (41,59,'Alexandra Lambring',NULL,'lulytuly@live.com',6,'cheergirl96',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2012-03-09 22:00:25','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (42,60,'Jimmy Songer',NULL,'jimmy.songer@suddenlink.net',6,'jsonger13',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2012-03-16 15:32:58','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (43,61,'Emily Acevedo',NULL,'eacevedo@konraddavisgroup.com',6,'eacevedo@konraddavisgroup.com',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2012-03-19 18:29:23','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (44,62,'Kim Falconnet',NULL,'whalen.kim@gmail.com',6,'KFalconnet',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2012-03-27 19:12:53','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (45,63,'Lisa',NULL,'Liyoungman@hotmail.com',6,'Youngman',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2012-04-06 23:09:55','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (46,64,'Gina Binyon',NULL,'glbinyon@hotmail.com',6,'glbinyon',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2012-04-09 16:03:17','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (47,65,'Dainyell Wilson',NULL,'dainyellw@yahoo.com',6,'dainyellw@yahoo.com',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2012-04-23 22:01:20','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (48,66,'nikenewerahat',NULL,'asdcvsdfdf2012@gmail.com',6,'nikenewerahat',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2012-05-13 03:53:31','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (49,67,'Cori Baird',NULL,'corichad@gmail.com',6,'corichad@gmail.com',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2012-05-14 01:44:56','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (50,68,'sue',NULL,'skacines@gmail.com',6,'skacines',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2012-05-29 21:16:05','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (51,69,'Robyn Miller',NULL,'robyynhere@aol.com',6,'robynmiller',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2012-06-11 16:20:25','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (52,70,'Christie Olivarri',NULL,'christieolivarri@yahoo.com',6,'Pumpkinbear',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2012-06-13 00:41:13','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (53,71,'Nadine',NULL,'nadanwil@gmail.com',6,'nadine',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2012-06-14 16:09:51','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (54,72,'Stephen and Delana Mota',NULL,'themotas08@gmail.com',6,'TheMotas',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2012-06-18 15:02:18','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (55,73,'Lori Lamoreaux',NULL,'llamoreaux@jw.com',6,'llamoreaux',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2012-06-22 04:32:55','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (56,74,'Rozalyn Payne',NULL,'rozalyn@rrileymedia.com',6,'rpayne',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2012-07-06 17:13:04','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (57,75,'Joy Pickering',NULL,'jpickering@theheights.org',6,'jpickering',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2012-07-11 18:30:07','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (58,76,'Michelle Hancock',NULL,'mhancock@addisontx.gov',6,'mhancock',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2012-07-12 16:37:13','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (59,77,'Janet Stockhammer',NULL,'janetstockhammer@yahoo.com',6,'janetstockhammer@yahoo.com',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2012-07-13 14:38:09','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (60,78,'Kathleen Horn',NULL,'kathleenh@fellowshipdallas.org',6,'kathorn',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2012-07-24 19:54:02','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (61,79,'Jose Luis',NULL,'jlsanchez17@yahoo.com',6,'jlsanchez',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2012-07-27 23:53:28','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (62,80,'Kathy McGrath',NULL,'Kathy.McGrath@tamuc.edu',6,'Kathy.McGrath',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2012-08-24 20:46:23','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (63,81,'Heather Plyler',NULL,'hrplyler@hotmail.com',6,'hrplyler',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2012-08-25 00:58:22','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (64,82,'Mary Nancy Wiley',NULL,'jwmnw@msn.com',6,'marynancy',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2012-08-28 19:51:20','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (65,83,'jafaderne',NULL,'alljordanse111@gmail.com',6,'jafaderne',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2012-09-01 08:00:01','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (66,84,'golfTholf',NULL,'alljordansd111@gmail.com',6,'golfTholf',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2012-09-03 10:58:23','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (67,86,'Larry Dickinson',NULL,'kebm@hdlnerd.com',6,'larryd',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2012-09-14 23:52:00','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (68,87,'Brittany Smith',NULL,'brittanyrheasmith@gmail.com',6,'brittany',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2012-09-18 13:48:27','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (69,88,'Malcolm Smith',NULL,'malcolmwsmith1@gmail.com',6,'Doofus Dad',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2012-09-20 14:01:11','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (70,89,'tomschduin',NULL,'sfeoevm8960@gmail.com',6,'tomschduin',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2012-10-20 08:37:27','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (71,90,'Howard Lee Harkness',NULL,'howard.lee.harkness@gmail.com',6,'HLHarkness',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2012-10-20 19:15:44','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (72,91,'Memiacheems',NULL,'n.icol.asd.e.w.19.8.4@gmail.com',6,'Memiacheems',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2012-10-26 21:03:44','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (73,92,'Capernauia Hopkins',NULL,'Blackkitten26@yahoo.com',6,'Capernauia',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2012-11-02 15:23:21','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (74,93,'Patricia Imhof',NULL,'pattypanitz@hotmail.com',6,'pattypanitz',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2012-11-02 16:06:25','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (75,94,'Casey Smith',NULL,'maxgrayhi@gmail.com',6,'caseysmith',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2012-11-02 16:40:24','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (76,95,'jacy fournier',NULL,'jacyweatherwax@yahoo.com',6,'kylexia',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2012-11-02 19:42:41','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (77,96,'Jan and Holly Barrows',NULL,'plop9723@gmail.com',6,'plop9723',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2012-11-03 00:35:22','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (78,97,'jennifer boyd',NULL,'isaiahje2000@yahoo.com',6,'jenni1966',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2012-11-03 06:47:35','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (79,98,'madison',NULL,'tatilama@msn.com',6,'madisondt',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2012-11-03 14:56:36','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (80,99,'Leslie Powell',NULL,'lpowell826@gmail.com',6,'lpowell826',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2012-11-03 20:23:34','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (81,100,'april smith',NULL,'aprilsmith200978@yahoo.com',6,'april',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2012-11-03 23:36:13','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (82,101,'Merina Bearden',NULL,'beardenmr@sbcglobal.net',6,'beardenmr',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2012-11-04 19:41:00','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (83,102,'Cindy Quintin',NULL,'CinCityx3@yahoo.com',6,'Cindyq',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2012-11-04 20:42:56','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (84,103,'Melodie Branch',NULL,'melodie.branch@gmail.com',6,'MAB',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2012-11-04 21:12:40','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (85,104,'Elizabeth Akin',NULL,'Ellifaine@gmail.com',6,'Elizabeth',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2012-11-05 03:16:27','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (86,105,'Jennifer edwards',NULL,'jrm_edwards@hotmail.com',6,'jedwards',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2012-11-05 04:51:03','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (87,106,'sara roberts',NULL,'saraelisabethroberts@hotmail.com',6,'sroberts',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2012-11-05 21:05:52','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (88,107,'Milea Menckhoff',NULL,'menckhoff@att.net',6,'menckhoff@att.net',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2012-11-06 01:53:57','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (89,108,'CatGurlXaq',NULL,'xltkmooeef@ulwkmooeux.com',6,'CatGurlXaq',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2012-11-06 09:57:42','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (90,109,'becky froehle',NULL,'bdfroehle@hotmail.com',6,'bfroehle',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2012-11-06 19:11:27','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (91,110,'Colleen Driggers',NULL,'colleen.driggers@wylieumc.org',6,'Colleen Driggers',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2012-11-06 20:50:25','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (92,111,'Mercedes Conner',NULL,'MERCISERNA@GMAIL.COM',6,'MYSC90',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2012-11-06 23:05:05','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (93,112,'Ludivina',NULL,'ludi_vega@yahoo.com',6,'Ludi3',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2012-11-07 03:05:22','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (94,113,'michael barton',NULL,'msb1616@yahoo.com',6,'shane',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2012-11-07 15:37:05','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (95,114,'Holly Moreno',NULL,'hollyannmoreno@hotmail.com',6,'hollyannmoreno',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2012-11-07 19:04:24','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (96,115,'Lizzie',NULL,'lizzielove21@me.com',6,'lizzielove',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2012-11-07 23:03:27','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (97,116,'Tanya Chepuri',NULL,'tanya_chepuri@yahoo.com',6,'tchepuri',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2012-11-08 16:52:49','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (98,117,'Ganasia Boyd',NULL,'ganasiaboyd@rocketmail.com',6,'102606',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2012-11-08 19:49:24','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (99,118,'Collin',NULL,'cflynn@wickerassociates.com',6,'Collin',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2012-11-08 20:19:57','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (100,119,'Jenny Pawlewicz',NULL,'mommapawz@yahoo.com',6,'mommapawz',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2012-11-08 20:29:39','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (101,120,'CatGurlXph',NULL,'izxkmooeap@qzwkmooegz.com',6,'CatGurlXph',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2012-11-09 02:47:17','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (102,121,'hayley',NULL,'haymcd@icloud.com',6,'hayley12',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2012-11-10 18:07:21','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (103,122,'TizGeale',NULL,'okmnhyxsntksrd1tr@gmail.com',6,'TizGeale',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2012-11-10 22:40:52','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (104,123,'Breetbal',NULL,'ujnkwsxt@gmail.com',6,'Breetbal',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2012-11-10 22:49:03','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (105,124,'Yvette',NULL,'vargasy86@gmail.com',6,'vargasy86 ',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2012-11-11 12:48:48','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (106,125,'Sarah Thetford',NULL,'thetfordsarah@yahoo.com',6,'saraht',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2012-11-11 17:09:06','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (107,126,'PiBetaPhi DallasAlumni',NULL,'ina.kuehn@gmail.com',6,'PiBetaPhi EasterHunt',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2012-11-12 17:28:23','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (108,127,'Moundbow',NULL,'wsdsdyuiop@gmail.com',6,'Moundbow',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2012-11-12 20:48:32','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (109,128,'broaltbal',NULL,'nnn.wsxt@gmail.com',6,'broaltbal',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2012-11-12 20:50:38','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (110,129,'Natalie Garcia',NULL,'jngarcia3@verizon.net',6,'jngarcia3',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2012-11-12 21:18:51','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (111,130,'embalpbype',NULL,'ujniwsxt@gmail.com',6,'embalpbype',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2012-11-13 01:07:11','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (112,131,'paydayInada',NULL,'oskochil@fast-paydayloan.com',6,'paydayInada',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2012-11-13 06:23:00','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (113,132,'Tami Rowe',NULL,'mylesandtami@gmail.com',6,'mrsrowe',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2012-11-14 15:15:50','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (114,133,'joiseOnessy',NULL,'ttsxtt@gmail.com',6,'joiseOnessy',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2012-11-14 15:16:17','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (115,134,'Lila Retnasaba',NULL,'lilaret@gmail.com',6,'lilaret@gmail.com',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2012-11-16 01:59:09','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (116,135,'Tammy Lightfoot',NULL,'tammy.lightfoot@dads.state.tx.us',6,'winxtheclown',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2012-11-16 22:22:49','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (117,136,'Jill Adley',NULL,'ja@adleyhome.com',6,'ja@adleyhome.com',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2012-11-16 22:24:21','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (118,137,'Menda',NULL,'mgmercik1@gmail.com',6,'mmercik',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2012-11-17 14:05:41','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (119,138,'abcdefg',NULL,'tejaldhaval@hotmail.com',6,'abc-efg',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2012-11-19 20:36:09','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (120,139,'Laura Fowler',NULL,'laura.fowler09@gmail.com',6,'FoodieFowlers',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2012-11-19 22:43:35','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (121,140,'Camille Palmer',NULL,'camille_dc@hotmail.com',6,'camille_dc',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2012-11-20 16:10:24','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (122,141,'Lauren',NULL,'laurenbturner@mac.com',6,'laurenturner14',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2012-11-20 19:14:11','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (123,142,'Michelle',NULL,'michellehooker@yahoo.com',6,'Hooker',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2012-11-21 14:37:24','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (124,143,'kejacksb',NULL,'kejacksb@gmail.com',6,'kejacksb',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2012-11-22 14:25:08','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (125,144,'wuLwtjUvvbL',NULL,'onsequenc@gmail.com',6,'wuLwtjUvvbL',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2012-11-22 20:16:20','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (126,145,'dee',NULL,'delany8@hotmail.com',6,'delany8@hotmail.com',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2012-11-23 21:52:17','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (127,146,'Tony & Shellye',NULL,'she.ber1@gmail.com',6,'pettingzoopartyforA',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2012-11-25 15:24:30','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (128,147,'Aberbuccusa',NULL,'linbiao13@mailabconline.com',6,'Aberbuccusa',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2012-11-26 11:48:54','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (129,148,'Abigail Ramirez',NULL,'abigailramirez22@gmail.com',6,'abiramirez',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2012-11-26 21:56:22','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (130,149,'Innoponry',NULL,'danielle002@126.com',6,'Innoponry',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2012-11-27 10:59:49','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (131,150,'Victoria Tutt',NULL,'vicki_tutt@tx.rr.com',6,'vicki_tutt@tx.rr.com',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2012-11-27 13:29:09','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (132,151,'Andrew Harley',NULL,'andrewh@calvarychurch.cc',6,'aharley',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2012-11-28 17:11:41','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (133,152,'Stefanie Skeen',NULL,'stefskeen@yahoo.com',6,'stefskeen',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2012-11-28 19:49:15','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (134,153,'Adele',NULL,'adele@alumni.utexas.net',6,'adelehoe',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2012-11-29 17:00:26','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (135,154,'linda sullivan',NULL,'lsulli1967@yahoo.com',6,'lsulli1967',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2012-11-30 20:45:07','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (136,155,'Sujata Desai',NULL,'SHDESAI99@HOTMAIL.COM',6,'sdesai',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2012-11-30 21:12:03','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (137,156,'meghan self',NULL,'mgill79@yahoo.com',6,'mself',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2012-12-01 04:11:04','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (138,157,'Cheridy',NULL,'cdodd@sharingtheheart.org',6,'cherdodd',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2012-12-02 20:07:50','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (139,158,'Amanda',NULL,'ardavis@prosper-isd.net',6,'ardavis',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2012-12-03 18:40:08','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (140,159,'jena',NULL,'jenamasq6@gmail.com',6,'jenamasq',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2012-12-03 21:59:56','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (141,160,'Hila Ben-Avraham',NULL,'hilaolga@gmail.com',6,'hilaolga',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2012-12-03 22:12:38','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (142,161,'Sharon Hurwitz',NULL,'skhurwitz@att.net',6,'es031650',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2012-12-04 17:11:25','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (143,162,'Stephanie Hankins',NULL,'66chevy2racer@gmail.com',6,'66chevy2racer',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2012-12-04 18:59:37','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (144,163,'Howard Harkness',NULL,'harkness@procountinc.com',6,'howardh',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2012-12-07 23:47:04','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (145,164,'Geraldine Tidman',NULL,'gtidman119@att.net',6,'gtidman119@att.net',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2012-12-08 22:01:19','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (146,165,'Sharyn',NULL,'SJPalladino@aol.com',6,'Sharyn',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2012-12-10 01:14:22','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (147,166,'Lindsay Idar',NULL,'extc22@yahoo.com',6,'extc22',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2012-12-11 14:10:46','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (148,167,'Jan Eason',NULL,'pdo@saintpaulchurch.org',6,'PDO',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2012-12-11 16:45:29','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (149,168,'Lakshmi Kumar',NULL,'lkumar@ti.com',6,'sriprinithi25dec',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2012-12-11 19:29:22','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (150,169,'Sarah Stoglin',NULL,'sarah.stoglin@carpediempreschool.com',6,'stoglinsarah',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2012-12-12 22:16:54','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (151,170,'Jeanne Thoes',NULL,'jthoes@csc.com',6,'jthoes',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2012-12-13 04:05:23','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (152,171,'tea',NULL,'teairaham@aol.com',6,'teairaham',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2012-12-13 16:24:36','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (153,172,'Erika',NULL,'ackererika@yahoo.com',6,'Stanish',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2012-12-14 05:41:22','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (154,173,'Lisa McDonald',NULL,'noesis1970@yahoo.com',6,'lisaMcD',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2012-12-14 22:02:14','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (155,174,'Ariele',NULL,'arielepost@yahoo.com',6,'arielepost',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2012-12-16 22:37:47','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (156,176,'Jennifer Hayes',NULL,'jenniferh@dmagazine.com',6,'jenhayes',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2012-12-17 14:56:55','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (157,177,'carpinteyroihj',NULL,'de.a.rgirl789@gmail.com',6,'carpinteyroihj',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2012-12-17 17:43:41','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (158,178,'Jennifer',NULL,'jnn41wms@yahoo.com',6,'JennW',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2012-12-17 20:57:38','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (159,179,'pletcherxeu',NULL,'lrovelyteomcat456@gmail.com',6,'pletcherxeu',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2012-12-18 05:53:49','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (160,180,'Elizabeth Hammann',NULL,'bhammann@mckinneytexas.org',6,'ejhammann',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2012-12-18 17:59:36','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (161,181,'Andrea LeBlanc',NULL,'andreantx@yahoo.com',6,'andreantx',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2012-12-19 01:10:39','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (162,182,'debbie caputto',NULL,'debbiecaputto@hotmail.com',6,'dcaputto',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2012-12-19 05:52:53','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (163,183,'Amy Bockes',NULL,'abockes@oakpointtexas.com',6,'abockes',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2012-12-19 16:06:38','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (164,184,'Spanish Schoolhouse Allen',NULL,'allen@spanishschoolhouse.com',6,'ssh.allen',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2012-12-19 19:08:37','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (165,185,'Monique Chartier',NULL,'marousse@aol.com',6,'mchartier',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2012-12-19 20:41:49','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (166,186,'Rachel Cooper',NULL,'rachel.w@alumni.utexas.net',6,'rachaw',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2012-12-21 16:19:13','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (167,187,'jsmith',NULL,'jsmith@aol.com',6,'jsmith',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2012-12-23 03:53:08','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (168,188,'Susan Billingsley',NULL,'sewb@stx.rr.com',6,'sewb',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2012-12-23 06:14:37','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (169,189,'Charlene Nelson',NULL,'charlene@fumcd.com',6,'charlene@fumcd.com',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2012-12-28 21:35:14','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (170,190,'dena fayad',NULL,'dfayad@gmail.com',6,'dfayad',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2012-12-29 16:50:28','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (171,191,'Lesli',NULL,'jonespres.lesli@yahoo.com',6,'dorrisjones',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2013-01-03 17:14:09','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (172,192,'Tammy Hillis',NULL,'tammy.hillis@verizon.net',6,'tammyhillis',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2013-01-03 18:46:38','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (173,193,'Susan Kershaw',NULL,'boydsusan@yahoo.com',6,'boydsusan@yahoo.com',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2013-01-04 05:37:28','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (174,194,'Jennifer Barnes',NULL,'mrsbarnes2009@yahoo.com',6,'Mrsbarnes2009',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2013-01-04 19:20:04','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (175,195,'anna',NULL,'anna3.14159@yahoo.com',6,'annagel',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2013-01-05 02:06:17','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (176,196,'Lindsay',NULL,'webblindsay@sbcglobal.net',6,'webblindsay',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2013-01-05 19:02:53','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (177,197,'julie james',NULL,'jrijames@yahoo.com',6,'jrijames',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2013-01-05 21:37:51','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (178,198,'Leslie Spradlin',NULL,'lesliekarylbryan@gmail.com',6,'lesliekarylbryan',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2013-01-06 03:32:33','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (179,199,'alisha smith',NULL,'alisha@lonestarfield.com',6,'vannah0703',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2013-01-06 20:50:40','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (180,200,'Jennifer Ring',NULL,'Jennifer_L_Ring@baylor.edu',6,'Verbgirl',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2013-01-07 16:04:06','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (181,201,'Shepherd\'s Kids ',NULL,'pdo@murphychurch.com',6,'lettie',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2013-01-07 18:53:35','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (182,202,'Patty Celis',NULL,'Triciacelis1@hotmail.com',6,'patcel',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2013-01-07 19:26:42','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (183,203,'patty clifford',NULL,'pattyclifford@earthlink.net',6,'pattyclifford',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2013-01-07 21:43:54','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (184,204,'Erin Stephenson',NULL,'erindhill@yahoo.com',6,'edh7507',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2013-01-07 22:03:57','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (185,205,'Dyrenda Tutt',NULL,'djtutt@gmail.com',6,'djtutt@gmail.com',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2013-01-08 00:27:45','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (186,206,'Joshua Denman',NULL,'jdenman@fcop.net',6,'jdenman@fcop.net',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2013-01-08 15:04:44','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (187,207,'Christie Waldrip',NULL,'christieclarkson@yahoo.com',6,'cwaldrip',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2013-01-09 01:11:39','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (188,208,'Tara Draper',NULL,'tjy1030@yahoo.com',6,'tjy1030',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2013-01-09 19:40:06','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (189,209,'Brooke Eung',NULL,'eungs@att.net',6,'eungs',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2013-01-09 22:21:13','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (190,210,'Amy Krakowski',NULL,'amy.krakowski@capgemini.com',6,'Amykrak',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2013-01-10 17:45:44','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (191,211,'renicia',NULL,'reniciawitherspoon@yahoo.com',6,'renicia',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2013-01-12 00:31:47','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (192,212,'Ashley Pond',NULL,'ashleypond07@gmail.com',6,'bake5412',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2013-01-12 20:08:50','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (193,213,'divya',NULL,'divya_sethi79@hotmail.com',6,'divya',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2013-01-14 15:43:11','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (194,214,'Nathan',NULL,'nathan.smith@ubs.com',6,'nsmith9790',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2013-01-14 16:17:06','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (195,215,'Deidra Klemm',NULL,'deidra@fbcfarmersville.com',6,'deidra @fbcfarmersville.com',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2013-01-14 17:59:24','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (196,217,'Andy Pugh',NULL,'andrewpugh45@yahoo.com',6,'AndyPugh25',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2013-01-14 18:42:32','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (197,218,'Kyndra Krensavage',NULL,'kyndrakrensavage@hotmail.com',6,'krensavage',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2013-01-15 15:26:40','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (198,219,'Libby Moore',NULL,'libbyhmoore@yahoo.com',6,'LMoore',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2013-01-16 01:06:28','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (199,220,'Courtney Bryson',NULL,'courtneymbryson@gmail.com',6,'courtneybryson',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2013-01-16 14:40:00','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (200,221,'Leah Gaither',NULL,'lka833@aol.com',6,'leahgaither',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2013-01-16 21:26:42','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (201,222,'Cody Loyd',NULL,'clubhouse@heritagelakes-hoa.org',6,'clubhouse',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2013-01-16 22:01:08','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (202,223,'Beth Hanley',NULL,'elizabethlhanley@yahoo.com',6,'elizabethlhanley',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2013-01-17 13:48:05','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (203,224,'Jordana Bernstein',NULL,'jbernstein@akibaacademy.org',6,'jbernstein',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2013-01-17 16:10:34','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (204,225,'Beth Kratochvil',NULL,'bethk@douglassdist.com',6,'bkratochvil1',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2013-01-17 23:34:56','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (205,226,'SarahMaupin',NULL,'sarah@gomaupin.com',6,'slamaupin',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2013-01-19 18:38:31','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (206,227,'julie',NULL,'joules28@sbcglobal.net',6,'cunneen',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2013-01-19 20:23:27','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (207,228,'Rich Bustillos',NULL,'romb66@msn.com',6,'romb66',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2013-01-21 00:48:22','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (208,229,'Janie Means',NULL,'choclo8@aol.com',6,'choclo8@aol.com',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2013-01-21 16:03:48','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (209,230,'Ann Erlandsson',NULL,'ann.erlandsson@gmail.com',6,'annerlandsson',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2013-01-22 16:06:43','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (210,231,'Bright Beginnings preschool',NULL,'brightbeginningsfbc@hotmail.com',6,'bright beginnings',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2013-01-22 19:06:28','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (211,233,'Gretchen Kern',NULL,'gretchen.kern@pxd.com',6,'gretchenkern',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2013-01-23 16:34:46','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (212,234,'Cassey',NULL,'cassey@gatewayonline.org',6,'cassey@gatewayonline.org',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2013-01-23 17:49:01','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (213,235,'Delores Turner',NULL,'delores@firstmckinney.com',6,'Delores',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2013-01-23 18:26:36','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (214,236,'Cheryl Shulman',NULL,'cshulman@thelamplighterschool.org',6,'cshulman',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2013-01-23 20:46:00','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (215,237,'Karen Shelley-Kepley',NULL,'karen@krkwestfrisco.com',6,'kshelley',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2013-01-24 13:40:08','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (216,238,'Sue Saukam',NULL,'ssaukam@gmail.com',6,'ssaukam',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2013-01-24 19:04:06','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (217,239,'Karin',NULL,'karin.mahlenkamp@kellerisd.net',6,'kmahlenkamp',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2013-01-24 20:35:47','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (218,240,'Sonal Johnsamson',NULL,'sonal@gatewayonline.org',6,'gateway2013',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2013-01-25 15:23:37','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (219,241,'Lana',NULL,'lanafidel@yahoo.com',6,'Lanafidel',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2013-01-25 19:55:58','headcritter1',NULL,NULL);
+INSERT INTO `cc1_it_people` VALUES (286,242,'kendra mcdaniel',NULL,'mcdaniel_kendra@sbcglobal.net',6,'mcdaniel_kendra@sbcglobal.net',1,0,0,0,1,0,0,0,'0000-00-00 00:00:00','2013-01-27 13:23:04','critters_kevin@localhost',NULL,NULL);
+/*!40000 ALTER TABLE `cc1_it_people` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = '' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`critters_kevin`@`localhost`*/ /*!50003 trigger `cc1_it_people_bi`
+before insert on `cc1_it_people`
+for each row
+BEGIN
+   IF (NEW.CREATED_ON IS NULL OR NEW.CREATED_ON = '0000-00-00 00:00:00') THEN
+      SET NEW.CREATED_ON := sysdate();
+   END IF; 
+   IF (NEW.CREATED_BY IS NULL OR NEW.CREATED_BY = '') THEN
+      SET NEW.CREATED_BY := USER();
+   END IF; 
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = '' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`critters_kevin`@`localhost`*/ /*!50003 trigger `cc1_it_people_bu`
+before update on `cc1_it_people`
+for each row
+BEGIN
+   IF (NEW.MODIFIED_ON IS NULL OR NEW.MODIFIED_ON = '0000-00-00 00:00:00') THEN
+      SET NEW.MODIFIED_ON := sysdate();
+   END IF; 
+   IF (NEW.MODIFIED_BY IS NULL OR NEW.MODIFIED_BY = '') THEN
+      SET NEW.MODIFIED_BY := USER();
+   END IF; 
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+
+--
+-- Table structure for table `cc1_it_priority`
+--
+
+DROP TABLE IF EXISTS `cc1_it_priority`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `cc1_it_priority` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'The system generated unique identifier for the priority.',
+  `priority_name` varchar(60) NOT NULL COMMENT 'The unique name of the priority.',
+  `response_time` decimal(11,2) NOT NULL COMMENT 'The target response time expressed in hours.',
+  `ranking` int(11) NOT NULL COMMENT 'The ranking of the priority expressed as a value between 0 and 100.  Higher numbers indicate higher priority.',
+  `resolution_time` decimal(11,2) NOT NULL COMMENT 'The target resolution time expressed in hours.',
+  `description` varchar(1024) DEFAULT NULL COMMENT 'The full text description of the priority.',
+  `state` tinyint(4) DEFAULT '1' COMMENT 'State of the specific record.  i.e.  Published, archived, trashed etc.',
+  `ordering` int(11) NOT NULL COMMENT 'Default ordering column',
+  `checked_out` int(11) NOT NULL DEFAULT '0' COMMENT 'Checked out indicator.  User id of user editing the record.',
+  `checked_out_time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT 'Time and date when the record was checked out.',
+  `created_on` datetime NOT NULL COMMENT 'Audit Column: Date the record was created.',
+  `created_by` varchar(255) NOT NULL COMMENT 'Audit Column: The user who created the record.',
+  `modified_on` datetime DEFAULT NULL COMMENT 'Audit Column: Date the record was last modified.',
+  `modified_by` varchar(255) DEFAULT NULL COMMENT 'Audit Column: The user who last modified the record.',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COMMENT='Issue priorities within the company.';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `cc1_it_priority`
+--
+
+LOCK TABLES `cc1_it_priority` WRITE;
+/*!40000 ALTER TABLE `cc1_it_priority` DISABLE KEYS */;
+INSERT INTO `cc1_it_priority` VALUES (1,'High',0.50,70,4.00,'Office, department, or user has completely lost ability to perform all their functions but does not lend itself to financial liability or loss.',1,0,0,'0000-00-00 00:00:00','0000-00-00 00:00:00','',NULL,NULL);
+INSERT INTO `cc1_it_priority` VALUES (2,'Low',4.00,10,24.00,'1 or 2 Users have a minor inconvenience with the functionality of a single product.',1,0,0,'0000-00-00 00:00:00','0000-00-00 00:00:00','',NULL,NULL);
+INSERT INTO `cc1_it_priority` VALUES (3,'Medium',2.00,40,8.00,'Office, department, or user has a marginal loss of functionality but has an alternate method of performing task without financial liability or loss.',1,0,0,'0000-00-00 00:00:00','0000-00-00 00:00:00','',NULL,NULL);
+INSERT INTO `cc1_it_priority` VALUES (4,'Critical',0.25,90,2.00,'Office, department, or user has completely lost ability to perform all their functions, which in turn may cause financial liability or loss.',1,0,0,'0000-00-00 00:00:00','0000-00-00 00:00:00','',NULL,NULL);
+/*!40000 ALTER TABLE `cc1_it_priority` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = '' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`critters_kevin`@`localhost`*/ /*!50003 TRIGGER `cc1_it_priority_bi` BEFORE INSERT ON `cc1_it_priority` FOR EACH ROW
+BEGIN
+   IF (NEW.ID IS NULL) THEN
+      SET NEW.ID := 0;
+   END IF;
+   IF (NEW.CREATED_ON IS NULL OR NEW.CREATED_ON = '0000-00-00 00:00:00') THEN
+      SET NEW.CREATED_ON := sysdate();
+   END IF; 
+   IF (NEW.CREATED_BY IS NULL  OR NEW.CREATED_BY = '') THEN
+      SET NEW.CREATED_BY := USER();
+   END IF; 
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = '' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`critters_kevin`@`localhost`*/ /*!50003 TRIGGER `cc1_it_priority_bu` BEFORE UPDATE ON `cc1_it_priority` FOR EACH ROW
+BEGIN
+   IF (NEW.MODIFIED_ON IS NULL OR NEW.MODIFIED_ON = '0000-00-00 00:00:00') THEN
+      SET NEW.MODIFIED_ON := sysdate();
+   END IF; 
+   IF (NEW.MODIFIED_BY IS NULL OR NEW.MODIFIED_BY = '') THEN
+      SET NEW.MODIFIED_BY := USER();
+   END IF;
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+
+--
+-- Table structure for table `cc1_it_projects`
+--
+
+DROP TABLE IF EXISTS `cc1_it_projects`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `cc1_it_projects` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'The system generated unique identifier for the project.',
+  `parent_id` int(11) unsigned NOT NULL DEFAULT '0' COMMENT 'Link to parent project id.',
+  `project_name` varchar(255) NOT NULL COMMENT 'The unique name of the project.',
+  `alias` varchar(10) DEFAULT NULL COMMENT 'Project Alias.  Used to mask primary key of issue from random selection.',
+  `project_description` varchar(4000) DEFAULT NULL COMMENT 'A full description of the project.',
+  `state` tinyint(4) DEFAULT '0' COMMENT 'State of the specific record.  i.e.  Published, archived, trashed etc.',
+  `ordering` int(11) NOT NULL DEFAULT '0' COMMENT 'Order in which categories are presented.',
+  `checked_out` int(11) NOT NULL DEFAULT '0' COMMENT 'Checked out indicator.  User id of user editing the record.',
+  `checked_out_time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT 'Time and date when the record was checked out.',
+  `start_date` datetime NOT NULL COMMENT 'The start date of the project.',
+  `target_end_date` datetime DEFAULT NULL COMMENT 'The targeted end date of the project.',
+  `actual_end_date` datetime DEFAULT NULL COMMENT 'The actual end date of the project.',
+  `created_on` datetime NOT NULL COMMENT 'Audit Column: Date the record was created.',
+  `created_by` varchar(255) NOT NULL COMMENT 'Audit Column: The user who created the record.',
+  `modified_on` datetime DEFAULT NULL COMMENT 'Audit Column: Date the record was last modified.',
+  `modified_by` varchar(255) DEFAULT NULL COMMENT 'Audit Column: The user who last modified the record.',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8 COMMENT='All projects currently underway.';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `cc1_it_projects`
+--
+
+LOCK TABLES `cc1_it_projects` WRITE;
+/*!40000 ALTER TABLE `cc1_it_projects` DISABLE KEYS */;
+INSERT INTO `cc1_it_projects` VALUES (1,0,'Web site redesign',NULL,'<p>New template, new content layout, new logo and banner, better everything!</p>',1,0,0,'0000-00-00 00:00:00','2013-01-26 11:15:31','2013-03-05 06:00:00',NULL,'2013-01-26 11:15:31','headcritter1','2013-01-26 17:25:17','headcritter1');
+/*!40000 ALTER TABLE `cc1_it_projects` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = '' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`critters_kevin`@`localhost`*/ /*!50003 trigger `cc1_it_projects_bi`
+before insert on `cc1_it_projects`
+for each row
+BEGIN 
+   IF (NEW.ACTUAL_END_DATE = '0000-00-00 00:00:00') THEN
+      SET NEW.ACTUAL_END_DATE := NULL;
+   END IF;
+   IF (NEW.CREATED_ON IS NULL OR NEW.CREATED_ON = '0000-00-00 00:00:00') THEN
+      SET NEW.CREATED_ON := sysdate();
+   END IF; 
+   IF (NEW.CREATED_BY IS NULL OR NEW.CREATED_BY = '') THEN
+      SET NEW.CREATED_BY := USER();
+   END IF; 
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = '' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`critters_kevin`@`localhost`*/ /*!50003 trigger `cc1_it_projects_bu`
+before update on `cc1_it_projects`
+for each row 
+BEGIN 
+   IF (NEW.ACTUAL_END_DATE = '0000-00-00 00:00:00') THEN
+      SET NEW.ACTUAL_END_DATE := NULL;
+   END IF;
+   IF (NEW.MODIFIED_ON IS NULL OR NEW.MODIFIED_ON = '0000-00-00 00:00:00') THEN
+      SET NEW.MODIFIED_ON := sysdate();
+   END IF; 
+   IF (NEW.MODIFIED_BY IS NULL OR NEW.MODIFIED_BY = '') THEN
+      SET NEW.MODIFIED_BY := USER();
+   END IF; 
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+
+--
+-- Table structure for table `cc1_it_roles`
+--
+
+DROP TABLE IF EXISTS `cc1_it_roles`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `cc1_it_roles` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'The system generated unique identifier for the person role.',
+  `role_name` varchar(60) NOT NULL COMMENT 'The unique name of the role.',
+  `description` varchar(1024) DEFAULT NULL COMMENT 'The full text description of the role.',
+  `state` tinyint(4) DEFAULT '1' COMMENT 'State of the specific record.  i.e.  Published, archived, trashed etc.',
+  `ordering` int(11) NOT NULL COMMENT 'Default ordering column',
+  `checked_out` int(11) NOT NULL DEFAULT '0' COMMENT 'Checked out indicator.  User id of user editing the record.',
+  `checked_out_time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT 'Time and date when the record was checked out.',
+  `created_on` datetime NOT NULL COMMENT 'Audit Column: Date the record was created.',
+  `created_by` varchar(255) NOT NULL COMMENT 'Audit Column: The user who created the record.',
+  `modified_on` datetime DEFAULT NULL COMMENT 'Audit Column: Date the record was last modified.',
+  `modified_by` varchar(255) DEFAULT NULL COMMENT 'Audit Column: The user who last modified the record.',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COMMENT='People Roles.  i.e. CEO, Member, Lead, Guest, Customer etc.';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `cc1_it_roles`
+--
+
+LOCK TABLES `cc1_it_roles` WRITE;
+/*!40000 ALTER TABLE `cc1_it_roles` DISABLE KEYS */;
+INSERT INTO `cc1_it_roles` VALUES (1,'CEO','Chief Executive Office.  Senior member of company.  Does not usually have any specific projects assigned.',1,0,0,'0000-00-00 00:00:00','0000-00-00 00:00:00','',NULL,NULL);
+INSERT INTO `cc1_it_roles` VALUES (2,'Customer','Customer of the product or company.  Usually just reports problems, raises queries etc.',1,0,0,'0000-00-00 00:00:00','0000-00-00 00:00:00','','2013-01-26 11:25:37','critters_kevin@localhost');
+INSERT INTO `cc1_it_roles` VALUES (3,'Lead','This role indicate an individual with direct responsibility for any assigned projects.',1,0,0,'0000-00-00 00:00:00','0000-00-00 00:00:00','',NULL,NULL);
+INSERT INTO `cc1_it_roles` VALUES (4,'Manager','The person responsible for many projects and usually many staff, each of which is associated with one or more projects.',1,0,0,'0000-00-00 00:00:00','0000-00-00 00:00:00','',NULL,NULL);
+INSERT INTO `cc1_it_roles` VALUES (5,'Member','A team member working or assigned to one or more projects but without overall responsibility for any one.',1,0,0,'0000-00-00 00:00:00','0000-00-00 00:00:00','',NULL,NULL);
+INSERT INTO `cc1_it_roles` VALUES (6,'User','A user of the product.  Might be considered a customer but usually no financial transaction has occurred.',1,0,0,'0000-00-00 00:00:00','0000-00-00 00:00:00','',NULL,NULL);
+/*!40000 ALTER TABLE `cc1_it_roles` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = '' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`critters_kevin`@`localhost`*/ /*!50003 TRIGGER `cc1_it_roles_bi` BEFORE INSERT ON `cc1_it_roles` FOR EACH ROW
+BEGIN
+   IF (NEW.ID IS NULL) THEN
+      SET NEW.ID := 0;
+   END IF;
+   IF (NEW.CREATED_ON IS NULL OR NEW.CREATED_ON = '0000-00-00 00:00:00') THEN
+      SET NEW.CREATED_ON := sysdate();
+   END IF; 
+   IF (NEW.CREATED_BY IS NULL  OR NEW.CREATED_BY = '') THEN
+      SET NEW.CREATED_BY := USER();
+   END IF;
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = '' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`critters_kevin`@`localhost`*/ /*!50003 TRIGGER `cc1_it_roles_bu` BEFORE UPDATE ON `cc1_it_roles` FOR EACH ROW
+BEGIN
+   IF (NEW.MODIFIED_ON IS NULL OR NEW.MODIFIED_ON = '0000-00-00 00:00:00') THEN
+      SET NEW.MODIFIED_ON := sysdate();
+   END IF; 
+   IF (NEW.MODIFIED_BY IS NULL OR NEW.MODIFIED_BY = '') THEN
+      SET NEW.MODIFIED_BY := USER();
+   END IF;
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+
+--
+-- Table structure for table `cc1_it_status`
+--
+
+DROP TABLE IF EXISTS `cc1_it_status`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `cc1_it_status` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'The system generated unique identifier for the issue status.',
+  `status_name` varchar(60) NOT NULL COMMENT 'The unique name of the status.',
+  `description` varchar(1024) DEFAULT NULL COMMENT 'The full text description of the status.',
+  `state` tinyint(4) DEFAULT '1' COMMENT 'State of the specific record.  i.e.  Published, archived, trashed etc.',
+  `ordering` int(11) NOT NULL COMMENT 'Default ordering column',
+  `checked_out` int(11) NOT NULL DEFAULT '0' COMMENT 'Checked out indicator.  User id of user editing the record.',
+  `checked_out_time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT 'Time and date when the record was checked out.',
+  `created_on` datetime NOT NULL COMMENT 'Audit Column: Date the record was created.',
+  `created_by` varchar(255) NOT NULL COMMENT 'Audit Column: The user who created the record.',
+  `modified_on` datetime DEFAULT NULL COMMENT 'Audit Column: Date the record was last modified.',
+  `modified_by` varchar(255) DEFAULT NULL COMMENT 'Audit Column: The user who last modified the record.',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COMMENT='Issue statuses.  i.e. Open, closed, on-hold etc.';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `cc1_it_status`
+--
+
+LOCK TABLES `cc1_it_status` WRITE;
+/*!40000 ALTER TABLE `cc1_it_status` DISABLE KEYS */;
+INSERT INTO `cc1_it_status` VALUES (1,'Closed','Used when an issue is completed and no further change related to the issue is expected.',1,0,0,'0000-00-00 00:00:00','0000-00-00 00:00:00','',NULL,NULL);
+INSERT INTO `cc1_it_status` VALUES (2,'In-Progress','The issue is being actively worked by an individual.',1,0,0,'0000-00-00 00:00:00','0000-00-00 00:00:00','',NULL,NULL);
+INSERT INTO `cc1_it_status` VALUES (3,'On-Hold','The issue is currently awaiting some unspecified activitiy and is not currently being worked.',1,0,0,'0000-00-00 00:00:00','0000-00-00 00:00:00','',NULL,NULL);
+INSERT INTO `cc1_it_status` VALUES (4,'Open','The issue is open but no work has commenced to resolve it.',1,0,0,'0000-00-00 00:00:00','0000-00-00 00:00:00','',NULL,NULL);
+INSERT INTO `cc1_it_status` VALUES (5,'Undefined','The current status of this issue is unknown.',1,0,0,'0000-00-00 00:00:00','0000-00-00 00:00:00','',NULL,NULL);
+/*!40000 ALTER TABLE `cc1_it_status` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = '' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`critters_kevin`@`localhost`*/ /*!50003 TRIGGER `cc1_it_status_bi` BEFORE INSERT ON `cc1_it_status` FOR EACH ROW
+BEGIN
+   IF (NEW.ID IS NULL) THEN
+      SET NEW.ID := 0;
+   END IF;
+   IF (NEW.CREATED_ON IS NULL OR NEW.CREATED_ON = '0000-00-00 00:00:00') THEN
+      SET NEW.CREATED_ON := sysdate();
+   END IF; 
+   IF (NEW.CREATED_BY IS NULL  OR NEW.CREATED_BY = '') THEN
+      SET NEW.CREATED_BY := USER();
+   END IF;
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = '' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`critters_kevin`@`localhost`*/ /*!50003 TRIGGER `cc1_it_status_bu` BEFORE UPDATE ON `cc1_it_status` FOR EACH ROW
+BEGIN
+   IF (NEW.MODIFIED_ON IS NULL OR NEW.MODIFIED_ON = '0000-00-00 00:00:00') THEN
+      SET NEW.MODIFIED_ON := sysdate();
+   END IF; 
+   IF (NEW.MODIFIED_BY IS NULL OR NEW.MODIFIED_BY = '') THEN
+      SET NEW.MODIFIED_BY := USER();
+   END IF;
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+
+--
+-- Table structure for table `cc1_it_types`
+--
+
+DROP TABLE IF EXISTS `cc1_it_types`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `cc1_it_types` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'The system generated unique identifier for the issue type.',
+  `type_name` varchar(60) NOT NULL COMMENT 'The unique name of the type.',
+  `description` varchar(1024) DEFAULT NULL COMMENT 'The full text description of the type.',
+  `state` tinyint(4) DEFAULT '1' COMMENT 'State of the specific record.  i.e.  Published, archived, trashed etc.',
+  `ordering` int(11) NOT NULL COMMENT 'Default ordering column',
+  `checked_out` int(11) NOT NULL DEFAULT '0' COMMENT 'Checked out indicator.  User id of user editing the record.',
+  `checked_out_time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT 'Time and date when the record was checked out.',
+  `created_on` datetime NOT NULL COMMENT 'Audit Column: Date the record was created.',
+  `created_by` varchar(255) NOT NULL COMMENT 'Audit Column: The user who created the record.',
+  `modified_on` datetime DEFAULT NULL COMMENT 'Audit Column: Date the record was last modified.',
+  `modified_by` varchar(255) DEFAULT NULL COMMENT 'Audit Column: The user who last modified the record.',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COMMENT='Issue types.  i.e. Defect , Enhancement etc.';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `cc1_it_types`
+--
+
+LOCK TABLES `cc1_it_types` WRITE;
+/*!40000 ALTER TABLE `cc1_it_types` DISABLE KEYS */;
+INSERT INTO `cc1_it_types` VALUES (1,'Defect','The product has a defect that prevents it working correctly.',1,0,0,'0000-00-00 00:00:00','0000-00-00 00:00:00','',NULL,NULL);
+INSERT INTO `cc1_it_types` VALUES (2,'Enhancement','The product could be improved if this enhancement were applied.',1,0,0,'0000-00-00 00:00:00','0000-00-00 00:00:00','',NULL,NULL);
+INSERT INTO `cc1_it_types` VALUES (3,'Documentation','The documentation needs correcting.',1,0,0,'0000-00-00 00:00:00','0000-00-00 00:00:00','',NULL,NULL);
+INSERT INTO `cc1_it_types` VALUES (4,'Suggestion','The product could be improved if this suggestion were implemented.',1,0,0,'0000-00-00 00:00:00','0000-00-00 00:00:00','',NULL,NULL);
+INSERT INTO `cc1_it_types` VALUES (5,'Other','The issue is not described by any of the other types.',1,0,0,'0000-00-00 00:00:00','0000-00-00 00:00:00','',NULL,NULL);
+/*!40000 ALTER TABLE `cc1_it_types` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = '' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`critters_kevin`@`localhost`*/ /*!50003 TRIGGER `cc1_it_types_bi` BEFORE INSERT ON `cc1_it_types` FOR EACH ROW
+BEGIN
+   IF (NEW.ID IS NULL) THEN
+      SET NEW.ID := 0;
+   END IF;
+   IF (NEW.CREATED_ON IS NULL OR NEW.CREATED_ON = '0000-00-00 00:00:00') THEN
+      SET NEW.CREATED_ON := sysdate();
+   END IF; 
+   IF (NEW.CREATED_BY IS NULL  OR NEW.CREATED_BY = '') THEN
+      SET NEW.CREATED_BY := USER();
+   END IF;
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = '' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`critters_kevin`@`localhost`*/ /*!50003 TRIGGER `cc1_it_types_bu` BEFORE UPDATE ON `cc1_it_types` FOR EACH ROW
+BEGIN
+   IF (NEW.MODIFIED_ON IS NULL OR NEW.MODIFIED_ON = '0000-00-00 00:00:00') THEN
+      SET NEW.MODIFIED_ON := sysdate();
+   END IF; 
+   IF (NEW.MODIFIED_BY IS NULL OR NEW.MODIFIED_BY = '') THEN
+      SET NEW.MODIFIED_BY := USER();
+   END IF;
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+
+--
 -- Table structure for table `cc1_joomblog_admin`
 --
 
@@ -4720,6 +5655,29 @@ INSERT INTO `cc1_myjspace` VALUES (3,155,155,0,'sdesai','',0,1,'2012-12-03 22:35
 INSERT INTO `cc1_myjspace` VALUES (4,115,115,0,'lizzielove','',0,1,'2012-12-11 06:54:56','2012-12-11 06:54:56','0000-00-00 00:00:00','0',0,'0000-00-00 00:00:00','0000-00-00 00:00:00','','',0);
 INSERT INTO `cc1_myjspace` VALUES (5,170,170,0,'jthoes','',0,1,'2012-12-13 04:07:22','2012-12-13 04:07:22','0000-00-00 00:00:00','0',0,'0000-00-00 00:00:00','0000-00-00 00:00:00','','',0);
 /*!40000 ALTER TABLE `cc1_myjspace` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `cc1_myjspace_cfg`
+--
+
+DROP TABLE IF EXISTS `cc1_myjspace_cfg`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `cc1_myjspace_cfg` (
+  `foldername` varchar(100) NOT NULL,
+  PRIMARY KEY (`foldername`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `cc1_myjspace_cfg`
+--
+
+LOCK TABLES `cc1_myjspace_cfg` WRITE;
+/*!40000 ALTER TABLE `cc1_myjspace_cfg` DISABLE KEYS */;
+INSERT INTO `cc1_myjspace_cfg` VALUES ('myjsp');
+/*!40000 ALTER TABLE `cc1_myjspace_cfg` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -6582,4 +7540,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2013-01-19 15:27:35
+-- Dump completed on 2013-01-27 20:48:22
