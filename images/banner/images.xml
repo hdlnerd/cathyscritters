@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<slides>
+ <slide>
+  <image>BabyCricket_Cropped.jpg</image>
+  <title>
+  	<![CDATA[<h3> Learn </h3>
+  	<h4> Temporary text for Learn</h4> ]]>
+  </title>
+ </slide>
+ <slide>
+  <image>BunnyLine_Cropped.jpg</image>
+  <title>
+  	<![CDATA[<h3> Touch </h3>
+  	<h4> Temporary text for Touch </h4> ]]>
+  </title>
+  <description>Sample description</description>
+ </slide>
+ <slide>
+  <image>Cowboy_Cropped.jpg</image>
+  <title>
+  	<![CDATA[<h3> Fun </h3>
+  	<h4> Temporary text for Fun </h4> ]]>
+  </title>
+ </slide>
+ <slide>
+  <image>Molly_Cropped.jpg</image>
+  <title>
+  	<![CDATA[<h3> Friends </h3>
+  	<h4> Temporary text for Friends </h4> ]]>
+  </title>
+ </slide>
+ <slide>
+  <image>Zebu_Compressed.jpg</image>
+  <title>
+  	<![CDATA[<h3> Zebu </h3>
+  	<h4> Temporary text for Zebu </h4> ]]>
+  </title>
+ </slide>
+</slides>
