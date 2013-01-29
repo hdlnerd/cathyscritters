@@ -116,7 +116,7 @@
 	if ($miles > 40)
 	{
 		$travel_fee = $miles*2;
-		$travel_fee_line = "Travel fee (\$2/mile, outside a 40-mile radius): \$$travel_fee.<br>";
+		$travel_fee_line = "Travel fee (\$1.5/mile, outside a 40-mile radius): \$$travel_fee.<br>";
 	} else {
 		$travel_fee = 0;
 		$travel_fee_line = "";

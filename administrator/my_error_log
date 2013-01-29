@@ -213,7 +213,6 @@
 [01-Jan-2013 14:36:43] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/public_html/administrator/components/com_fabrik/models/element.php on line 1231
 [13-Jan-2013 16:44:55] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/public_html/components/com_fabrik/models/list.php on line 9246
 [13-Jan-2013 16:45:01] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/public_html/components/com_fabrik/models/list.php on line 9246
-<<<<<<< HEAD
 [27-Jan-2013 20:15:42] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/sites/cathyscritters.com/components/com_fabrik/models/list.php on line 9246
 [27-Jan-2013 20:15:48] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/sites/cathyscritters.com/components/com_fabrik/models/list.php on line 9246
 [27-Jan-2013 20:18:40] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/sites/cathyscritters.com/components/com_fabrik/models/list.php on line 9246
@@ -223,9 +222,39 @@
 [27-Jan-2013 20:21:27] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/sites/cathyscritters.com/components/com_fabrik/models/list.php on line 9246
 [27-Jan-2013 20:40:55] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/sites/cathyscritters.com/components/com_fabrik/models/list.php on line 9246
 [27-Jan-2013 20:41:02] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/sites/cathyscritters.com/components/com_fabrik/models/list.php on line 9246
-=======
 [27-Jan-2013 20:13:59] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/sites/petsupervisor.com/components/com_fabrik/models/list.php on line 9246
 [27-Jan-2013 20:14:29] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/sites/petsupervisor.com/components/com_fabrik/models/list.php on line 9246
 [27-Jan-2013 20:14:53] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/sites/petsupervisor.com/components/com_fabrik/models/list.php on line 9246
 [27-Jan-2013 20:15:10] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/sites/petsupervisor.com/components/com_fabrik/models/list.php on line 9246
->>>>>>> 772103f73bec61d47c93e0158d7ec883819950fd
+[20-Jan-2013 16:18:55] PHP Warning:  mysql_real_escape_string() [<a href='function.mysql-real-escape-string'>function.mysql-real-escape-string</a>]: Access denied for user 'critters'@'localhost' (using password: NO) in /home/critters/sites/petsupervisor.com/administrator/components/com_joomblog/tables/settings.php on line 59
+[20-Jan-2013 16:18:55] PHP Warning:  mysql_real_escape_string() [<a href='function.mysql-real-escape-string'>function.mysql-real-escape-string</a>]: A link to the server could not be established in /home/critters/sites/petsupervisor.com/administrator/components/com_joomblog/tables/settings.php on line 59
+[20-Jan-2013 16:19:25] PHP Warning:  mysql_real_escape_string() [<a href='function.mysql-real-escape-string'>function.mysql-real-escape-string</a>]: Access denied for user 'critters'@'localhost' (using password: NO) in /home/critters/sites/petsupervisor.com/administrator/components/com_joomblog/tables/settings.php on line 59
+[20-Jan-2013 16:19:25] PHP Warning:  mysql_real_escape_string() [<a href='function.mysql-real-escape-string'>function.mysql-real-escape-string</a>]: A link to the server could not be established in /home/critters/sites/petsupervisor.com/administrator/components/com_joomblog/tables/settings.php on line 59
+[20-Jan-2013 16:19:46] PHP Warning:  mysql_real_escape_string() [<a href='function.mysql-real-escape-string'>function.mysql-real-escape-string</a>]: Access denied for user 'critters'@'localhost' (using password: NO) in /home/critters/sites/petsupervisor.com/administrator/components/com_joomblog/tables/settings.php on line 59
+[20-Jan-2013 16:19:46] PHP Warning:  mysql_real_escape_string() [<a href='function.mysql-real-escape-string'>function.mysql-real-escape-string</a>]: A link to the server could not be established in /home/critters/sites/petsupervisor.com/administrator/components/com_joomblog/tables/settings.php on line 59
+[20-Jan-2013 16:21:42] PHP Warning:  mysql_real_escape_string() [<a href='function.mysql-real-escape-string'>function.mysql-real-escape-string</a>]: Access denied for user 'critters'@'localhost' (using password: NO) in /home/critters/sites/petsupervisor.com/administrator/components/com_joomblog/tables/settings.php on line 59
+[20-Jan-2013 16:21:42] PHP Warning:  mysql_real_escape_string() [<a href='function.mysql-real-escape-string'>function.mysql-real-escape-string</a>]: A link to the server could not be established in /home/critters/sites/petsupervisor.com/administrator/components/com_joomblog/tables/settings.php on line 59
+[20-Jan-2013 16:24:30] PHP Warning:  mysql_real_escape_string() [<a href='function.mysql-real-escape-string'>function.mysql-real-escape-string</a>]: Access denied for user 'critters'@'localhost' (using password: NO) in /home/critters/sites/petsupervisor.com/administrator/components/com_joomblog/tables/settings.php on line 59
+[20-Jan-2013 16:24:30] PHP Warning:  mysql_real_escape_string() [<a href='function.mysql-real-escape-string'>function.mysql-real-escape-string</a>]: A link to the server could not be established in /home/critters/sites/petsupervisor.com/administrator/components/com_joomblog/tables/settings.php on line 59
+[20-Jan-2013 16:25:29] PHP Warning:  mysql_real_escape_string() [<a href='function.mysql-real-escape-string'>function.mysql-real-escape-string</a>]: Access denied for user 'critters'@'localhost' (using password: NO) in /home/critters/sites/petsupervisor.com/administrator/components/com_joomblog/tables/settings.php on line 59
+[20-Jan-2013 16:25:29] PHP Warning:  mysql_real_escape_string() [<a href='function.mysql-real-escape-string'>function.mysql-real-escape-string</a>]: A link to the server could not be established in /home/critters/sites/petsupervisor.com/administrator/components/com_joomblog/tables/settings.php on line 59
+[20-Jan-2013 16:27:58] PHP Warning:  mysql_real_escape_string() [<a href='function.mysql-real-escape-string'>function.mysql-real-escape-string</a>]: Access denied for user 'critters'@'localhost' (using password: NO) in /home/critters/sites/petsupervisor.com/administrator/components/com_joomblog/tables/settings.php on line 59
+[20-Jan-2013 16:27:58] PHP Warning:  mysql_real_escape_string() [<a href='function.mysql-real-escape-string'>function.mysql-real-escape-string</a>]: A link to the server could not be established in /home/critters/sites/petsupervisor.com/administrator/components/com_joomblog/tables/settings.php on line 59
+[20-Jan-2013 17:49:20] PHP Warning:  constant() [<a href='function.constant'>function.constant</a>]: Couldn't find constant JPATH_ in /home/critters/sites/petsupervisor.com/libraries/joomla/installer/adapters/module.php on line 117
+[20-Jan-2013 17:49:20] PHP Warning:  constant() [<a href='function.constant'>function.constant</a>]: Couldn't find constant JPATH_ in /home/critters/sites/petsupervisor.com/libraries/joomla/installer/adapters/module.php on line 119
+[28-Jan-2013 23:15:58] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/sites/cathyscritters.com/components/com_fabrik/models/list.php on line 9246
+[28-Jan-2013 23:37:53] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/sites/cathyscritters.com/components/com_fabrik/models/list.php on line 9246
+[28-Jan-2013 23:42:29] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/sites/cathyscritters.com/components/com_fabrik/models/list.php on line 9246
+[29-Jan-2013 00:21:38] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/sites/cathyscritters.com/components/com_fabrik/models/list.php on line 9246
+[29-Jan-2013 00:21:45] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/sites/cathyscritters.com/components/com_fabrik/models/list.php on line 9246
+[29-Jan-2013 09:13:30] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/sites/cathyscritters.com/components/com_fabrik/models/list.php on line 9246
+[29-Jan-2013 09:13:38] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/sites/cathyscritters.com/components/com_fabrik/models/list.php on line 9246
+[29-Jan-2013 09:13:52] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/sites/cathyscritters.com/components/com_fabrik/models/list.php on line 9246
+[29-Jan-2013 11:57:10] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/sites/cathyscritters.com/components/com_fabrik/models/list.php on line 9246
+[29-Jan-2013 11:57:20] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/sites/cathyscritters.com/components/com_fabrik/models/list.php on line 9246
+[29-Jan-2013 12:01:26] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/sites/cathyscritters.com/components/com_fabrik/models/list.php on line 9246
+[29-Jan-2013 12:01:41] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/sites/cathyscritters.com/components/com_fabrik/models/list.php on line 9246
+[29-Jan-2013 14:57:58] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/sites/cathyscritters.com/components/com_fabrik/models/list.php on line 9246
+[29-Jan-2013 14:58:04] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/sites/cathyscritters.com/components/com_fabrik/models/list.php on line 9246
+[29-Jan-2013 16:33:13] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/sites/cathyscritters.com/components/com_fabrik/models/list.php on line 9246
+[29-Jan-2013 16:33:21] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/sites/cathyscritters.com/components/com_fabrik/models/list.php on line 9246

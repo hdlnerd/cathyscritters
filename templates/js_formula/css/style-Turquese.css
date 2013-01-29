@@ -1,0 +1,44 @@
+@charset "utf-8";
+/* CSS Document Copyright © */
+h2,
+h2 a,
+.module_ms3 .pad-title h3{
+	color: #00B299;
+	font-size: 20px;
+	font-weight: bold;
+}
+a{
+	color: #00B299;
+}
+body #sliderNav a:link, 
+body #sliderNav a:active, 
+body #sliderNav a:visited, 
+body #sliderNav a:hover{
+	background-color:#00B299;
+}
+.module_ms1 .pad3 .pad-title{
+	background-color: #00B299;
+}
+
+.module_ms2 .pad3 .pad-title h3{
+	color: #00B299; 
+}
+div.categories-list li{
+	border: 1px solid #00B299
+}
+div.categories-list li li{
+	border: 1px outset #00B299;
+}
+.footer-wrapper a:hover{
+ box-shadow:0 -6px 6px -6px #00B299 inset;
+}
+.pagination a:hover {
+    box-shadow: 0 0 5px #00B299;
+}
+
+body .shackSliderslider .slideTitle {
+	background-color: #00B299;
+}
+div.cat-children li{
+   border:1px #00B299 outset;
+}

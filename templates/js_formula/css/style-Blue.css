@@ -1,0 +1,43 @@
+@charset "utf-8";
+/* CSS Document Copyright © */
+h2,
+h2 a,
+.module_ms3 .pad-title h3{
+	color: #4C5CC5;
+	font-size: 20px;
+	font-weight: bold;
+}
+a{
+	color: #4C5CC5;
+}
+body #sliderNav a:link, 
+body #sliderNav a:active, 
+body #sliderNav a:visited, 
+body #sliderNav a:hover{
+	background-color:#4C5CC5;
+}
+.module_ms1 .pad3 .pad-title{
+	background-color: #4C5CC5;
+}
+
+.module_ms2 .pad3 .pad-title h3{
+	color: #4C5CC5; 
+}
+div.categories-list li{
+	border: 1px solid #4C5CC5
+}
+div.categories-list li li{
+	border: 1px outset #4C5CC5;
+}
+.footer-wrapper a:hover{
+ box-shadow:0 -6px 6px -6px #4C5CC5 inset;
+}
+.pagination a:hover {
+    box-shadow: 0 0 5px #4C5CC5;
+}
+body .shackSliderslider .slideTitle {
+	background-color: #4C5CC5;
+}
+div.cat-children li{
+   border:1px #4C5CC5 outset;
+}

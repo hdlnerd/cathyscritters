@@ -120,7 +120,7 @@ class userAjax {
 			($duration-1.5)*$addon_pony_hour*$numponies +
 			(($pictures=='true')?($numpics*$addon_picture):0) +
 			(($concrete=='true')?50:0) +
-			(($travel > 40) ? ($travel*2) : 0) +
+			(($travel > 40) ? ($travel*1.5) : 0) +
 			$cityfee;
 		//echo $base_price + "|" + $duration + "|" + $numponies + "|" + $numpics + "|" + $concrete + "|" + $travel;
 
