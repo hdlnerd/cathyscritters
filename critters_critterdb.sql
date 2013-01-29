@@ -1,6 +1,6 @@
 -- MySQL dump 10.13  Distrib 5.5.23, for Linux (x86_64)
 --
--- Host: localhost    Database: critters_critterdb
+-- Host: localhost    Database: critters_petsupervisor
 -- ------------------------------------------------------
 -- Server version	5.5.23-55
 
@@ -1796,9 +1796,9 @@ CREATE TABLE `cc1_fabrik_connections` (
 
 LOCK TABLES `cc1_fabrik_connections` WRITE;
 /*!40000 ALTER TABLE `cc1_fabrik_connections` DISABLE KEYS */;
-INSERT INTO `cc1_fabrik_connections` VALUES (1,'localhost','critters_kevin','711coffeesql','critters_critterdb','site database',1,0,'0000-00-00 00:00:00',1,'');
-INSERT INTO `cc1_fabrik_connections` VALUES (2,'localhost','critters_kevin','711coffeesql','critters_critterdb','site database',1,0,NULL,1,'');
-INSERT INTO `cc1_fabrik_connections` VALUES (3,'localhost','critters_kevin','711coffeesql','critters_critterdb','site database',1,0,NULL,1,'');
+INSERT INTO `cc1_fabrik_connections` VALUES (1,'localhost','critters_kevin','711coffeesql','critters_petsupervisor','site database',1,0,'0000-00-00 00:00:00',1,'');
+INSERT INTO `cc1_fabrik_connections` VALUES (2,'localhost','critters_kevin','711coffeesql','critters_petsupervisor','site database',1,0,NULL,1,'');
+INSERT INTO `cc1_fabrik_connections` VALUES (3,'localhost','critters_kevin','711coffeesql','critters_petsupervisor','site database',1,0,NULL,1,'');
 /*!40000 ALTER TABLE `cc1_fabrik_connections` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -6519,12 +6519,16 @@ CREATE TABLE `cc1_session` (
 
 LOCK TABLES `cc1_session` WRITE;
 /*!40000 ALTER TABLE `cc1_session` DISABLE KEYS */;
+<<<<<<< HEAD
 INSERT INTO `cc1_session` VALUES ('0500e6472007d95bd0e3855127bed35e',0,1,'1359350737','__default|a:7:{s:15:\"session.counter\";i:1;s:19:\"session.timer.start\";i:1359350737;s:18:\"session.timer.last\";i:1359350737;s:17:\"session.timer.now\";i:1359350737;s:22:\"session.client.browser\";s:72:\"Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)\";s:8:\"registry\";O:9:\"JRegistry\":1:{s:7:\"\0*\0data\";O:8:\"stdClass\":0:{}}s:4:\"user\";O:5:\"JUser\":25:{s:9:\"\0*\0isRoot\";N;s:2:\"id\";i:0;s:4:\"name\";N;s:8:\"username\";N;s:5:\"email\";N;s:8:\"password\";N;s:14:\"password_clear\";s:0:\"\";s:8:\"usertype\";N;s:5:\"block\";N;s:9:\"sendEmail\";i:0;s:12:\"registerDate\";N;s:13:\"lastvisitDate\";N;s:10:\"activation\";N;s:6:\"params\";N;s:6:\"groups\";a:0:{}s:5:\"guest\";i:1;s:13:\"lastResetTime\";N;s:10:\"resetCount\";N;s:10:\"\0*\0_params\";O:9:\"JRegistry\":1:{s:7:\"\0*\0data\";O:8:\"stdClass\":0:{}}s:14:\"\0*\0_authGroups\";N;s:14:\"\0*\0_authLevels\";a:3:{i:0;i:1;i:1;i:1;i:2;i:5;}s:15:\"\0*\0_authActions\";N;s:12:\"\0*\0_errorMsg\";N;s:10:\"\0*\0_errors\";a:0:{}s:3:\"aid\";i:0;}}',0,'','');
 INSERT INTO `cc1_session` VALUES ('424c15d7dfc4c26423ae3fa3edea229e',0,1,'1359350772','__default|a:7:{s:15:\"session.counter\";i:1;s:19:\"session.timer.start\";i:1359350772;s:18:\"session.timer.last\";i:1359350772;s:17:\"session.timer.now\";i:1359350772;s:22:\"session.client.browser\";s:83:\"Mozilla/5.0 (Macintosh; Intel Mac OS X 10.7; rv:14.0) Gecko/20100101 Firefox/14.0.1\";s:8:\"registry\";O:9:\"JRegistry\":1:{s:7:\"\0*\0data\";O:8:\"stdClass\":0:{}}s:4:\"user\";O:5:\"JUser\":25:{s:9:\"\0*\0isRoot\";b:0;s:2:\"id\";i:0;s:4:\"name\";N;s:8:\"username\";N;s:5:\"email\";N;s:8:\"password\";N;s:14:\"password_clear\";s:0:\"\";s:8:\"usertype\";N;s:5:\"block\";N;s:9:\"sendEmail\";i:0;s:12:\"registerDate\";N;s:13:\"lastvisitDate\";N;s:10:\"activation\";N;s:6:\"params\";N;s:6:\"groups\";a:0:{}s:5:\"guest\";i:1;s:13:\"lastResetTime\";N;s:10:\"resetCount\";N;s:10:\"\0*\0_params\";O:9:\"JRegistry\":1:{s:7:\"\0*\0data\";O:8:\"stdClass\":0:{}}s:14:\"\0*\0_authGroups\";a:2:{i:0;i:1;i:1;i:9;}s:14:\"\0*\0_authLevels\";a:3:{i:0;i:1;i:1;i:1;i:2;i:5;}s:15:\"\0*\0_authActions\";N;s:12:\"\0*\0_errorMsg\";N;s:10:\"\0*\0_errors\";a:0:{}s:3:\"aid\";i:0;}}',0,'','');
 INSERT INTO `cc1_session` VALUES ('66647220691cecea5d7ba68ed9a73ed1',0,1,'1359350768','__default|a:7:{s:15:\"session.counter\";i:1;s:19:\"session.timer.start\";i:1359350768;s:18:\"session.timer.last\";i:1359350768;s:17:\"session.timer.now\";i:1359350768;s:22:\"session.client.browser\";s:72:\"Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)\";s:8:\"registry\";O:9:\"JRegistry\":1:{s:7:\"\0*\0data\";O:8:\"stdClass\":0:{}}s:4:\"user\";O:5:\"JUser\":25:{s:9:\"\0*\0isRoot\";N;s:2:\"id\";i:0;s:4:\"name\";N;s:8:\"username\";N;s:5:\"email\";N;s:8:\"password\";N;s:14:\"password_clear\";s:0:\"\";s:8:\"usertype\";N;s:5:\"block\";N;s:9:\"sendEmail\";i:0;s:12:\"registerDate\";N;s:13:\"lastvisitDate\";N;s:10:\"activation\";N;s:6:\"params\";N;s:6:\"groups\";a:0:{}s:5:\"guest\";i:1;s:13:\"lastResetTime\";N;s:10:\"resetCount\";N;s:10:\"\0*\0_params\";O:9:\"JRegistry\":1:{s:7:\"\0*\0data\";O:8:\"stdClass\":0:{}}s:14:\"\0*\0_authGroups\";N;s:14:\"\0*\0_authLevels\";a:3:{i:0;i:1;i:1;i:1;i:2;i:5;}s:15:\"\0*\0_authActions\";N;s:12:\"\0*\0_errorMsg\";N;s:10:\"\0*\0_errors\";a:0:{}s:3:\"aid\";i:0;}}',0,'','');
 INSERT INTO `cc1_session` VALUES ('b3148d12fce2b793f44b4ee4a15f43b8',0,1,'1359350853','__default|a:7:{s:15:\"session.counter\";i:1;s:19:\"session.timer.start\";i:1359350853;s:18:\"session.timer.last\";i:1359350853;s:17:\"session.timer.now\";i:1359350853;s:22:\"session.client.browser\";s:72:\"Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)\";s:8:\"registry\";O:9:\"JRegistry\":1:{s:7:\"\0*\0data\";O:8:\"stdClass\":0:{}}s:4:\"user\";O:5:\"JUser\":25:{s:9:\"\0*\0isRoot\";N;s:2:\"id\";i:0;s:4:\"name\";N;s:8:\"username\";N;s:5:\"email\";N;s:8:\"password\";N;s:14:\"password_clear\";s:0:\"\";s:8:\"usertype\";N;s:5:\"block\";N;s:9:\"sendEmail\";i:0;s:12:\"registerDate\";N;s:13:\"lastvisitDate\";N;s:10:\"activation\";N;s:6:\"params\";N;s:6:\"groups\";a:0:{}s:5:\"guest\";i:1;s:13:\"lastResetTime\";N;s:10:\"resetCount\";N;s:10:\"\0*\0_params\";O:9:\"JRegistry\":1:{s:7:\"\0*\0data\";O:8:\"stdClass\":0:{}}s:14:\"\0*\0_authGroups\";N;s:14:\"\0*\0_authLevels\";a:3:{i:0;i:1;i:1;i:1;i:2;i:5;}s:15:\"\0*\0_authActions\";N;s:12:\"\0*\0_errorMsg\";N;s:10:\"\0*\0_errors\";a:0:{}s:3:\"aid\";i:0;}}',0,'','');
 INSERT INTO `cc1_session` VALUES ('f41bf4147135ff80efc21654858931d2',0,1,'1359350829','__default|a:7:{s:15:\"session.counter\";i:1;s:19:\"session.timer.start\";i:1359350829;s:18:\"session.timer.last\";i:1359350829;s:17:\"session.timer.now\";i:1359350829;s:22:\"session.client.browser\";s:72:\"Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)\";s:8:\"registry\";O:9:\"JRegistry\":1:{s:7:\"\0*\0data\";O:8:\"stdClass\":0:{}}s:4:\"user\";O:5:\"JUser\":25:{s:9:\"\0*\0isRoot\";N;s:2:\"id\";i:0;s:4:\"name\";N;s:8:\"username\";N;s:5:\"email\";N;s:8:\"password\";N;s:14:\"password_clear\";s:0:\"\";s:8:\"usertype\";N;s:5:\"block\";N;s:9:\"sendEmail\";i:0;s:12:\"registerDate\";N;s:13:\"lastvisitDate\";N;s:10:\"activation\";N;s:6:\"params\";N;s:6:\"groups\";a:0:{}s:5:\"guest\";i:1;s:13:\"lastResetTime\";N;s:10:\"resetCount\";N;s:10:\"\0*\0_params\";O:9:\"JRegistry\":1:{s:7:\"\0*\0data\";O:8:\"stdClass\":0:{}}s:14:\"\0*\0_authGroups\";N;s:14:\"\0*\0_authLevels\";a:3:{i:0;i:1;i:1;i:1;i:2;i:5;}s:15:\"\0*\0_authActions\";N;s:12:\"\0*\0_errorMsg\";N;s:10:\"\0*\0_errors\";a:0:{}s:3:\"aid\";i:0;}}',0,'','');
 INSERT INTO `cc1_session` VALUES ('fdb1b4ffabe7ea61037ce792e76c1e04',0,1,'1359350797','__default|a:7:{s:15:\"session.counter\";i:1;s:19:\"session.timer.start\";i:1359350797;s:18:\"session.timer.last\";i:1359350797;s:17:\"session.timer.now\";i:1359350797;s:22:\"session.client.browser\";s:72:\"Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)\";s:8:\"registry\";O:9:\"JRegistry\":1:{s:7:\"\0*\0data\";O:8:\"stdClass\":0:{}}s:4:\"user\";O:5:\"JUser\":25:{s:9:\"\0*\0isRoot\";N;s:2:\"id\";i:0;s:4:\"name\";N;s:8:\"username\";N;s:5:\"email\";N;s:8:\"password\";N;s:14:\"password_clear\";s:0:\"\";s:8:\"usertype\";N;s:5:\"block\";N;s:9:\"sendEmail\";i:0;s:12:\"registerDate\";N;s:13:\"lastvisitDate\";N;s:10:\"activation\";N;s:6:\"params\";N;s:6:\"groups\";a:0:{}s:5:\"guest\";i:1;s:13:\"lastResetTime\";N;s:10:\"resetCount\";N;s:10:\"\0*\0_params\";O:9:\"JRegistry\":1:{s:7:\"\0*\0data\";O:8:\"stdClass\":0:{}}s:14:\"\0*\0_authGroups\";N;s:14:\"\0*\0_authLevels\";a:3:{i:0;i:1;i:1;i:1;i:2;i:5;}s:15:\"\0*\0_authActions\";N;s:12:\"\0*\0_errorMsg\";N;s:10:\"\0*\0_errors\";a:0:{}s:3:\"aid\";i:0;}}',0,'','');
+=======
+INSERT INTO `cc1_session` VALUES ('f74d7f54b85de245a5945705cc5e6ee6',0,1,'1359338802','__default|a:7:{s:15:\"session.counter\";i:1;s:19:\"session.timer.start\";i:1359338801;s:18:\"session.timer.last\";i:1359338801;s:17:\"session.timer.now\";i:1359338801;s:22:\"session.client.browser\";s:83:\"Mozilla/5.0 (Macintosh; Intel Mac OS X 10.7; rv:14.0) Gecko/20100101 Firefox/14.0.1\";s:8:\"registry\";O:9:\"JRegistry\":1:{s:7:\"\0*\0data\";O:8:\"stdClass\":0:{}}s:4:\"user\";O:5:\"JUser\":25:{s:9:\"\0*\0isRoot\";b:0;s:2:\"id\";i:0;s:4:\"name\";N;s:8:\"username\";N;s:5:\"email\";N;s:8:\"password\";N;s:14:\"password_clear\";s:0:\"\";s:8:\"usertype\";N;s:5:\"block\";N;s:9:\"sendEmail\";i:0;s:12:\"registerDate\";N;s:13:\"lastvisitDate\";N;s:10:\"activation\";N;s:6:\"params\";N;s:6:\"groups\";a:0:{}s:5:\"guest\";i:1;s:13:\"lastResetTime\";N;s:10:\"resetCount\";N;s:10:\"\0*\0_params\";O:9:\"JRegistry\":1:{s:7:\"\0*\0data\";O:8:\"stdClass\":0:{}}s:14:\"\0*\0_authGroups\";a:2:{i:0;i:1;i:1;i:9;}s:14:\"\0*\0_authLevels\";a:3:{i:0;i:1;i:1;i:1;i:2;i:5;}s:15:\"\0*\0_authActions\";N;s:12:\"\0*\0_errorMsg\";N;s:10:\"\0*\0_errors\";a:0:{}s:3:\"aid\";i:0;}}',0,'','');
+>>>>>>> d58b
 /*!40000 ALTER TABLE `cc1_session` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -6561,6 +6565,10 @@ INSERT INTO `cc1_template_styles` VALUES (5,'hathor',1,'0','Hathor - Default','{
 INSERT INTO `cc1_template_styles` VALUES (6,'beez5',0,'0','Beez5 - Default','{\"wrapperSmall\":53,\"wrapperLarge\":72,\"logo\":\"images\\/sampledata\\/fruitshop\\/fruits.gif\",\"sitetitle\":\"Joomla!\",\"sitedescription\":\"Open Source Content Management\",\"navposition\":\"left\",\"html5\":0}');
 INSERT INTO `cc1_template_styles` VALUES (8,'greenleaves',0,'1','GreenLeaves - Default','{}');
 INSERT INTO `cc1_template_styles` VALUES (9,'GreenLeaves_old',0,'0','GreenLeaves - Default','{}');
+<<<<<<< HEAD
+=======
+INSERT INTO `cc1_template_styles` VALUES (10,'greenleaves2',0,'0','GreenLeaves2 - Default','{\"siteTitle\":\"\",\"siteSlogan\":\"\"}');
+>>>>>>> d58b
 INSERT INTO `cc1_template_styles` VALUES (11,'js_formula',0,'0','js_formula - Default','{\"rebrand\":\"no\",\"style\":\"Lime\",\"mootools\":\"1\",\"logo\":\"template\",\"logowidth\":\"4\",\"body_font\":\"default\",\"header_font\":\"default\",\"columns\":\"sidebar1:3;main:6;sidebar2:3\",\"doctype\":\"html5\",\"menutype\":\"accordion-open\",\"Tone\":\"\"}');
 /*!40000 ALTER TABLE `cc1_template_styles` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -6615,6 +6623,7 @@ CREATE TABLE `cc1_update_sites` (
 
 LOCK TABLES `cc1_update_sites` WRITE;
 /*!40000 ALTER TABLE `cc1_update_sites` DISABLE KEYS */;
+<<<<<<< HEAD
 INSERT INTO `cc1_update_sites` VALUES (1,'Joomla Core','collection','http://update.joomla.org/core/list.xml',1,1359339662);
 INSERT INTO `cc1_update_sites` VALUES (2,'Joomla Extension Directory','collection','http://update.joomla.org/jed/list.xml',1,1359339662);
 INSERT INTO `cc1_update_sites` VALUES (3,'','collection','http://fabrikar.com/update/fabrik/package_list.xml',1,1359339662);
@@ -6622,6 +6631,15 @@ INSERT INTO `cc1_update_sites` VALUES (4,'JCE Editor Updates','extension','https
 INSERT INTO `cc1_update_sites` VALUES (7,'Accredited Joomla! Translations','collection','http://update.joomla.org/language/translationlist.xml',1,1359339662);
 INSERT INTO `cc1_update_sites` VALUES (8,'JCE Editor Updates','extension','https://www.joomlacontenteditor.net/index.php?option=com_updates&view=update&format=xml&id=1\n        ',1,1359339664);
 INSERT INTO `cc1_update_sites` VALUES (9,'Macrotone Issue Tracker Update','extension','http://www.macrotoneconsulting.co.uk/extensions/update_com_issuetracker.xml',1,1359339664);
+=======
+INSERT INTO `cc1_update_sites` VALUES (1,'Joomla Core','collection','http://update.joomla.org/core/list.xml',1,1358633740);
+INSERT INTO `cc1_update_sites` VALUES (2,'Joomla Extension Directory','collection','http://update.joomla.org/jed/list.xml',1,1358633740);
+INSERT INTO `cc1_update_sites` VALUES (3,'','collection','http://fabrikar.com/update/fabrik/package_list.xml',1,1358633740);
+INSERT INTO `cc1_update_sites` VALUES (4,'JCE Editor Updates','extension','https://www.joomlacontenteditor.net/index.php?option=com_updates&view=update&format=xml&id=1',1,1358633740);
+INSERT INTO `cc1_update_sites` VALUES (6,'BS MyJspace Update Site','extension','http://softs.saulme.fr/download/download.php?h=text/plain&d=myjspace-update.xml',1,1358633740);
+INSERT INTO `cc1_update_sites` VALUES (7,'Accredited Joomla! Translations','collection','http://update.joomla.org/language/translationlist.xml',1,1358633740);
+INSERT INTO `cc1_update_sites` VALUES (8,'JCE Editor Updates','extension','https://www.joomlacontenteditor.net/index.php?option=com_updates&view=update&format=xml&id=1\n        ',1,1358633740);
+>>>>>>> d58b
 /*!40000 ALTER TABLE `cc1_update_sites` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -6679,7 +6697,11 @@ CREATE TABLE `cc1_updates` (
   `detailsurl` text NOT NULL,
   `infourl` text NOT NULL,
   PRIMARY KEY (`update_id`)
+<<<<<<< HEAD
 ) ENGINE=InnoDB AUTO_INCREMENT=187 DEFAULT CHARSET=utf8 COMMENT='Available Updates';
+=======
+) ENGINE=InnoDB AUTO_INCREMENT=166 DEFAULT CHARSET=utf8 COMMENT='Available Updates';
+>>>>>>> d58b
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -6852,6 +6874,7 @@ INSERT INTO `cc1_updates` VALUES (162,7,0,0,'Romanian','','pkg_ro-RO','package',
 INSERT INTO `cc1_updates` VALUES (163,3,0,0,'Fabrik validationrule - example','','example','plugin','fabrik_validationrul',0,'3.0.6.3','','http://fabrikar.com/update/fabrik/plg_validationrule_example.xml','');
 INSERT INTO `cc1_updates` VALUES (164,7,0,0,'Italian','','pkg_it-IT','package','',0,'2.5.8.2','','http://update.joomla.org/language/details/it-IT_details.xml','');
 INSERT INTO `cc1_updates` VALUES (165,7,0,0,'Romanian','','pkg_ro-RO','package','',0,'2.5.5.3','','http://update.joomla.org/language/details/ro-RO_details.xml','');
+<<<<<<< HEAD
 INSERT INTO `cc1_updates` VALUES (166,3,0,0,'Fabrik validationrule - example','','example','plugin','fabrik_validationrul',0,'3.0.6.3','','http://fabrikar.com/update/fabrik/plg_validationrule_example.xml','');
 INSERT INTO `cc1_updates` VALUES (167,7,0,0,'Italian','','pkg_it-IT','package','',0,'2.5.8.2','','http://update.joomla.org/language/details/it-IT_details.xml','');
 INSERT INTO `cc1_updates` VALUES (168,7,0,0,'Romanian','','pkg_ro-RO','package','',0,'2.5.5.3','','http://update.joomla.org/language/details/ro-RO_details.xml','');
@@ -6873,6 +6896,8 @@ INSERT INTO `cc1_updates` VALUES (183,7,0,0,'Romanian','','pkg_ro-RO','package',
 INSERT INTO `cc1_updates` VALUES (184,3,0,0,'Fabrik validationrule - example','','example','plugin','fabrik_validationrul',0,'3.0.6.3','','http://fabrikar.com/update/fabrik/plg_validationrule_example.xml','');
 INSERT INTO `cc1_updates` VALUES (185,7,0,0,'Italian','','pkg_it-IT','package','',0,'2.5.8.2','','http://update.joomla.org/language/details/it-IT_details.xml','');
 INSERT INTO `cc1_updates` VALUES (186,7,0,0,'Romanian','','pkg_ro-RO','package','',0,'2.5.5.3','','http://update.joomla.org/language/details/ro-RO_details.xml','');
+=======
+>>>>>>> d58b
 /*!40000 ALTER TABLE `cc1_updates` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -7278,7 +7303,11 @@ CREATE TABLE `cc1_users` (
 
 LOCK TABLES `cc1_users` WRITE;
 /*!40000 ALTER TABLE `cc1_users` DISABLE KEYS */;
+<<<<<<< HEAD
 INSERT INTO `cc1_users` VALUES (42,'Kevin Smith','headcritter1','kevin@cathys-critters.com','d79fe1d678a33d32feda30bb0db051cf:2QnOno5z18mOFMKQVmEsLStFtLcP5Inf','deprecated',0,1,'2011-12-21 20:37:27','2013-01-28 02:21:02','','{\"admin_style\":\"\",\"admin_language\":\"\",\"language\":\"\",\"editor\":\"\",\"helpsite\":\"\",\"timezone\":\"\"}','0000-00-00 00:00:00',0);
+=======
+INSERT INTO `cc1_users` VALUES (42,'Kevin Smith','headcritter1','kevin@cathys-critters.com','d79fe1d678a33d32feda30bb0db051cf:2QnOno5z18mOFMKQVmEsLStFtLcP5Inf','deprecated',0,1,'2011-12-21 20:37:27','2013-01-19 23:09:34','','{\"admin_style\":\"\",\"admin_language\":\"\",\"language\":\"\",\"editor\":\"\",\"helpsite\":\"\",\"timezone\":\"\"}','0000-00-00 00:00:00',0);
+>>>>>>> d58b
 INSERT INTO `cc1_users` VALUES (50,'Cathy Smith','cathysmith','cathy@cathys-critters.com','e82002e21f1b5743778567a5741f6fc5:1QGExOKun42jBim2oK0vmxo8pwuStF6B','',0,0,'2011-12-30 02:58:43','2011-12-30 02:58:59','','{\"admin_style\":\"\",\"admin_language\":\"\",\"language\":\"\",\"editor\":\"\",\"helpsite\":\"\",\"timezone\":\"\"}','0000-00-00 00:00:00',0);
 INSERT INTO `cc1_users` VALUES (51,'garzarath','garzarath','garzarath@gmail.com','23f076ff601bf99c497be6db518ed470:UmMifOljsSE80BdKHu8rsq3wdada3Gkk','',0,0,'2012-02-01 07:36:07','2012-02-01 18:08:40','','{}','0000-00-00 00:00:00',0);
 INSERT INTO `cc1_users` VALUES (53,'Ruth Bratton','headcritter2','ruthbratton@gmail.com','1156e86b17f45fe93d5985aa86fe09e9:BxYpgBruAz15PPocMHheTGrIGdepkgr7','',0,0,'2012-02-17 03:00:04','2013-01-13 22:05:41','','{\"admin_style\":\"\",\"admin_language\":\"\",\"language\":\"\",\"editor\":\"\",\"helpsite\":\"\",\"timezone\":\"America\\/New_York\"}','0000-00-00 00:00:00',0);
@@ -7612,4 +7641,8 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
+<<<<<<< HEAD
 -- Dump completed on 2013-01-27 23:43:05
+=======
+-- Dump completed on 2013-01-27 20:12:15
+>>>>>>> d58b
