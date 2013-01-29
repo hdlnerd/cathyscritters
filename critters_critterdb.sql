@@ -906,7 +906,7 @@ CREATE TABLE `cc1_critters_profile` (
   `dummy` varchar(255) DEFAULT NULL,
   `gom` tinyint(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=23 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=25 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -926,6 +926,8 @@ INSERT INTO `cc1_critters_profile` VALUES (19,'2012-09-13 14:36:00',0,'Lisa','Ca
 INSERT INTO `cc1_critters_profile` VALUES (20,'2012-09-16 21:30:00',86,'Larry','Dickinson','','','123 Larry Lane','','Plano','TX','75025','972-222-2222','214-222-2222',NULL,NULL);
 INSERT INTO `cc1_critters_profile` VALUES (21,'2012-12-03 22:28:00',155,'Sujata','Desai','','','11313 Sanabel Dr','','Dallas','TX','75218','214-221-1516','214-601-1136',NULL,NULL);
 INSERT INTO `cc1_critters_profile` VALUES (22,'2013-01-04 19:21:00',194,'Jennifer','Barnes','','','840 Equestrian Drive','','Rockwall','TX','75032','469-939-7032','469-939-7032',NULL,NULL);
+INSERT INTO `cc1_critters_profile` VALUES (23,'2013-01-15 15:29:00',218,'Kyndra','Krensavage','','','10469 FM 455','','Celina','TX','75009','972-369-9411','972-369-9411',NULL,NULL);
+INSERT INTO `cc1_critters_profile` VALUES (24,'2013-01-16 19:19:00',220,'Courtney','Bryson','','','1604 Geneva','','Plano','TX','75075','469-231-1886','469-231-1886',NULL,NULL);
 /*!40000 ALTER TABLE `cc1_critters_profile` ENABLE KEYS */;
 UNLOCK TABLES;
 
