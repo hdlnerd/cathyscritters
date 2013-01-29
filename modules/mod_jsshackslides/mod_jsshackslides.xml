@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension version="2.5" type="module" method="upgrade">
+	<name>JS Shackslides</name>
+	<creationDate>September 2012</creationDate>
+	<author>Jeremy Wilken - Joomlashack</author>
+	<authorEmail>support@joomlashack.com</authorEmail>
+	<authorUrl>http://www.joomlashack.com</authorUrl>
+	<copyright>Joomlashack</copyright>
+	<license>GNU/GPL v3 http://www.gnu.org/copyleft/gpl.html</license>
+	<version>2.2.1</version>
+	<description>
+		<![CDATA[<div style='text-align: left !important'><h3>Shackslides by Joomlashack</h3>
+		<h2>IMPORTANT - Read this if you have a previous version of Shackslides installed.</h2>
+		<p>The latest version of Shackslides includes new features such as integration with our Visionary component and support for
+			responsive templates. For this reason this version is not compatible with the previous version of Shackslides.</p>
+		<p>To avoid losing information we have not updated your previous Shackslides installation. You need to manually move your
+			previous configuration from the old version to the new version of the Module, and after that you can unintall the old version safely.</p>
+		<p>
+			Here's how to do it:
+		</p>
+		<ol>
+			<li>
+				All the basic options remain the same, so you just need to copy them from the older Shackslides.
+			</li>
+			<li>
+				The advanced configuration is the same, as well. Again, you just need to copy all the configurations from the older Shackslides.
+			</li>
+			<li>
+				There is a new set of options called "Bootstrap Options" where you can configure how Shackslides integrates with a responsive template that uses Twitter Bootstrap.
+			</li>
+			<li>
+				After you have configured and tested the new Shackslides, you can safely uninstall the previous version.
+			</li>
+		</ol>
+		<p>You can find more details about this process <a href='http://demoextensions.joomlashack.com/shackslides/27-update-from-previous-version'>here</a>.</p>
+		</div>
+		]]>
+	</description>
+	<files>
+		<filename module="mod_jsshackslides">mod_jsshackslides.php</filename>
+		<filename>helper.php</filename>
+		<filename>en-GB.mod_jsshackslides.ini</filename>
+		<filename>index.html</filename>
+		<folder>assets</folder>
+		<folder>fields</folder>
+		<folder>helpers</folder>
+		<folder>tmpl</folder>
+	</files>
+
+  <languages>
+		<language tag="en-GB">en-GB.mod_jsshackslides.ini</language>
+	</languages>
+
+	<config>
+		<fields name="params" addfieldpath="/modules/mod_jsshackslides/fields">
+			<fieldset name="basic">
+				<field name="source" type="list" default="folder" label="SHACKSLIDE_SOURCE" description="SHACKSLIDE_SOURCE_DESC">
+					<option value="folder">Folder</option>
+                    <option value="joomla">Joomla Content</option>
+                    <option value="k2">K2 Content</option>
+                    <option value="flexi">FlexiContent Content</option>
+                    <option value="visionary">Visionary Collection</option>
+				</field>
+				<field name="limit" type="text" default="5" label="LIMIT" description="LIMIT_DESC" />
+				<field name="folder_folder" type="directory" default="images" directory="images" label="FOLDER" description="FOLDER_DESC" />
+				<field name="joomla_category" type="category" extension="com_content" default="1" label="CATEGORY" description="CATEGORY_DESC" />
+				<field name="k2_category" type="k2category" default="0" label="K2_CATEGORY" description="K2_CATEGORY_DESC" />
+				<field name="flexi_category" type="flexicategory" default="" label="FLEXICONTENT_CATEGORY" description="FLEXICONTENT_CATEGORY_DESC" />
+				<field name="visionary_collection" type="visionarycollection" default="" label="VISIONARYCOLLECTION" description="VISIONARYCOLLECTION_DESC" />
+
+				<field name="ordering" type="list" default="1" label="ORDERING" description="ORDERING_DESC">
+					<option value="ordering">ORDER</option>
+					<option value="title">TITLE</option>
+					<option value="created">DATE</option>
+					<option value="hits">HITS</option>
+					<option value="RAND()">RANDOM</option>
+				</field>
+				<field name="ordering_dir" type="list" default="1" label="ORDERING_DIRECTION" description="ORDERING_DIRECTION_DESC">
+					<option value="ASC">ASCENDING</option>
+					<option value="DESC">DESCENDING</option>
+				</field>
+				<field name="featured" type="list" default="exclude" label="FEATURED" description="FEATURED_DESC">
+					<option value="exclude">Exclude</option>
+					<option value="include">Include</option>
+					<option value="only">Only Featured/Frontpage</option>
+				</field>
+			</fieldset>
+			<fieldset name="advanced">
+				<field name="moduleclass_sfx" type="text" label="COM_MODULES_FIELD_MODULECLASS_SFX_LABEL" description="COM_MODULES_FIELD_MODULECLASS_SFX_DESC" />
+				<field name="width" type="text" default="500" label="CONTAINERWIDTH" description="CONTAINERWIDTH_DESC" />
+				<field name="height" type="text" default="250" label="CONTAINERHEIGHT" description="CONTAINERHEIGHT_DESC" />
+				<field name="container" type="text" default="slider" label="CONTAINER" description="CONTAINER_DESC" />
+				<field name="main_container_class" type="text" default="" label="MAIN_CONTAINER_CLASS" description="MAIN_CONTAINER_CLASS_DESC" />
+				<field name="autoplay" type="list" default="5" label="AUTOPLAYENABLED" description="AUTOPLAYENABLED_DESC">
+					<option value="0">JDISABLED</option>
+					<option value="1">1</option>
+					<option value="2">2</option>
+					<option value="3">3</option>
+					<option value="4">4</option>
+					<option value="5">5</option>
+					<option value="6">6</option>
+					<option value="7">7</option>
+					<option value="8">8</option>
+					<option value="9">9</option>
+					<option value="10">10</option>
+					<option value="11">11</option>
+					<option value="12">12</option>
+					<option value="13">13</option>
+					<option value="14">14</option>
+					<option value="15">15</option>
+					<option value="16">16</option>
+					<option value="17">17</option>
+					<option value="18">18</option>
+					<option value="19">19</option>
+					<option value="20">20</option>
+				</field>
+				<field name="pause" type="radio" default="yes" label="AUTOPLAY_PAUSE" description="AUTOPLAY_PAUSE_DESC">
+					<option value="yes">YES</option>
+					<option value="no">NO</option>
+				</field>
+				<field name="effect" type="list" default="fade" label="EFFECT" description="EFFECT_DESC">
+					<option value="default">EFFECT_DEFAULT</option>
+					<option value="slide_bottom">EFFECT_SLIDE_BOTTOM</option>
+					<option value="slide_left">EFFECT_SLIDE_LEFT</option>
+					<option value="slide_right">EFFECT_SLIDE_RIGHT</option>
+					<option value="slide_top">EFFECT_SLIDE_TOP</option>
+					<option value="fade">EFFECT_FADE</option>
+					<option value="swirl_tl">EFFECT_SWIRL_TL</option>
+					<option value="swirl_br">EFFECT_SWIRL_BR</option>
+					<option value="random">EFFECT_RANDOM</option>
+					<option value="chess">EFFECT_CHESS</option>
+					<option value="snake">EFFECT_SNAKE</option>
+					<option value="rain">EFFECT_RAIN</option>
+				</field>
+				<field name="theme" type="list" default="gray" label="THEME" description="THEME_DESC">
+					<option value="gray">GRAY</option>
+					<option value="white">WHITE</option>
+					<option value="black">BLACK</option>
+					<option value="blue">BLUE</option>
+					<option value="green">GREEN</option>
+					<option value="orange">ORANGE</option>
+					<option value="red">RED</option>
+					<option value="brown">BROWN</option>
+				</field>
+				<field name="description" type="radio" default="yes" label="DESCRIPTIONS" description="DESCRIPTIONS_DESC">
+					<option value="yes">YES</option>
+					<option value="no">NO</option>
+				</field>
+				<field name="description_opacity" type="text" default="0.5" label="DESCRIPTION_OPACITY" description="DESCRIPTION_OPACITY_DESC" />
+				<field name="description_height" type="text" default="50" label="DESCRIPTION_HEIGHT" description="DESCRIPTION_HEIGHT_DESC" />
+				<field name="description_width" type="text" default="50" label="DESCRIPTION_WIDTH" description="DESCRIPTION_WIDTH_DESC" />
+				<field name="description_position" type="list" default="bottom" label="DESCRIPTION_POSITION" description="DESCRIPTION_POSITION_DESC">
+					<option value="bottom">Bottom</option>
+					<option value="top">Top</option>
+					<option value="left">Left</option>
+					<option value="right">Right</option>
+					<option value="above_image">ABOVE_IMAGE</option>
+					<option value="below_image">BELOW_IMAGE</option>
+					<option value="left_image">LEFT_IMAGE</option>
+					<option value="right_image">RIGHT_IMAGE</option>
+				</field>
+				<field name="description_background" type="colorpicker" default="ffffff" label="DESCRIPTION_BACKGROUND" description="DESCRIPTION_BACKGROUND_DESC" />
+				<field name="description_transparent_background" type="radio" default="no" label="DESCRIPTION_TRANSPARENT_BACKGROUND" description="DESCRIPTION_TRANSPARENT_BACKGROUND_DESC">
+					<option value="no">NO</option>
+					<option value="yes">YES</option>
+				</field>
+				<field name="description_overflow" type="radio" default="hidden" label="DESCRIPTION_OVERFLOW" description="DESCRIPTION_OVERFLOW_DESC">
+					<option value="hidden">NO</option>
+					<option value="visible">YES</option>
+				</field>
+				<field name="anchor_target" type="list" default="self" label="ANCHOR_TARGET" description="ANCHOR_TARGET_DESC">
+					<option value="self">SELF</option>
+					<option value="blank">BLANK</option>
+				</field>
+				<field name="buttons" type="radio" default="no" label="BUTTONS" description="BUTTONS_DESC">
+					<option value="yes">YES</option>
+					<option value="no">NO</option>
+				</field>
+				<field name="buttons_opacity" type="text" default="1.0" label="BUTTONS_OPACITY" description="BUTTONS_OPACITY_DESC" />
+				<field name="buttons_prev_label" type="text" default="Prev" label="BUTTON_PREV_LABEL" description="BUTTON_PREV_LABEL_DESC" />
+				<field name="buttons_next_label" type="text" default="Next" label="BUTTON_NEXT_LABEL" description="BUTTON_NEXT_LABEL_DESC" />
+
+				<field name="navigation" type="radio" default="yes" label="NAVIGATION" description="NAVIGATION_DESC">
+					<option value="yes">YES</option>
+					<option value="no">NO</option>
+				</field>
+				<field name="navigation_buttons" type="radio" default="yes" label="NAVIGATION_BUTTONS" description="NAVIGATION_BUTTONS_DESC">
+					<option value="yes">YES</option>
+					<option value="no">NO</option>
+				</field>
+				<field name="navigation_label" type="radio" default="yes" label="NAVIGATION_LABEL" description="NAVIGATION_LABEL_DESC">
+					<option value="yes">YES</option>
+					<option value="no">NO</option>
+				</field>
+				<field name="navigation_align" type="list" default="center" label="NAVIGATION_ALIGN" description="NAVIGATION_ALIGN_DESC">
+					<option value="left">LEFT</option>
+					<option value="right">RIGHT</option>
+					<option value="center">CENTER</option>
+				</field>
+				<field name="mousewheel" type="radio" default="no" label="MOUSEWHEEL" description="MOUSEWHEEL_DESC">
+					<option value="yes">YES</option>
+					<option value="no">NO</option>
+				</field>
+				<field name="extra_container" type="radio" default="no" label="EXTRA_CONTAINER" description="EXTRA_CONTAINER_DESC">
+					<option value="yes">YES</option>
+					<option value="no">NO</option>
+				</field>
+				<field name="extra_container_class" type="text" deafult="" label="EXTRA_CONTAINER_CLASS" description="EXTRA_CONTAINER_CLASS_DESC" />
+			</fieldset>
+			<fieldset name='bootstrap' label="BOOTSTRAP_OPTIONS_LABEL">
+				<field name="enable_bootstrap_styles" type="radio" default="no" label="ENABLE_BOOTSTRAP_STYLES" description="ENABLE_BOOTSTRAP_STYLES_DESC">
+					<option value="yes">YES</option>
+					<option value="no">NO</option>
+				</field>
+			</fieldset>
+		</fields>
+	</config>
+</extension>
