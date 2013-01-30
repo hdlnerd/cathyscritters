@@ -17,3 +17,6 @@ libraries/dompdf/lib/fonts/log.htm
 !.htaccess
 temp.sql
 critters_critterdb_bak.sql
+backup_db.sh
+dump_db.sh
+restore_db.sh
