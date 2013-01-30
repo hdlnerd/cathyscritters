@@ -6,6 +6,8 @@ configuration.php
 *.log
 cache/*
 logs
+my_error_log
+administrator/my_error_log
 /tmp
 libraries/dompdf/lib/fonts/log.htm
 
