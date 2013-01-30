@@ -16,3 +16,4 @@ libraries/dompdf/lib/fonts/log.htm
 !.gitignore
 !.htaccess
 temp.sql
+critters_critterdb_bak.sql
