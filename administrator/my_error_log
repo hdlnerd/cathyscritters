@@ -258,3 +258,5 @@
 [29-Jan-2013 14:58:04] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/sites/cathyscritters.com/components/com_fabrik/models/list.php on line 9246
 [29-Jan-2013 16:33:13] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/sites/cathyscritters.com/components/com_fabrik/models/list.php on line 9246
 [29-Jan-2013 16:33:21] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/sites/cathyscritters.com/components/com_fabrik/models/list.php on line 9246
+[31-Jan-2013 09:23:04] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/sites/cathyscritters.com/components/com_fabrik/models/list.php on line 9246
+[31-Jan-2013 09:23:13] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/sites/cathyscritters.com/components/com_fabrik/models/list.php on line 9246
