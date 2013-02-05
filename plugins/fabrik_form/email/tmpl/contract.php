@@ -126,7 +126,7 @@
 	$miles = $this->data['distance_one_way'];
 	if ($miles > 40)
 	{
-		$travel_fee = $miles*2;
+		$travel_fee = $miles*1.5;
 		$travel_fee_line = "Travel fee (\$1.50/mile, outside a 40-mile radius): \$$travel_fee.<br>";
 	} else {
 		$travel_fee = 0;
