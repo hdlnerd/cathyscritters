@@ -47,11 +47,18 @@
 	$miles           = $this->data['distance_one_way'];
 	$cityfee          = $this->data['reservations_cityfees'];
 
+	$date_header = date('l, F d, Y', strtotime($event_date));
+
 	// event_date comes from a date-picker
 	$event_date = substr($this->data['reservations_partydate'], 0, 10);
-	$date_header = date('l, F d, Y', strtotime($event_date));
+	// start time is a string
 	$start_time = $this->data['reservations_partytime'];
-	$timespan = "$start_time for $duration hours";
+
+	$start_time_str = date("h:i A", strtotime($start_time));
+	$end_time_str = date("h:i A", strtotime($start_time . " + $duration hours"));
+
+	$timespan = "$start_time_str - $end_time_str";
+
 
 	error_log("Dump of database variables.");
 	error_log("Package #:".$base_package);
@@ -115,7 +122,7 @@
 	$miles = $this->data['distance_one_way'];
 	if ($miles > 40)
 	{
-		$travel_fee = $miles*2;
+		$travel_fee = $miles*1.5;
 		$travel_fee_line = "Travel fee (\$1.5/mile, outside a 40-mile radius): \$$travel_fee.<br>";
 	} else {
 		$travel_fee = 0;
