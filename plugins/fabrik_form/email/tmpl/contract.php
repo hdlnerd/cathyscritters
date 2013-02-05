@@ -59,8 +59,13 @@
 
 	// event_date comes from a date-picker
 	$event_date = substr($this->data['reservations_partydate'], 0, 10);
+	// start time is a string
 	$start_time = $this->data['reservations_partytime'];
-	$timespan = "$start_time for $duration hours";
+
+	$start_time_str = date("h:i A", strtotime($start_time));
+	$end_time_str = date("h:i A", strtotime($start_time . " + $duration hours"));
+
+	$timespan = "$start_time_str - $end_time_str";
 
 	error_log("Dump of database variables.");
 	error_log("Package #:".$base_package);
