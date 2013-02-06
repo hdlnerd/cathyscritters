@@ -47,15 +47,15 @@
 	$miles           = $this->data['distance_one_way'];
 	$cityfee          = $this->data['reservations_cityfees'];
 
-	$date_header = date('l, F d, Y', strtotime($event_date));
-
 	// event_date comes from a date-picker
 	$event_date = substr($this->data['reservations_partydate'], 0, 10);
+	$date_header = date('l, F d, Y', strtotime($event_date));
+
 	// start time is a string
 	$start_time = $this->data['reservations_partytime'];
 
-	$start_time_str = date("h:i A", strtotime($start_time));
-	$end_time_str = date("h:i A", strtotime($start_time . " + $duration hours"));
+	$start_time_str = date("g:i A", strtotime($start_time));
+	$end_time_str = date("g:i A", strtotime($start_time . " + $duration hours"));
 
 	$timespan = "$start_time_str - $end_time_str";
 

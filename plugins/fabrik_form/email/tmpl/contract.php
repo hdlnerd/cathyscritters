@@ -62,8 +62,8 @@
 	// start time is a string
 	$start_time = $this->data['reservations_partytime'];
 
-	$start_time_str = date("h:i A", strtotime($start_time));
-	$end_time_str = date("h:i A", strtotime($start_time . " + $duration hours"));
+	$start_time_str = date("g:i A", strtotime($start_time));
+	$end_time_str = date("g:i A", strtotime($start_time . " + $duration hours"));
 
 	$timespan = "$start_time_str - $end_time_str";
 
