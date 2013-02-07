@@ -47,17 +47,23 @@
 	$miles           = $this->data['distance_one_way'];
 	$cityfee          = $this->data['reservations_cityfees'];
 
+
 	// event_date comes from a date-picker
 	$event_date = substr($this->data['reservations_partydate'], 0, 10);
-	$date_header = date('l, F d, Y', strtotime($event_date));
-
 	// start time is a string
 	$start_time = $this->data['reservations_partytime'];
 
 	$start_time_str = date("g:i A", strtotime($start_time));
-	$end_time_str = date("g:i A", strtotime($start_time . " + $duration hours"));
+	$end_time_eval_str = $start_time . " + $duration hours";
+
+	// Add hours * min/hour * sec/min
+	$start_time_num = strtotime($start_time);
+	$start_time_str = date("g:i A", $start_time_num);
+	$end_time_num = $start_time_num + 60 * 60 * $duration;
+	$end_time_str = date("g:i A", $end_time_num);
 
 	$timespan = "$start_time_str - $end_time_str";
+
 
 
 	error_log("Dump of database variables.");
@@ -189,23 +195,26 @@
 	$user =& JFactory::getUser();
 	$email = $user->email;
 
+	$formatted_party_date = date('l, F d, Y', strtotime($event_date));
+
 echo <<<EOD
 <h3>Cathy's Critters has sent you this contract: </h3>
 <TABLE WIDTH=745 BORDER=0 bgcolor="white" cellpadding="13" cellspacing="13">
 	<TR>
 		<TD>
-			<center>$date_header</center>
+			<center>$formatted_party_date</center>
 			<div align=right>
-				$surname <br>
+				$surname, $orgname <br>
 				$timespan <br>
-				$party_package at $base_event_price <br>
+				$party_package at \$$base_event_price <br>
 				$travel_fee_line
 				$concrete_setup_line
 				<br>
 			</div>
 			<center><h3>Cathy's Critters - Event Contract</h3></center>
 			<font size=3>
-				<b>$firname &nbsp;$surname </font> </b> <br>
+				<b>$orgname <br>
+				<b>$firname $surname, $title <br>
 			<font size=2>Event date:&nbsp;$event_date &nbsp;&nbsp;&nbsp; Event time:&nbsp;$timespan<br>
 			<br>
 			<br>
@@ -215,7 +224,7 @@ echo <<<EOD
 			$billing_address_block
 			<br>
 			Price quotation<br>
-			Base Price:&nbsp;&nbsp;$party_package at $base_price<br>
+			Base Price:&nbsp;&nbsp;$party_package at \$$base_event_price<br>
 			$travel_fee_line
 			$concrete_setup_line
 			<br>
