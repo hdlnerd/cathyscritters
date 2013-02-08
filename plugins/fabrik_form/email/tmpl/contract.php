@@ -224,7 +224,7 @@ echo <<<EOD
 			<center><h3>Cathy's Critters - Private Event Contract</h3></center>
 			<font size=3>
 				<b>$firname &nbsp;$surname </font> </b> <br>
-			<font size=2>Event date:&nbsp;$event_date &nbsp;&nbsp;&nbsp; Event time:&nbsp;$timespan<br>
+			<font size=2>Event date:&nbsp;$formatted_party_date &nbsp;&nbsp;&nbsp; Event time:&nbsp;$timespan<br>
 			<br>
 			$birthday_block<br>
 			<b>Party Locaton:</b><br>

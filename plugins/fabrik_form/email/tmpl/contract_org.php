@@ -215,7 +215,7 @@ echo <<<EOD
 			<font size=3>
 				<b>$orgname <br>
 				<b>$firname $surname, $title <br>
-			<font size=2>Event date:&nbsp;$event_date &nbsp;&nbsp;&nbsp; Event time:&nbsp;$timespan<br>
+			<font size=2>Event date:&nbsp;$formatted_party_date &nbsp;&nbsp;&nbsp; Event time:&nbsp;$timespan<br>
 			<br>
 			<br>
 			<b>Party Locaton:<br>
@@ -227,7 +227,6 @@ echo <<<EOD
 			Base Price:&nbsp;&nbsp;$party_package at \$$base_event_price<br>
 			$travel_fee_line
 			$concrete_setup_line
-			<br>
 			Total price \$$package_price<br>
 			Deposit Due: \$$deposit_due<br>
 			Remainder due at event \$$remainder_due<br>
