@@ -116,12 +116,13 @@
 		$party_address_block .= ($address2=='')?"":"$address2<br>";
 		$party_address_block .= "$city, $state  $zipcode<br>";
 	} else if ($ishomeaddress == 2) {
-		$billing_address_block = "$address1<br>";
+		$billing_address_block = "Billing address: <br>";
+		$billing_address_block .= "$address1<br>";
 		$billing_address_block .= ($address2=='')?"":"$address2<br>";
 		$billing_address_block .= "$city, $state  $zipcode<br>";
 
 		$party_address_block = "$party_address1<br>";
-		$party_address_block .= "$party_address2<br>";
+		$party_address_block .= ($party_address2=='')?"":"$party_address2<br>";
 		$party_address_block .= "$party_city, $party_state  $party_zipcode<br>";
 	}
 	
@@ -216,12 +217,12 @@ echo <<<EOD
 				<b>$orgname <br>
 				<b>$firname $surname, $title <br>
 			<font size=2>Event date:&nbsp;$formatted_party_date &nbsp;&nbsp;&nbsp; Event time:&nbsp;$timespan<br>
+			$billing_address_block
 			<br>
 			<br>
 			<b>Party Locaton:<br>
 			$party_address_block
 			<br>
-			$billing_address_block
 			<br>
 			Price quotation<br>
 			Base Price:&nbsp;&nbsp;$party_package at \$$base_event_price<br>

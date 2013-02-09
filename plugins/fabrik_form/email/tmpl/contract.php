@@ -119,18 +119,19 @@
 	$ishomeaddress = $this->data['ishomeaddress'][0];
 	//1 => is home; 2 => is elsewhere
 	if ($ishomeaddress == 1){
-		$billing_address_block = "<b>Billing address same as party location.</b><br>";
+		$billing_address_block = "<strong>Billing address same as party location.</strong><br>";
 
 		$party_address_block = "$address1<br>";
 		$party_address_block .= ($address2=='')?"":"$address2<br>";
 		$party_address_block .= "$city, $state  $zipcode<br>";
 	} else if ($ishomeaddress == 2) {
+		$billing_address_block = "<strong>Billing address:</strong> <br>";
 		$billing_address_block = "$address1<br>";
 		$billing_address_block .= ($address2=='')?"":"$address2<br>";
 		$billing_address_block .= "$city, $state  $zipcode<br>";
 
 		$party_address_block = "$party_address1<br>";
-		$party_address_block .= "$party_address2<br>";
+		$party_address_block .= ($party_address2=='')?"":"$party_address2<br>";
 		$party_address_block .= "$party_city, $party_state  $party_zipcode<br>";
 	}
 	
