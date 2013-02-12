@@ -107,7 +107,7 @@ function updatePrice () {
 				travel = Math.round(r.route.distance);
 				toll_charge_estimate = r.route.hasTollRoad?5:0;
 				$('cc1_critters_reservations___distance_one_way').value = travel;
-				$('cc1_critters_reservations___toll-roads').value = toll_charge_estimate;
+				$('cc1_critters_reservations___toll_roads').value = toll_charge_estimate;
 
 				var url_pz='index.php?option=com_fabrik&format=raw&task=plugin.userAjax&method=calcPZBasePrice';
 	

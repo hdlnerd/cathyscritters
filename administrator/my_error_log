@@ -260,3 +260,20 @@
 [29-Jan-2013 16:33:21] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/sites/cathyscritters.com/components/com_fabrik/models/list.php on line 9246
 [31-Jan-2013 09:23:04] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/sites/cathyscritters.com/components/com_fabrik/models/list.php on line 9246
 [31-Jan-2013 09:23:13] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/sites/cathyscritters.com/components/com_fabrik/models/list.php on line 9246
+[11-Feb-2013 23:18:24] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/sites/cathyscritters.com/administrator/components/com_fabrik/models/element.php on line 1231
+[11-Feb-2013 23:18:50] PHP Warning:  mysqli_query() [<a href='function.mysqli-query'>function.mysqli-query</a>]: Empty query in /home/critters/sites/cathyscritters.com/libraries/joomla/database/database/mysqli.php on line 382
+[11-Feb-2013 23:19:04] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/sites/cathyscritters.com/administrator/components/com_fabrik/models/element.php on line 1231
+[11-Feb-2013 23:19:25] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/sites/cathyscritters.com/administrator/components/com_fabrik/models/element.php on line 1231
+[11-Feb-2013 23:22:24] PHP Warning:  json_decode() expects parameter 1 to be string, array given in /home/critters/sites/cathyscritters.com/administrator/components/com_fabrik/models/fields/fabrikmodalrepeat.php on line 74
+[11-Feb-2013 23:32:26] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/sites/cathyscritters.com/components/com_fabrik/models/list.php on line 9246
+[11-Feb-2013 23:40:36] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/sites/cathyscritters.com/administrator/components/com_fabrik/models/element.php on line 1231
+[11-Feb-2013 23:40:36] PHP Warning:  json_decode() expects parameter 1 to be string, array given in /home/critters/sites/cathyscritters.com/components/com_fabrik/models/list.php on line 9397
+[11-Feb-2013 23:42:11] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/sites/cathyscritters.com/administrator/components/com_fabrik/models/element.php on line 1231
+[11-Feb-2013 23:42:11] PHP Warning:  Missing argument 1 for plgFabrik_Element::onSave(), called in /home/critters/sites/cathyscritters.com/plugins/fabrik_element/databasejoin/databasejoin.php on line 2216 and defined in /home/critters/sites/cathyscritters.com/components/com_fabrik/models/element.php on line 3671
+[11-Feb-2013 23:43:39] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/sites/cathyscritters.com/administrator/components/com_fabrik/models/element.php on line 1231
+[11-Feb-2013 23:43:40] PHP Warning:  Missing argument 1 for plgFabrik_Element::onSave(), called in /home/critters/sites/cathyscritters.com/plugins/fabrik_element/databasejoin/databasejoin.php on line 2216 and defined in /home/critters/sites/cathyscritters.com/components/com_fabrik/models/element.php on line 3671
+[11-Feb-2013 23:49:36] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/sites/cathyscritters.com/administrator/components/com_fabrik/models/element.php on line 1231
+[11-Feb-2013 23:55:43] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/sites/cathyscritters.com/administrator/components/com_fabrik/models/element.php on line 1231
+[11-Feb-2013 23:57:24] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/sites/cathyscritters.com/administrator/components/com_fabrik/models/element.php on line 1231
+[12-Feb-2013 00:02:35] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/sites/cathyscritters.com/administrator/components/com_fabrik/models/element.php on line 1231
+[12-Feb-2013 00:02:35] PHP Warning:  Missing argument 1 for plgFabrik_Element::onSave(), called in /home/critters/sites/cathyscritters.com/plugins/fabrik_element/databasejoin/databasejoin.php on line 2216 and defined in /home/critters/sites/cathyscritters.com/components/com_fabrik/models/element.php on line 3671
