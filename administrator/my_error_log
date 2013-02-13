@@ -277,3 +277,7 @@
 [11-Feb-2013 23:57:24] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/sites/cathyscritters.com/administrator/components/com_fabrik/models/element.php on line 1231
 [12-Feb-2013 00:02:35] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/sites/cathyscritters.com/administrator/components/com_fabrik/models/element.php on line 1231
 [12-Feb-2013 00:02:35] PHP Warning:  Missing argument 1 for plgFabrik_Element::onSave(), called in /home/critters/sites/cathyscritters.com/plugins/fabrik_element/databasejoin/databasejoin.php on line 2216 and defined in /home/critters/sites/cathyscritters.com/components/com_fabrik/models/element.php on line 3671
+[12-Feb-2013 22:59:34] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/sites/cathyscritters.com/components/com_fabrik/models/list.php on line 9246
+[12-Feb-2013 22:59:52] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/sites/cathyscritters.com/components/com_fabrik/models/list.php on line 9246
+[12-Feb-2013 23:00:49] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/sites/cathyscritters.com/components/com_fabrik/models/list.php on line 9246
+[12-Feb-2013 23:00:59] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/sites/cathyscritters.com/components/com_fabrik/models/list.php on line 9246
