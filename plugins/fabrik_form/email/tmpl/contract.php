@@ -4,9 +4,7 @@
  -->
 
 <?php
-//REM// Open database and common variable definitions
 	$db =& JFactory::getDBO();
-
 	require_once("contract_lib.php");
 
 	$pictures_data    = $this->data['reservations_photo_raw'];

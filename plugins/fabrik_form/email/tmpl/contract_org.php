@@ -5,7 +5,7 @@
 
 <?php
 	$db =& JFactory::getDBO();
-	require_once "contract_lib.php";
+	require_once("contract_lib.php");
 
 	$orgname = $this->data['organization'];
 	$title   = $this->data['org_title'];
