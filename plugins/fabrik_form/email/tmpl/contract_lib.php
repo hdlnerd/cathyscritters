@@ -83,7 +83,7 @@
 		$party_address_block .= "</span>";
 	} else if ($ishomeaddress == 2) {
 		$billing_address_block = "Billing address:<br>";
-		$billing_address_block = "<b>$address1<br>";
+		$billing_address_block .= "<b>$address1<br>";
 		$billing_address_block .= ($address2=='')?"":"$address2<br>";
 		$billing_address_block .= "$city, $state  $zipcode<br></b>";
 

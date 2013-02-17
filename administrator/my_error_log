@@ -1,2 +1,8 @@
 [02-Feb-2013 22:55:40] PHP Warning:  file_put_contents(/home/critters/sites/cathys-critters.com/configuration.php) [<a href='function.file-put-contents'>function.file-put-contents</a>]: failed to open stream: Permission denied in /home/critters/sites/cathys-critters.com/libraries/joomla/filesystem/file.php on line 418
 [02-Feb-2013 22:55:50] PHP Warning:  file_put_contents(/home/critters/sites/cathys-critters.com/configuration.php) [<a href='function.file-put-contents'>function.file-put-contents</a>]: failed to open stream: Permission denied in /home/critters/sites/cathys-critters.com/libraries/joomla/filesystem/file.php on line 418
+[17-Feb-2013 13:37:56] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/sites/cathyscritters.com/administrator/components/com_fabrik/models/element.php on line 1231
+[17-Feb-2013 13:39:11] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/sites/cathyscritters.com/administrator/components/com_fabrik/models/element.php on line 1231
+[17-Feb-2013 13:42:50] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/sites/cathyscritters.com/administrator/components/com_fabrik/models/element.php on line 1231
+[17-Feb-2013 13:43:26] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/sites/cathyscritters.com/administrator/components/com_fabrik/models/element.php on line 1231
+[17-Feb-2013 13:44:41] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/sites/cathyscritters.com/administrator/components/com_fabrik/models/element.php on line 1231
+[17-Feb-2013 13:50:16] PHP Warning:  Invalid argument supplied for foreach() in /home/critters/sites/cathyscritters.com/administrator/components/com_fabrik/models/element.php on line 1231

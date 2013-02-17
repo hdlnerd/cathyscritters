@@ -28,7 +28,8 @@ echo <<<EOD
 		<TD>
 			<center>$formatted_party_date</center>
 			<div align=right>
-				<b>$surname, $orgname</b> <br>
+				<b>$surname</b> <br>
+				<b>$orgname</b> <br>
 				<b>$timespan </b> <br>
 				<b>$party_package</b> at <b>\$$base_event_price</b> <br>
 				$travel_fee_line
@@ -39,7 +40,8 @@ echo <<<EOD
 			<font size=3>
 				<b>$orgname</b> <br>
 				<b>$firname $surname, $title</b> <br>
-			<font size=2>Event date:&nbsp;$formatted_party_date &nbsp;&nbsp;&nbsp; Event time:&nbsp;$timespan<br>
+			<font size=2>Event date: $formatted_party_date  Event time: $timespan<br>
+			<br>
 			$billing_address_block
 			<br>
 			<br>
