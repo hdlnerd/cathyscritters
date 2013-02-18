@@ -26,21 +26,45 @@ function getSelectedRadio(buttonGroup) {
    return -1;
 } // Ends the "getSelectedRadio" function
 
+function emptyDropdown ( box ) {
+	// Set each option to null thus removing it
+	while (box.options.length)
+		box.options[0] = null;
+}
+
+function fillDropdown (box, arr) {
+	// Add default "please select" option.  May make this
+	// feature optional if we ever do a dropdown that doesn't
+	// require it.
+	option = new Option( "Please Select", 0 );
+	box.options[box.length] = option;
+
+	for (i = 0; i < arr.length; i++) {
+		// Create a new drop down option with the
+		// display text and value from arr
+		option = new Option( arr[i][1], arr[i][0] );
+		// Add to the end of the existing options
+		box.options[box.length] = option;
+	}
+	// Preselect option 0
+	box.selectedIndex=0;
+}
+
 function calcPlanoCharges (check_zip) {
 	var plano_zips =["75023", "75024", "75025", "75026", "75074",
 	                 "75075", "75086", "75093", "75094"]
-	console.log("Checking ZIP code");
-	console.log(plano_zips.length);
-	console.log("Yes ="+plano_zips.contains("75023"));
-	console.log("No ="+plano_zips.contains("75407"));
+	//console.log("Checking ZIP code");
+	//console.log(plano_zips.length);
+	//console.log("Yes ="+plano_zips.contains("75023"));
+	//console.log("No ="+plano_zips.contains("75407"));
 
   if (plano_zips.contains(check_zip)) {
-		console.log("Found a Plano ZIP" + check_zip);
+		//console.log("Found a Plano ZIP" + check_zip);
 		cityfee = 100;
 		$('cc1_critters_reservations___reservations_isplano').getParent('fieldset').slide('in');
 		$('cc1_critters_reservations___reservations_cityfees').value = 100;
 	} else {
-		console.log("Found a non-Plano ZIP" + check_zip);
+		//console.log("Found a non-Plano ZIP" + check_zip);
 		cityfee = 0;
 		$('cc1_critters_reservations___reservations_isplano').getParent('fieldset').slide('out');
 		$('cc1_critters_reservations___reservations_cityfees').value = 0;
@@ -97,7 +121,7 @@ function updatePrice () {
 	//var url_mq='http://platform.beta.mapquest.com/directions/v1/route?key='+key;
 	var url_mq='http://www.mapquestapi.com/directions/v1/route?key='+key;
 	data_mq = 'from='+from_addr+'&to='+to_addr+'&ambiguities=ignore';
-	console.log("Data to mapquest: "+data_mq);
+	//console.log("Data to mapquest: "+data_mq);
 	//alert("Data to mapquest: "+data_mq);
 
 	// This is super-ugly.  I haven't figured out the "correct" way to do chained requests, so
@@ -123,7 +147,7 @@ function updatePrice () {
 				console.log("Data to calcPZBasePrice= "+url_pz+data_pz);
 				new Request(
 					{url: url_pz, method: 'post', 
-						onComplete:
+						onSuccess:
 						function(r){
 							$('cc1_critters_reservations___reservations_base_price').value = r;
 							$('cc1_critters_reservations___reservations_deposit_due').value = r/2;
@@ -131,7 +155,6 @@ function updatePrice () {
 					}
 				).send(data_pz);
 			},
-			onComplete: function(r){ },
 			onFailure: function(r){
 				alert("Mapquest request failed. Bad URL?"+url_mq);
 			}
@@ -139,4 +162,42 @@ function updatePrice () {
 	);
 
 	newreq.send(data_mq);
+}
+
+// This function populates the "party duration" pulldown with all
+// valid values available for the chosen party type.
+// For example, little rancher as a minimum time of 1.5 hr and a max of 4, so the
+// times in the pull down should be {1.5, 2, 2.5, 3, 3.5, 4}
+function popDurationPulldown () {
+	//
+	//When adding variables to the pricing formula, add a variable, gleaned from the form here...
+	//
+	var base_package = $('cc1_critters_reservations___package_basetype').getValue();
+	var coupon_code = $('cc1_critters_reservations___package_admin').getValue();
+
+	var url_dur='index.php?option=com_fabrik&format=raw&task=plugin.userAjax&method=getValidDurations';
+	
+	data_dur='base_package='+base_package+'&coupon_code='+coupon_code;
+	
+	//alert("Data to getValidDurations= "+url_dur+":::"+data_dur);
+	new Request(
+		{url: url_dur, method: 'post', 
+			onSuccess:
+			function(r){
+				console.log("popDurationPulldown success AJAX call");
+				//console.log(r);
+				var r_array = JSON.parse(r);
+				//alert(r_array);
+				emptyDropdown ( $('cc1_critters_reservations___package_duration') );
+				fillDropdown ( $('cc1_critters_reservations___package_duration'), r_array );
+				//for ( var count = 0; count < r_array.length; count++) {
+				//	console.log(r_array[count]);
+				//}
+			},
+			onFailure:
+			function(r){
+				alert("popDurationPulldown failed AJAX call");
+			}
+		}
+	).send(data_dur);
 }
