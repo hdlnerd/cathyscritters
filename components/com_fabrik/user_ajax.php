@@ -106,25 +106,94 @@ class userAjax {
 		// Bug alert - concrete is added if selected, but we need to make sure
 		// we don't add it if the user has picked a party with no petting zoo,
 		// which hides the concrete checkbox so he can't uncheck it.
-		error_log("Computing price.", 0);
-		error_log($base_price);
-		error_log($duration);
-		error_log($addl_time_price);
-		error_log($numponies);
-		error_log($travel);
+		if ($duration == 1) {
+			// Special 1-hour price is just base price minus $50.
+			$package_price =
+				$base_price  - 50 +
+				$numponies * $addon_pony_price  +
+				$duration*$addon_pony_hour*$numponies +
+				(($pictures=='true')?($numpics*$addon_picture):0) +
+				(($concrete=='true')?50:0) +
+				(($travel > 40) ? ($travel*1.5) : 0) +
+				$cityfee;
+		} else {
+			$package_price =
+				$base_price  + 
+				($duration - 1.5) * 2 * $addl_time_price  +
+				$numponies * $addon_pony_price  +
+				($duration-1.5)*$addon_pony_hour*$numponies +
+				(($pictures=='true')?($numpics*$addon_picture):0) +
+				(($concrete=='true')?50:0) +
+				(($travel > 40) ? ($travel*1.5) : 0) +
+				$cityfee;
+		}
 		error_log("--------------");
-		$package_price =
-			$base_price  + 
-			($duration - 1.5) * 2 * $addl_time_price  +
-			$numponies * $addon_pony_price  +
-			($duration-1.5)*$addon_pony_hour*$numponies +
-			(($pictures=='true')?($numpics*$addon_picture):0) +
-			(($concrete=='true')?50:0) +
-			(($travel > 40) ? ($travel*1.5) : 0) +
-			$cityfee;
-		//echo $base_price + "|" + $duration + "|" + $numponies + "|" + $numpics + "|" + $concrete + "|" + $travel;
+		error_log("Computing price.", 0);
+		error_log("base = ".$base_price);
+		error_log("duration = ".$duration);
+		error_log("half hour price = ".$addl_time_price);
+		error_log("num ponies = ".$numponies);
+		error_log("travel fee = ".$travel);
+		error_log("city fee = ".$cityfee);
+		error_log("concrete fee = ".$concrete);
+		error_log("picture = ".$pictures);
+		error_log("num pictures = ".$numpics);
+		error_log("price per picture = ".$addon_picture);
+		error_log("total price = ".$package_price);
+		error_log("--------------");
 
     echo $package_price;
+	}
+
+	// base_package is the numeric ID field that indexes the critters_base_price table.
+	// We will return an array of tuplets giving all the valid party durations.
+	// For Little Rancher, for example, return value r should be:
+	// r[0]->duration_num = 1.5
+	// r[0]->duration_str = '1:30'
+	// r[1]->duration_num = 2
+	// r[1]->duration_str = '2:00'
+	// r[2]->duration_num = 2.5
+	// r[2]->duration_str = '2:30'
+	// etc...
+	function getValidDurations () {
+
+		// Left in as a reminder:  Here's the syntax to stick a message in the PHP error log,
+		// which resides in public_html/my_error_log
+		error_log("Reporting from inside getValidDurations", 0);
+
+		$db =& JFactory::getDBO();
+
+		$base_package = JRequest::getVar('base_package');
+		$coupon_code  = JRequest::getVar('coupon_code');
+
+		error_log("Base package = $base_package");
+		error_log("Coupon code  = $coupon_code");
+
+		if ($coupon_code) {
+			$min_time_permitted = 1;
+		} else {
+			$query_min = "SELECT `min_time` FROM `cc1_critters_base_price` WHERE `id` = $base_package";
+			$db->setQuery($query_min);
+			$retArr = $db->loadRow();
+			$min_time_permitted = $retArr[0];
+			// Can user print_r to print variables of pretty much any type to the log...
+			//error_log($retArr);
+		}
+
+		$query_max = "SELECT `max_time` FROM `cc1_critters_base_price` WHERE `id` = $base_package";
+		$db->setQuery($query_max);
+		$retArr = $db->loadRow();
+		$max_time_permitted = $retArr[0];
+
+		$query = "SELECT duration_num, duration_str from `cc1_critters_party_durations` WHERE
+				`duration_num` >= $min_time_permitted AND `duration_num` <= $max_time_permitted";
+
+		$db->setQuery($query);
+		$retArr = $db->loadRowList();
+
+		//error_log("Returning " . json_encode($retArr));
+
+		echo json_encode($retArr);
 	}
 }
 
