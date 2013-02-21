@@ -1,4 +1,17 @@
 <?php
+/**
+ * Fabrik List Template: IWebKit
+ *
+ * @package     Joomla
+ * @subpackage  Fabrik
+ * @copyright   Copyright (C) 2005 Fabrik. All rights reserved.
+ * @license     http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.php
+ */
+
+// No direct access
+defined('_JEXEC') or die;
+?>
+<?php
   	$document = JFactory::getDocument();
   	$document->setMetaData("apple-mobile-web-app-capable", "yes");
   	$document->setMetaData("viewport", "minimum-scale=1.0, width=device-width, maximum-scale=0.6667, user-scalable=no");
@@ -41,7 +54,7 @@ if ($this->showFilters) {
 <?php
 	foreach ($this->rows as $groupedby => $group) {
 		if ($this->isGrouped) {
-			echo "<li class=\"title\">".$this->grouptemplates[$groupedby]."</li>";
+			echo "<li class=\"title\">". '<span class="groupTitle">' .$this->grouptemplates[$groupedby]."</span></li>";
 		}
 
 		foreach ($group as $this->_row) {

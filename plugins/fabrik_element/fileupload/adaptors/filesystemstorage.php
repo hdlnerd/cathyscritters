@@ -1,5 +1,7 @@
 <?php
 /**
+ * Server File System Storage adaptor for Fabrik file upload element
+ *
  * @package     Joomla
  * @subpackage  Fabrik
  * @copyright   Copyright (C) 2005 Fabrik. All rights reserved.
@@ -187,12 +189,12 @@ class Filesystemstorage extends FabrikStorageAdaptor
 	 * @param   string  $file    file name
 	 * @param   string  $buffer  the buffer to write
 	 *
-	 * @return  void
+	 * @return  bool
 	 */
 
 	public function write($file, $buffer)
 	{
-		JFile::write($file, $buffer);
+		return JFile::write($file, $buffer);
 	}
 
 	/**
@@ -255,6 +257,9 @@ class Filesystemstorage extends FabrikStorageAdaptor
 		// $$$ rob wasnt working when getting thumb path on upload
 		$ulDir = JPath::clean($params->get('ul_directory'));
 		$ulDir = str_replace("\\", "/", $ulDir);
+
+		// If we're deleting a file, See http://fabrikar.com/forums/showthread.php?t=31715
+		$file = str_replace("\\", "/", $file);
 
 		// Replace things like $my->id may barf on other stuff
 		$afile = str_replace(JURI::root(), '', $file);

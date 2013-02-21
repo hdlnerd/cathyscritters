@@ -51,23 +51,19 @@ var FbGoogleMap = new Class({
 		'streetView': false,
 		'sensor': false,
 		'center': 0,
-		'reverse_geocode': false
+		'reverse_geocode': false,
+		'styles': []
 	},
 	
 	loadScript: function () {
-		if (typeOf(Fabrik.googleMap) === 'null') {
-			var script = document.createElement("script");
-			script.type = "text/javascript";
-			var s = this.options.sensor === false ? 'false' : 'true';
-			script.src = 'http://maps.googleapis.com/maps/api/js?sensor=' + s + '&callback=googlemapload';
-			document.body.appendChild(script);
-			Fabrik.googleMap = true;
-		}
+		var s = this.options.sensor === false ? 'false' : 'true';
+		Fabrik.loadGoogleMap(s, 'googlemapload');
 	},
 	
 	initialize: function (element, options) {
 		this.parent(element, options);
 		this.loadScript();
+		
 		// @TODO test google object when offline $type(google) isnt working
 		if (this.options.center === 1 && this.options.rowid === 0) {
 			if (geo_position_js.init()) {
@@ -147,7 +143,7 @@ var FbGoogleMap = new Class({
 					}
 				};
 			this.map = new google.maps.Map(document.id(this.element).getElement('.map'), mapOpts);
-			
+			this.map.setOptions({'styles': this.options.styles});
 			var point = new google.maps.LatLng(this.options.lat, this.options.lon);
 			var opts = {
 				map: this.map,
@@ -267,6 +263,9 @@ var FbGoogleMap = new Class({
 			}
 		}
 		this.watchTab();
+		Fabrik.addEvent('fabrik.form.page.chage.end', function (form) {
+			this.redraw();
+		}.bind(this));
 	},
 
 	radiusUpdatePosition: function () {
@@ -378,6 +377,7 @@ var FbGoogleMap = new Class({
 		var dms = this.element.getElement('.latdms');
 		var latdms = dms.get('value').replace('S', '-');
 		latdms = latdms.replace('N', '');
+		dms = this.element.getElement('.lngdms');
 		var lngdms = dms.get('value').replace('W', '-');
 		lngdms = lngdms.replace('E', '');
 
@@ -622,12 +622,18 @@ var FbGoogleMap = new Class({
 	},
     
 	watchTab: function () {
-		var tab_dl = this.element.getParent('.tabs');
-		if (tab_dl) {
-			this.options.tab_dt = this.element.getParent('.fabrikGroup').getPrevious();
-			if (!this.options.tab_dt.hasClass('open')) {
-				this.doTabBound = this.doTab.bindWithEvent(this);
-				this.options.tab_dt.addEvent('click', this.doTabBound);
+		var tab_div = this.element.getParent('.current');
+		if (tab_div) {
+			var tab_dl = tab_div.getPrevious('.tabs');
+			if (tab_dl) {
+				this.options.tab_dd = this.element.getParent('.fabrikGroup');
+				if (this.options.tab_dd.style.getPropertyValue('display') === 'none') {
+					this.options.tab_dt = tab_dl.getElementById('group' + this.groupid + '_tab');
+					if (this.options.tab_dt) {
+						this.doTabBound = this.doTab.bindWithEvent(this);
+						this.options.tab_dt.addEvent('click', this.doTabBound);
+					}
+				}
 			}
 		}
 	}

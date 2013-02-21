@@ -1,42 +1,63 @@
 <?php
 /**
- * Plugin element to render fields
- * @package fabrikar
- * @author Rob Clayburn
- * @copyright (C) Rob Clayburn
- * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
+ * Fileupload adaptor to render uploaded images
+ *
+ * @package     Joomla.Plugin
+ * @subpackage  Fabrik.element.fileupload
+ * @copyright   Copyright (C) 2005 Fabrik. All rights reserved.
+ * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
 
 // Check to ensure this file is included in Joomla!
 defined('_JEXEC') or die();
 
+/**
+ * Fileupload adaptor to render uploaded images
+ *
+ * @package     Joomla.Plugin
+ * @subpackage  Fabrik.element.fileupload
+ * @since       3.0
+ */
+
 class imageRender
 {
 
-	var $output = '';
+	/**
+	 * Render output
+	 *
+	 * @var  string
+	 */
+	public $output = '';
 
 	var $inTableView = false;
+
 	/**
-	 * @param object element model
-	 * @param object element params
-	 * @param string row data for this element
-	 * @param object all row's data
+	 * @param   object  &$model   Element model
+	 * @param   object  &$params  Element params
+	 * @param   string  $file     Row data for this element
+	 * @param   object  $thisRow  All rows data
+	 *
+	 * @return  void
 	 */
 
-	function renderListData(&$model, &$params, $file, $thisRow)
+	public function renderListData(&$model, &$params, $file, $thisRow)
 	{
 		$this->inTableView = true;
 		$this->render($model, $params, $file, $thisRow);
 	}
 
 	/**
-	 * @param object element model
-	 * @param object element params
-	 * @param string row data for this element
-	 * @param object all row's data
+	 * Render uploaded image
+	 *
+	 * @param   object  &$model   Element model
+	 * @param   object  &$parmas  Element params
+	 * @param   string  $file     Row data for this element
+	 * @param   object  $thisRow  All row's data
+	 *
+	 * @return  void
 	 */
 
-	function render(&$model, &$params, $file, $thisRow = null)
+	public function render(&$model, &$params, $file, $thisRow = null)
 	{
 		// $$$ hugh - added this hack to let people use elementname__title as a title element
 		// for the image, to show in the lightbox popup.
@@ -121,23 +142,32 @@ class imageRender
 		}
 		$file = $model->storage->preRenderPath($file);
 		$fullSize = $model->storage->preRenderPath($fullSize);
-		if ($model->isJoin())
+		if ($params->get('fu_show_image') == 0)
 		{
-			$this->output .= '<div class="fabrikGalleryImage" style="width:' . $width . 'px;height:' . $height
-				. 'px; vertical-align: middle;text-align: center;">';
-		}
-		$img = '<img class="fabrikLightBoxImage" src="' . $file . '" alt="' . strip_tags($element->label) . '" />';
-		if ($params->get('make_link', true) && !$this->fullImageInRecord($params))
-		{
-			$this->output .= '<a href="' . $fullSize . '" rel="lightbox[]" title="' . $title . '">' . $img . '</a>';
+			$fileName = explode("/", $file);
+			$fileName = array_pop($fileName);
+			$this->output .= '<a href="' . $fullSize . '">' . $fileName . '</a>';
 		}
 		else
 		{
-			$this->output .= $img;
-		}
-		if ($model->isJoin())
-		{
-			$this->output .= '</div>';
+			if ($model->isJoin())
+			{
+				$this->output .= '<div class="fabrikGalleryImage" style="width:' . $width . 'px;height:' . $height
+					. 'px; vertical-align: middle;text-align: center;">';
+			}
+			$img = '<img class="fabrikLightBoxImage" src="' . $file . '" alt="' . strip_tags($element->label) . '" />';
+			if ($params->get('make_link', true) && !$this->fullImageInRecord($params))
+			{
+				$this->output .= '<a href="' . $fullSize . '" rel="lightbox[]" title="' . $title . '">' . $img . '</a>';
+			}
+			else
+			{
+				$this->output .= $img;
+			}
+			if ($model->isJoin())
+			{
+				$this->output .= '</div>';
+			}
 		}
 	}
 

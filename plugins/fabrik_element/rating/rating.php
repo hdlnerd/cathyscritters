@@ -24,10 +24,18 @@ require_once JPATH_SITE . '/components/com_fabrik/models/element.php';
 class plgFabrik_ElementRating extends plgFabrik_Element
 {
 
-	/** @var  string  db table field type */
+	/**
+	 * Db table field type
+	 *
+	 * @var string
+	 */
 	protected $fieldDesc = 'TINYINT(%s)';
 
-	/** @var  string  db table field size */
+	/**
+	 * Db table field size
+	 *
+	 * @var string
+	 */
 	protected $fieldSize = '1';
 
 	/** @var array average ratings */
@@ -50,6 +58,8 @@ class plgFabrik_ElementRating extends plgFabrik_Element
 
 	public function renderListData($data, &$thisRow)
 	{
+		$app = JFactory::getApplication();
+		$package = $app->getUserState('com_fabrik.package', 'fabrik');
 		$user = JFactory::getUser();
 		$params = $this->getParams();
 		$ext = $params->get('rating-pngorgif', '.png');
@@ -57,7 +67,7 @@ class plgFabrik_ElementRating extends plgFabrik_Element
 		$data = FabrikWorker::JSONtoData($data, true);
 
 		$url = COM_FABRIK_LIVESITE
-			. 'index.php?option=com_fabrik&amp;format=raw&amp;view=plugin&amp;task=pluginAjax&amp;g=element&amp;plugin=rating&amp;method=ajax_rate&amp;element_id='
+			. 'index.php?option=com_' . $package . '&amp;format=raw&amp;view=plugin&amp;task=pluginAjax&amp;g=element&amp;plugin=rating&amp;method=ajax_rate&amp;element_id='
 			. $this->getElement()->id;
 		FabrikHelperHTML::addPath(COM_FABRIK_BASE . 'plugins/fabrik_element/rating/images/', 'image', 'list', false);
 		$insrc = FabrikHelperHTML::image("star_in$ext", 'list', @$this->tmpl, array(), true);
@@ -516,7 +526,6 @@ class plgFabrik_ElementRating extends plgFabrik_Element
 	{
 		$user = JFactory::getUser();
 		$params = $this->getParams();
-		$user = JFactory::getUser();
 		$id = $this->getHTMLId();
 		$list = $this->getlistModel()->getTable();
 		$ext = $params->get('rating-pngorgif', '.png');
@@ -538,7 +547,7 @@ class plgFabrik_ElementRating extends plgFabrik_Element
 	/**
 	 * Should the element's data be returned in the search all?
 	 *
-	 * @param   bool  $advancedMode  is the elements' list is advanced search all mode?
+	 * @param   bool  $advancedMode  is the elements' list is extended search all mode?
 	 *
 	 * @return  bool	true
 	 */

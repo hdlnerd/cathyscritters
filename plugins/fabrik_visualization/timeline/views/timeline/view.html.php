@@ -1,5 +1,7 @@
 <?php
 /**
+ * Fabrik Timeline Viz HTML View
+ *
  * @package     Joomla.Plugin
  * @subpackage  Fabrik.visualization.timeline
  * @copyright   Copyright (C) 2005 Fabrik. All rights reserved.
@@ -66,7 +68,7 @@ class fabrikViewTimeline extends JView
 		$srcs[] = 'media/com_fabrik/js/listfilter.js';
 		$srcs[] = 'plugins/fabrik_visualization/timeline/timeline.js';
 		$srcs[] = 'media/com_fabrik/js/advanced-search.js';
-		$srcs[] = 'media/com_fabrik/js/encoder.js';
+		//$srcs[] = 'media/com_fabrik/js/encoder.js';
 
 		$js .= $model->getFilterJs();
 		FabrikHelperHTML::script($srcs, $js);

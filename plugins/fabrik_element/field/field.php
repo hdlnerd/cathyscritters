@@ -1,5 +1,7 @@
 <?php
 /**
+ * Plugin element to render fields
+ *
  * @package     Joomla.Plugin
  * @subpackage  Fabrik.element.field
  * @copyright   Copyright (C) 2005 Fabrik. All rights reserved.
@@ -125,6 +127,10 @@ class plgFabrik_ElementField extends plgFabrik_Element
 			$bits['value'] = htmlspecialchars($value, ENT_COMPAT, 'UTF-8', false);
 		}
 		$bits['class'] .= ' ' . $params->get('text_format');
+		if ($params->get('speech', 0))
+		{
+			$bits['x-webkit-speech'] = "x-webkit-speech";
+		}
 		return $this->buildInput('input', $bits);
 	}
 

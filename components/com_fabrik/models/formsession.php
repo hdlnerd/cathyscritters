@@ -1,6 +1,7 @@
 <?php
-
 /**
+ * Fabrik Form Session Model
+ *
  * @package     Joomla
  * @subpackage  Fabrik
  * @copyright   Copyright (C) 2005 Fabrik. All rights reserved.
@@ -12,36 +13,83 @@ defined('_JEXEC') or die();
 
 jimport('joomla.application.component.model');
 
+/**
+ * Fabrik Form Session Model
+ *
+ * @package     Joomla
+ * @subpackage  Fabrik
+ * @since       3.0
+ */
+
 class FabrikFEModelFormsession extends FabModel
 {
 
+	/**
+	 * User id
+	 *
+	 * @var int
+	 */
 	protected $userid = null;
 
+	/**
+	 * Unique reference for the form sesson
+	 *
+	 * @var string
+	 */
 	protected $hash = null;
 
+	/**
+	 * Form id
+	 *
+	 * @var int
+	 */
 	protected $formid = null;
 
+	/**
+	 * Row id
+	 *
+	 * @var string
+	 */
 	protected $rowid = null;
 
-	/** @var string status message */
+	/**
+	 * Status message
+	 *
+	 * @var string
+	 */
 	public $status = null;
 
-	/** @var int status id **/
+	/**
+	 * Status id
+	 *
+	 * @var int
+	 */
 	protected $statusid = null;
 
+	/**
+	 * Formsession row
+	 *
+	 * @var JTable
+	 */
 	public $row = null;
 
 	/**
-	 * @var bool should the form store a cookie with
+	 * Should the form store a cookie with
 	 * a reference to the incomplete form data
+	 *
+	 * @var bool
 	 */
 	protected $useCookie = true;
 
-	/** var object cryptor **/
+	/**
+	 * cryptor
+	 *
+	 * @var object
+	 */
 	protected $crypt = null;
 
 	/**
-	 * constructor
+	 * Constructor
 	 */
 
 	function __construct()
@@ -64,6 +112,9 @@ class FabrikFEModelFormsession extends FabModel
 
 	public function savePage(&$formModel)
 	{
+		$app = JFactory::getApplication();
+		$package = $app->getUserState('com_fabrik.package', 'fabrik');
+
 		//need to check for encrypted vars, unencrypt them and
 		//place them back in the array
 		//$post = JRequest::get('post');
@@ -98,7 +149,7 @@ class FabrikFEModelFormsession extends FabModel
 		// $$$ hugh - if we're saving the formdata in the session, we should set 'session.on'
 		// as per The New Way we're doing redirects, etc.
 		$session = JFactory::getSession();
-		$session->set('com_fabrik.form.' . $this->getFormId() . '.session.on', true);
+		$session->set('com_' . $package . '.form.' . $this->getFormId() . '.session.on', true);
 	}
 
 	/**
@@ -242,9 +293,11 @@ class FabrikFEModelFormsession extends FabModel
 
 	public function canUseCookie()
 	{
+		$app = JFactory::getApplication();
+		$package = $app->getUserState('com_fabrik.package', 'fabrik');
 		$session = JFactory::getSession();
 		$formid = $this->getFormId();
-		if ($session->get('com_fabrik.form.' . $formid . '.session.on'))
+		if ($session->get('com_' . $package . '.form.' . $formid . '.session.on'))
 		{
 			return true;
 		}
@@ -261,7 +314,9 @@ class FabrikFEModelFormsession extends FabModel
 		// $$$ hugh - need to clear the 'session.on'.  If we're zapping the stored
 		// session form data, doesn't matter who or what set 'session.on' ... it ain't there any more.
 		$session = JFactory::getSession();
-		$session->clear('com_fabrik.form.' . $this->getFormId() . '.session.on');
+		$app = JFactory::getApplication();
+		$package = $app->getUserState('com_fabrik.package', 'fabrik');
+		$session->clear('com_' . $package . '.form.' . $this->getFormId() . '.session.on');
 		$user = JFactory::getUser();
 		$row = $this->getTable('Formsession', 'FabrikTable');
 		$hash = '';

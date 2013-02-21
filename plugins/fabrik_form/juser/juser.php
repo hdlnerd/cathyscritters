@@ -454,7 +454,8 @@ class plgFabrik_FormJUser extends plgFabrik_Form
 				$data['block'] = 1;
 			}
 			// If Auto login is activated, we need to set activation and block to 0
-			if( $autoLogin ) {
+			if ($autoLogin )
+			{
 				$data['activation'] = 0;
 				$data['block'] = 0;
 			}
@@ -539,7 +540,7 @@ class plgFabrik_FormJUser extends plgFabrik_Form
 					$data['username'], $data['password_clear']
 				);
 			}
-			elseif ( $autoLogin )
+			elseif ($autoLogin)
 			{
 				$emailSubject = JText::sprintf('COM_USERS_EMAIL_ACCOUNT_DETAILS', $data['name'], $data['sitename']);
 
@@ -770,6 +771,7 @@ class plgFabrik_FormJUser extends plgFabrik_Form
 	protected function autoLogin($formModel)
 	{
 		$app = JFactory::getApplication();
+		$package = $app->getUserState('com_fabrik.package', 'fabrik');
 
 		/* $$$ rob 04/02/2011 no longer used - instead a session var is set
 		 * com_fabrik.form.X.juser.created with values true/false.
@@ -799,7 +801,7 @@ class plgFabrik_FormJUser extends plgFabrik_Form
 		$error = $app->login($credentials, $options);
 
 		$session = JFactory::getSession();
-		$context = 'com_fabrik.form.' . $formModel->getId() . '.juser.';
+		$context = 'com_' . $package . '.form.' . $formModel->getId() . '.juser.';
 		$w = new FabrikWorker;
 		if (!JError::isError($error))
 		{

@@ -125,7 +125,7 @@ class plgFabrik_Element extends FabrikPlugin
 	 * If the element 'Include in search all' option is set to 'default' then this states if the
 	 * element should be ignored from search all.
 	 *
-	 * @var bool  True, ignore in advanced search all.
+	 * @var bool  True, ignore in extended search all.
 	 */
 	protected $ignoreSearchAllDefault = false;
 
@@ -546,10 +546,26 @@ class plgFabrik_Element extends FabrikPlugin
 				$opts->position = 'top';
 				$opts = json_encode($opts);
 				$data = '<span>' . $data . '</span>';
+
+				// See if data has an <a> tag
+				$html = new DOMDocument;
+				$html->loadXML($data);
+				$as = $html->getElementsBytagName('a');
+
 				if ($params->get('icon_hovertext', true))
 				{
+					$ahref = '#';
+					$target = '';
+					if ($as->length)
+					{
+						// Data already has an <a href="foo"> lets get that for use in hover text
+						$a = $as->item(0);
+						$ahref = $a->getAttribute('href');
+						$target = $a->getAttribute('target');
+						$target = 'target="' . $target . '"';
+					}
 					$data = htmlspecialchars($data, ENT_QUOTES);
-					$img = '<a class="fabrikTip" href="#" opts=\'' . $opts . '\' title="' . $data . '">' . $img . '</a>';
+					$img = '<a class="fabrikTip" ' . $target . ' href="' . $ahref . '" opts=\'' . $opts . '\' title="' . $data . '">' . $img . '</a>';
 				}
 				elseif (!empty($iconfile))
 				{
@@ -558,9 +574,7 @@ class plgFabrik_Element extends FabrikPlugin
 					 * we'll need to replace the text in the link with the image
 					 * After ages dicking around with a regex to do this, decided to use DOMDocument instead!
 					 */
-					$html = new DOMDocument;
-					$html->loadXML($data);
-					$as = $html->getElementsBytagName('a');
+
 					if ($as->length)
 					{
 						$img = $html->createElement('img');
@@ -769,18 +783,25 @@ class plgFabrik_Element extends FabrikPlugin
 	/**
 	 * Check user can view the read only element & view in list view
 	 *
+	 * @param   string  $view  View list/form @since 3.0.7
+	 *
 	 * @return  bool  can view or not
 	 */
 
-	public function canView()
+	public function canView($view = 'form')
 	{
-		if (!is_object($this->_access) || !array_key_exists('view', $this->_access))
+		// As list view acl is new we should inherit from the details view setting which was being applied to the list view.
+		$default = ($view === 'list') ? $this->canView() : 1;
+		$key = $view == 'form' ? 'view' : 'listview';
+		$prop = $view == 'form' ? 'view_access' : 'list_view_access';
+		if (!is_object($this->_access) || !array_key_exists($key, $this->_access))
 		{
 			$user = JFactory::getUser();
 			$groups = $user->authorisedLevels();
-			$this->_access->view = in_array($this->getParams()->get('view_access'), $groups);
+
+			$this->_access->$key = in_array($this->getParams()->get($prop, $default), $groups);
 		}
-		return $this->_access->view;
+		return $this->_access->$key;
 	}
 
 	/**
@@ -1027,6 +1048,7 @@ class plgFabrik_Element extends FabrikPlugin
 
 	public function getDefaultValue($data = array())
 	{
+
 		if (!isset($this->_default))
 		{
 			$w = new FabrikWorker;
@@ -1034,9 +1056,25 @@ class plgFabrik_Element extends FabrikPlugin
 			$default = $w->parseMessageForPlaceHolder($element->default, $data);
 			if ($element->eval == "1")
 			{
-				FabrikHelperHTML::debug($default, 'element eval default:' . $element->label);
-				$default = @eval(stripslashes($default));
-				FabrikWorker::logEval($default, 'Caught exception on eval of ' . $element->name . ': %s');
+				/**
+				 * Inline edit with a default eval'd "return FabrikHelperElement::filterValue(290);"
+				 * was causing the default to be eval'd twice (no idea y) - add in check for 'return' into eval string
+				 * see http://fabrikar.com/forums/showthread.php?t=30859
+				 */
+				if (!stristr($default, 'return'))
+				{
+					$this->_default = $default;
+				}
+				else
+				{
+					FabrikHelperHTML::debug($default, 'element eval default:' . $element->label);
+					$default = stripslashes($default);
+					$default = @eval($default);
+					FabrikWorker::logEval($default, 'Caught exception on eval of ' . $element->name . ': %s');
+
+					// test this does stop error
+					$this->_default = $default === false ? '' : $default;
+				}
 			}
 			$this->_default = $default;
 		}
@@ -1426,7 +1464,7 @@ class plgFabrik_Element extends FabrikPlugin
 						$validationHovers[] = '<li>' . $validation->getHoverText($this, $pluginc, $tmpl) . '</li>';
 					}
 					$validationHovers[] = '</ul></div>';
-					$title = implode('', $validationHovers);
+					$title = htmlspecialchars(implode('', $validationHovers),ENT_QUOTES);
 					$opts = new stdClass;
 					$opts->position = 'top';
 					$opts = json_encode($opts);
@@ -1524,7 +1562,12 @@ class plgFabrik_Element extends FabrikPlugin
 		{
 			$data = $this->getFormModel()->_data;
 		}
+		$model = $this->getFormModel();
 		$params = $this->getParams();
+		if (!$model->isEditable() && !$params->get('labelindetails'))
+		{
+			return '';
+		}
 		$w = new FabrikWorker;
 		$tip = $w->parseMessageForPlaceHolder($params->get('rollover'), $data);
 		if ($params->get('tipseval'))
@@ -2026,7 +2069,7 @@ class plgFabrik_Element extends FabrikPlugin
 			 */
 			foreach ($data as $k => $val)
 			{
-				if ($k == 'join')
+				if ($k === 'join')
 				{
 					foreach ($val as $joindata)
 					{
@@ -2334,6 +2377,7 @@ class plgFabrik_Element extends FabrikPlugin
 		$params = $this->getParams();
 		$validations = (array) $params->get('validations', 'array');
 		$usedPlugins = JArrayHelper::getValue($validations, 'plugin', array());
+		$published = JArrayHelper::getValue($validations, 'plugin_published', array());
 		$pluginManager = FabrikWorker::getPluginManager();
 		$pluginManager->getPlugInGroup('validationrule');
 		$c = 0;
@@ -2341,20 +2385,26 @@ class plgFabrik_Element extends FabrikPlugin
 
 		$dispatcher = JDispatcher::getInstance();
 		$ok = JPluginHelper::importPlugin('fabrik_validationrule');
+		$i = 0;
 		foreach ($usedPlugins as $usedPlugin)
 		{
 			if ($usedPlugin !== '')
 			{
-				$class = 'plgFabrik_Validationrule' . JString::ucfirst($usedPlugin);
-				$conf = array();
-				$conf['name'] = JString::strtolower($usedPlugin);
-				$conf['type'] = JString::strtolower('fabrik_Validationrule');
-				$plugIn = new $class($dispatcher, $conf);
-				$oPlugin = JPluginHelper::getPlugin('fabrik_validationrule', $usedPlugin);
-				$plugIn->elementModel = $this;
-				$this->_aValidations[] = $plugIn;
-				$c++;
+				$isPublished = JArrayHelper::getValue($published, $i, true);
+				if ($isPublished)
+				{
+					$class = 'plgFabrik_Validationrule' . JString::ucfirst($usedPlugin);
+					$conf = array();
+					$conf['name'] = JString::strtolower($usedPlugin);
+					$conf['type'] = JString::strtolower('fabrik_Validationrule');
+					$plugIn = new $class($dispatcher, $conf);
+					$oPlugin = JPluginHelper::getPlugin('fabrik_validationrule', $usedPlugin);
+					$plugIn->elementModel = $this;
+					$this->_aValidations[] = $plugIn;
+					$c ++;
+				}
 			}
+			$i ++;
 		}
 		return $this->_aValidations;
 	}
@@ -2446,6 +2496,19 @@ class plgFabrik_Element extends FabrikPlugin
 					{
 						$js = "if (this.getContainer().getStyle('display') !== 'none') {";
 					}
+					elseif ($jsAct->js_e_condition == 'CONTAINS')
+					{
+						$js = "if (Array.from(this.get('value')).contains('$jsAct->js_e_value')) {";
+					}
+					elseif ($jsAct->js_e_condition == '!CONTAINS')
+					{
+						$js = "if (!Array.from(this.get('value')).contains('$jsAct->js_e_value')) {";
+					}
+					// $$$ hugh if we always quote the js_e_value, numeric comparison doesn't work, as '100' < '3'.
+					// So let's assume if they use <, <=, > or >= they mean numbers.
+					elseif (in_array($jsAct->js_e_condition, array('<', '<=', '>', '>='))) {
+						$js .= "if(this.get('value').toFloat() $jsAct->js_e_condition '$jsAct->js_e_value'.toFloat()) {";
+					}
 					else
 					{
 						$js = "if (this.get('value') $jsAct->js_e_condition '$jsAct->js_e_value') {";
@@ -2483,6 +2546,13 @@ class plgFabrik_Element extends FabrikPlugin
 	protected function getDefaultFilterVal($normal = true, $counter = 0)
 	{
 		$app = JFactory::getApplication();
+
+		// Used for update col list plugin - we dont want a default value filled
+		if ($app->input->get('fabrikIngoreDefaultFilterVal', false))
+		{
+			return '';
+		}
+		$package = $app->getUserState('com_fabrik.package', 'fabrik');
 		$listModel = $this->getListModel();
 		$filters = $listModel->getFilterArray();
 
@@ -2509,7 +2579,7 @@ class plgFabrik_Element extends FabrikPlugin
 				$default = @$data[$elName]['value'];
 			}
 		}
-		$context = 'com_fabrik.list' . $listModel->getRenderContext() . '.filter.' . $elid;
+		$context = 'com_' . $package . '.list' . $listModel->getRenderContext() . '.filter.' . $elid;
 		$context .= $normal ? '.normal' : '.advanced';
 
 		// We didnt find anything - lets check the filters
@@ -2904,9 +2974,22 @@ class plgFabrik_Element extends FabrikPlugin
 
 	protected function getSubOptionValues()
 	{
-		$params = $this->getParams();
-		$opts = $params->get('sub_options', '');
-		return $opts == '' ? array() : (array) @$opts->sub_values;
+		$phpOpts = $this->getPhpOptions();
+		if (!$phpOpts)
+		{
+			$params = $this->getParams();
+			$opts = $params->get('sub_options', '');
+			$opts = $opts == '' ? array() : (array) @$opts->sub_values;
+		}
+		else
+		{
+			$opts = array();
+			foreach ($phpOpts as $phpOpt)
+			{
+				$opts[] = $phpOpt->value;
+			}
+		}
+		return $opts;
 	}
 
 	/**
@@ -2917,9 +3000,41 @@ class plgFabrik_Element extends FabrikPlugin
 
 	protected function getSubOptionLabels()
 	{
+		$phpOpts = $this->getPhpOptions();
+		if (!$phpOpts)
+		{
+			$params = $this->getParams();
+			$opts = $params->get('sub_options', '');
+			$opts = $opts == '' ? array() : (array) @$opts->sub_labels;
+		}
+		else
+		{
+			$opts = array();
+			foreach ($phpOpts as $phpOpt)
+			{
+				$opts[] = $phpOpt->text;
+			}
+		}
+		return $opts;
+	}
+
+	/**
+	 * Should we get the elements sub options via the use of eval'd parameter setting
+	 *
+	 * @since  3.0.7
+	 *
+	 * @return mixed  false if no, otherwise needs to return array of JHTML::options
+	 */
+
+	protected function getPhpOptions()
+	{
 		$params = $this->getParams();
-		$opts = $params->get('sub_options', '');
-		return $opts == '' ? array() : (array) @$opts->sub_labels;
+		$pop = $params->get('dropdown_populate', '');
+		if ($pop !== '')
+		{
+			return eval($pop);
+		}
+		return false;
 	}
 
 	/**
@@ -3132,6 +3247,32 @@ class plgFabrik_Element extends FabrikPlugin
 	}
 
 	/**
+	 * Get a readonly value for a filter, uses _getROElement() to asscertain value, adds between x & y if ranged values
+	 *
+	 * @param    mixed  $data  String or array of filter value(s)
+	 *
+	 * @since   3.0.7
+	 *
+	 * @return  string
+	 */
+
+	public function getFilterRO($data)
+	{
+		if (in_array($this->getFilterType(), array('range', 'range-hidden')))
+		{
+			$return = array();
+			foreach ($data as $d)
+			{
+				$return[] = $this->_getROElement($d);
+
+			}
+			return JText::_('COM_FABRIK_BETWEEN') . '<br />' . implode('<br />' . JText::_('COM_FABRIK_AND') . "<br />", $return);
+
+		}
+		return $this->_getROElement($data);
+	}
+
+	/**
 	 * Get options order by
 	 *
 	 * @param   string         $view   Ciew mode '' or 'filter'
@@ -3252,6 +3393,28 @@ class plgFabrik_Element extends FabrikPlugin
 			$cond = ($match == 1) ? '=' : 'contains';
 		}
 		return $cond;
+	}
+
+	/**
+	 * Get the filter type: the element filter_type property unless a ranged querystring is used
+	 *
+	 * @since  3.0.7
+	 *
+	 * @return string
+	 */
+	protected function getFilterType()
+	{
+		$element = $this->getElement();
+		$type = $element->filter_type;
+		$name = $this->getFullName(false, true, false);
+		$app = JFactory::getApplication();
+		$qsFilter = $app->input->get($name, array(), 'array');
+		$qsValues = JArrayHelper::getValue($qsFilter, 'value', array());
+		if (count($qsValues) > 1)
+		{
+			$type = $type === 'hidden' ? 'range-hidden' : 'range';
+		}
+		return $type;
 	}
 
 	/**
@@ -3925,10 +4088,21 @@ FROM (SELECT DISTINCT $item->db_primary_key, $name AS value, $label AS label FRO
 
 	public function sum(&$listModel)
 	{
+		$app = JFactory::getApplication();
+		$requestGroupBy = $app->input->get('group_by', '');
+		if ($requestGroupBy == '0')
+		{
+			$requestGroupBy = '';
+		}
+		if ($requestGroupBy !== '')
+		{
+			$formModel = $this->getFormModel();
+			$requestGroupBy = $formModel->getElement($requestGroupBy)->getElement()->id;
+		}
 		$db = $listModel->getDb();
 		$params = $this->getParams();
 		$item = $listModel->getTable();
-		$splitSum = $params->get('sum_split', '');
+		$splitSum = $params->get('sum_split', $requestGroupBy);
 		$split = trim($splitSum) == '' ? false : true;
 		$calcLabel = $params->get('sum_label', JText::_('COM_FABRIK_SUM'));
 		if ($split)
@@ -4842,6 +5016,10 @@ FROM (SELECT DISTINCT $item->db_primary_key, $name AS value, $label AS label FRO
 			$s = '<ul>';
 			foreach ($o as $k => $v)
 			{
+				if (!is_string($v))
+				{
+					$v = json_encode($v);
+				}
 				$s .= '<li>' . $v . '</li>';
 			}
 			$s .= '</ul>';
@@ -5227,7 +5405,7 @@ FROM (SELECT DISTINCT $item->db_primary_key, $name AS value, $label AS label FRO
 	/**
 	 * Should the element's data be returned in the search all?
 	 *
-	 * @param   bool  $advancedMode  is the elements' list is advanced search all mode?
+	 * @param   bool  $advancedMode  is the elements' list is extended search all mode?
 	 *
 	 * @return  bool	true
 	 */
@@ -6191,6 +6369,21 @@ FROM (SELECT DISTINCT $item->db_primary_key, $name AS value, $label AS label FRO
 	protected function _buildQueryWhere($data = array(), $incWhere = true, $thisTableAlias = null, $opts = array(), $query = false)
 	{
 		return '';
+	}
+
+	/**
+	 *
+	 * Is the element set to always render in list contexts
+	 *
+	 * @param    bool  $not_shown_only
+	 *
+	 * @return   bool
+	 */
+	public function isAlwaysRender($not_shown_only = true)
+	{
+		$params = $this->getParams();
+		$element = $this->getElement();
+		return $not_shown_only ? $element->show_in_list_summary == 0 && $params->get('always_render', '0') == '1' : $params->get('always_render', '0') == '1';
 	}
 
 }

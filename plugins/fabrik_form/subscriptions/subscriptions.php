@@ -1,5 +1,7 @@
 <?php
 /**
+ *  Redirects the browser to subscriptions to perform payment
+ *
  * @package     Joomla.Plugin
  * @subpackage  Fabrik.form.subscriptions
  * @copyright   Copyright (C) 2005 Fabrik. All rights reserved.
@@ -24,8 +26,18 @@ JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_fabrik/tables');
 class plgFabrik_FormSubscriptions extends plgFabrik_Form
 {
 
+	/**
+	 * Gateway
+	 *
+	 * @var object
+	 */
 	protected $gateway = null;
 
+	/**
+	 * Billing Cycle
+	 *
+	 * @var object
+	 */
 	protected $billingCycle = null;
 
 	/**
@@ -280,11 +292,13 @@ class plgFabrik_FormSubscriptions extends plgFabrik_Form
 
 	protected function getNotifyUrl()
 	{
+		$app = JFactory::getApplication();
+		$package = $app->getUserState('com_fabrik.package', 'fabrik');
 		$testSite = $this->params->get('subscriptions_test_site', '');
 		$testSiteQs = $this->params->get('subscriptions_test_site_qs', '');
 		$testMode = $this->params->get('subscriptions_testmode', false);
 		$ppurl = ($testMode == 1 && !empty($testSite)) ? $testSite : COM_FABRIK_LIVESITE;
-		$ppurl .= '/index.php?option=com_fabrik&task=plugin.pluginAjax&formid=' . $this->formModel->get('id')
+		$ppurl .= '/index.php?option=com_' . $package . '&task=plugin.pluginAjax&formid=' . $this->formModel->get('id')
 			. '&g=form&plugin=subscriptions&method=ipn';
 		if ($testMode == 1 && !empty($testSiteQs))
 		{
@@ -302,12 +316,14 @@ class plgFabrik_FormSubscriptions extends plgFabrik_Form
 
 	protected function getReturnUrl()
 	{
+		$app = JFactory::getApplication();
+		$package = $app->getUserState('com_fabrik.package', 'fabrik');
 		$url = '';
 		$testSite = $this->params->get('subscriptions_test_site', '');
 		$testSiteQs = $this->params->get('subscriptions_test_site_qs', '');
 		$testMode = (bool) $this->params->get('subscriptions_testmode', false);
 
-		$qs = '/index.php?option=com_fabrik&task=plugin.pluginAjax&formid=' . $this->formModel->get('id')
+		$qs = '/index.php?option=com_' . $package . '&task=plugin.pluginAjax&formid=' . $this->formModel->get('id')
 			. '&g=form&plugin=subscriptions&method=thanks&rowid=' . $this->data['rowid'] . '&renderOrder=' . $this->renderOrder;
 
 		if ($testMode)

@@ -1,6 +1,8 @@
 <?php
 /**
- * @package     Joomla
+ * View to grab plugin form fields.
+ *
+ * @package     Joomla.Administrator
  * @subpackage  Fabrik
  * @copyright   Copyright (C) 2005 Fabrik. All rights reserved.
  * @license     http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.php
@@ -52,10 +54,13 @@ class fabrikViewPlugin extends JView
 	protected function setStates()
 	{
 		$model = $this->getModel();
-		$model->setState('type', JRequest::getVar('type'));
-		$model->setState('plugin', JRequest::getVar('plugin'));
-		$model->setState('c', JRequest::getInt('c'));
-		$model->setState('id', JRequest::getInt('id', 0));
+		$app = JFactory::getApplication();
+		$input = $app->input;
+		$model->setState('type', $input->get('type'));
+		$model->setState('plugin', $input->get('plugin'));
+		$model->setState('c', $input->getInt('c'));
+		$model->setState('id', $input->getInt('id', 0));
+		$model->setState('plugin_published', $input->get('plugin_published'));
 	}
 
 }

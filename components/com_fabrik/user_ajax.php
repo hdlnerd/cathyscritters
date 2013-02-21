@@ -203,14 +203,19 @@ class userAjax {
 // registered user, not a guest.
 function fetchUserProfileValue( $fieldname ) {
 
+		error_log('Fetching Profile Field '.$fieldname);
 		$userid = JFactory::getUser()->id;
+		error_log('User ID '.$userid);
+
 		$db =& JFactory::getDBO();
 
-		$tablename = 'cc1_critters_profile';
+		$tablename = 'cc1_profiles';
 		$query = "SELECT `$fieldname` FROM $tablename WHERE `user_id` = $userid;";
+		error_log('Query: '.$query);
 		$db->setQuery($query);
 		$retStr = $db->loadResult();
 
+		error_log('Returning with '.$retStr);
 		return $retStr;
 
 }

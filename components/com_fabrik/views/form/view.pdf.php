@@ -10,7 +10,7 @@
 defined('_JEXEC') or die();
 
 jimport('joomla.application.component.view');
-require_once('components/com_fabrik/views/form/view.base.php');
+require_once JPATH_SITE . '/components/com_fabrik/views/form/view.base.php';
 
 class fabrikViewForm extends FabrikViewFormBase
 {
@@ -25,6 +25,12 @@ class fabrikViewForm extends FabrikViewFormBase
 	{
 		if (parent::display($tpl) !== false)
 		{
+			$document = JFactory::getDocument();
+			$model = $this->getModel();
+			$params = $model->getParams();
+			$size = $params->get('pdf_size', 'A4');
+			$orientation = $params->get('pdf_orientation', 'portrait');
+			$document->setPaper($size, $orientation);
 			$this->output();
 		}
 	}

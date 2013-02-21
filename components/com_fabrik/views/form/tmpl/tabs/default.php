@@ -55,7 +55,8 @@ foreach ($this->groups as $group) :
 	endforeach;
 	$c ++;
 	?>
-	<dt <?php echo $errorstyle?>>
+	<dt id="group<?php echo $group->id; ?>_tab"
+		<?php echo $errorstyle?>>
 		<?php echo $group->title;?>
 	</dt>
 	<dd class="fabrikGroup" id="group<?php echo $group->id;?>" style="<?php echo $group->css;?>">
@@ -115,7 +116,7 @@ endforeach;
 echo $this->hiddenFields;
  echo $this->pluginbottom; ?>
 <div class="fabrikActions"><?php echo $form->resetButton;?> <?php echo $form->submitButton;?>
-<?php echo $form->nextButton?> <?php echo $form->prevButton?>
+<?php echo $form->prevButton?><?php echo $form->nextButton?> 
  <?php echo $form->applyButton;?>
 <?php echo $form->copyButton  . " " . $form->gobackButton . ' ' . $form->deleteButton . ' ' . $this->message ?>
 </div>

@@ -1,10 +1,12 @@
 <?php
 /**
-* @package		Joomla.Plugin
-* @subpackage	Fabrik.visualization.chart
-* @copyright	Copyright (C) 2005 Fabrik. All rights reserved.
-* @license		GNU General Public License version 2 or later; see LICENSE.txt
-*/
+ * Fabrik Calendar HTML View
+ *
+ * @package		Joomla.Plugin
+ * @subpackage	Fabrik.visualization.chart
+ * @copyright	Copyright (C) 2005 Fabrik. All rights reserved.
+ * @license		GNU General Public License version 2 or later; see LICENSE.txt
+ */
 
 // Check to ensure this file is included in Joomla!
 defined('_JEXEC') or die();
@@ -12,57 +14,60 @@ defined('_JEXEC') or die();
 jimport('joomla.application.component.view');
 
 /**
-* Fabrik Calendar HTML View
-*
-* @package		Joomla.Plugin
-* @subpackage	Fabrik.visualization.chart
+ * Fabrik Calendar HTML View
+ *
+ * @package		Joomla.Plugin
+ * @subpackage	Fabrik.visualization.chart
+ * @since       3.0
 */
 
 class fabrikViewChart extends JView
 {
 
 	/**
-	* Execute and display a template script.
-	*
-	* @param   string  $tpl  The name of the template file to parse; automatically searches through the template paths.
-	*
-	* @return  mixed  A string if successful, otherwise a JError object.
-	*/
+	 * Execute and display a template script.
+	 *
+	 * @param   string  $tpl  The name of the template file to parse; automatically searches through the template paths.
+	 *
+	 * @return  mixed  A string if successful, otherwise a JError object.
+	 */
 
-	function display($tpl = 'default')
+	public function display($tpl = 'default')
 	{
+		$app = JFactory::getApplication();
+		$input = $app->input;
 		$srcs = FabrikHelperHTML::framework();
 		$srcs[] = 'media/com_fabrik/js/listfilter.js';
 		$srcs[] = 'media/com_fabrik/js/advanced-search.js';
-		require_once(COM_FABRIK_FRONTEND . '/helpers/html.php');
+		require_once COM_FABRIK_FRONTEND . '/helpers/html.php';
 		$model = $this->getModel();
 		$usersConfig = JComponentHelper::getParams('com_fabrik');
-		$model->setId(JRequest::getVar('id', $usersConfig->get('visualizationid', JRequest::getInt('visualizationid', 0))));
+		$model->setId($input->getInt('id', $usersConfig->get('visualizationid', $input->getInt('visualizationid', 0))));
 		$this->row = $model->getVisualization();
 		if ($this->row->published == 0)
 		{
 			JError::raiseWarning(500, JText::_('JERROR_ALERTNOAUTHOR'));
 			return '';
 		}
-		$calendar = $model->_row;
-		$this->assign('requiredFiltersFound', $this->get('RequiredFiltersFound'));
+		$calendar = $model->getRow();
+		$this->requiredFiltersFound = $this->get('RequiredFiltersFound');
 		if ($this->requiredFiltersFound)
 		{
-			$this->assign('chart', $this->get('Chart'));
+			$this->chart = $this->get('Chart');
 		}
 		else
 		{
-			$this->assign('chart', '');
+			$this->chart = '';
 		}
 		$params = $model->getParams();
-		$this->assign('params', $params);
+		$this->params = $params;
 		$viewName = $this->getName();
 		$pluginManager = FabrikWorker::getPluginManager();
 		$plugin = $pluginManager->getPlugIn('chart', 'visualization');
-		$this->assign('containerId', $this->get('ContainerId'));
-		$this->assignRef('filters', $this->get('Filters'));
-		$this->assign('showFilters', JRequest::getInt('showfilters', $params->get('show_filters')) === 1 ?  1 : 0);
-		$this->assign('filterFormURL', $this->get('FilterFormURL'));
+		$this->containerId = $this->get('ContainerId');
+		$this->filters = $this->get('Filters');
+		$this->showFilters = $input->getInt('showfilters', $params->get('show_filters')) === 1 ?  1 : 0;
+		$this->filterFormURL = $this->get('FilterFormURL');
 
 		$pluginParams = $model->getPluginParams();
 		$tpl = $pluginParams->get('chart_layout', $tpl);
@@ -85,4 +90,3 @@ class fabrikViewChart extends JView
 	}
 
 }
-?>

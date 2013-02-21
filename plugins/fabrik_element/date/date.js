@@ -345,7 +345,7 @@ var FbDateTime = new Class({
 		if (action === 'change') {
 			Fabrik.addEvent('fabrik.date.select', function () {
 				var e = 'fabrik.date.select';
-				typeOf(js) === 'function' ? js.delay(0) : eval(js);
+				typeOf(js) === 'function' ? js.delay(0, this, this) : eval(js);
 			});
 		}
 		this.element.getElements('input').each(function (i) {
@@ -353,12 +353,12 @@ var FbDateTime = new Class({
 				if (typeOf(e) === 'event') {
 					e.stop();
 				}
-				typeOf(js) === 'function' ? js.delay(0) : eval(js);
+				typeOf(js) === 'function' ? js.delay(0, this, this) : eval(js);
 			});
 		}.bind(this));	
 	},
 	
-	addNewEvent : function (action, js) {
+	/*addNewEvent : function (action, js) {
 		if (action === 'load') {
 			this.loadEvents.push(js);
 			this.runLoadEvent(js);
@@ -371,7 +371,7 @@ var FbDateTime = new Class({
 			}
 			this.addNewEventAux(action, js);
 		}
-	},
+	},*/
 
 	/**
 	 * takes a date object or string
@@ -393,7 +393,9 @@ var FbDateTime = new Class({
 				this._getSubElements().each(function (subEl) {
 					subEl.value = '';
 				});
-				this.cal.date = '';
+				if (this.cal) {
+					this.cal.date = '';
+				}
 				return;
 			}
 		} else {

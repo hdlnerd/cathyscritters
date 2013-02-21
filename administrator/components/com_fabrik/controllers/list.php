@@ -1,5 +1,7 @@
 <?php
 /**
+ * List controller class.
+ *
  * @package     Joomla.Administrator
  * @subpackage  Fabrik
  * @copyright   Copyright (C) 2005 Fabrik. All rights reserved.
@@ -23,14 +25,15 @@ require_once 'fabcontrollerform.php';
 class FabrikControllerList extends FabControllerForm
 {
 	/**
-	 * @var		string	The prefix to use with controller messages.
-	 * @since	1.6
+	 * The prefix to use with controller messages.
+	 *
+	 * @var	string
 	 */
 	protected $text_prefix = 'COM_FABRIK_LIST';
 
 	/**
-	 * @var int  id
 	 * Used from content plugin when caching turned on to ensure correct element rendered)
+	 * @var int
 	 */
 	protected $cacheId = 0;
 
@@ -118,11 +121,16 @@ class FabrikControllerList extends FabControllerForm
 			$model = JModel::getInstance('List', 'FabrikFEModel');
 			$model->setState('list.id', $cid);
 		}
+
+		$app = JFactory::getApplication();
+		$input = $app->input;
+
 		$viewType = JFactory::getDocument()->getType();
 
 		// Use the front end renderer to show the table
 		$this->setPath('view', COM_FABRIK_FRONTEND . '/views');
-		$viewLayout = JRequest::getCmd('layout', 'default');
+		// $viewLayout = JRequest::getCmd('layout', 'default');
+		$viewLayout = $input->getWord('layout', 'default');
 		$view = $this->getView($this->view_item, $viewType, '');
 		$view->setModel($model, true);
 
@@ -156,12 +164,15 @@ class FabrikControllerList extends FabControllerForm
 	public function showLinkedElements()
 	{
 		$document = JFactory::getDocument();
+		$app = JFactory::getApplication();
+		$input = $app->input;
 		$cid = JRequest::getVar('cid', array(0), 'method', 'array');
 		$model = JModel::getInstance('List', 'FabrikFEModel');
 		$model->setState('list.id', $cid[0]);
 		$formModel = $model->getFormModel();
 		$viewType = $document->getType();
-		$viewLayout = JRequest::getCmd('layout', 'linked_elements');
+		// $viewLayout = JRequest::getCmd('layout', 'linked_elements');
+		$viewLayout = $input->getWord('layout', 'linked_elements');
 		$view = $this->getView($this->view_item, $viewType, '');
 		$view->setModel($model, true);
 		$view->setModel($formModel);

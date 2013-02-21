@@ -1,10 +1,10 @@
 /*  
- * JCE Editor                 2.3.0
+ * JCE Editor                 2.3.1
  * @package                 JCE
  * @url                     http://www.joomlacontenteditor.net
  * @copyright               Copyright (C) 2006 - 2012 Ryan Demmer. All rights reserved
  * @license                 GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html
- * @date                    06 December 2012
+ * @date                    10 December 2012
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -22,4 +22,4 @@ ed.windowManager.open({file:ed.getParam('site_url')+'index.php?option=com_jce&vi
 if(o.style){var s=ed.dom.parseStyle(o.style);tinymce.extend(args.style,s);delete o.style;}
 tinymce.each(attribs,function(k){if(typeof o[k]!=='undefined'){args[k]=o[k];}});return ed.dom.create('img',args);}
 return false;},getUploadURL:function(file){if(/image\/(gif|png|jpeg|jpg)/.test(file.type)){return this.editor.getParam('site_url')+'index.php?option=com_jce&view=editor&layout=plugin&plugin=imgmanager';}
-return false;},getInfo:function(){return{longname:'Image Manager',author:'Ryan Demmer',authorurl:'http://www.joomlacontenteditor.net',infourl:'http://www.joomlacontenteditor.net/index2.php?option=com_content&amp;task=findkey&amp;pop=1&amp;lang=en&amp;keyref=imgmanager.about',version:'2.3.0'};}});tinymce.PluginManager.add('imgmanager',tinymce.plugins.ImageManager);})();
+return false;},getInfo:function(){return{longname:'Image Manager',author:'Ryan Demmer',authorurl:'http://www.joomlacontenteditor.net',infourl:'http://www.joomlacontenteditor.net/index2.php?option=com_content&amp;task=findkey&amp;pop=1&amp;lang=en&amp;keyref=imgmanager.about',version:'2.3.1'};}});tinymce.PluginManager.add('imgmanager',tinymce.plugins.ImageManager);})();

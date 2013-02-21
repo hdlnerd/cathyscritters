@@ -90,6 +90,19 @@ class FabrikFEModelVisualization extends JModel
 		$pluginParams = new JRegistry($this->getVisualization()->params);
 		return $pluginParams;
 	}
+	
+	/**
+	 * alais to getVisualization()
+	 *
+	 * @since	3.0.6
+	 *
+	 * @return  FabTable viz
+	 */
+	
+	public function getRow()
+	{
+		return $this->getVisualization();
+	}
 
 	/**
 	 * get the item
@@ -229,6 +242,7 @@ class FabrikFEModelVisualization extends JModel
 	public function getAdvancedSearchLink()
 	{
 		$app = JFactory::getApplication();
+		$package = $app->getUserState('com_fabrik.package', 'fabrik');
 		$links = array();
 		$listModels = $this->getlistModels();
 		$js = array();
@@ -240,7 +254,7 @@ class FabrikFEModelVisualization extends JModel
 			{
 				$table = $listModel->getTable();
 				$tmpl = $listModel->getTmpl();
-				$url = COM_FABRIK_LIVESITE . 'index.php?option=com_fabrik&amp;view=list&amp;layout=_advancedsearch&amp;tmpl=component&amp;listid='
+				$url = COM_FABRIK_LIVESITE . 'index.php?option=com_' . $package . '&amp;view=list&amp;layout=_advancedsearch&amp;tmpl=component&amp;listid='
 					. $table->id . '&amp;nextview=' . $app->input->get('view', 'list')
 					. '&scope&amp;=' . $app->scope;
 
@@ -250,7 +264,7 @@ class FabrikFEModelVisualization extends JModel
 		}
 		$title = '<span>' . JText::_('COM_FABRIK_ADVANCED_SEARCH') . '</span>';
 		$opts = array('alt' => JText::_('COM_FABRIK_ADVANCED_SEARCH'), 'class' => 'fabrikTip', 'opts' => "{notice:true}", 'title' => $title);
-		$img = FabrikHelperHTML::image('find.png', 'list', $tmpl, $opts);
+		$img = FabrikHelperHTML::image('find.png', 'list', '', $opts);
 
 		if (count($links) === 1)
 		{
@@ -278,8 +292,11 @@ class FabrikFEModelVisualization extends JModel
 	public function getRenderContext()
 	{
 		$app = JFactory::getApplication();
+		$input = $app->input;
 		$id = $this->getId();
-		return $id . '_' . JFactory::getApplication()->scope . '_' . $id;
+
+		// Calendar in content plugin - choose event form needs to know its from a content plugin.
+		return $input->get('renderContext', $id . '_' . JFactory::getApplication()->scope . '_' . $id);
 	}
 
 	/**
@@ -308,6 +325,7 @@ class FabrikFEModelVisualization extends JModel
 			return $this->getFilterFormURL;
 		}
 		$app = JFactory::getApplication();
+		$package = $app->getUserState('com_fabrik.package', 'fabrik');
 		$input = $app->input;
 		$option = $input->get('option');
 
@@ -321,7 +339,7 @@ class FabrikFEModelVisualization extends JModel
 		 * rest filters is set to 1 again
 		 */
 		$router->setVar('resetfilters', 0);
-		if ($option !== 'com_fabrik')
+		if ($option !== 'com_' . $package)
 		{
 			// $$$ rob these can't be set by the menu item, but can be set in {fabrik....}
 			$router->setVar('clearordering', 0);

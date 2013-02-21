@@ -1,5 +1,7 @@
 <?php
 /**
+ * Insert Fabrik Content into Joomla Articles
+ *
  * @package     Joomla.Plugin
  * @subpackage  Content
  * @copyright   Copyright (C) 2005 - 2008 Pollen 8 Design Ltd. All rights reserved.
@@ -12,7 +14,7 @@ defined('_JEXEC') or die();
 jimport('joomla.plugin.plugin');
 
 /**
- * Fabrik content plugin - renders forms and tables
+ * Fabrik content plugin - renders forms, lists and visualizations
  *
  * @package     Joomla.Plugin
  * @subpackage  Content
@@ -183,7 +185,9 @@ class plgContentFabrik extends JPlugin
 		// Special case if we are wanting to write in an element's data
 		$element = false;
 		$repeatcounter = 0;
-		$showfilters = $input->get('showfilters', 1);
+
+		// Was defaulting to 1 but that forced filters to show in cal viz even with showfilter=no option turned on
+		$showfilters = $input->get('showfilters', null);
 		$clearfilters = $input->get('clearfilters', 0);
 		$resetfilters = $input->get('resetfilters', 0);
 		$this->origRequestVars = array();
@@ -357,7 +361,8 @@ class plgContentFabrik extends JPlugin
 				$element = $element . '_raw';
 			}
 			// $$$ hugh - need to pass all row data, or calc elements that use {placeholders} won't work
-			$defaultdata = get_object_vars($row);
+			$defaultdata = is_object($row) ? get_object_vars($row) : $row;
+
 			/* $$$ hugh - if we don't do this, our passed data gets blown away when render() merges the form data
 			 * not sure why, but apparently if you do $foo =& $bar and $bar is NULL ... $foo ends up NULL
 			 */
@@ -388,6 +393,7 @@ class plgContentFabrik extends JPlugin
 		$input->set('origview', $origView);
 
 		$input->set('id', $id);
+		JRequest::setVar('view', $viewName);
 		$input->set('view', $viewName);
 
 		/*
@@ -740,10 +746,14 @@ class plgContentFabrik extends JPlugin
 	{
 		$app = JFactory::getApplication();
 		$input = $app->input;
-
 		require_once COM_FABRIK_FRONTEND . '/controller.php';
-		require_once COM_FABRIK_FRONTEND . '/controllers/form.php';
-		require_once COM_FABRIK_FRONTEND . '/controllers/details.php';
+
+		// If in admin form or details view and embedding a list - this gave an error - if only needed for 3.0.x
+		if ($view !== 'list')
+		{
+			require_once COM_FABRIK_FRONTEND . '/controllers/form.php';
+			require_once COM_FABRIK_FRONTEND . '/controllers/details.php';
+		}
 		require_once COM_FABRIK_FRONTEND . '/controllers/package.php';
 		require_once COM_FABRIK_FRONTEND . '/controllers/list.php';
 		require_once COM_FABRIK_FRONTEND . '/controllers/visualization.php';

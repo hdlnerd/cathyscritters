@@ -1,5 +1,7 @@
 <?php
 /**
+ * Plugin element to render dropdown list to select user
+ *
  * @package     Joomla.Plugin
  * @subpackage  Fabrik.element.user
  * @copyright   Copyright (C) 2005 Fabrik. All rights reserved.
@@ -22,10 +24,18 @@ require_once JPATH_SITE . '/plugins/fabrik_element/databasejoin/databasejoin.php
 class plgFabrik_ElementUser extends plgFabrik_ElementDatabasejoin
 {
 
-	/** @var bol is a join element */
+	/**
+	 * Is a join element
+	 *
+	 * @var bool
+	 */
 	var $_isJoin = true;
 
-	/** @var  string  db table field type */
+	/**
+	 * Db table field type
+	 *
+	 * @var string
+	 */
 	protected $fieldDesc = 'INT(11)';
 
 	/**
@@ -88,7 +98,9 @@ class plgFabrik_ElementUser extends plgFabrik_ElementDatabasejoin
 			else
 			{
 				$userid = (int) $this->getValue($data, $repeatCounter);
-				$user = $userid === 0 ? JFactory::getUser() : JFactory::getUser($userid);
+
+				// On failed validtion value is 1 - user ids are always more than that so dont load userid=1 otherwise an error is generated
+				$user = $userid <= 1 ? JFactory::getUser() : JFactory::getUser($userid);
 			}
 		}
 		else
@@ -431,6 +443,12 @@ class plgFabrik_ElementUser extends plgFabrik_ElementDatabasejoin
 		parent::formJavascriptClass($srcs, $script);
 	}
 
+	/**
+	 * Get select option label
+	 *
+	 * @return  string
+	 */
+
 	protected function _getSelectLabel()
 	{
 		return $this->getParams()->get('user_noselectionlabel', JText::_('COM_FABRIK_PLEASE_SELECT'));
@@ -510,6 +528,12 @@ class plgFabrik_ElementUser extends plgFabrik_ElementDatabasejoin
 		return true;
 	}
 
+	/**
+	 * Get the join label name
+	 *
+	 * @return  string
+	 */
+
 	protected function getJoinLabel()
 	{
 		$label = parent::getJoinLabel();
@@ -575,11 +599,11 @@ class plgFabrik_ElementUser extends plgFabrik_ElementDatabasejoin
 		// form with joined data - make record with on repeated group (containing this element)
 		// edit record and the commented out if statement below meant the user dd reverted
 		// to the current logged in user and not the previously selected one
-		if (empty($data) || !array_key_exists($key, $data) || (array_key_exists($key, $data) && empty($data[$key])))
+		if (empty($data) || !array_key_exists($key, $data) )
 		{
 			// $$$ rob - added check on task to ensure that we are searching and not submitting a form
 			// as otherwise not empty valdiation failed on user element
-			if (!in_array(JRequest::getCmd('task'), array('processForm', 'view')))
+			if (!in_array(JRequest::getCmd('task'), array('processForm', 'view', '', 'form.process')))
 			{
 				return '';
 			}
@@ -840,7 +864,7 @@ class plgFabrik_ElementUser extends plgFabrik_ElementDatabasejoin
 		static $displayMessage;
 		$params = $this->getParams();
 		$displayParam = $this->getValColumn();
-		return $user->get($displayParam);
+		return is_a($user, 'JUser') ? $user->get($displayParam) : false;
 	}
 
 	/**
@@ -930,5 +954,22 @@ class plgFabrik_ElementUser extends plgFabrik_ElementDatabasejoin
 			}
 		}
 		return $displayParam;
+	}
+
+	/**
+	 * Get an array of element html ids and their corresponding
+	 * js events which trigger a validation.
+	 * Examples of where this would be overwritten include timedate element with time field enabled
+	 *
+	 * @param   int  $repeatCounter  repeat group counter
+	 *
+	 * @return  array  html ids to watch for validation
+	 */
+
+	public function getValidationWatchElements($repeatCounter)
+	{
+		$id = $this->getHTMLId($repeatCounter);
+		$ar = array('id' => $id, 'triggerEvent' => 'change');
+		return array($ar);
 	}
 }

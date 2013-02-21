@@ -25,22 +25,39 @@ require_once 'fabmodeladmin.php';
 class FabrikModelList extends FabModelAdmin
 {
 	/**
-	 * @var		string	The prefix to use with controller messages.
-	 * @since	1.6
+	 * The prefix to use with controller messages.
+	 *
+	 * @var  string
 	 */
-
 	protected $text_prefix = 'COM_FABRIK_LIST';
 
-	/** @var object model - front end form model */
+	/**
+	 * Front end form model
+	 *
+	 * @var object model
+	 */
 	protected $formModel = null;
 
-	/** @var object model - front end table model */
+	/**
+	 * Front end list model
+	 *
+	 * @var object
+	 */
 	protected $feListModel = null;
 
-	/** @var object currently loaded list row */
+	/**
+	 * Currently loaded list row
+	 *
+	 * @var array
+	 */
 	protected $tables = array();
 
-	/** @var string */
+	/**
+	 * Plugin type
+	 *
+	 * @var string
+	 * @deprecated ?
+	 */
 	protected $pluginType = 'List';
 
 	/**
@@ -549,6 +566,7 @@ class FabrikModelList extends FabModelAdmin
 	{
 		$this->populateState();
 		$app = JFactory::getApplication();
+		$input = $app->input;
 		$user = JFactory::getUser();
 		$config = JFactory::getConfig();
 		$date = JFactory::getDate();
@@ -558,11 +576,17 @@ class FabrikModelList extends FabModelAdmin
 		$row->load($id);
 
 		$params = new JRegistry($row->params);
-		$origCollation = $params->get('collation', 'none');
+
 		$this->setState('list.id', $id);
 		$this->setState('list.form_id', $row->form_id);
 		$feModel = $this->getFEModel();
 		$formModel = $this->getFormModel();
+
+		// Get original collation
+		$db = $feModel->getDb();
+		$db->setQuery('SHOW TABLE STATUS LIKE ' . $db->quote($data['db_table_name']));
+		$info = $db->loadObject();
+		$origCollation = is_object($info) ? $info->Collation : $params->get('collation', 'none');
 
 		if (!$row->bind($data))
 		{
@@ -774,8 +798,8 @@ class FabrikModelList extends FabModelAdmin
 	 */
 	protected function collation($feModel, $origCollation, $row)
 	{
-		// Don't attempt to alter new table
-		if ($row->id == 0)
+		// Don't attempt to alter new table, or a view
+		if ($row->id == 0 || $feModel->isView())
 		{
 			return;
 		}
@@ -2085,8 +2109,15 @@ class FabrikModelList extends FabModelAdmin
 	public function loadFromFormId($formId)
 	{
 		$item = $this->getTable();
-		$item->load(array('form_id' => $formId));
+
+		/**
+		 * Not sure why but we need to populate and manually __state_set
+		 * Otherwise list.id reverts to the form's id and not the list id
+		 */
+		$this->populateState();
+		$this->__state_set = true;
 		$this->_table = $item;
+		$item->load(array('form_id' => $formId));
 		$this->setState('list.id', $item->id);
 		return $item;
 	}
@@ -2101,7 +2132,9 @@ class FabrikModelList extends FabModelAdmin
 
 	public function &getDb()
 	{
-		return FabrikWorker::getConnection($this->getItem())->getDb();
+		$listId = $this->getState('list.id');
+		$item = $this->getItem($listId);
+		return FabrikWorker::getConnection($item)->getDb();
 	}
 
 	/**

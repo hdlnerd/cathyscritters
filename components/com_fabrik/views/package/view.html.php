@@ -17,13 +17,13 @@ class fabrikViewPackage extends JView
 		$srcs = array('media/com_fabrik/js/icons.js', 'media/com_fabrik/js/icongen.js', 'media/com_fabrik/js/canvas.js',
 		'media/com_fabrik/js/history.js', 'media/com_fabrik/js/keynav.js', 'media/com_fabrik/js/tabs.js',
 		'media/com_fabrik/js/pages.js', 'media/com_fabrik/js/frontpackage.js');
-		
+
 		FabrikHelperHTML::script($srcs);
 
 		FabrikHelperHTML::stylesheet('media/com_fabrik/css/package.css');
 		$canvas = $item->params->get('canvas');
-		
-		// $$$ rob 08/11/2011 test if component name set but still rendering 
+
+		// $$$ rob 08/11/2011 test if component name set but still rendering
 		// in option=com_fabrik then we should use fabrik as the package
 		if (JRequest::getCmd('option') === 'com_fabrik') {
 			$item->component_name = 'fabrik';
@@ -42,7 +42,7 @@ class fabrikViewPackage extends JView
 		tabelement : 'packagemenu',
 		pagecontainer : 'packagepages',
 		layout: $layout,
-		'packageid':$id,
+		'packageId': $id,
 		'package':'$item->component_name'
 	});
 		});";
@@ -53,15 +53,8 @@ class fabrikViewPackage extends JView
 		$tmpl = !isset($item->template) ? 'default' : $item->template;
 		$this->addTemplatePath($this->_basePath . '/' . $this->_name . '/tmpl/' . $tmpl);
 		$text = $this->loadTemplate();
-		$opt = JRequest::getVar('option');
-		JRequest::setVar('option', 'com_content');
-		jimport('joomla.html.html.content');
-		$text .= '{emailcloak=off}';
-		$text = JHTML::_('content.prepare', $text);
-		$text = preg_replace('/\{emailcloak\=off\}/', '', $text);
-		JRequest::setVar('option', $opt);
+		FabrikHelperHTML::runConentPlugins($text);
 		echo $text;
 	}
 
 }
-?>

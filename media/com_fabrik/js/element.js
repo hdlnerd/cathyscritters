@@ -29,7 +29,7 @@ var FbElement =  new Class({
 		options.element = element;
 		this.strElement = element;
 		this.loadEvents = []; // need to store these for use if the form is reset
-		this.changeEvents = []; // need to store these for gory reasons to do with cloning
+		this.events = $H({}); // was changeEvents
 		this.setOptions(options);
 		return this.setElement();
 	},
@@ -47,6 +47,18 @@ var FbElement =  new Class({
 		if (v === 'value') {
 			return this.getValue(); 
 		}
+	},
+	
+	/**
+	 * Sets the element key used in Fabrik.blocks.form_X.formElements
+	 * Overwritten by any element which performs a n-n join (multi ajax fileuploads, dbjoins as checkboxes) 
+	 * 
+	 * @since   3.0.7
+	 * 
+	 * @return  string
+	 */
+	getFormElementsKey: function (elId) {
+		return elId;
 	},
 	
 	attachedToForm: function ()
@@ -144,17 +156,25 @@ var FbElement =  new Class({
 	 */
 	removeCustomEvents: function () {},
 	
-	renewChangeEvents: function () {
-		this.element.removeEvents('change');
-		this.changeEvents.each(function (js) {
-			this.addNewEventAux('change', js);
+	/**
+	 * Was renewChangeEvents() but dont see why change events should be treated
+	 * differently to other events?
+	 * 
+	 * @since 3.0.7
+	 */
+	renewEvents: function () {
+		this.events.each(function (fns, type) {
+			this.element.removeEvents(type);
+			fns.each(function (js) {
+				this.addNewEventAux(type, js);
+			}.bind(this));
 		}.bind(this));
 	},
 	
 	addNewEventAux: function (action, js) {
 		this.element.addEvent(action, function (e) {
 			e.stop();
-			typeOf(js) === 'function' ? js.delay(0) : eval(js);
+			typeOf(js) === 'function' ? js.delay(0, this, this) : eval(js);
 		}.bind(this));
 	},
 	
@@ -167,9 +187,10 @@ var FbElement =  new Class({
 				this.element = document.id(this.strElement);
 			}
 			if (this.element) {
-				if (action === 'change') {
-					this.changeEvents.push(js);
+				if (!Object.keys(this.events).contains(action)) {
+					this.events[action] = [];
 				}
+				this.events[action].push(js);
 				this.addNewEventAux(action, js);
 			}
 		}
@@ -254,14 +275,14 @@ var FbElement =  new Class({
 	},
 
 	/**
-	 * run when the element is cloned in a repeat group
+	 * Run when the element is cloned in a repeat group
 	 */
 	cloned: function (c) {
-		this.renewChangeEvents();
+		this.renewEvents();
 	},
 	
 	/**
-	 * run when the element is decloled from the form as part of a deleted repeat group
+	 * Run when the element is decloled from the form as part of a deleted repeat group
 	 */
 	decloned: function (groupid) {
 	},

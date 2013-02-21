@@ -1,5 +1,7 @@
 <?php
 /**
+ * Slideshow viz Model
+ *
  * @package     Joomla.Plugin
  * @subpackage  Fabrik.visualization.slideshow
  * @copyright   Copyright (C) 2005 Fabrik. All rights reserved.
@@ -56,7 +58,8 @@ class fabrikModelSlideshow extends FabrikFEModelVisualization
 	public function getPlaylist()
 	{
 		$params = $this->getParams();
-
+		$app = JFactory::getApplication();
+		$package = $app->getUserState('com_fabrik.package', 'fabrik');
 		$mediaElement = $params->get('media_media_elementList');
 		$mediaElement .= '_raw';
 		$titleElement = $params->get('media_title_elementList', '');
@@ -134,7 +137,7 @@ class fabrikModelSlideshow extends FabrikFEModelVisualization
 				}
 				else
 				{
-					$link = JRoute::_('index.php?option=com_fabrik&view=form&formid=' . $form->getId() . '&rowid=' . $row->__pk_val);
+					$link = JRoute::_('index.php?option=com_' . $package . '&view=form&formid=' . $form->getId() . '&rowid=' . $row->__pk_val);
 					$retstr .= "			<info>" . $link . "</info>\n";
 				}
 				$retstr .= "		</track>\n";

@@ -136,7 +136,9 @@ var FbList = new Class({
 		'popup_offset_x': null,
 		'popup_offset_y': null,
 		'groupByOpts': {},
-		'listRef': '' // e.g. '1_com_fabrik_1'
+		'listRef': '', // e.g. '1_com_fabrik_1'
+		'fabrik_show_in_list': [],
+		'singleOrdering' : false
 	},
 
 	initialize: function (id, options) {
@@ -436,7 +438,7 @@ var FbList = new Class({
 			this.csvfields = fields;
 		}
 
-		this.form.getElements('.fabrik_filter').each(function (f) {
+		this.getFilters().each(function (f) {
 			opts[f.name] = f.get('value');
 		}.bind(this));
 		
@@ -512,10 +514,12 @@ var FbList = new Class({
 
 	watchOrder: function () {
 		var elementId = false;
+		
 		var hs = document.id(this.options.form).getElements('.fabrikorder, .fabrikorder-asc, .fabrikorder-desc');
 		hs.removeEvents('click');
 		hs.each(function (h) {
 			h.addEvent('click', function (e) {
+				var img = 'ordernone.png';
 				var orderdir = '';
 				var newOrderClass = '';
 				// $$$ rob in pageadaycalendar.com h was null so reset to e.target
@@ -528,14 +532,17 @@ var FbList = new Class({
 				case 'fabrikorder-asc':
 					newOrderClass = 'fabrikorder-desc';
 					orderdir = 'desc';
+					img = 'orderdesc.png';
 					break;
 				case 'fabrikorder-desc':
 					newOrderClass = 'fabrikorder';
 					orderdir = "-";
+					img = 'ordernone.png';
 					break;
 				case 'fabrikorder':
 					newOrderClass = 'fabrikorder-asc';
 					orderdir = 'asc';
+					img = 'orderasc.png';
 					break;
 				}
 				td.className.split(' ').each(function (c) {
@@ -548,17 +555,38 @@ var FbList = new Class({
 					return;
 				}
 				h.className = newOrderClass;
+				var i = h.getElement('img');
+				
+				// Swap images - if list doing ajax nav then we need to do this
+				if (this.options.singleOrdering) {
+					document.id(this.options.form).getElements('.fabrikorder, .fabrikorder-asc, .fabrikorder-desc').each(function (otherH) {
+						var i = otherH.getElement('img');
+						if (i) {
+							i.src = i.src.replace('ordernone.png', '').replace('orderasc.png', '').replace('orderdesc.png', '');
+							i.src += 'ordernone.png';
+						}
+					});
+				}
+				if (i) {
+					i.src = i.src.replace('ordernone.png', '').replace('orderasc.png', '').replace('orderdesc.png', '');
+					i.src += img;
+				}
+				
 				this.fabrikNavOrder(elementId, orderdir);
 				e.stop();
 			}.bind(this));
 		}.bind(this));
 
 	},
+	
+	getFilters: function () {
+		return document.id(this.options.form).getElements('.fabrik_filter');
+	},
 
 	watchFilters: function () {
 		var e = '';
 		var submit = document.id(this.options.form).getElement('.fabrik_filter_submit');
-		document.id(this.options.form).getElements('.fabrik_filter').each(function (f) {
+		this.getFilters().each(function (f) {
 			e = f.get('tag') === 'select' ? 'change' : 'blur';
 			if (this.options.filterMethod !== 'submitform') {
 				f.removeEvent(e);
@@ -567,7 +595,7 @@ var FbList = new Class({
 				f.addEvent(e, function (e) {
 					e.stop();
 					if (e.target.retrieve('initialvalue') !== e.target.get('value')) {
-						this.submit('list.filter');
+						this.doFilter();
 					}
 				}.bind(this));
 			} else {
@@ -581,16 +609,26 @@ var FbList = new Class({
 			if (submit) {
 				submit.removeEvents();
 				submit.addEvent('click', function (e) {
-					this.submit('list.filter');
+					this.doFilter();
 				}.bind(this));
 			}
 		}
-		document.id(this.options.form).getElements('.fabrik_filter').addEvent('keydown', function (e) {
+		this.getFilters().addEvent('keydown', function (e) {
 			if (e.code === 13) {
 				e.stop();
-				this.submit('list.filter');
+				this.doFilter();
 			}
 		}.bind(this));
+	},
+	
+	doFilter: function () {
+		var res = Fabrik.fireEvent('list.filter', [this]).eventResults;
+		if (typeOf(res) === 'null') {
+			this.submit('list.filter');
+		}
+		if (res.length === 0 || !res.contains(false)) {
+			this.submit('list.filter');
+		}
 	},
 
 	// highlight active row, deselect others
@@ -620,7 +658,10 @@ var FbList = new Class({
 			// not sure why but on ajax first load of xhr content the form object does not ini
 			// if we created the window, hidden from view, then this 'fixes' the issue. I'd really like to 
 			// find out what the problem is here but for now this band aid is a help
-			var url = Fabrik.liveSite + "index.php?option=com_fabrik&view=form&formid=" + this.options.formid + '&rowid=0&tmpl=component&ajax=1';
+			
+			// Didnt work in admin list view if list add acl was anything other than public
+			//var url = Fabrik.liveSite + "index.php?option=com_fabrik&view=form&formid=" + this.options.formid + '&rowid=0&tmpl=component&ajax=1';
+			var url = 'index.php?option=com_fabrik&task=form.view&formid=' + this.options.formid + '&rowid=0&tmpl=component&ajax=1';
 			var winOpts = {
 				'id': 'add.' + this.id,
 				'title': this.options.popup_edit_label,
@@ -652,8 +693,10 @@ var FbList = new Class({
 		this.getForm();
 		if (task === 'list.delete') {
 			var ok = false;
+			var delCount = 0;
 			this.form.getElements('input[name^=ids]').each(function (c) {
 				if (c.checked) {
+					delCount ++;
 					ok = true;
 				}
 			});
@@ -662,7 +705,8 @@ var FbList = new Class({
 				Fabrik.loader.stop('listform_' + this.options.listRef);
 				return false;
 			}
-			if (!confirm(Joomla.JText._('COM_FABRIK_CONFIRM_DELETE'))) {
+			var delMsg = delCount === 1 ? Joomla.JText._('COM_FABRIK_CONFIRM_DELETE_1') : Joomla.JText._('COM_FABRIK_CONFIRM_DELETE').replace('%s', delCount); 
+			if (!confirm(delMsg)) {
 				Fabrik.loader.stop('listform_' + this.options.listRef);
 				return false;
 			}
@@ -696,6 +740,13 @@ var FbList = new Class({
 					data += '&replacefilters=1';
 				}
 			}
+			// Pass the elements that are shown in the list - to ensure they are formatted
+			for (var i = 0; i < this.options.fabrik_show_in_list.length; i ++) {
+				data += '&fabrik_show_in_list[]=' + this.options.fabrik_show_in_list[i]; 
+			}
+			
+			// Add in tmpl for custom nav in admin
+			data += '&tmpl=' + this.options.tmpl;
 			if (!this.request) {
 				this.request = new Request({
 					'url': this.form.get('action'),
@@ -734,6 +785,23 @@ var FbList = new Class({
 		}
 		this.submit('list.view');
 		return false;
+	},
+	
+	/**
+	 * Get the primary keys for the visible rows
+	 * 
+	 * @since   3.0.7
+	 * 
+	 * @return  array 
+	 */
+	getRowIds: function () {
+		var keys = [];
+		$H(this.options.data).each(function (group) {
+			group.each(function (row) {
+				keys.push(row.data.__pk_val);
+			});
+		});
+		return keys;
 	},
 
 	fabrikNavOrder: function (orderby, orderdir) {
@@ -823,7 +891,7 @@ var FbList = new Class({
 			var counter = 0;
 			var rowcounter = 0;
 			trs = [];
-			this.options.data = data.data;
+			this.options.data = this.options.isGrouped ? $H(data.data) : data.data;
 			if (data.calculations) {
 				this.updateCals(data.calculations);
 			}
@@ -838,6 +906,12 @@ var FbList = new Class({
 			gdata.each(function (groupData, groupKey) {
 				var container, thisrowtemplate;
 				var tbody = this.options.isGrouped ? this.list.getElements('.fabrik_groupdata')[gcounter] : this.tbody;
+				
+				// Set the group by heading
+				if (this.options.isGrouped && tbody) {
+					groupHeading = tbody.getPrevious();
+					groupHeading.getElement('.groupTitle').set('html', groupData[0].groupHeading);
+				}
 				if (typeOf(tbody) !== 'null') {
 					gcounter++;
 					for (i = 0; i < groupData.length; i++) {
@@ -882,6 +956,19 @@ var FbList = new Class({
 				}
 			}.bind(this));
 
+			// Grouped data - show all tbodys, then hide empty tbodys (not going to work for none <table> tpls)
+			var tbodys = this.list.getElements('tbody');
+			tbodys.setStyle('display', '');
+			tbodys.each(function (tbody) {
+				if (!tbody.hasClass('fabrik_groupdata')) {
+					var groupTbody = tbody.getNext();
+					if (groupTbody.getElements('.fabrik_row').length === 0) {
+						tbody.hide();
+						groupTbody.hide();
+					}
+				}
+			});
+			
 			var fabrikDataContainer = this.list.getParent('.fabrikDataContainer');
 			var emptyDataMessage = this.list.getParent('.fabrikForm').getElement('.emptyDataMessage');
 			if (rowcounter === 0) {
@@ -993,7 +1080,7 @@ var FbList = new Class({
 					this.result = true;
 					return false;
 				}
-				this.submit('list.filter');
+				this.doFilter();
 			}.bind(this));
 		}
 		var addRecord = this.form.getElement('.addRecord');
@@ -1028,18 +1115,22 @@ var FbList = new Class({
 				window.location = 'index.php?option=com_fabrik&task=list.view&cid=' + e.target.get('value');
 			}.bind(this));
 		}
-		if (this.options.ajax) {
-			if (typeOf(this.form.getElement('.pagination')) !== 'null') {
-				this.form.getElement('.pagination').getElements('.pagenav').each(function (a) {
-					a.addEvent('click', function (e) {
-						e.stop();
-						if (a.get('tag') === 'a') {
-							var o = a.href.toObject();
-							this.fabrikNav(o['limitstart' + this.id]);
-						}
-					}.bind(this));
-				}.bind(this));
+		// All nav links should submit the form, if we dont then filters are not taken into account when building the list cache id
+		// Can result in 2nd pages of cached data being shown, but without filters applied
+		if (typeOf(this.form.getElement('.pagination')) !== 'null') {
+			var as = this.form.getElement('.pagination').getElements('.pagenav');
+			if (as.length === 0) {
+				as = this.form.getElement('.pagination').getElements('a');
 			}
+			as.each(function (a) {
+				a.addEvent('click', function (e) {
+					e.stop();
+					if (a.get('tag') === 'a') {
+						var o = a.href.toObject();
+						this.fabrikNav(o['limitstart' + this.id]);
+					}
+				}.bind(this));
+			}.bind(this));
 		}
 		
 		if (this.options.admin) {
@@ -1132,7 +1223,7 @@ var FbGroupedToggler = new Class({
 		this.setOptions(options);
 		this.container = container;
 		this.toggleState = 'shown';
-		if (this.options.startCollapsed) {
+		if (this.options.startCollapsed && this.options.isGrouped) {
 			this.collapse();
 		}
 		container.addEvent('click:relay(.fabrik_groupheading a.toggle)', function (e) {

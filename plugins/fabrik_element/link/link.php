@@ -22,7 +22,11 @@ class plgFabrik_ElementLink extends plgFabrik_Element
 
 	public $hasSubElements = true;
 
-	/** @var  string  db table field type */
+	/**
+	 * Db table field type
+	 *
+	 * @var string
+	 */
 	protected $fieldDesc = 'TEXT';
 
 	/**
@@ -96,6 +100,11 @@ class plgFabrik_ElementLink extends plgFabrik_Element
 				// Treat some default values as empty
 				$_lnk = '';
 			}
+			// If used as a icon - the dom parser needs to use &amp; and not & in url querystrings
+			if (!strstr($_lnk, '&amp;'))
+			{
+				$_lnk = str_replace('&', '&amp;', $_lnk);
+			}
 			$target = $params->get('link_target', '');
 			if ($listModel->getOutPutFormat() != 'rss')
 			{
@@ -125,7 +134,8 @@ class plgFabrik_ElementLink extends plgFabrik_Element
 				$link = $_lnk;
 			}
 			$w = new FabrikWorker;
-			$link = $listModel->parseMessageForRowHolder($link, JArrayHelper::fromObject($thisRow));
+			$aRow = JArrayHelper::fromObject($thisRow);
+			$link = $listModel->parseMessageForRowHolder($link, $aRow);
 			return $link;
 		}
 		return $data;
@@ -366,13 +376,13 @@ class plgFabrik_ElementLink extends plgFabrik_Element
 				$values[$name]['data']['label'] = array();
 				$values[$name]['data']['link'] = array();
 			}
-			$values[$name]['data']['label'][$c] = $data['label'];
-			$values[$name]['data']['link'][$c] = $data['link'];
+			$values[$name]['data']['label'][$c] =  JArrayHelper::getValue($data, 'label');
+			$values[$name]['data']['link'][$c] = JArrayHelper::getValue($data, 'link');
 		}
 		else
 		{
-			$values[$name]['data']['label'] = $data['label'];
-			$values[$name]['data']['link'] = $data['link'];
+			$values[$name]['data']['label'] = JArrayHelper::getValue($data, 'label');
+			$values[$name]['data']['link'] = JArrayHelper::getValue($data, 'link');
 		}
 	}
 

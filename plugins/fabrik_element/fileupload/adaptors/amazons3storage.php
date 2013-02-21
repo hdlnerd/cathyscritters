@@ -1,5 +1,7 @@
 <?php
 /**
+ *  Amazon s3 Storage adaptor for Fabrik file upload element
+ *
  * @package     Joomla
  * @subpackage  Fabrik
  * @copyright   Copyright (C) 2005 Fabrik. All rights reserved.
@@ -225,7 +227,7 @@ class Amazons3storage extends FabrikStorageAdaptor
 	 * @param   string  $file    file name
 	 * @param   string  $buffer  the buffer to write
 	 *
-	 * @return  void
+	 * @return  bool
 	 */
 
 	public function write($file, $buffer)

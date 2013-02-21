@@ -248,22 +248,40 @@ var Loader = new Class({
 		
 		Fabrik.fireEvent = function (type, args, delay) {
 			var events = Fabrik.events;
+			
+			// An array of returned values from all events.
+			this.eventResults = [];
 			if (!events || !events[type]) {
 				return this;
 			}
 			args = Array.from(args);
-	
 			events[type].each(function (fn) {
 				if (delay) {
-					fn.delay(delay, this, args);
+					this.eventResults.push(fn.delay(delay, this, args));
 				} else {
-					fn.apply(this, args);
+					this.eventResults.push(fn.apply(this, args));
 				}
 			}, this);
 			return this;
 		};
 		
 		Fabrik.requestQueue = new RequestQueue();
+		
+		Fabrik.loadGoogleMap = function (s, cb) {
+			if (typeOf(Fabrik.googleMap) === 'null') {
+				var script = document.createElement("script");
+				script.type = "text/javascript";
+				script.src = 'http://maps.googleapis.com/maps/api/js?sensor=' + s + '&callback=' + cb;
+				document.body.appendChild(script);
+				Fabrik.googleMap = true;
+			}
+			else {
+				// $$$ hugh - need to fire these by hand, otherwise when re-using a map object, like
+				// opening a popup edit for the second time, the map JS will never get these events.
+				window.fireEvent('google.map.loaded');
+				window.fireEvent('google.radius.loaded');
+			}
+		};
 		
 		/** Globally observe delete links **/
 		

@@ -10,6 +10,7 @@
 defined('_JEXEC') or die();
 
 require_once JPATH_SITE . '/components/com_fabrik/models/element.php';
+require_once JPATH_SITE . '/components/com_fabrik/helpers/googlemap.php';
 
 /**
  * Plugin element to render a Google map
@@ -40,15 +41,15 @@ class plgFabrik_ElementGooglemap extends plgFabrik_Element
 	{
 		$listModel = $this->getListModel();
 		$params = $this->getParams();
-		$w = $params->get('fb_gm_table_mapwidth');
-		$h = $params->get('fb_gm_table_mapheight');
-		$z = $params->get('fb_gm_table_zoomlevel');
+		$w = (int) $params->get('fb_gm_table_mapwidth');
+		$h = (int) $params->get('fb_gm_table_mapheight');
+		$z = (int) $params->get('fb_gm_table_zoomlevel');
 		$data = FabrikWorker::JSONtoData($data, true);
 		foreach ($data as $i => &$d)
 		{
 			if ($params->get('fb_gm_staticmap_tableview'))
 			{
-				$d = $this->_staticMap($d, $w, $h, null, $i, true, JArrayHelper::fromObject($thisRow));
+				$d = $this->_staticMap($d, $w, $h, $z, $i, true, JArrayHelper::fromObject($thisRow));
 			}
 			if ($params->get('icon_folder') == '1')
 			{
@@ -202,6 +203,7 @@ class plgFabrik_ElementGooglemap extends plgFabrik_Element
 			}
 		}
 	}
+
 	/**
 	 * Returns javascript which creates an instance of the class defined in formJavascriptClass()
 	 *
@@ -224,7 +226,8 @@ class plgFabrik_ElementGooglemap extends plgFabrik_Element
 		$opts = $this->getElementJSOptions($repeatCounter);
 		$this->geoJs();
 
-		// $this->radiusJs();
+		$mapShown = $this->isEditable() || (!$this->isEditable() && $v != '');
+
 		$opts->lat = (float) $o->coords[0];
 		$opts->lon = (float) $o->coords[1];
 		$opts->lat_dms = (float) $dms->coords[0];
@@ -247,6 +250,7 @@ class plgFabrik_ElementGooglemap extends plgFabrik_Element
 		$opts->geocode_event = $params->get('fb_gm_geocode_event', 'button');
 		$opts->geocode_fields = array();
 		$opts->auto_center = (bool) $params->get('fb_gm_auto_center', false);
+		$opts->styles = FabGoogleMapHelper::styleJs($params);
 		if ($opts->geocode == '2')
 		{
 			foreach (array('addr1', 'addr2', 'city', 'state', 'zip', 'country') as $which_field)
@@ -273,7 +277,7 @@ class plgFabrik_ElementGooglemap extends plgFabrik_Element
 		}
 		$opts->center = (int) $params->get('fb_gm_defaultloc', 0);
 
-		$opts->use_radius = $params->get('fb_gm_radius', '0') == '0' ? false : true;
+		$opts->use_radius = $params->get('fb_gm_radius', '0') == '0' || !$mapShown ? false : true;
 		$opts->radius_fitmap = $params->get('fb_gm_radius_fitmap', '0') == '0' ? false : true;
 		$opts->radius_write_element = $opts->use_radius ? $this->_getFieldId('fb_gm_radius_write_element', $repeatCounter) : false;
 		$opts->radius_read_element = $opts->use_radius ? $this->_getFieldId('fb_gm_radius_read_element', $repeatCounter) : false;
@@ -651,7 +655,12 @@ class plgFabrik_ElementGooglemap extends plgFabrik_Element
 				{
 					$str .= '</div>';
 				}
-				$str .= '<div class="map" style="width:' . $w . 'px; height:' . $h . 'px"></div>';
+				// Allow for 100% width
+				if ($w !== '')
+				{
+					$w = 'width:' . $w . 'px;';
+				}
+				$str .= '<div class="map" style="' . $w . 'height:' . $h . 'px"></div>';
 				$str .= '<input type="hidden" class="fabrikinput" name="' . $name . '" value="' . htmlspecialchars($val, ENT_QUOTES) . '" />';
 				if (($this->isEditable() || $params->get('fb_gm_staticmap') == '2') && $params->get('fb_gm_latlng') == '1')
 				{

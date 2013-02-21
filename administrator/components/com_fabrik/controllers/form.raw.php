@@ -1,10 +1,12 @@
 <?php
 /**
- * @package Joomla.Administrator
- * @subpackage Fabrik
- * @since		1.6
- * @copyright Copyright (C) 2005 Rob Clayburn. All rights reserved.
- * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.php
+ * Raw Form controller class.
+ *
+ * @package     Joomla.Administrator
+ * @subpackage  Fabrik
+ * @copyright   Copyright (C) 2005 Fabrik. All rights reserved.
+ * @license     http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.php
+ * @since       1.6
  */
 
 // No direct access
@@ -13,20 +15,26 @@ defined('_JEXEC') or die;
 jimport('joomla.application.component.controllerform');
 
 /**
- * Form controller class.
+ * Raw Form controller class.
  *
  * @package		Joomla.Administrator
  * @subpackage	Fabrik
- * @since		1.6
+ * @since		3.0
  */
 class FabrikControllerForm extends JControllerForm
 {
 	/**
-	 * @var		string	The prefix to use with controller messages.
-	 * @since	1.6
+	 * The prefix to use with controller messages.
+	 *
+	 * @var	string
 	 */
 	protected $text_prefix = 'COM_FABRIK_FORM';
 
+	/**
+	 * Is in J content plugin
+	 *
+	 * @var bool
+	 */
 	public $isMambot = false;
 
 	/**
@@ -133,8 +141,10 @@ class FabrikControllerForm extends JControllerForm
 				{
 					JRequest::setVar('fabrik_referrer', JArrayHelper::getValue($_SERVER, 'HTTP_REFERER', ''), 'post');
 
-					// $$$ hugh - testing way of preserving form values after validation fails with form plugin
-					// might as well use the 'savepage' mechanism, as it's already there!
+					/**
+					 * $$$ hugh - testing way of preserving form values after validation fails with form plugin
+					 * might as well use the 'savepage' mechanism, as it's already there!
+					 */
 					$this->savepage();
 					$this->makeRedirect($model, '');
 				}
@@ -174,7 +184,7 @@ class FabrikControllerForm extends JControllerForm
 			echo $model->inLineEditResult();
 			return;
 		}
-		if (JRequest::getInt('_packageId') !== 0)
+		if (JRequest::getInt('packageId') !== 0)
 		{
 			$rowid = JRequest::getInt('rowid');
 			echo json_encode(array('msg' => $msg, 'rowid' => $rowid));

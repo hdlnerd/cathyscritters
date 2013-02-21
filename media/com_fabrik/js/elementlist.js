@@ -47,12 +47,10 @@ var FbElementList =  new Class({
 			this.runLoadEvent(js);
 		} else {
 			c = this.form.form;
-			var delegate = action + ':relay(input[type=' + this.type + '])';
+			
+			// Addded name^= for http://fabrikar.com/forums/showthread.php?t=30563 (js events to show hide multiple groups)
+			var delegate = action + ':relay(input[type=' + this.type + '][name^=' + this.strElement + '])';
 			c.addEvent(delegate, function (event, target) {
-				/*var subEls = this._getSubElements();
-				if (subEls.contains(target)) {
-					typeOf(js) === 'function' ? js.delay(0) : eval(js);
-				}*/
 				
 				// As we are delegating the event, and reference to 'this' in the js will refer to the first element
 				// When in a repeat group we want to replace that with a reference to the current element.

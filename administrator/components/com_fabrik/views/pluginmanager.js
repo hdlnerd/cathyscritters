@@ -107,15 +107,24 @@ var PluginManager = new Class({
 	},
 	
 	addTop: function (plugin) {
-		plugin = plugin ? plugin : '';
+		var published;
+		if (typeOf(plugin) === 'string') {
+			published = 1;
+			plugin = plugin ? plugin : '';
+		} else {
+			// Validation plugins 
+			published = plugin ? plugin.published : 1;
+			plugin = plugin ? plugin.plugin : '';
+		}
 		var div = new Element('div.actionContainer.panel');
 		var toggler = new Element('h3.title.pane-toggler').adopt(new Element('a', {'href': '#'}).adopt(new Element('span').set('text', plugin)));
 			
 		div.adopt(toggler);
 		div.inject(document.id('plugins'));
 		var append = document.id('plugins').getElements('.actionContainer').getLast();
-		// Ajax request to load the first part of the plugin form (do[plugin] in, on)
+		var tt_temp = this.topTotal; //added temp variable
 		
+		// Ajax request to load the first part of the plugin form (do[plugin] in, on)
 		var request = new Request.HTML({
 			url: 'index.php',
 			data: {
@@ -125,6 +134,7 @@ var PluginManager = new Class({
 				'format': 'raw',
 				'type': this.type,
 				'plugin': plugin,
+				'plugin_published': published,
 				'c': this.topTotal,
 				'id': this.id
 			},
@@ -132,7 +142,8 @@ var PluginManager = new Class({
 			onSuccess: function (res) {
 				
 				if (plugin !== '') {
-					this.addPlugin(plugin);
+					// Sent temp variable as c to addPlugin, so they are aligned properly
+					this.addPlugin(plugin, tt_temp + 1);
 				}
 				this.accordion.addSection(toggler, div.getElement('.pane-slider'));
 			}.bind(this),

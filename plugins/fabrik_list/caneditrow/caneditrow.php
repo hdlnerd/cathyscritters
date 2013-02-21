@@ -1,5 +1,7 @@
 <?php
 /**
+ * Determines if a row is editable
+ *
  * @package     Joomla.Plugin
  * @subpackage  Fabrik.list.caneditrow
  * @copyright   Copyright (C) 2005 Fabrik. All rights reserved.
@@ -14,12 +16,12 @@ require_once COM_FABRIK_FRONTEND . '/models/plugin-list.php';
 require_once COM_FABRIK_FRONTEND . '/helpers/html.php';
 
 /**
-*  Determines if a row is editable
-*
-* @package     Joomla.Plugin
-* @subpackage  Fabrik.list.caneditrow
-* @since       3.0
-*/
+ *  Determines if a row is editable
+ *
+ * @package     Joomla.Plugin
+ * @subpackage  Fabrik.list.caneditrow
+ * @since       3.0
+ */
 
 class plgFabrik_ListCaneditrow extends plgFabrik_List
 {
@@ -89,7 +91,29 @@ class plgFabrik_ListCaneditrow extends plgFabrik_List
 				$field .= '_raw';
 			}
 			$value = $params->get('caneditrow_value');
-			return $data->$field == $value;
+			$operator = $params->get('operator', '=');
+			switch ($operator)
+			{
+				case '=':
+				default:
+					return $data->$field == $value;
+					break;
+				case "!=":
+					return $data->$field != $value;
+					break;
+			}
+
 		}
+	}
+
+	/**
+	 * Get the parameter name that defines the plugins acl access
+	 *
+	 * @return  string
+	 */
+
+	protected function getAclParam()
+	{
+		return 'caneditrow_access';
 	}
 }

@@ -1,5 +1,7 @@
 <?php
 /**
+ * Plugin element to yes/no radio options - render as tick/cross in list view
+ *
  * @package     Joomla.Plugin
  * @subpackage  Fabrik.element.yesno
  * @copyright   Copyright (C) 2005 Fabrik. All rights reserved.
@@ -23,14 +25,22 @@ require_once JPATH_SITE . '/plugins/fabrik_element/radiobutton/radiobutton.php';
 class plgFabrik_ElementYesno extends plgFabrik_ElementRadiobutton
 {
 
-	/** @var  string  db table field type */
+	/**
+	 * Db table field type
+	 *
+	 * @var string
+	 */
 	protected $fieldDesc = 'TINYINT(%s)';
 
-	/** @var  string  db table field size */
+	/**
+	 * Db table field size
+	 *
+	 * @var string
+	 */
 	protected $fieldSize = '1';
 
 	/**
-	 * this really does get just the default value (as defined in the element's settings)
+	 * This really does get just the default value (as defined in the element's settings)
 	 *
 	 * @param   array  $data  to use as parsemessage for placeholder
 	 *
@@ -192,19 +202,6 @@ class plgFabrik_ElementYesno extends plgFabrik_ElementRadiobutton
 		FabrikHelperHTML::addPath(COM_FABRIK_BASE . 'plugins/fabrik_element/yesno/images/', 'image', 'form', false);
 		$img = $value == '1' ? "1.png" : "0.png";
 		return FabrikHelperHTML::image($img, 'form', @$this->tmpl, array('alt' => $label));
-	}
-
-	/**
-	 * draws the form element
-	 * @param int repeat group counter
-	 * @return string returns element html
-	 */
-
-	function render($data, $repeatCounter = 0)
-	{
-		$params = $this->getParams();
-		$params->set('options_per_row', 4);
-		return parent::render($data, $repeatCounter);
 	}
 
 	/**

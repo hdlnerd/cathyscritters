@@ -1,6 +1,8 @@
 <?php
 /**
- * @package     Joomla
+ * View to edit an element.
+ *
+ * @package     Joomla.Administrator
  * @subpackage  Fabrik
  * @copyright   Copyright (C) 2005 Rob Clayburn. All rights reserved.
  * @license     http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.php
@@ -21,13 +23,38 @@ jimport('joomla.application.component.view');
 
 class FabrikViewElement extends JView
 {
+	/**
+	 * Form
+	 *
+	 * @var JForm
+	 */
 	protected $form;
+
+	/**
+	 * Element item
+	 *
+	 * @var JTable
+	 */
 	protected $item;
+
+	/**
+	 * View state
+	 *
+	 * @var object
+	 */
 	protected $state;
+
+	/**
+	 * Plugin HTML
+	 * @var string
+	 */
 	protected $pluginFields;
-	protected $validations;
+
+	/**
+	 * JavaScript Events
+	 * @var array
+	 */
 	protected $jsevents;
-	protected $activeValidations;
 
 	/**
 	 * Display the view
@@ -75,6 +102,9 @@ class FabrikViewElement extends JView
 		}
 		$this->assign('parent', $this->get('Parent'));
 		JText::script('COM_FABRIK_ERR_ELEMENT_JS_ACTION_NOT_DEFINED');
+		JText::script('JNO');
+		JText::script('JYES');
+		JText::script('COM_FABRIK_PUBLISHED');
 		parent::display($tpl);
 	}
 

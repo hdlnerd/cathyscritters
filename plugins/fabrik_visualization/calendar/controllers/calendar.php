@@ -1,5 +1,7 @@
 <?php
 /**
+ * Fabrik Calendar Plug-in Controller
+ *
  * @package     Joomla.Plugin
  * @subpackage  Fabrik.visualization.calendar
  * @copyright   Copyright (C) 2005 Fabrik. All rights reserved.
@@ -19,6 +21,7 @@ require_once COM_FABRIK_FRONTEND . '/helpers/string.php';
  *
  * @package     Joomla.Plugin
  * @subpackage  Fabrik.visualization.calendar
+ * @since       3.0
  */
 
 class FabrikControllerVisualizationcalendar extends FabrikControllerVisualization
@@ -52,6 +55,12 @@ class FabrikControllerVisualizationcalendar extends FabrikControllerVisualizatio
 		return $this;
 	}
 
+	/**
+	 * Delete an event
+	 *
+	 * @return  void
+	 */
+
 	function deleteEvent()
 	{
 		$model = $this->getModel('calendar');
@@ -59,6 +68,11 @@ class FabrikControllerVisualizationcalendar extends FabrikControllerVisualizatio
 		$this->getEvents();
 	}
 
+	/**
+	 * Get events
+	 *
+	 * @return  void
+	 */
 	function getEvents()
 	{
 		$viewName = 'calendar';
@@ -69,6 +83,11 @@ class FabrikControllerVisualizationcalendar extends FabrikControllerVisualizatio
 		echo $model->getEvents();
 	}
 
+	/**
+	 * Choose which list to add the event to
+	 *
+	 * @return  void
+	 */
 	function chooseaddevent()
 	{
 		$document = JFactory::getDocument();
@@ -89,9 +108,16 @@ class FabrikControllerVisualizationcalendar extends FabrikControllerVisualizatio
 		$view->chooseaddevent();
 	}
 
+	/**
+	 * Show the add event form
+	 *
+	 * @return  void
+	 */
+
 	function addEvForm()
 	{
 		$app = JFactory::getApplication();
+		$package = $app->getUserState('com_fabrik.package', 'fabrik');
 		$input = $app->input;
 		$listid = $input->getInt('listid');
 		$viewName = 'calendar';
@@ -118,8 +144,10 @@ class FabrikControllerVisualizationcalendar extends FabrikControllerVisualizatio
 		$input->set('formid', $table->form_id);
 		$input->set('tmpl', 'component');
 		$input->set('ajax', '1');
-		$link = 'index.php?option=com_fabrik&view=form&formid=' . $table->form_id . '&rowid=' . $rowid . '&tmpl=component&ajax=1';
+		$link = 'index.php?option=com_' . $package . '&view=form&formid=' . $table->form_id . '&rowid=' . $rowid . '&tmpl=component&ajax=1';
 		$link .= '&jos_fabrik_calendar_events___visualization_id=' . JRequest::getInt('jos_fabrik_calendar_events___visualization_id');
+		$link .= '&fabrik_window_id=' . $input->get('fabrik_window_id');
+
 		$start_date = JRequest::getVar('start_date', '');
 		if (!empty($start_date))
 		{

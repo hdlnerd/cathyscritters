@@ -23,7 +23,7 @@ class WFEditor extends JObject {
     /**
      * @var varchar
      */
-    private $_version = '2.3.0';
+    private $_version = '2.3.1';
 
     /**
      * Constructor activating the default information of the class
@@ -99,9 +99,12 @@ class WFEditor extends JObject {
             }
             // get the Joomla! area (admin or site)
             $area = $mainframe->isAdmin() ? 2 : 1;
+            
+            if (!class_exists('Mobile_Detect')) {
+                // load mobile detect class
+                require_once(dirname(__FILE__) . '/mobile.php');
+            }
 
-            // load mobile detect class
-            include_once(dirname(__FILE__) . '/mobile.php');
             $mobile = new Mobile_Detect();
 
             // set device values
@@ -126,17 +129,15 @@ class WFEditor extends JObject {
                     continue;
                 }
 
-                // check users if set
-                if ($item->users && in_array($user->id, explode(',', $item->users)) === false) {
-                    continue;
-                }
-
                 // check user groups - a value should always be set
                 $groups = array_intersect($keys, explode(',', $item->types));
 
-                // no users set and user not in group
-                if (empty($item->users) && empty($groups)) {
-                    continue;
+                // user not in the current group...
+                if (empty($groups)) {
+                    // no additional users set or no user match
+                    if (empty($item->users) || in_array($user->id, explode(',', $item->users)) === false) {
+                        continue;
+                    }
                 }
 
                 // check component
@@ -150,12 +151,12 @@ class WFEditor extends JObject {
                 }
 
                 // check device
-                if (in_array($device, explode(',', $item->device)) == false) {
+                if (in_array($device, explode(',', $item->device)) === false) {
                     continue;
                 }
 
                 // check area
-                if (!empty($item->area) && (int) $item->area !== $area) {
+                if (!empty($item->area) && (int) $item->area != $area) {
                     continue;
                 }
 
@@ -165,10 +166,10 @@ class WFEditor extends JObject {
                 }
 
                 $profile = $item;
-                
+
                 return $profile;
             }
-            
+
             return null;
         }
 
@@ -419,6 +420,7 @@ class WFEditor extends JObject {
         $log = JLog::getInstance($file);
         $log->addEntry(array('comment' => 'LOG: ' . $msg));
     }
+
 }
 
 ?>

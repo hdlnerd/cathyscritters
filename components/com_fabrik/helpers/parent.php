@@ -508,14 +508,24 @@ class FabrikWorker
 	 * Check a string is not reserved by Fabrik
 	 *
 	 * @param   string  $str  to check
+	 * @param   bool  $strict  incude things like rowid, listid in the reserved words, defaults to true
 	 *
 	 * @return bool
 	 */
 
-	public static function isReserved($str)
+	public static function isReserved($str, $strict = true)
 	{
-		$_reservedWords = array("task", "view", "layout", "option", "formid", "submit", "ul_max_file_size", "ul_file_types", "ul_directory",
-			"listid", 'rowid', 'itemid', 'adddropdownvalue', 'adddropdownlabel', 'ul_end_dir');
+		$_reservedWords = array("task", "view", "layout", "option", "formid", "submit", "ul_max_file_size", "ul_file_types", "ul_directory", 'adddropdownvalue', 'adddropdownlabel', 'ul_end_dir');
+		/*
+		 * $$$ hugh - a little arbitrary, but need to be able to exlude these so people can create lists from things like
+		 * log files, which include field names like rowid and itemid.  So when saving an element, we now set strict mode
+		 * to false if it's not a new element.
+		 */
+		$_strictWords = array("listid", 'rowid', 'itemid');
+		if ($strict)
+		{
+			$_reservedWords = array_merge($_reservedWords, $_strictWords);
+		}
 		if (in_array(JString::strtolower($str), $_reservedWords))
 		{
 			return true;
@@ -1533,8 +1543,10 @@ class FabrikWorker
 
 	public static function getCache()
 	{
+		$app = JFactory::getApplication();
+		$package = $app->getUserState('com_fabrik.package', 'fabrik');
 		$cache = JCache::getInstance('callback',
-				array('defaultgroup' => 'com_fabrik', 'cachebase' => JPATH_BASE . '/cache/', 'lifetime' => ((float) 2 * 60 * 60), 'language' => 'en-GB',
+				array('defaultgroup' => 'com_' . $package, 'cachebase' => JPATH_BASE . '/cache/', 'lifetime' => ((float) 2 * 60 * 60), 'language' => 'en-GB',
 						'storage' => 'file'));
 		$config = JFactory::getConfig();
 		$doCache = $config->get('caching', 0) > 0 ? true : false;
@@ -1572,5 +1584,22 @@ class FabrikWorker
 			}
 		}
 		return $json;
+	}
+
+	/**
+	 * Are we in J3 or using a bootstrap tmpl
+	 *
+	 * @since   3.1
+	 *
+	 * @return  bool
+	 */
+
+	public static function j3()
+	{
+		$app = JFactory::getApplication();
+		$version = new JVersion;
+
+		// Only use template test for testing in 2.5 with my temp J bootstrap template.
+		return ($app->getTemplate() === 'bootstrap' || $version->RELEASE > 2.5);
 	}
 }

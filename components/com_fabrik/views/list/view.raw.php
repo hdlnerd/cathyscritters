@@ -1,10 +1,10 @@
 <?php
 /**
-* @package Joomla
-* @subpackage Fabrik
-* @copyright Copyright (C) 2005 Rob Clayburn. All rights reserved.
-* @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.php
-*/
+ * @package     Joomla
+ * @subpackage  Fabrik
+ * @copyright   Copyright (C) 2005 Fabrik. All rights reserved.
+ * @license     http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.php
+ */
 
 // Check to ensure this file is included in Joomla!
 defined('_JEXEC') or die();
@@ -14,20 +14,26 @@ jimport('joomla.application.component.view');
 class FabrikViewList extends JView{
 
 	/**
-	 * display a json object representing the table data.
+	 * Display the template
+	 *
+	 * @param   sting  $tpl  template
+	 *
+	 * @return void
 	 */
 
-	function display()
+	function display($tpl = null)
 	{
+		$app = JFactory::getApplication();
+		$input = $app->input;
+		$package = $app->getUserState('com_fabrik.package', 'fabrik');
 		$model = $this->getModel();
-		$model->setId(JRequest::getInt('listid'));
+		$model->setId($input->getInt('listid'));
 		$table = $model->getTable();
 		$params = $model->getParams();
-		//$this->assign('emptyDataMessage', $this->get('EmptyDataMsg'));
-		$rowid = JRequest::getInt('rowid');
+		$rowid = $input->getInt('rowid');
 		list($this->headings, $groupHeadings, $this->headingClass, $this->cellClass) = $this->get('Headings');
 		$data = $model->render();
-		$this->assign('emptyDataMessage', $this->get('EmptyDataMsg'));
+		$this->emptyDataMessage = $this->get('EmptyDataMsg');
 		$nav = $model->getPagination();
 		$form = $model->getFormModel();
 		$c = 0;
@@ -44,6 +50,7 @@ class FabrikViewList extends JView{
 				{
 					$o->data = $data[$groupk][$i];
 				}
+				$o->groupHeading = JArrayHelper::getValue($model->groupTemplates, $groupk, '') . ' ( ' . count($group) . ' )';
 				$o->cursor = $i + $nav->limitstart;
 				$o->total = $nav->total;
 				$o->id = 'list_' . $model->getRenderContext() . '_row_' . @$o->data->__pk_val;
@@ -70,16 +77,17 @@ class FabrikViewList extends JView{
 				$elementModel->setRowClass($data);
 			}
 		}
-		// $$$ hugh - heading[3] doesn't exist any more?  Trying [0] instead.
 		$d = array('id' => $table->id, 'listRef' => JRequest::getVar('listref'), 'rowid' => $rowid, 'model'=>'list', 'data' => $data,
 		'headings' => $this->headings,
 			'formid'=> $model->getTable()->form_id,
 			'lastInsertedRow' => JFactory::getSession()->get('lastInsertedRow', 'test'));
 		$d['nav'] = $nav->getProperties();
-		$d['htmlnav'] = $params->get('show-table-nav', 1) ? $nav->getListFooter($model->getId(), $this->getTmpl()) : '';
+		$tmpl = $input->get('tmpl', $this->getTmpl());
+		$d['htmlnav'] = $params->get('show-table-nav', 1) ? $nav->getListFooter($model->getId(), $tmpl) : '';
 		$d['calculations'] = $model->getCalculations();
+
 		// $$$ hugh - see if we have a message to include, set by a list plugin
-		$context = 'com_fabrik.list' . $model->getRenderContext() . '.msg';
+		$context = 'com_' . $package . '.list' . $model->getRenderContext() . '.msg';
 		$session = JFactory::getSession();
 		if ($session->has($context))
 		{
@@ -90,25 +98,30 @@ class FabrikViewList extends JView{
 	}
 
 	/**
-	 * get the view template name
-	 * @return string template name
+	 * Get the view template name
+	 *
+	 * @return  string template name
 	 */
 
 	private function getTmpl()
 	{
 		$app = JFactory::getApplication();
+		$input = $app->input;
 		$model = $this->getModel();
 		$table = $model->getTable();
 		$params = $model->getParams();
-		if ($app->isAdmin()) {
+		if ($app->isAdmin())
+		{
 			$tmpl = $params->get('admin_template');
-			if ($tmpl == -1 || $tmpl == '') {
-				$tmpl = JRequest::getVar('layout', $table->template);
+			if ($tmpl == -1 || $tmpl == '')
+			{
+				$tmpl = $input->get('layout', $table->template);
 			}
-		} else {
-			$tmpl = JRequest::getVar('layout', $table->template);
+		}
+		else
+		{
+			$tmpl = $input->get('layout', $table->template);
 		}
 		return $tmpl;
 	}
 }
-?>

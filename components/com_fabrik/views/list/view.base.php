@@ -1,9 +1,9 @@
 <?php
 /**
-* @package     Joomla
-* @subpackage  Fabrik
-* @copyright   Copyright (C) 2005 Fabrik. All rights reserved.
-* @license     http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.php
+ * @package     Joomla
+ * @subpackage  Fabrik
+ * @copyright   Copyright (C) 2005 Fabrik. All rights reserved.
+ * @license     http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.php
 */
 
 // Check to ensure this file is included in Joomla!
@@ -55,7 +55,7 @@ class FabrikViewListBase extends JView
 		array_unshift($src, 'media/com_fabrik/js/advanced-search.js');
 
 		$model->getCustomJsAction($src);
-		$src[] = 'media/com_fabrik/js/encoder.js';
+		//$src[] = 'media/com_fabrik/js/encoder.js';
 
 		$tmpl = $this->get('tmpl');
 		$this->tmpl = $tmpl;
@@ -103,6 +103,7 @@ class FabrikViewListBase extends JView
 		$opts->canView = $model->canView() ? "1" : "0";
 		$opts->page = JRoute::_('index.php');
 		$opts->isGrouped = $this->isGrouped;
+		$opts->singleOrdering = (bool) $model->singleOrdering();
 
 		$formEls = array();
 		foreach ($elementsNotInTable as $tmpElement)
@@ -114,6 +115,7 @@ class FabrikViewListBase extends JView
 
 		}
 		$opts->formels = $formEls;//$elementsNotInTable;
+		$opts->fabrik_show_in_list = $input->get('fabrik_show_in_list', array(), 'array');
 		$opts->actionMethod = $model->actionMethod();
 		$opts->floatPos = $params->get('floatPos');
 		$opts->csvChoose = (bool) $params->get('csv_frontend_selection');
@@ -143,6 +145,7 @@ class FabrikViewListBase extends JView
 		$opts->popup_add_label = $params->get('addlabel', JText::_('COM_FABRIK_ADD'));
 		$opts->limitLength = $model->limitLength;
 		$opts->limitStart = $model->limitStart;
+		$opts->tmpl = $tmpl;
 		$csvOpts = new stdClass;
 		$csvOpts->excel = (int) $params->get('csv_format');
 		$csvOpts->inctabledata = (int) $params->get('csv_include_data');
@@ -157,6 +160,7 @@ class FabrikViewListBase extends JView
 		$opts->data = $data;
 
 		$opts->groupByOpts = new stdClass;
+		$opts->groupByOpts->isGrouped = (bool) $this->isGrouped;
 		$opts->groupByOpts->collapseOthers = (bool) $params->get('group_by_collapse_others', false);
 		$opts->groupByOpts->startCollapsed = (bool) $params->get('group_by_start_collapsed', false);
 
@@ -194,7 +198,7 @@ class FabrikViewListBase extends JView
 		JText::script('COM_FABRIK_RECORDS');
 		JText::script('COM_FABRIK_SAVING_TO');
 		JText::script('COM_FABRIK_CONFIRM_DROP');
-		JText::script('COM_FABRIK_CONFIRM_DELETE');
+		JText::script('COM_FABRIK_CONFIRM_DELETE_1');
 		JText::script('COM_FABRIK_NO_RECORDS');
 		JText::script('COM_FABRIK_CSV_COMPLETE');
 		JText::script('COM_FABRIK_CSV_DOWNLOAD_HERE');
@@ -331,7 +335,7 @@ class FabrikViewListBase extends JView
 		$this->rows = $data;
 		reset($this->rows);
 
-		// Cant use numeric key '0' as group by uses groupd name as key
+		// Cant use numeric key '0' as group by uses grouped name as key
 		$firstRow = current($this->rows);
 		$this->requiredFiltersFound = $this->get('RequiredFiltersFound');
 		$this->advancedSearch = $this->get('AdvancedSearchLink');
@@ -356,8 +360,10 @@ class FabrikViewListBase extends JView
 			require_once JPATH_ROOT . '/includes/application.php';
 		}
 		$app = JFactory::getApplication();
+		$package = $app->getUserState('com_fabrik.package', 'fabrik');
 		$this->setTitle($w, $params, $model);
-		/** depreciated (keep incase ppl use them in old tmpls**/
+
+		// Depreciated (keep in case ppl use them in old tmpls)
 		$this->table = new stdClass;
 		$this->table->label = $w->parseMessageForPlaceHolder($item->label, $_REQUEST);
 		$this->table->intro = $w->parseMessageForPlaceHolder($item->introduction);
@@ -365,7 +371,8 @@ class FabrikViewListBase extends JView
 		$this->table->id = $item->id;
 		$this->table->renderid = $this->get('RenderContext');
 		$this->table->db_table_name = $item->db_table_name;
-		/** end **/
+
+		// End deprecated
 		$this->list = $this->table;
 		$this->group_by = $item->group_by;
 		$this->form = new stdClass;
@@ -383,6 +390,7 @@ class FabrikViewListBase extends JView
 		$this->nav = '<div class="fabrikNav">' . $this->nav . '</div>';
 		$this->fabrik_userid = $user->get('id');
 		$this->canDelete = $model->deletePossible() ? true : false;
+		$this->limitLength = $model->limitLength;
 
 		// 3.0 observed in list.js & html moved into fabrik_actions rollover
 		$canPdf = FabrikWorker::canPdf();
@@ -393,7 +401,7 @@ class FabrikViewListBase extends JView
 			JError::raiseNotice(500, JText::_('COM_FABRIK_NOTICE_DOMPDF_NOT_FOUND'));
 		}
 		$this->emptyLink = $model->canEmpty() ? '#' : '';
-		$this->csvImportLink = $this->showCSVImport ? JRoute::_("index.php?option=com_fabrik&view=import&filetype=csv&listid=" . $item->id) : '';
+		$this->csvImportLink = $this->showCSVImport ? JRoute::_('index.php?option=com_' . $package . '&view=import&filetype=csv&listid=' . $item->id) : '';
 		$this->showAdd = $model->canAdd();
 		if ($this->showAdd)
 		{
@@ -419,14 +427,22 @@ class FabrikViewListBase extends JView
 		}
 		if ($app->isAdmin())
 		{
+			// Admin always uses com_fabrik option
 			$this->pdfLink = JRoute::_('index.php?option=com_fabrik&task=list.view&listid=' . $item->id .'&format=pdf&tmpl=component');
 		}
 		else
 		{
-			$this->pdfLink = JRoute::_('index.php?option=com_fabrik&view=list&format=pdf&listid=' . $item->id);
+			$pdfLink = 'index.php?option=com_' . $package . '&view=list&format=pdf&listid=' . $item->id;
+			if (!$this->nodata)
+			{
+				// If some data is shown then ensure that menu links reset filters (combined with require filters) doesnt produce an empty data set for the pdf
+				$pdfLink .= '&resetfilters=0';
+			}
+			$this->pdfLink = JRoute::_($pdfLink);
 		}
 
 		list($this->headings, $groupHeadings, $this->headingClass, $this->cellClass) = $this->get('Headings');
+
 		$this->groupByHeadings = $this->get('GroupByHeadings');
 		$this->filter_action = $this->get('FilterAction');
 		JDEBUG ? $profiler->mark('fabrik getfilters start') : null;
@@ -523,13 +539,7 @@ class FabrikViewListBase extends JView
 		$params = $model->getParams();
 		if ($params->get('process-jplugins'))
 		{
-			$opt = $input->get('option');
-			$input->set('option', 'com_content');
-			jimport('joomla.html.html.content');
-			$text .= '{emailcloak=off}';
-			$text = JHTML::_('content.prepare', $text);
-			$text = preg_replace('/\{emailcloak\=off\}/', '', $text);
-			$input->set('option', $opt);
+			FabrikHelperHTML::runConentPlugins($text);
 		}
 		JDEBUG ? $profiler->mark('end fabrik display') : null;
 
@@ -764,10 +774,10 @@ class FabrikViewListBase extends JView
 
 		$this->hiddenFields[] = '<input type="hidden" name="format" value="html" />';
 
-		// $packageId = $input->getInt('_packageId', 0);
+		// $packageId = $input->getInt('packageId', 0);
 		// $$$ rob testing for ajax table in module
 		$packageId = $model->packageId;
-		$this->hiddenFields[] = '<input type="hidden" name="_packageId" value="' . $packageId . '" />';
+		$this->hiddenFields[] = '<input type="hidden" name="packageId" value="' . $packageId . '" />';
 		if ($app->isAdmin())
 		{
 			$this->hiddenFields[] = '<input type="hidden" name="task" value="list.view" />';
@@ -803,6 +813,7 @@ class FabrikViewListBase extends JView
 	protected function advancedSearch($tpl)
 	{
 		$app = JFactory::getApplication();
+		$package = $app->getUserState('com_fabrik.package', 'fabrik');
 		$input = $app->input;
 		$model = $this->getModel();
 		$id = $model->getState('list.id');
@@ -812,7 +823,7 @@ class FabrikViewListBase extends JView
 
 		// Advanced search script loaded in list view - avoids timing issues with ie loading the ajax content and script
 		$this->rows = $this->get('advancedSearchRows');
-		$action = $input->server->get('HTTP_REFERER', 'index.php?option=com_fabrik', 'string');
+		$action = $input->server->get('HTTP_REFERER', 'index.php?option=com_' . $package, 'string');
 		$this->action = $action;
 		$this->listid = $id;
 	}

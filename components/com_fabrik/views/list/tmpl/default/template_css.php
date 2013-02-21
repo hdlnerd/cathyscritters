@@ -1,4 +1,13 @@
 <?php
+/**
+ * Fabrik List Template: Default CSS
+ *
+ * @package     Joomla
+ * @subpackage  Fabrik
+ * @copyright   Copyright (C) 2005 Fabrik. All rights reserved.
+ * @license     http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.php
+ */
+
 header('Content-type: text/css');
 $c = $_REQUEST['c'];
 $buttonCount = (int) $_REQUEST['buttoncount'];
@@ -203,9 +212,15 @@ div.calendar{
 	padding: 3px;
 }
 
-#listform_$c .fabrikHover {
+#listform_$c .fabrikHover,
+#advancedSearchContainer tr:hover {
 	background-color: #ffffff;
 }
+
+#advancedSearchContainer tr:active {
+background-color: red;
+}
+
 
 /** highlight the last row that was clicked */
 #listform_$c .fabrikRowClick {

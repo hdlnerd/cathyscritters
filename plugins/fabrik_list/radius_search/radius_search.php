@@ -51,10 +51,9 @@ class plgFabrik_ListRadius_search extends plgFabrik_List
 		$f = new stdClass;
 		$f->label = $params->get('radius_label', 'Radius search');
 		$class = "class=\"inputbox fabrik_filter autocomplete-trigger\"";
-		$type = $app->getUserStateFromRequest($baseContext . 'radius_search_type', 'radius_search_type', array('mylocation'));
+		$type = $app->getUserStateFromRequest($baseContext . 'radius_search_type' . $this->renderOrder, 'radius_search_type' . $this->renderOrder, array('mylocation'));
 		$style = $type[0] == 'place' ? 'display:block' : 'display:none';
 
-		$placeElement = $this->getPlaceElement()->getElement();
 		$context = $baseContext . 'radius_search_place-auto-complete';
 		$name = "radius_search_place{$this->_counter}-auto-complete";
 		$place = $app->getUserStateFromRequest($context, $name);
@@ -70,27 +69,60 @@ class plgFabrik_ListRadius_search extends plgFabrik_List
 		</div>";
 
 		$style = $type[0] == 'latlon' ? 'display:block' : 'display:none';
-		$lat = $app->getUserStateFromRequest($baseContext . 'lat', 'radius_search_lat');
-		$lon = $app->getUserStateFromRequest($baseContext . 'lon', 'radius_search_lon');
+		$lat = $app->getUserStateFromRequest($baseContext . 'lat' . $this->renderOrder, 'radius_search_lat' . $this->renderOrder);
+		$lon = $app->getUserStateFromRequest($baseContext . 'lon' . $this->renderOrder, 'radius_search_lon' . $this->renderOrder);
+
 		$strLatLon = "<div class=\"radius_search_coords_container\" style=\"$style\">
 		<table><tr><td><label for=\"radius_search_lat\">" . JText::_('PLG_VIEW_RADIUS_LATITUDE')
 			. "</label></td><td><input name=\"radius_search_lat\" value=\"$lat\" id=\"radius_search_lat\" $class size=\"6\"/></td></tr>
 		<label><tr><td><label for=\"radius_search_lon\">" . JText::_('PLG_VIEW_RADIUS_LONGITUDE')
 			. "</label></td><td><input name=\"radius_search_lon\" value=\"$lon\" id=\"radius_search_lon\" $class size=\"6\"/></td></tr></table></div>";
 
+		$strGeocode = $this->geoCodeWidget($type);
+
+		$o = FabrikString::mapStrToCoords($params->get('geocode_default', ''));
+
+		$defaultLat = $lat ? $lat : (float) $o->lat;
+		$defaultLon = $lon ? $lon : (float) $o->long;
+		$defaultZoom = (int) $o->zoom === 0 ? 7 : (int) $o->zoom;
 		$strSlider = $this->slider();
 
-		$checked = $type[0] == 'mylocation' ? 'checked="checked"' : '';
-		$options = "<label>" . JText::_('PLG_VIEW_RADIUS_MY_LOCATION')
-			. "<input type=\"radio\" name=\"radius_search_type[]\" value=\"mylocation\" $checked /></label><br />";
-		$checked = $type[0] == 'place' ? 'checked="checked"' : '';
-		$options .= "<label>" . strip_tags($placeElement->label)
-			. "<input type=\"radio\" name=\"radius_search_type[]\" value=\"place\" $checked /></label><br />";
-		$checked = $type[0] == 'latlon' ? 'checked="checked"' : '';
-		$options .= "<label>" . JText::_('PLG_VIEW_RADIUS_COORDINATES')
-			. "<input type=\"radio\" name=\"radius_search_type[]\" value=\"latlon\" $checked /></label><br />";
+		$geocodeSelected = $params->get('geocode', 1);
 
-		$active = $app->getUserStateFromRequest($baseContext . 'radius_serach_active', 'radius_search_active');
+		if ($params->get('myloc', 1) == 1)
+		{
+			$checked = $type[0] == 'mylocation' && !$geocodeSelected ? 'checked="checked"' : '';
+			$options[] = '<label>' . JText::_('PLG_VIEW_RADIUS_MY_LOCATION')
+			. '<input type="radio" name="radius_search_type' . $this->renderOrder . '[]" value="mylocation" ' . $checked . '/></label><br />';
+		}
+
+		if ($params->get('place', 1) == 1)
+		{
+			$placeElement = $this->getPlaceElement()->getElement();
+			$checked = $type[0] == 'place' && !$geocodeSelected ? 'checked="checked"' : '';
+			$options[] = '<label>' . strip_tags($placeElement->label)
+			. '<input type="radio" name="radius_search_type' . $this->renderOrder . '[]" value="place" ' . $checked . '/></label><br />';
+		}
+
+		if ($params->get('coords', 1) == 1)
+		{
+			$checked = $type[0] == 'latlon' && !$geocodeSelected ? 'checked="checked"' : '';
+			$options[] = '<label>' . JText::_('PLG_VIEW_RADIUS_COORDINATES')
+			. '<input type="radio" name="radius_search_type'  . $this->renderOrder . '[]" value="latlon" ' . $checked . '/></label><br />';
+		}
+
+		if ($geocodeSelected == 1)
+		{
+			$checked = $type[0] == 'geocode' ? 'checked="checked"' : '';
+			$options[] = '<label>' . JText::_('PLG_VIEW_RADIUS_GEOCODE')
+			. '<input type="radio" name="radius_search_type'  . $this->renderOrder . '[]" value="geocode" ' . $checked . '/></label><br />'
+			. '<input type="hidden" name="geo_code_def_zoom" value="' . $defaultZoom . '" />'
+			. '<input type="hidden" name="geo_code_def_lat" value="' . $defaultLat . '" />'
+			. '<input type="hidden" name="geo_code_def_lon" value="' . $defaultLon . '" />';
+		}
+
+		$active = $app->getUserStateFromRequest($baseContext . 'radius_serach_active', 'radius_search_active' . $this->renderOrder, array( $params->get('start_active', 0)));
+
 		if ($active[0] == 1)
 		{
 			$yessel = "checked=\"checked\"";
@@ -101,35 +133,82 @@ class plgFabrik_ListRadius_search extends plgFabrik_List
 			$yessel = "";
 			$nosel = "checked=\"checked\"";
 		}
-		$str = "<div class=\"radus_search\">
+		$str = "<div class=\"radus_search\" id=\"radius_search" . $this->renderOrder . "\" style=\"left:-100000px;position:absolute;\">
 
 		<label>" . JText::_('PLG_VIEW_RADIUS_ACTIVE')
-			. "<input type=\"radio\" $yessel name=\"radius_search_active[]\" value=\"1\" /></label>
+			. "<input type=\"radio\" $yessel name=\"radius_search_active" . $this->renderOrder . "[]\" value=\"1\" /></label>
 		<label>" . JText::_('PLG_VIEW_RADIUS_INACTIVE')
-			. "<input type=\"radio\" $nosel name=\"radius_search_active[]\" value=\"0\" /></label>
+			. "<input type=\"radio\" $nosel name=\"radius_search_active" . $this->renderOrder . "[]\" value=\"0\" /></label>
 		<div class=\"radius_search_options\">
-		<table class=\"radius_table\" style=\"width:100%\">
+		<table class=\"radius_table fabrikList table table-striped\" style=\"width:100%\">
 			<tbody>
 			<tr>
 				<td>" . JText::_('PLG_VIEW_RADIUS_DISTANCE') . "</td>
 				<td>$strSlider</td>
-			<tr>
+			<tr>";
+		if (count($options) < 2)
+		{
+			$str .= '<td colspan="2"><div style="display:none">' . implode("\n", $options) . '</div>' . $strPlace . $strLatLon . $strGeocode . '</td>';
+		}
+		else
+		{
+		$str .= "
 				<td>" . JText::_('PLG_VIEW_RADIUS_FROM')
-			. ":<br />$options</td>
-				<td style=\"text-align:left\">$strPlace $strLatLon
-			</tr>
-			</tbody>
+			. ":<br />" . implode("\n", $options) . "</td>
+				<td style=\"text-align:left\">$strPlace $strLatLon $strGeocode
+			</tr>";
+		}
+		$str .=	"</tbody>
 		</table>
 		</div>
 		";
-		//this.listform.adopt(new Element('input', {'type': 'hidden', 'name': 'radius_prefilter', 'value': 1}));
 		$str .= '<input type="hidden" name="radius_prefilter" value="1" />';
 		$str .= "</div>";
 		$f->element = $str;
 		$f->required = '';
 		FabrikHelperHTML::addStyleDeclaration("table.radius_table{border-collapse:collapse;border:0;}
 		table.radius_table td{border:0;}");
-		$model->viewfilters[] = $f;
+		JText::script('PLG_VIEW_RADIUS_NO_GEOLOCATION_AVAILABLE');
+		JText::script('COM_FABRIK_SEARCH');
+		JText::script('PLG_LIST_RADIUS_SEARCH');
+
+		$mapElement = $this->getMapElement();
+		$mapName = $mapElement->getFullName(false, true, false);
+		$model->viewfilters[$mapName] = $f;
+	}
+
+	/**
+	 * Create the geocode widget to determine search center.
+	 *
+	 * @param   array  $type  Search type
+	 *
+	 * @since   3.0.8
+	 *
+	 * @return  string
+	 */
+
+	private function geoCodeWidget($type)
+	{
+		$app = JFactory::getApplication();
+		$params = $this->getParams();
+		$baseContext = $this->getSessionContext();
+		//$style = $type[0] == 'geocode' ? '' : 'display:none';
+
+		$style = $type[0] == 'geocode' ? '' : 'position:absolute;left:-10000000px';
+
+		$address = $app->getUserStateFromRequest($baseContext . 'geocode' . $this->renderOrder, 'radius_search_geocode_field' . $this->renderOrder);
+		list($latitude, $longitude) = $this->getSearchLatLon();
+		$str[] = '<div class="radius_search_geocode" style="' . $style . '">';
+		$str[] = '<input class="radius_search_geocode_field" name="radius_search_geocode_field' . $this->renderOrder . '" value="' . $address . '" />';
+		if (!$params->get('geocode_as_type', 1))
+		{
+			$str[] = '<button class="btn button" id="radius_search_button">' . JText::_('COM_FABRIK_SEARCH') . '</button>';
+		}
+		$str[] = '<div class="radius_search_geocode_map" id="radius_search_geocode_map' . $this->renderOrder . '" style="width:400px;height:300px;margin-top:15px;"></div>';
+		$str[] = '<input type="hidden" name="radius_search_geocode_lat' . $this->renderOrder . '" value="' . $latitude . '" />';
+		$str[] = '<input type="hidden" name="radius_search_geocode_lon' . $this->renderOrder . '" value="' . $longitude. '" />';
+		$str[] = '</div>';
+		return implode("\n", $str);
 	}
 
 	/**
@@ -142,6 +221,8 @@ class plgFabrik_ListRadius_search extends plgFabrik_List
 
 	private function placeCoordinates($place)
 	{
+		$app = JFactory::getApplication();
+		$input = $app->input;
 		if (isset($this->placeCoordinates))
 		{
 			return $this->placeCoordinates;
@@ -150,10 +231,10 @@ class plgFabrik_ListRadius_search extends plgFabrik_List
 		$mapName = $mapElement->getFullName(false, true, false);
 		$placeElement = $this->getPlaceElement()->getElement();
 		$db = $this->model->getDb();
-		$usekey = JRequest::getVar('usekey');
-		JRequest::setVar('usekey', $placeElement->name);
+		$usekey = $input->get('usekey');
+		$input->set('usekey', $placeElement->name);
 		$row = $this->model->getRow($place);
-		JRequest::SetVar('usekey', $usekey);
+		$input->set('usekey', $usekey);
 		if (is_object($row))
 		{
 			$coords = explode(':', str_replace(array('(', ')'), '', $row->$mapName));
@@ -192,7 +273,10 @@ class plgFabrik_ListRadius_search extends plgFabrik_List
 
 	public function onGetPostFilter($params, &$model, &$args)
 	{
-		$this->model = $model;
+		// Returning here as was creating odd results with empty filters for other elements - seems to work without this anyway???
+		return;
+
+		/* $this->model = $model;
 		$filters = $model->tmpFilters;
 		$v = JRequest::getVar('radius_search_distance');
 		if ($v == '')
@@ -233,7 +317,7 @@ class plgFabrik_ListRadius_search extends plgFabrik_List
 		$filters['label'][$key] = $params->get('radius_label', 'Radius search');
 		$filters['elementid'][$key] = $key;
 		$query = $this->getQuery($params);
-		$filters['sqlCond'][$key] = $query;
+		$filters['sqlCond'][$key] = $query; */
 	}
 
 	/**
@@ -247,25 +331,16 @@ class plgFabrik_ListRadius_search extends plgFabrik_List
 	protected function getQuery($params)
 	{
 		$app = JFactory::getApplication();
-		$baseContext = $this->getSessionContext();
-		$values = JArrayHelper::getValue($filters, 'value', array());
-		$type = JRequest::getVar('radius_search_type');
-		if ($type[0] == 'place')
-		{
-			$place = $app->getUserStateFromRequest($baseContext . 'radius_search_place', 'radius_search_place');
-			list($latitude, $longitude) = $this->placeCoordinates($place);
-		}
-		else
-		{
-
-			$latitude = $app->getUserStateFromRequest($baseContext . 'lat', 'radius_search_lat');
-			$longitude = $app->getUserStateFromRequest($baseContext . 'lon', 'radius_search_lon');
-		}
+		$input = $app->input;
+		$values = JArrayHelper::getValue($this->filters, 'value', array());
+		list($latitude, $longitude) = $this->getSearchLatLon();
 		if (trim($latitude) === '' && trim($longitude) === '')
 		{
-			JRequest::setVar('radius_search_active', array(0));
+			$input->set('radius_search_active' . $this->renderOrder, array(0));
 			return;
 		}
+		// Need to unset for multiple radius searches to work
+		unset($this->mapElement);
 		$el = $this->getMapElement();
 		$el = FabrikString::safeColName($el->getFullName(false, false, false));
 
@@ -288,6 +363,38 @@ class plgFabrik_ListRadius_search extends plgFabrik_List
 	}
 
 	/**
+	 * Get the searched for lat/lon
+	 *
+	 * @since   3.0.8
+	 *
+	 * @return  array
+	 */
+
+	protected function getSearchLatLon()
+	{
+		$app = JFactory::getApplication();
+		$baseContext = $this->getSessionContext();
+		$type = $app->input->get('radius_search_type' . $this->renderOrder, array(), 'array');
+		$type = JArrayHelper::getValue($type, 0);
+		switch ($type)
+		{
+			case 'place':
+				$place = $app->getUserStateFromRequest($baseContext . 'radius_search_place' . $this->renderOrder, 'radius_search_place' . $this->renderOrder);
+				list($latitude, $longitude) = $this->placeCoordinates($place);
+				break;
+			default:
+				$latitude = $app->getUserStateFromRequest($baseContext . 'lat' . $this->renderOrder, 'radius_search_lat' . $this->renderOrder);
+				$longitude = $app->getUserStateFromRequest($baseContext . 'lon' . $this->renderOrder, 'radius_search_lon' . $this->renderOrder);
+				break;
+			case 'geocode':
+				$latitude = $app->getUserStateFromRequest($baseContext . 'lat' . $this->renderOrder, 'radius_search_geocode_lat' . $this->renderOrder);
+				$longitude = $app->getUserStateFromRequest($baseContext . 'lon' . $this->renderOrder, 'radius_search_geocode_lon' . $this->renderOrder);
+				break;
+		}
+		return array($latitude, $longitude);
+	}
+
+	/**
 	 * onFiltersGot method - run after the list has created filters
 	 *
 	 * @param   object  $params  plugin params
@@ -301,7 +408,7 @@ class plgFabrik_ListRadius_search extends plgFabrik_List
 		$this->model = $model;
 		$key = $this->onGetFilterKey();
 		$app = JFactory::getApplication();
-		$active = JRequest::getVar('radius_search_active', array(0));
+		$active = $app->input->get('radius_search_active' . $this->renderOrder, array(0), 'array');
 		if ($active[0] == 0)
 		{
 			return;
@@ -310,6 +417,7 @@ class plgFabrik_ListRadius_search extends plgFabrik_List
 		$v = $this->getValue();
 		$query = $this->getQuery($params);
 
+		$key = 'rs_test___map';
 		$model->filters['elementid'][] = null;
 		$model->filters['value'][] = $v;
 		$model->filters['condition'][] = '=';
@@ -340,7 +448,7 @@ class plgFabrik_ListRadius_search extends plgFabrik_List
 	{
 		$baseContext = $this->getSessionContext();
 		$app = JFactory::getApplication();
-		$v = $app->getUserStateFromRequest($baseContext . 'radius_search_distance', 'radius_search_distance', '');
+		$v = $app->getUserStateFromRequest($baseContext . 'radius_search_distance' . $this->renderOrder, 'radius_search_distance' . $this->renderOrder, '');
 		if ($v == '')
 		{
 			return;
@@ -359,14 +467,15 @@ class plgFabrik_ListRadius_search extends plgFabrik_List
 	{
 		$v = $this->getValue();
 		FabrikHelperHTML::stylesheet('plugins/fabrik_list/radius_search/radius_search.css');
-		$str = "<div class=\"slider_cont\" style=\"width:200px;\">\n";
-		$str .= "<div class=\"fabrikslider-line\" style=\"width:200px\">";
-		$str .= "\n<div class=\"knob\"></div>\n";
-		$str .= "</div>\n";
-		$str .= "<input type=\"hidden\" class=\"radius_search_distance\" name=\"radius_search_distance\" value=\"$v\"/>\n";
-		$str .= "<div class=\"slider_output\">$v" . $this->getParams()->get('radius_unit', 'km') . "</div>\n";
-		$str .= "</div>";
-		return $str;
+		$str = array();
+		$str[] = '<div class="slider_cont" style="width:200px;">';
+		$str[] = '<div class="fabrikslider-line" style="width:200px">';
+		$str[] = '<div class="knob"></div>';
+		$str[] = '</div>';
+		$str[] = '<input type="hidden" class="radius_search_distance" name="radius_search_distance' . $this->renderOrder . '" value="' . $v . '"/>';
+		$str[] = '<div class="slider_output">' . $v . $this->getParams()->get('radius_unit', 'km') . '</div>';
+		$str[] = '</div>';
+		return implode("\n", $str);
 	}
 
 	/**
@@ -432,25 +541,27 @@ class plgFabrik_ListRadius_search extends plgFabrik_List
 
 	public function loadJavascriptClass()
 	{
-		$el = $this->getPlaceElement();
+		$params = $this->getParams();
 		$mapelement = $this->getMapElement();
 		if (!is_object($mapelement))
 		{
+			JError::raiseNotice(500, JText::_('Radius search plug-in active but map element unpublished'));
 			return;
 		}
 		$opts = array();
 		$opts['container'] = 'radius_search_place_container';
 		$listid = $this->model->get('id');
 		$formid = $this->model->getFormModel()->get('id');
-		$shortkey = $el->getElement()->name;
-		if (!is_object($mapelement))
+
+		if ($params->get('place', 1) == 1)
 		{
-			JError::raiseNotice(500, JText::_('Radius search plug-in active but map element unpublished'));
-			return;
+			$el = $this->getPlaceElement();
+			FabrikHelperHTML::autoComplete("radius_search_place{$this->_counter}", $el->getElement()->id, $el->getElement()->plugin, $opts);
 		}
-		$mapfullkey = $mapelement->getFullName(false, true, false);
-		FabrikHelperHTML::autoComplete("radius_search_place{$this->_counter}", $el->getElement()->id, $el->getElement()->plugin, $opts);
-		FabrikHelperHTML::script('components/com_fabrik/libs/geo-location/geo.js');
+		if ($params->get('myloc', 1) == 1)
+		{
+			FabrikHelperHTML::script('components/com_fabrik/libs/geo-location/geo.js');
+		}
 		parent::loadJavascriptClass();
 	}
 
@@ -473,14 +584,24 @@ class plgFabrik_ListRadius_search extends plgFabrik_List
 		}
 		$params = $this->getParams();
 		$app = JFactory::getApplication();
+		list($latitude, $longitude) = $this->getSearchLatLon();
 		$opts = $this->getElementJSOptions($model);
 		$opts->steps = (int) $params->get('radius_max', 100);
 		$opts->unit = $params->get('radius_unit', 'km');
 		$opts->value = $this->getValue();
+		$opts->lat = $latitude;
+		$opts->lon = $longitude;
 		$prefilterDistance = $params->get('prefilter_distance', '');
 		$opts->prefilter = $prefilterDistance === '' ? false : true;
 		$opts->prefilterDone = (bool) $app->input->getBool('radius_prefilter', false);
 		$opts->prefilterDistance = $prefilterDistance;
+		$opts->myloc = $params->get('myloc', 1) == 1 ? true : false;
+		$o = FabrikString::mapStrToCoords($params->get('geocode_default', ''));
+		$opts->geocode_default_lat = $o->lat;
+		$opts->geocode_default_long = $o->long;
+		$opts->geocode_default_zoom = (int) $o->zoom;
+		$opts->geoCodeAsType = $params->get('geocode_as_type', 1);
+		$opts->renderOrder = $this->renderOrder;
 		$opts = json_encode($opts);
 		$this->jsInstance = "new FbListRadiusSearch($opts)";
 		return true;

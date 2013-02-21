@@ -1,5 +1,7 @@
 <?php
 /**
+ * Approval viz Model
+ *
  * @package		Joomla.Plugin
  * @subpackage	Fabrik.visualization.approvals
  * @copyright	Copyright (C) 2005 Fabrik. All rights reserved.
@@ -33,6 +35,8 @@ class fabrikModelApprovals extends FabrikFEModelVisualization
 
 	function getRows()
 	{
+		$app = JFactory::getApplication();
+		$package = $app->getUserState('com_fabrik.package', 'fabrik');
 		$params = $this->getParams();
 		$ids = (array) $params->get('approvals_table');
 		$approveEls = (array) $params->get('approvals_approve_element');
@@ -83,7 +87,7 @@ class fabrikModelApprovals extends FabrikFEModelVisualization
 			{
 				foreach ($rows as &$row)
 				{
-					$row->view = 'index.php?option=com_fabrik&task=form.view&formid=' . $formModel->getId() . '&rowid=' . $row->pk;
+					$row->view = 'index.php?option=com_' . $package . '&task=form.view&formid=' . $formModel->getId() . '&rowid=' . $row->pk;
 					$row->rowid = $row->pk;
 					$row->listid = $ids[$x];
 				}
@@ -156,7 +160,7 @@ class fabrikModelApprovals extends FabrikFEModelVisualization
 	}
 
 	/**
-	 * Set list ids
+	 * Set an array of list id's whose data is used inside the visualaziation
 	 *
 	 * @return  void
 	 */

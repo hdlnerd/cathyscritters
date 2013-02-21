@@ -1,5 +1,7 @@
 <?php
 /**
+ * Plug-in to render fileupload element
+ *
  * @package     Joomla.Plugin
  * @subpackage  Fabrik.element.fileupload
  * @copyright   Copyright (C) 2005 Fabrik. All rights reserved.
@@ -110,7 +112,8 @@ class plgFabrik_ElementFileupload extends plgFabrik_Element
 			{
 				if ($params->get('fileupload_crop') == false)
 				{
-					return true;
+					// Was stopping saving of single ajax upload image
+					// return true;
 				}
 				else
 				{
@@ -170,7 +173,7 @@ class plgFabrik_ElementFileupload extends plgFabrik_Element
 		$params = $this->getParams();
 		if ($params->get('ajax_upload'))
 		{
-			$prefix = JDEBUG ? '' : '.min';
+			$prefix = FabrikHelperHTML::isDebug() ? '' : '.min';
 			$runtimes = $params->get('ajax_runtime', 'html5');
 			$folder = 'plugins/fabrik_element/fileupload/lib/plupload/';
 			parent::formJavascriptClass($srcs, $folder . $js_dir . '/plupload' . $prefix . '.js');
@@ -361,6 +364,8 @@ class plgFabrik_ElementFileupload extends plgFabrik_Element
 		$opts->dir = JPATH_SITE . '/' . $params->get('ul_directory');
 		$opts->ajax_upload = (bool) $params->get('ajax_upload', false);
 		$opts->ajax_runtime = $params->get('ajax_runtime', 'html5');
+		$opts->ajax_silverlight_path = COM_FABRIK_LIVESITE . 'plugins/fabrik_element/fileupload/lib/plupload/js/plupload.flash.swf';
+		$opts->ajax_flash_path = COM_FABRIK_LIVESITE . 'plugins/fabrik_element/fileupload/lib/plupload/js/plupload.flash.swf';
 		$opts->max_file_size = $params->get('ul_max_file_size');
 		$opts->ajax_chunk_size = (int) $params->get('ajax_chunk_size', 0);
 		$opts->crop = (int) $params->get('fileupload_crop', 0);
@@ -372,6 +377,11 @@ class plgFabrik_ElementFileupload extends plgFabrik_Element
 		$opts->previewButton = FabrikHelperHTML::image('image.png', 'form', @$this->tmpl, array('alt' => JText::_('PLG_ELEMENT_FILEUPLOAD_VIEW')));
 		$opts->resizeButton = FabrikHelperHTML::image('resize.png', 'form', @$this->tmpl, array('alt' => JText::_('PLG_ELEMENT_FILEUPLOAD_RESIZE')));
 		$opts->files = $oFiles;
+
+		$opts->winWidth = (int) $params->get('win_width', 400);
+		$opts->winHeight = (int) $params->get('win_height', 400);
+		$opts->elementShortName = $element->name;
+		$opts->listName = $this->getListModel()->getTable()->db_table_name;
 		$opts = json_encode($opts);
 		JText::script('PLG_ELEMENT_FILEUPLOAD_MAX_UPLOAD_REACHED');
 		JText::script('PLG_ELEMENT_FILEUPLOAD_DRAG_FILES_HERE');
@@ -539,6 +549,8 @@ class plgFabrik_ElementFileupload extends plgFabrik_Element
 
 	protected function _renderListData($data, &$thisRow, $i = 0)
 	{
+		$app = JFactory::getApplication();
+		$package = $app->getUserState('com_fabrik.package', 'fabrik');
 		$this->_repeatGroupCounter = $i;
 		$element = $this->getElement();
 		$params = $this->getParams();
@@ -648,7 +660,7 @@ class plgFabrik_ElementFileupload extends plgFabrik_Element
 				$title = '<i class="icon-download icon-white"></i> ' . JText::_('PLG_ELEMENT_FILEUPLOAD_DOWNLOAD');
 			}
 			$link = COM_FABRIK_LIVESITE
-				. 'index.php?option=com_fabrik&amp;task=plugin.pluginAjax&amp;plugin=fileupload&amp;method=ajax_download&amp;element_id='
+				. 'index.php?option=com_' . $package . '&amp;task=plugin.pluginAjax&amp;plugin=fileupload&amp;method=ajax_download&amp;element_id='
 				. $elementid . '&amp;formid=' . $formid . '&amp;rowid=' . $rowid . '&amp;repeatcount=' . $i;
 			$url = '<a href="' . $link . '"' . $aClass . '>' . $title . '</a>';
 			return $url;
@@ -919,6 +931,7 @@ class plgFabrik_ElementFileupload extends plgFabrik_Element
 			$saveParams = array();
 			$files = array_keys($crop);
 			$groupModel = $this->getGroup();
+			$formModel = $this->getFormModel();
 			$isjoin = ($groupModel->isJoin() || $this->isJoin());
 			if ($isjoin)
 			{
@@ -938,20 +951,30 @@ class plgFabrik_ElementFileupload extends plgFabrik_Element
 
 				$name = $this->getFullName(false, true, false);
 
-				$this->_form->updateFormData("join.{$joinid}.{$name}", $files);
-				$this->_form->updateFormData("join.{$joinid}.{$name}_raw", $files);
+				$formModel->updateFormData("join.{$joinid}.{$name}", $files);
+				$formModel->updateFormData("join.{$joinid}.{$name}_raw", $files);
 
-				$this->_form->updateFormData("join.{$joinid}.{$joinsid}", $ids);
-				$this->_form->updateFormData("join.{$joinid}.{$joinsid}_raw", $ids);
+				$formModel->updateFormData("join.{$joinid}.{$joinsid}", $ids);
+				$formModel->updateFormData("join.{$joinid}.{$joinsid}_raw", $ids);
 
-				$this->_form->updateFormData("join.{$joinid}.{$joinsparam}", $saveParams);
-				$this->_form->updateFormData("join.{$joinid}.{$joinsparam}_raw", $saveParams);
+				$formModel->updateFormData("join.{$joinid}.{$joinsparam}", $saveParams);
+				$formModel->updateFormData("join.{$joinid}.{$joinsparam}_raw", $saveParams);
 			}
 			else
 			{
-				$strfiles = json_encode($files);
-				$this->_form->updateFormData($name . '_raw', $strfiles);
-				$this->_form->updateFormData($name, $strfiles);
+
+				// Only one file
+				$store = array();
+				for ($i = 0; $i < count($files); $i++)
+				{
+					$o = new stdClass;
+					$o->file = $files[$i];
+					$o->params = $crop[$files[$i]];
+					$store[] = $o;
+				}
+				$store = json_encode($store);
+				$formModel->updateFormData($name . '_raw', $store);
+				$formModel->updateFormData($name, $store);
 			}
 			return true;
 		}
@@ -963,6 +986,7 @@ class plgFabrik_ElementFileupload extends plgFabrik_Element
 
 	/**
 	 * If an image has been uploaded with ajax upload then we may need to crop it
+	 * Since 3.0.7 crop data is posted as base64 encoded info from the actual canvas element - much simpler and more accurate cropping
 	 *
 	 * @param   string  $name  element
 	 *
@@ -992,12 +1016,14 @@ class plgFabrik_ElementFileupload extends plgFabrik_Element
 				{
 					$crop = (array) JArrayHelper::getValue($raw[0], 'crop');
 					$ids = (array) JArrayHelper::getValue($raw[0], 'id');
+					$cropData = (array) JArrayHelper::getValue($raw[0], 'cropdata');
 				}
 				else
 				{
 					// Single uploaded image.
 					$crop = (array) JArrayHelper::getValue($raw, 'crop');
 					$ids = (array) JArrayHelper::getValue($raw, 'id');
+					$cropData = (array) JArrayHelper::getValue($raw, 'cropdata');
 				}
 			}
 			else
@@ -1005,6 +1031,7 @@ class plgFabrik_ElementFileupload extends plgFabrik_Element
 				// Single image
 				$crop = (array) JArrayHelper::getValue($raw, 'crop');
 				$ids = (array) JArrayHelper::getValue($raw, 'id');
+				$cropData = (array) JArrayHelper::getValue($raw, 'cropdata');
 			}
 			if ($raw == '')
 			{
@@ -1020,6 +1047,12 @@ class plgFabrik_ElementFileupload extends plgFabrik_Element
 			$fileCounter = 0;
 			foreach ($crop as $filepath => $json)
 			{
+				$imgData = $cropData[$filepath];
+				$imgData = substr($imgData, strpos($imgData, ',') + 1);
+
+				// Need to decode before saving since the data we received is already base64 encoded
+				$imgData = base64_decode($imgData);
+
 				$coords = json_decode(urldecode($json));
 				$saveParams[] = $json;
 
@@ -1028,8 +1061,6 @@ class plgFabrik_ElementFileupload extends plgFabrik_Element
 				$cropPath = $storage->clean(JPATH_SITE . '/' . $params->get('fileupload_crop_dir') . '/' . $myFileDir . '/', false);
 				$w = new FabrikWorker;
 				$cropPath = $w->parseMessageForPlaceHolder($cropPath);
-				$cropWidth = $params->get('fileupload_crop_width', 125);
-				$cropHeight = $params->get('fileupload_crop_height', 125);
 				if ($cropPath != '')
 				{
 					if (!$storage->folderExists($cropPath))
@@ -1046,9 +1077,6 @@ class plgFabrik_ElementFileupload extends plgFabrik_Element
 				$destCropFile = $storage->_getCropped($fileURL);
 				$destCropFile = $storage->urlToPath($destCropFile);
 				$destCropFile = $storage->clean($destCropFile);
-				$srcX = $coords->cropdim->x;
-				$srcY = $coords->cropdim->y;
-				$imagedim = $coords->imagedim;
 				if (!JFile::exists($filepath))
 				{
 					unset($files[$fileCounter]);
@@ -1056,12 +1084,20 @@ class plgFabrik_ElementFileupload extends plgFabrik_Element
 					continue;
 				}
 				$fileCounter++;
-				$this->cropForSmaller($oImage, $filepath, $destCropFile, $coords);
+
+				if ($imgData != '')
+				{
+					if (!$storage->write($destCropFile, $imgData))
+					{
+						return JError::raiseError(500, 'couldnt write image, ' . $destCropFile);
+					}
+				}
+
 				$storage->setPermissions($destCropFile);
 			}
 			$groupModel = $this->getGroup();
 			$isjoin = ($groupModel->isJoin() || $this->isJoin());
-
+			$formModel = $this->getFormModel();
 			if ($isjoin)
 			{
 				if (!$groupModel->canRepeat() && !$this->isJoin())
@@ -1079,14 +1115,14 @@ class plgFabrik_ElementFileupload extends plgFabrik_Element
 
 				$name = $this->getFullName(false, true, false);
 
-				$this->_form->updateFormData("join.{$joinid}.{$name}", $files);
-				$this->_form->updateFormData("join.{$joinid}.{$name}_raw", $files);
+				$formModel->updateFormData("join.{$joinid}.{$name}", $files);
+				$formModel->updateFormData("join.{$joinid}.{$name}_raw", $files);
 
-				$this->_form->updateFormData("join.{$joinid}.{$joinsid}", $ids);
-				$this->_form->updateFormData("join.{$joinid}.{$joinsid}_raw", $ids);
+				$formModel->updateFormData("join.{$joinid}.{$joinsid}", $ids);
+				$formModel->updateFormData("join.{$joinid}.{$joinsid}_raw", $ids);
 
-				$this->_form->updateFormData("join.{$joinid}.{$joinsparam}", $saveParams);
-				$this->_form->updateFormData("join.{$joinid}.{$joinsparam}_raw", $saveParams);
+				$formModel->updateFormData("join.{$joinid}.{$joinsparam}", $saveParams);
+				$formModel->updateFormData("join.{$joinid}.{$joinsparam}_raw", $saveParams);
 			}
 			else
 			{
@@ -1100,8 +1136,8 @@ class plgFabrik_ElementFileupload extends plgFabrik_Element
 					$store[] = $o;
 				}
 				$store = json_encode($store);
-				$this->_form->updateFormData($name . '_raw', $store);
-				$this->_form->updateFormData($name, $store);
+				$formModel->updateFormData($name . '_raw', $store);
+				$formModel->updateFormData($name, $store);
 
 			}
 			return true;
@@ -1110,171 +1146,6 @@ class plgFabrik_ElementFileupload extends plgFabrik_Element
 		{
 			return false;
 		}
-	}
-
-	/**
-	 * Crop for smaller
-	 *
-	 * @param   object  $oImage        image
-	 * @param   string  $filepath      source file
-	 * @param   string  $destCropFile  destination
-	 * @param   object  $coords        crop coordinates
-	 *
-	 * @return  void
-	 */
-
-	private function cropForSmaller($oImage, $filepath, $destCropFile, $coords)
-	{
-		$params = $this->getParams();
-		$bg = $params->get('fileupload_crop_bg', '#FFFFFF');
-		$log = array();
-		$log['coords'] = $coords;
-		$cropWidth = $coords->cropdim->w;
-		$cropHeight = $coords->cropdim->h;
-		$scale = (int) $coords->scale;
-
-		// Get the orignal file
-		list($origImage, $header) = $oImage->imageFromFile($filepath);
-
-		// Get original File dims
-		list($origWidth, $origHeight) = getimagesize($filepath);
-		if ($scale !== 100)
-		{
-			// Make a scaled verios of the original image
-			$destWidth = (int) $origWidth * ($scale / 100);
-			$destHeight = (int) $origHeight * ($scale / 100);
-
-			$scaledImage = imagecreatetruecolor($destWidth, $destHeight);
-
-			// Copy the man image into the scaled image
-			imagecopyresampled($scaledImage, $origImage, 0, 0, 0, 0, $destWidth, $destHeight, $origWidth, $origHeight);
-			$origImage = $scaledImage;
-		}
-		$imagedim = $coords->imagedim;
-
-		// Has the image itself been dragged?
-		$deltaX = 400 / 2 - $imagedim->x;
-		$deltaY = 400 / 2 - $imagedim->y;
-
-		// Make an image the size of the crop interface
-		$canvas = imagecreatetruecolor(400, 400);
-
-		// X position to start placing the original image on the canvas
-		$destX = (int) (400 - ($origWidth * ($scale / 100))) / 2;
-		$destX = $destX - $deltaX;
-
-		// Y position to start placing the original image on the canvas
-		$destY = (int) (400 - ($origHeight * ($scale / 100))) / 2;
-		$destY = $destY - $deltaY;
-
-		// X point on source image to copy from
-		$srcX = 0;
-
-		// Y point on source image to copy from
-		$srcY = 0;
-		$srcW = (int) $origWidth * ($scale / 100);
-		$srcH = (int) $origHeight * ($scale / 100);
-		$destWidth = (int) $imagedim->w;
-		$setHeight = (int) $imagedim->h;
-
-		imagecopyresampled($canvas, $origImage, $destX, $destY, $srcX, $srcY, $destWidth, $setHeight, $srcW, $srcH);
-
-		$oImage->imageToFile($destCropFile, $canvas);
-
-		if ($coords->rotation != 0)
-		{
-			// Works great here for images with scale < 100
-
-			// Rotate image
-			list($rotatedImgObject, $rotateWidth, $rotateHeight) = $oImage->rotate($destCropFile, $destCropFile, $coords->rotation * -1);
-
-			// Scale it back to crop dims
-			$xx = $rotateWidth / 2 - 400 / 2;
-			$yy = $rotateHeight / 2 - 400 / 2;
-			$oImage->crop($destCropFile, $destCropFile, $xx, $yy, 400, 400);
-		}
-
-		// Crop it from the crop coordinates
-		$srcX = ($coords->cropdim->x - ($coords->cropdim->w / 2));
-		$srcY = $coords->cropdim->y - ($coords->cropdim->h / 2);
-		$oImage->crop($destCropFile, $destCropFile, $srcX, $srcY, $cropWidth, $cropHeight, 0, 0, $bg);
-		FabrikWorker::log('fabrik.fileupload.crop', $log);
-	}
-
-	/**
-	 * Crop for larger
-	 *
-	 * @param   object  $oImage        image
-	 * @param   string  $filepath      source file
-	 * @param   string  $destCropFile  destination
-	 * @param   object  $coords        crop coordinates
-	 *
-	 * @return  void
-	 */
-
-	private function cropForLarger($oImage, $filepath, $destCropFile, $coords)
-	{
-		$params = $this->getParams();
-		$bg = $params->get('fileupload_crop_bg', '#FFFFFF');
-		$log = array();
-		$log['coords'] = $coords;
-
-		$imagedim = $coords->imagedim;
-		$srcX = $coords->cropdim->x;
-		$srcY = $coords->cropdim->y;
-		$cropWidth = $coords->cropdim->w;
-		$cropHeight = $coords->cropdim->h;
-		$scale = (int) $coords->scale;
-
-		/* deprecaited (again lol)
-		 * from here replaces commented code below
-		 */
-		list($width, $height) = getimagesize($filepath);
-		$log['rotate'] = array('path' => $filepath, 'dest' => $destCropFile, 'rotation' => $coords->rotation * -1);
-		list($rotatedImgObject, $rotateWidth, $rotateHeight) = $oImage->rotate($filepath, $destCropFile, $coords->rotation * -1);
-
-		$xx = $rotateWidth / 2 - $width / 2;
-		$yy = $rotateHeight / 2 - $height / 2;
-
-		/* need to crop image down to initial crop interface dimensions as rotate changes image dimensions
-		 * $oImage->crop($destCropFile, $destCropFile, $xx , $yy , 400, 400);
-		 * check if image  size is smaller than canvas size first
-		 */
-		$destW = $imagedim->w < 400 ? $imagedim->w : 400;
-		$destH = $imagedim->h < 400 ? $imagedim->h : 400;
-
-		// @TODO test for smaller image - set offset so that they dont appear at top
-		$log['crop1'] = array($destCropFile, $destCropFile, $xx, $yy, $destW, $destH, 0, 0, $bg);
-		$oImage->crop($destCropFile, $destCropFile, $xx, $yy, $destW, $destH, 0, 0, $bg);
-		$destX = $imagedim->x - ($imagedim->w / 2);
-		$destY = $imagedim->y - ($imagedim->h / 2);
-
-		// Make an image the size of the crop interface
-		$image_p = imagecreatetruecolor($destW, $destH);
-
-		list($image, $header) = $oImage->imageFromFile($destCropFile);
-
-		// Figure out what the destination w/h should be (scaling the image based on the submitted scale value)
-		$destwidth = $width * ((float) $scale / 100);
-		$destheight = $height * ((float) $scale / 100);
-
-		// Create a file which resembles the crop interfaces image
-		$log['scale'] = array('dest' => $destCropFile, 'destX' => $destX, 'destY' => $destY, 'destWidth' => $destwidth, 'destHeight' => $destheight,
-			'sourceWidth' => $width, 'sourceHeight' => $height);
-		imagecopyresampled($image_p, $image, $destX, $destY, 0, 0, $destwidth, $destheight, $width, $height);
-		$oImage->imageToFile($destCropFile, $image_p);
-
-		// Finally take the cropper coordinates and crop the image
-		$offsetX = ($imagedim->w < 400) ? (400 - $imagedim->w) / 2 : 0;
-		$offsetY = ($imagedim->h < 400) ? (400 - $imagedim->h) / 2 : 0;
-
-		$srcX = ($coords->cropdim->x - ($coords->cropdim->w / 2)) - $offsetX;
-		$srcY = $coords->cropdim->y - ($coords->cropdim->h / 2) - $offsetY;
-
-		$log['crop2'] = array('dest' => $destCropFile, 'startx' => $srcX, 'starty' => $srcY, 'crop width' => $cropWidth, 'cropHeight' => $cropHeight,
-			'cropx' => 0, 'cropy' => 0, 'bg' => $bg);
-		$oImage->crop($destCropFile, $destCropFile, $srcX, $srcY, $cropWidth, $cropHeight, 0, 0, $bg);
-		FabrikWorker::log('fabrik.fileupload.crop', $log);
 	}
 
 	/**
@@ -1294,7 +1165,8 @@ class plgFabrik_ElementFileupload extends plgFabrik_Element
 		$request = $filter->clean($_REQUEST, 'array');
 		$groupModel = $this->getGroup();
 		$isjoin = $groupModel->isJoin();
-		$origData = $this->_form->getOrigData();
+		$formModel = $this->getFormModel();
+		$origData = $formModel->getOrigData();
 		if ($isjoin)
 		{
 			$name = $this->getFullName(false, true, false);
@@ -1469,14 +1341,14 @@ class plgFabrik_ElementFileupload extends plgFabrik_Element
 			{
 				$files = JArrayHelper::getValue($files, 0, '');
 			}
-			$this->_form->updateFormData("join.{$joinid}.{$name}", $files);
-			$this->_form->updateFormData("join.{$joinid}.{$name}_raw", $files);
+			$formModel->updateFormData("join.{$joinid}.{$name}", $files);
+			$formModel->updateFormData("join.{$joinid}.{$name}_raw", $files);
 		}
 		else
 		{
 			$strfiles = implode(GROUPSPLITTER, $files);
-			$this->_form->updateFormData($name . '_raw', $strfiles);
-			$this->_form->updateFormData($name, $strfiles);
+			$formModel->updateFormData($name . '_raw', $strfiles);
+			$formModel->updateFormData($name, $strfiles);
 		}
 	}
 
@@ -1565,15 +1437,18 @@ class plgFabrik_ElementFileupload extends plgFabrik_Element
 			$joinid = $groupModel->getGroup()->join_id;
 			$joindata = $input->files->get('join', array(), 'array');
 
-			// if (!array_key_exists('name', $joindata))
 			if (empty($joindata))
 			{
 				return true;
 			}
-			// $file = (array) $joindata['name'][$joinid][$name];
-			// return JArrayHelper::getValue($file, $repeatCounter, '') == '' ? true : false;
-
-			$file = $joindata[$joinid][$name][$repeatCounter]['name'];
+			if ($groupModel->canRepeat())
+			{
+				$file = $joindata[$joinid][$name][$repeatCounter]['name'];
+			}
+			else
+			{
+				$file = $joindata[$joinid][$name]['name'];
+			}
 			return $file == '' ? true : false;
 		}
 		else
@@ -1601,7 +1476,6 @@ class plgFabrik_ElementFileupload extends plgFabrik_Element
 			}
 
 		}
-		//if (!array_key_exists('name', $file))
 		if (empty($file))
 		{
 			$file = $input->get($name);
@@ -1614,7 +1488,7 @@ class plgFabrik_ElementFileupload extends plgFabrik_Element
 	}
 
 	/**
-	 * Process the upload (can be called via ajax from pluploader
+	 * Process the upload (can be called via ajax from pluploader)
 	 *
 	 * @param   array   &$file               file info
 	 * @param   string  $myFileDir           user selected upload folder
@@ -1931,7 +1805,7 @@ class plgFabrik_ElementFileupload extends plgFabrik_Element
 				{
 					if ($this->isEditable())
 					{
-						$render->output = $this->deleteButton($value) . $render->output;
+						$render->output = '<span class="fabrikUploadDelete" id="' . $id . '_delete_span">' . $this->deleteButton($value) . $render->output . '</span>';
 					}
 					$allRenders[] = $render->output;
 				}
@@ -1979,6 +1853,14 @@ class plgFabrik_ElementFileupload extends plgFabrik_Element
 		return implode("\n", $str);
 	}
 
+	/**
+	 * Build the HTML to create the delete image button
+	 *
+	 * @param   string  $value  File to delete
+	 *
+	 * @return string
+	 */
+
 	protected function deleteButton($value)
 	{
 		return '<button class="btn button" data-file="' . $value . '">' . JText::_('COM_FABRIK_DELETE') . '</button> ';
@@ -2025,6 +1907,7 @@ class plgFabrik_ElementFileupload extends plgFabrik_Element
 	protected function downloadLink($value, $data, $repeatCounter = 0)
 	{
 		$app = JFactory::getApplication();
+		$package = $app->getUserState('com_fabrik.package', 'fabrik');
 		$input = $app->input;
 		$params = $this->getParams();
 		$storage = $this->getStorage();
@@ -2076,7 +1959,7 @@ class plgFabrik_ElementFileupload extends plgFabrik_Element
 			$title = '<img src="' . COM_FABRIK_LIVESITE . 'media/com_fabrik/images/' . $params->get('fu_download_access_image') . '" alt="' . $title
 				. '" />';
 		}
-		$link = COM_FABRIK_LIVESITE . 'index.php?option=com_fabrik&task=plugin.pluginAjax&plugin=fileupload&method=ajax_download&element_id='
+		$link = COM_FABRIK_LIVESITE . 'index.php?option=com_' . $package . '&task=plugin.pluginAjax&plugin=fileupload&method=ajax_download&element_id='
 			. $elementid . '&formid=' . $formid . '&rowid=' . $rowid . '&repeatcount=' . $repeatCounter;
 		$url = '<a href="' . $link . '">' . $title . '</a>';
 		return $url;
@@ -2112,6 +1995,8 @@ class plgFabrik_ElementFileupload extends plgFabrik_Element
 		FabrikHelperHTML::stylesheet(COM_FABRIK_LIVESITE . 'media/com_fabrik/css/slider.css');
 		$id = $this->getHTMLId($repeatCounter);
 		$params = $this->getParams();
+		$winWidth = $params->get('win_width', 400);
+		$winHeight = $params->get('win_height', 400);
 		$runtimes = $params->get('ajax_runtime', 'html5');
 		$w = (int) $params->get('ajax_dropbox_width', 300);
 		$h = (int) $params->get('ajax_dropbox_hight', 200);
@@ -2121,7 +2006,7 @@ class plgFabrik_ElementFileupload extends plgFabrik_Element
 		$pstr[] = '<span id="' . $id . '"></span>';
 		$pstr[] = '<div id="' . $id . '-widgetcontainer">';
 
-		$pstr[] = '<canvas id="' . $id . '-widget" width="400" height="400"></canvas>';
+		$pstr[] = '<canvas id="' . $id . '-widget" width="' . $winWidth . '" height="' . $winHeight . '"></canvas>';
 		if ($params->get('fileupload_crop', 0))
 		{
 			$pstr[] = '<div class="zoom" style="float:left;margin-top:10px;padding-right:10x;width:200px">';
@@ -2144,7 +2029,7 @@ class plgFabrik_ElementFileupload extends plgFabrik_Element
 		$pstr[] = '</div>';
 
 		$pstr[] = '<div class="plupload_container fabrikHide" id="' . $id . '_container" style="width:' . $w . 'px;height:' . $h . 'px">';
-		$pstr[] = '<div class="plupload">';
+		$pstr[] = '<div class="plupload" id="' . $id . '_dropList_container">';
 		$pstr[] = '	<div class="plupload_header">';
 		$pstr[] = '		<div class="plupload_header_content">';
 		$pstr[] = '			<div class="plupload_header_title">' . JText::_('PLG_ELEMENT_FILEUPLOAD_PLUP_HEADING') . '</div>';
@@ -2302,6 +2187,10 @@ class plgFabrik_ElementFileupload extends plgFabrik_Element
 
 	public function addEmailAttachement($data)
 	{
+		if (is_object($data))
+		{
+			$data = $data->file;
+		}
 		// @TODO: check what happens here with open base_dir in effect
 		$params = $this->getParams();
 		if ($params->get('ul_email_file'))
@@ -2494,6 +2383,7 @@ class plgFabrik_ElementFileupload extends plgFabrik_Element
 	{
 		$params = $this->getParams();
 		$storage = $this->getStorage();
+		$this->_repeatGroupCounter = $repeatCounter;
 		if ($params->get('fu_show_image_in_email', false))
 		{
 			$render = $this->loadElement($value);
@@ -2701,8 +2591,9 @@ class plgFabrik_ElementFileupload extends plgFabrik_Element
 	{
 		if (empty($val))
 		{
+			$formModel = $this->getFormModel();
 			$isjoin = $groupModel->isJoin();
-			$origData = $this->_form->getOrigData();
+			$origData = $formModel->getOrigData();
 			$groupModel = $this->getGroup();
 			if ($isjoin)
 			{
@@ -2752,9 +2643,14 @@ class plgFabrik_ElementFileupload extends plgFabrik_Element
 		$this->deleteFile($filename);
 		$db = $this->getListModel()->getDb();
 		$query = $db->getQuery(true);
-		$query->delete($db->quoteName($join->table_join))->where($db->quoteName('id') . ' = ' . $input->getInt('recordid'));
-		$db->setQuery($query);
-		$db->query();
+
+		// Could be a single ajax fileupload if so not joined
+		if ($join->table_join != '')
+		{
+			$query->delete($db->quoteName($join->table_join))->where($db->quoteName('id') . ' = ' . $input->getInt('recordid'));
+			$db->setQuery($query);
+			$db->query();
+		}
 	}
 
 	/**
@@ -2862,7 +2758,8 @@ class plgFabrik_ElementFileupload extends plgFabrik_Element
 					$value = !is_array($data) ? $data : JArrayHelper::getValue($data, $name, JArrayHelper::getValue($data, $rawname, $value));
 				}
 			}
-			if (is_array($value) && !$this->isJoin())
+			$params = $this->getParams();
+			if (is_array($value) && !$params->get('ajax_upload'))
 			{
 				if (!$this->getParams()->get('fileupload_crop'))
 				{
@@ -2878,7 +2775,7 @@ class plgFabrik_ElementFileupload extends plgFabrik_Element
 				// Query string for joined data
 				$value = JArrayHelper::getValue($data, $name);
 			}
-			if (is_array($value) && !$this->isJoin())
+			if (is_array($value) && !$params->get('ajax_upload'))
 			{
 				if (!$this->getParams()->get('fileupload_crop'))
 				{

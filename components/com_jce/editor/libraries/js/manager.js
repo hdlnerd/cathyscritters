@@ -1,10 +1,10 @@
 /*  
- * JCE Editor                 2.3.0
+ * JCE Editor                 2.3.1
  * @package                 JCE
  * @url                     http://www.joomlacontenteditor.net
  * @copyright               Copyright (C) 2006 - 2012 Ryan Demmer. All rights reserved
  * @license                 GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html
- * @date                    06 December 2012
+ * @date                    10 December 2012
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -143,4 +143,4 @@ if($(item).data('preview')){$('#info-preview').empty().append('<dl>'+'<dt>'+self
 if($.support.backgroundSize){$('dd','#info-preview').css('background-image','url("'+img.src+'")');if(w>100||h>80){$('dd','#info-preview').addClass('resize');}}else{var dim=$.Plugin.sizeToFit(img,{width:100,height:80});$('dd','#info-preview').append($(img).attr('alt',self._translate('preview','Preview')).css(dim));}
 $('dd','#info-preview').removeClass('loader');};img.onerror=function(){$('dd',$('#info-preview')).removeClass('loader').addClass('preview-error');};src=/http(s)?:\/\//.test(src)?src:$.String.encodeURI(src);img.src=src+(/\?/.test(src)?'&':'?')+new Date().getTime();}
 if(comments){$(dialog.comments).empty().append('<ul>'+comments+'</ul>');}
-$('span.hastip',$(dialog.comments)).tips();var cb=(type=='folder')?'onFolderDetails':'onFileDetails';self._trigger(cb,null,item);},destroy:function(){$.Widget.prototype.destroy.apply(this,arguments);}});$.extend($.ui.MediaManager,{version:"2.3.0"});})(jQuery);
+$('span.hastip',$(dialog.comments)).tips();var cb=(type=='folder')?'onFolderDetails':'onFileDetails';self._trigger(cb,null,item);},destroy:function(){$.Widget.prototype.destroy.apply(this,arguments);}});$.extend($.ui.MediaManager,{version:"2.3.1"});})(jQuery);

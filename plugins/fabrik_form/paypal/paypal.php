@@ -36,6 +36,8 @@ class plgFabrik_FormPaypal extends plgFabrik_Form
 	public function onAfterProcess($params, &$formModel)
 	{
 		$app = JFactory::getApplication();
+		$input = $app->input;
+		$package = $app->getUserState('com_fabrik.package', 'fabrik');
 		$data = $formModel->_fullFormData;
 		$this->data = $data;
 		JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_fabrik/tables');
@@ -60,7 +62,7 @@ class plgFabrik_FormPaypal extends plgFabrik_Form
 				$ipn->createInvoice();
 			}
 		}
-		$paypal_testmode = $params->get('paypal_testmode', false);
+		$paypal_testmode = $params->get('paypal_testmode', $input->get('paypal_testmode', false));
 		$url = $paypal_testmode == 1 ? 'https://www.sandbox.paypal.com/us/cgi-bin/webscr?' : 'https://www.paypal.com/cgi-bin/webscr?';
 
 		$opts = array();
@@ -296,12 +298,12 @@ class plgFabrik_FormPaypal extends plgFabrik_Form
 		$paypal_test_site = rtrim($paypal_test_site, '/');
 		if ($paypal_testmode == 1 && !empty($paypal_test_site))
 		{
-			$ppurl = $paypal_test_site . '/index.php?option=com_fabrik&c=plugin&task=plugin.pluginAjax&formid=' . $formModel->get('id')
+			$ppurl = $paypal_test_site . '/index.php?option=com_' . $package . '&c=plugin&task=plugin.pluginAjax&formid=' . $formModel->get('id')
 				. '&g=form&plugin=paypal&method=ipn';
 		}
 		else
 		{
-			$ppurl = COM_FABRIK_LIVESITE . '/index.php?option=com_fabrik&c=plugin&task=plugin.pluginAjax&formid=' . $formModel->get('id')
+			$ppurl = COM_FABRIK_LIVESITE . '/index.php?option=com_' . $package . '&c=plugin&task=plugin.pluginAjax&formid=' . $formModel->get('id')
 				. '&g=form&plugin=paypal&method=ipn';
 		}
 		$paypal_test_site_qs = $params->get('paypal_test_site_qs', '');
@@ -355,13 +357,13 @@ class plgFabrik_FormPaypal extends plgFabrik_Form
 			// Using default thanks() method so don't forget to add renderOrder
 			if ($paypal_testmode == '1' && !empty($paypal_test_site))
 			{
-				$opts['return'] = $paypal_test_site . '/index.php?option=com_fabrik&task=plugin.pluginAjax&formid=' . $formModel->get('id')
+				$opts['return'] = $paypal_test_site . '/index.php?option=com_' . $package . '&task=plugin.pluginAjax&formid=' . $formModel->get('id')
 					. '&g=form&plugin=paypal&method=thanks&rowid=' . $data['rowid'] . '&renderOrder=' . $this->renderOrder;
 
 			}
 			else
 			{
-				$opts['return'] = COM_FABRIK_LIVESITE . '/index.php?option=com_fabrik&task=plugin.pluginAjax&formid=' . $formModel->get('id')
+				$opts['return'] = COM_FABRIK_LIVESITE . '/index.php?option=com_' . $package . '&task=plugin.pluginAjax&formid=' . $formModel->get('id')
 					. '&g=form&plugin=paypal&method=thanks&rowid=' . $data['rowid'] . '&renderOrder=' . $this->renderOrder;
 			}
 		}
@@ -505,6 +507,8 @@ class plgFabrik_FormPaypal extends plgFabrik_Form
 		$table = $listModel->getTable();
 		$db = $listModel->getDb();
 		$query = $db->getQuery(true);
+
+		$paypal_testmode = $params->get('paypal_testmode', false);
 
 		/* $$$ hugh
 		 * @TODO shortColName won't handle joined data, need to fix this to use safeColName
@@ -703,6 +707,20 @@ class plgFabrik_FormPaypal extends plgFabrik_Form
 									$status = 'form.paypal.ipnfailure.query_error';
 									$err_msg = 'sql query error: ' . $db->getErrorMsg();
 								}
+								else
+								{
+									if ($paypal_testmode == 1)
+									{
+										$log->message_type = 'form.paypal.ipndebug.ipn_query';
+										$log->message = "IPN query: " . $query;
+										$log->store();
+									}
+								}
+							}
+							else
+							{
+								$status = 'form.paypal.ipnfailure.set_list_empty';
+								$err_msg = 'no IPN status fields found on form for rowid: ' . $rowid;
 							}
 						}
 					}
@@ -736,7 +754,7 @@ class plgFabrik_FormPaypal extends plgFabrik_Form
 			$log->message = $emailtext . "\n//////////////\n" . $res . "\n//////////////\n" . $req . "\n//////////////\n" . $err_msg;
 			if ($send_default_email == '1')
 			{
-				$payer_emailtext = "There was an error processing your PayPal payment.  The administrator of this site has been informed.";
+				$payer_emailtext = JText::_('PLG_FORM_PAYPAL_ERR_PROCESSING_PAYMENT');
 				JUtility::sendMail($email_from, $email_from, $payer_email, $subject, $payer_emailtext, false);
 			}
 		}
