@@ -167,7 +167,7 @@ class userAjax {
 		$coupon_code  = JRequest::getVar('coupon_code');
 
 		error_log("Base package = $base_package");
-		error_log("Coupon code  = $coupon_code");
+		error_log("Coupon code   = $coupon_code");
 
 		if ($coupon_code) {
 			$min_time_permitted = 1;
@@ -184,6 +184,7 @@ class userAjax {
 		$db->setQuery($query_max);
 		$retArr = $db->loadRow();
 		$max_time_permitted = $retArr[0];
+		error_log("Range requested " . $min_time_permitted . " - " . $max_time_permitted);
 
 		$query = "SELECT duration_num, duration_str from `cc1_critters_party_durations` WHERE
 				`duration_num` >= $min_time_permitted AND `duration_num` <= $max_time_permitted";
@@ -191,7 +192,7 @@ class userAjax {
 		$db->setQuery($query);
 		$retArr = $db->loadRowList();
 
-		//error_log("Returning " . json_encode($retArr));
+		error_log("Returning " . json_encode($retArr));
 
 		echo json_encode($retArr);
 	}
