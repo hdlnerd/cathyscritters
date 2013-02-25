@@ -190,9 +190,15 @@ function popDurationPulldown () {
 				//alert(r_array);
 				emptyDropdown ( $('cc1_critters_reservations___package_duration') );
 				fillDropdown ( $('cc1_critters_reservations___package_duration'), r_array );
+				$('cc1_critters_reservations___package_duration').set('disabled', '');
 				//for ( var count = 0; count < r_array.length; count++) {
 				//	console.log(r_array[count]);
 				//}
+			},
+			onRequest:
+			function(r){
+				//alert("Just requested.  Let's gray out duration.");
+				$('cc1_critters_reservations___package_duration').set('disabled', 'disabled');
 			},
 			onFailure:
 			function(r){
