@@ -144,7 +144,7 @@ function updatePrice () {
 	
 				data_pz='base_package='+base_package+'&duration='+duration+'&numponies='+numponies+'&pictures='+pictures+'&numpics='+numpics+'&concrete='+concrete+'&travel='+travel+'&cityfee='+cityfee;
 	
-				console.log("Data to calcPZBasePrice= "+url_pz+data_pz);
+				//console.log("Data to calcPZBasePrice= "+url_pz+data_pz);
 				new Request(
 					{url: url_pz, method: 'post', 
 						onSuccess:
@@ -184,7 +184,7 @@ function popDurationPulldown () {
 		{url: url_dur, method: 'post', 
 			onSuccess:
 			function(r){
-				console.log("popDurationPulldown success AJAX call");
+				//console.log("popDurationPulldown success AJAX call");
 				//console.log(r);
 				var r_array = JSON.parse(r);
 				//alert(r_array);
