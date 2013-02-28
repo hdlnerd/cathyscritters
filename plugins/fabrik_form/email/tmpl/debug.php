@@ -9,17 +9,6 @@
  */
 ?>
 <table>
-<h1>Field trip reserved!</h2>
-<p> Sorry for the ugly "welcome" email, we're working on it...  We just wanted ot make sure you received some confirmation of your reservation. </p>
-
-<p> Please call the office if you haven't already talked to Lisa regarding the date and time and she'll walk you through the procedure to pay the deposit and what to expect in the mail from us.</p>
-
-<p> We know that you have many choices in educational field trips and we are thrilled that you chose us, so we look forward to your visit!</p>
-
-<p> Sincerely, Cathy's Critters and the Myers Park and Events Center staff</p>
-
-<p> ====================== Below this line only intended for office use ============================== </p>
-
 <?php
 foreach ($this->data as $key => $val)
 {
@@ -43,6 +32,8 @@ foreach ($this->data as $key => $val)
 ?>
 </table>
 
+<h2>Join data</h2>
+<p>Below out puts the form's join data one record at a time:</p>
 <table>
 <?php
 $joindata = $this->data['join'];

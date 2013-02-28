@@ -1,3 +1,4 @@
+//
 // All instances of console.log in this file are commented out
 // because it throws an error in (you guessed it) Internet Exploder
 //

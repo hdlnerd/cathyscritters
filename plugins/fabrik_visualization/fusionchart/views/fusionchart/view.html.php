@@ -32,7 +32,7 @@ class fabrikViewFusionchart extends JView
 	 * @return  mixed  A string if successful, otherwise a JError object.
 	 */
 
-	function display($tpl = 'default')
+	public function display($tpl = 'default')
 	{
 		$app = JFactory::getApplication();
 		$input = $app->input;
@@ -65,7 +65,7 @@ class fabrikViewFusionchart extends JView
 		$plugin = $pluginManager->getPlugIn('calendar', 'visualization');
 		$this->containerId = $this->get('ContainerId');
 		$this->filters = $this->get('Filters');
-		$this->showFilters = $input->getInt('showfilters', $params->get('show_filters')) === 1 ? 1 : 0;
+		$this->showFilters = $model->showFilters();
 		$this->filterFormURL = $this->get('FilterFormURL');
 		$tpl = $params->get('fusionchart_layout', $tpl);
 		$this->_setPath('template', JPATH_ROOT . '/plugins/fabrik_visualization/fusionchart/views/fusionchart/tmpl/' . $tpl);
