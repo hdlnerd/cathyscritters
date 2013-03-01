@@ -88,12 +88,22 @@ function updatePrice () {
 	var travel       = 0;
 
   var party_elsewhere = $('cc1_critters_reservations___ishomeaddress').getElements('input')[1].checked;
+	var enable_submit = (base_package > 0) && (numponies >= 0) && (duration > 0);
+
+	// Unconditionally get rid of these buttons - not sure why they're here...
+	form_23._getButton('fabrikPagePrevious').hide();
+	form_23._getButton('fabrikPageNext').hide();
 
 
 
 
 
 
+	if (enable_submit) {
+		form_23._getButton('submit').show();
+	} else {
+		form_23._getButton('submit').hide();
+	}
 
   if (party_elsewhere) {
 		check_addr1 = $('cc1_critters_reservations___reservations_party_address_line1').value;

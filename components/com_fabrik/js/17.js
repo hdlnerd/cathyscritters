@@ -92,11 +92,22 @@ function updatePrice () {
 	var travel       = 0;
 	//alert(String($('cc1_critters_reservations___ishomeaddress').getElements('input')[1].checked));
   var party_elsewhere = $('cc1_critters_reservations___ishomeaddress').getElements('input')[1].checked;
+	var enable_submit = (base_package > 0) && (numponies >= 0) && (duration > 0);
+
+	// Unconditionally get rid of these buttons - not sure why they're here...
+	form_17._getButton('fabrikPagePrevious').hide();
+	form_17._getButton('fabrikPageNext').hide();
 
 	if (pictures) {
 		$('cc1_critters_reservations___reservations_photo_quantity').show();
 	} else {
 		$('cc1_critters_reservations___reservations_photo_quantity').hide();
+	}
+
+	if (enable_submit) {
+		form_17._getButton('submit').show();
+	} else {
+		form_17._getButton('submit').hide();
 	}
 
   if (party_elsewhere) {
@@ -117,6 +128,7 @@ function updatePrice () {
 
 	var one_way_mileage = 0;
 	var toll_charge_estimate = 0;
+
 
 	//Working copy-and-paste example:
 	//http://platform.beta.mapquest.com/directions/v1/route?key=Fmjtd%7Cluua2lu72h%2C25%3Do5-hyrs0&from=75407&to=75248&ambiguities=ignore
