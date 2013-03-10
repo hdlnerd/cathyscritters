@@ -129,7 +129,6 @@ function updatePrice () {
 	var one_way_mileage = 0;
 	var toll_charge_estimate = 0;
 
-
 	//Working copy-and-paste example:
 	//http://platform.beta.mapquest.com/directions/v1/route?key=Fmjtd%7Cluua2lu72h%2C25%3Do5-hyrs0&from=75407&to=75248&ambiguities=ignore
 
