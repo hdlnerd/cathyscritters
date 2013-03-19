@@ -47,6 +47,17 @@ class plgFabrik_FormPHP extends plgFabrik_Form
 	}
 
 	/**
+	* Get any html that needs to be written after the form close tag
+	*
+	* @return	string	html
+	*/
+
+	public function getTopContent_result()
+	{
+		return $this->html;
+	}
+
+	/**
 	 * Store the html to insert at the top of the form
 	 *
 	 * @param   object  $params     params
@@ -260,12 +271,14 @@ class plgFabrik_FormPHP extends plgFabrik_Form
 		 * if you want to modify the submitted form data
 		 * $formModel->updateFormData('tablename___elementname', $newvalue);
 		 */
-
+		$method = $params->get('only_process_curl');
 		/*
 		 *  $$$ rob this is poor when submitting the form the data is stored in _formData, when editing its stored in _data -
 		 *  as this method can run on render or on submit we have to do a little check to see which one we should use.
 		 *  really we should use the same form property to store the data regardless of form state
 		 */
+
+		// $$$ hugh - erm, why are we putting data in $this->html?  It's only used by onGetFooContent plugins, for, well, html!
 		$this->html = array();
 		if (!empty($formModel->_formData))
 		{
@@ -275,16 +288,54 @@ class plgFabrik_FormPHP extends plgFabrik_Form
 		{
 			$this->html = $formModel->_data;
 		}
+		$w = new FabrikWorker;
 		if ($params->get('form_php_file') == -1)
 		{
-			$w = new FabrikWorker;
 			$code = $w->parseMessageForPlaceHolder($params->get('curl_code', ''), $this->html, true, true);
-			return eval($code);
+
+			if ($method == 'getBottomContent' || $method == 'getTopContent' || $method == 'getEndContent')
+			{
+				// For these types of scripts any out put you want to inject into the form should be echo'd out
+				// $$$ hugh - the tooltip on the PHP plugin says specifically NOT to echo, but to return the content.
+				// Rather than break any existing code by changing this code to do what the tooltip says, here's a
+				// Horrible Hack so either way should work.
+				ob_start();
+				$php_result = eval($code);
+				$output = ob_get_contents();
+				ob_end_clean();
+				if (!empty($output))
+				{
+					return $output;
+				}
+				else
+				{
+					if (is_string($php_result))
+					{
+						return $php_result;
+					}
+				}
+				// Didn't get a viable response from either OB or result, so just return empty string
+				return '';
+			}
+			else
+			{
+				$php_result = eval($code);
+				// Bail out if code specifically returns false
+				if ($php_result === false)
+				{
+					return false;
+				}
+			}
 		}
 		else
 		{
+			// Added require_once param, for (kinda) corner case of having a file that defines functions, which gets used
+			// nore than once on the same page.
+			$require_once = $params->get('form_php_require_once', '0') == '1';
+
 			// $$$ hugh - give them some way of getting at form data
 			// (I'm never sure if $_REQUEST is 'safe', i.e. if it has post-validation data)
+			// $$$ hugh - pretty sure we can dump this, but left it in for possible backward compat issues
 			global $fabrikFormData, $fabrikFormDataWithTableName;
 
 			// For some reason, = wasn't working??
@@ -295,34 +346,70 @@ class plgFabrik_FormPHP extends plgFabrik_Form
 			{
 				$fabrikFormDataWithTableName = $formModel->_formDataWithtableName;
 			}
+
 			$php_file = JFilterInput::getInstance()->clean($params->get('form_php_file'), 'CMD');
 			$php_file = JPATH_ROOT . '/plugins/fabrik_form/php/scripts/' . $php_file;
 
 			if (!JFile::exists($php_file))
 			{
 				JError::raiseNotice(500, 'Mssing PHP form plugin file');
-				return;
+				return false;
 			}
-			$method = $params->get('only_process_curl');
+
+			// If it's a form load method, needs to be handled thisaway
 			if ($method == 'getBottomContent' || $method == 'getTopContent' || $method == 'getEndContent')
 			{
 				// For these types of scripts any out put you want to inject into the form should be echo'd out
 				// @TODO - shouldn't we apply this logic above as well (direct eval)?
+				// $$$ hugh - AAAAGH.  Tbe tooltip on the form plugin itself specifically says NOT to echo, but to
+				// return the content.  Rather than just changing this code to do what the comment says, which would
+				// break any existing code folk have, I'll do a Horrible Hack so it works either way.
 				ob_start();
-				require $php_file;
+				$php_result = $require_once ? require_once $php_file : require $php_file;
 				$output = ob_get_contents();
 				ob_end_clean();
-				return $output;
+				if (!empty($output))
+				{
+					return $output;
+				}
+				else
+				{
+					if (is_string($php_result))
+					{
+						return $php_result;
+					}
+				}
+				// Didn't get a viable response from either OB or result, so just return empty string
+				return '';
 			}
-			else
-			{
-				$php_result = require $php_file;
-			}
+
+			// OK, it's a form submit method, so handle it thisaway
+			$php_result = $require_once ? require_once $php_file : require $php_file;
+
+			// Bail out if code specifically returns false
 			if ($php_result === false)
 			{
 				return false;
 			}
+
+			// $$$ hugh - added this to make it more convenient for defining functions to call in form PHP.
+			// So you can have a 'script file' that defines function(s), AND a direct eval that calls them,
+			// without having to stick a require() in the eval code.
+			// @TODO add an option to specify which way round to execute (file first or eval first)
+			// as per Skype convo with Rob.
+			$code = $w->parseMessageForPlaceHolder($params->get('curl_code', ''), $this->html, true, true);
+			if (!empty($code))
+			{
+				$php_result = eval($code);
+				// Bail out if code specifically returns false
+				if ($php_result === false)
+				{
+					return false;
+				}
+			}
 		}
+
+		// Well, we seemed to have got here without blowing up, so return true
 		return true;
 	}
 
