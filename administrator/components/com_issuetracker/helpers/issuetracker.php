@@ -1,20 +1,25 @@
 <?php
 /*
  *
- * @Version       $Id: issuetracker.php 446 2012-09-10 15:33:37Z geoffc $
+ * @Version       $Id: issuetracker.php 752 2013-02-28 11:44:50Z geoffc $
  * @Package       Joomla Issue Tracker
  * @Subpackage    com_issuetracker
- * @Release       1.2.1
- * @Copyright     Copyright (C) 2011 - 2012 Macrotone Consulting Ltd. All rights reserved.
+ * @Release       1.3.0
+ * @Copyright     Copyright (C) 2011-2013 Macrotone Consulting Ltd. All rights reserved.
  * @License       GNU General Public License version 3 or later; see LICENSE.txt
  * @Contact       support@macrotoneconsulting.co.uk
- * @Lastrevision  $Date: 2012-09-10 16:33:37 +0100 (Mon, 10 Sep 2012) $
+ * @Lastrevision  $Date: 2013-02-28 11:44:50 +0000 (Thu, 28 Feb 2013) $
  *
  */
 defined('_JEXEC') or die;
 
 # Import JMailHelper
 jimport('joomla.mail.helper');
+
+// Load log helper
+if (! class_exists('IssueTrackerHelperLog')) {
+    require_once( JPATH_ADMINISTRATOR.DS.'components'.DS.'com_issuetracker'.DS.'helpers'.DS.'log.php');
+}
 
 /*
  *
@@ -23,6 +28,9 @@ jimport('joomla.mail.helper');
  */
 class IssueTrackerHelper
 {
+   /** @var array List of URLs to CSS files */
+   public static $cssURLs = array();
+
    /*
     *
     * addSubmenu
@@ -50,6 +58,11 @@ class IssueTrackerHelper
          JText::_('COM_ISSUETRACKER_MENU_PROJECTS'),
          'index.php?option=com_issuetracker&view=itprojectslist',
          $vName == 'projects'
+      );
+      JSubMenuHelper::addEntry(
+         JText::_('COM_ISSUETRACKER_MENU_ATTACHMENTS'),
+         'index.php?option=com_issuetracker&view=attachments',
+         $vName == 'attachments'
       );
       JSubMenuHelper::addEntry(
          JText::_('COM_ISSUETRACKER_MENU_PRIORITIES'),
@@ -98,10 +111,20 @@ class IssueTrackerHelper
    // Change to stop Strict Standards message.
    public static function ProjectTreeOption($data, $tree, $id=0, $text='', $currentId)
    {
+
+      if ( $id == 0 ) {
+         $db = JFactory::getDBO();
+         $query = "SELECT id FROM `#__it_projects` WHERE title= 'Root' ";
+         $db->setQuery( $query );
+         $rid = $db->loadResult();
+      } else {
+         $rid = $id;
+      }
+
       foreach ($data as $key) {
          $show_text =  $text . $key->text;
 
-         if ($key->parentid == $id && $currentId != $id && $currentId != $key->value) {
+         if ($key->parentid == $rid && $currentId != $rid && $currentId != $key->value) {
             $tree[$key->value]         = new JObject();
             $tree[$key->value]->text   = $show_text;
             $tree[$key->value]->value  = $key->value;
@@ -124,10 +147,10 @@ class IssueTrackerHelper
       $db = JFactory::getDBO();
       // Now need to merge in to get the full project name.
 
-      $query = 'SELECT a.project_name AS text, a.id AS value, a.parent_id as parentid'
+      $query = 'SELECT a.title AS text, a.id AS value, a.parent_id as parentid'
          . ' FROM #__it_projects AS a';
 //      $query .= ' WHERE a.state = 1'
-//              . ' ORDER BY a.ordering';
+//              . ' ORDER BY a.lft';
       $db->setQuery( $query );
       $rows2 = $db->loadObjectList();
 
@@ -153,10 +176,10 @@ class IssueTrackerHelper
       $db = JFactory::getDBO();
       // Now need to merge in to get the full project name.
 
-      $query = 'SELECT a.project_name AS text, a.id AS value, a.parent_id as parentid'
+      $query = 'SELECT a.title AS text, a.id AS value, a.parent_id as parentid'
          . ' FROM #__it_projects AS a';
 //         . ' WHERE a.state = 1'
-//         . ' ORDER BY a.ordering';
+//         . ' ORDER BY a.lft';
       $db->setQuery( $query );
       $rows2 = $db->loadObjectList();
 
@@ -167,7 +190,7 @@ class IssueTrackerHelper
 
       foreach ($tree as $key2) {
          if ($row->id == $key2->value) {
-            $row->project_name = $key2->text;
+            $row->title = $key2->text;
             break;    // Exit inner foreach since we have found our match.
          }
       }
@@ -201,7 +224,7 @@ class IssueTrackerHelper
       $db = JFactory::getDBO();
       // Now need to merge in to get the full project name.
 
-      $query = 'SELECT a.project_name AS text, a.id AS value, a.parent_id as parentid'
+      $query = 'SELECT a.title AS text, a.id AS value, a.parent_id as parentid'
          . ' FROM #__it_projects AS a';
       $db->setQuery( $query );
       $rows2 = $db->loadObjectList();
@@ -225,9 +248,10 @@ class IssueTrackerHelper
          $db = JFactory::getDBO();
 
           //build the list of categories
-         $query = 'SELECT a.project_name AS text, a.id AS value, a.parent_id as parentid';
+         $query = 'SELECT a.title AS text, a.id AS value, a.parent_id as parentid';
          $query .= ' FROM #__it_projects AS a';
-         $query .= ' ORDER BY a.ordering';
+         $query .= " WHERE title != 'Root' ";
+         $query .= ' ORDER BY a.lft';
          $db->setQuery( $query );
          $data = $db->loadObjectList();
 
@@ -235,7 +259,11 @@ class IssueTrackerHelper
          $text = '';
          $tree = self::ProjectTreeOption($data, $tree, 0, $text, $catId);
 
-         array_unshift($tree, JHTML::_('select.option', '', '- '.JText::_('COM_ISSUETRACKER_SELECT_PROJECT').' -', 'value', 'text'));
+         $query = "SELECT id FROM `#_it_projects` WHERE title = 'Root' ";
+         $db->setQuery($query);
+         $cnt  =  $db->loadResult();
+
+         array_unshift($tree, JHTML::_('select.option', $cnt, '- '.JText::_('COM_ISSUETRACKER_SELECT_PROJECT').' -', 'value', 'text'));
 
          return $tree;
    }
@@ -245,9 +273,9 @@ class IssueTrackerHelper
          $db = JFactory::getDBO();
 
           //build the list of categories
-         $query = 'SELECT a.project_name AS text, a.id AS value, a.parent_id as parentid';
+         $query = 'SELECT a.title AS text, a.id AS value, a.parent_id as parentid';
          $query .= ' FROM #__it_projects AS a';
-         $query .= ' ORDER BY a.ordering';
+         $query .= ' ORDER BY a.lft';
          $db->setQuery( $query );
          $data = $db->loadObjectList();
 
@@ -297,7 +325,7 @@ class IssueTrackerHelper
    public static function getPerson_name()
    {
       $db = JFactory::getDBO();
-      $db->setQuery( 'SELECT `id` AS value, `person_name` AS text FROM `#__it_people` ORDER BY id');
+      $db->setQuery( 'SELECT `id` AS value, `person_name` AS text FROM `#__it_people` ORDER BY person_name');
       $options = array();
       // Add a null value line for those users without assigned projects
       // $options[] = JHTML::_('select.option', '', JText::_('COM_ISSUETRACKER_NONE_ASSIGNED') );
@@ -348,13 +376,15 @@ class IssueTrackerHelper
       return $options;
    }
 
-   public static function getStatuses()
+   public static function getStatuses( $inchead = 0)
    {
       $db = JFactory::getDBO();
       $db->setQuery( 'SELECT `id` AS value, `status_name` AS text FROM `#__it_status` WHERE state = 1 ORDER BY id');
       $options = array();
       // Add a null value line for those users without assigned projects
-      $options[] = JHTML::_('select.option', '', '- '.JText::_('COM_ISSUETRACKER_SELECT_STATUS').' -' );
+      if ( $inchead == 0 ) {
+         $options[] = JHTML::_('select.option', '', '- '.JText::_('COM_ISSUETRACKER_SELECT_STATUS').' -' );
+      }
 
       foreach( $db->loadObjectList() as $r){
          $options[] = JHTML::_('select.option',  $r->value, $r->text );
@@ -401,6 +431,25 @@ class IssueTrackerHelper
       foreach( $db->loadObjectList() as $r){
          $options[] = JHTML::_('select.option',  $r->value, $r->text );
       }
+      return $options;
+   }
+
+   public static function getLogPriorities()
+   {
+
+      $options = array();
+
+      // Add a null value line
+      $options[] = JHTML::_('select.option', '', '- '.JText::_('COM_ISSUETRACKER_SELECT_PRIORITY').' -' );
+      $options[] = JHTML::_('select.option',  1,   JText::_('COM_ISSUETRACKER_LOG_EMERGENCY_LABEL') );
+      $options[] = JHTML::_('select.option',  2,   JText::_('COM_ISSUETRACKER_LOG_ALERT_LABEL') );
+      $options[] = JHTML::_('select.option',  4,   JText::_('COM_ISSUETRACKER_LOG_CRITICAL_LABEL') );
+      $options[] = JHTML::_('select.option',  8,   JText::_('COM_ISSUETRACKER_LOG_ERROR_LABEL') );
+      $options[] = JHTML::_('select.option',  16,  JText::_('COM_ISSUETRACKER_LOG_WARNING_LABEL') );
+      $options[] = JHTML::_('select.option',  32,  JText::_('COM_ISSUETRACKER_LOG_NOTICE_LABEL') );
+      $options[] = JHTML::_('select.option',  64,  JText::_('COM_ISSUETRACKER_LOG_INFO_LABEL') );
+      $options[] = JHTML::_('select.option',  128, JText::_('COM_ISSUETRACKER_LOG_DEBUG_LABEL') );
+
       return $options;
    }
 
@@ -749,7 +798,7 @@ class IssueTrackerHelper
                $db->setQuery($query);
                $usr_email = $db->loadRow();
 
-               // Allow for future posibility to allow user to close from front end.
+               // Allow for future possibility to allow user to close from front end.
                if ( $usr_email[1] == 1 || (array_key_exists('notify',$data) && $data['notify'])  ) {   // User requests notifications.
                   self::send_email('user_close', $usr_email[0], $data);   // Notify user
                }
@@ -910,7 +959,7 @@ class IssueTrackerHelper
       $body       = str_replace('[progress]', $progress, $body);
 
       // for the project, get the project id and expand out the full name
-      $query      = "SELECT project_name, id FROM #__it_projects WHERE id = ".$data['related_project_id'];
+      $query      = "SELECT title, id FROM #__it_projects WHERE id = ".$data['related_project_id'];
       $db->setQuery($query);
       $project    = $db->loadRow();
       $pname      = self::getprojname( $project[1] );
@@ -985,7 +1034,13 @@ class IssueTrackerHelper
    {
       $app  = JFactory::getApplication();
 
-      // print ("<p>In send_email $what $to ");
+      // get settings from com_issuetracker parameters
+      $params = JComponentHelper::getParams('com_issuetracker');
+
+      $logging   = $params->get('enableloggings', '0');
+
+      if ( $logging )
+         IssueTrackerHelperLog::dblog('Sending Mail: '.$what.' To: '.$to.' Issue: '.$data['alias']);
 
       if ( empty($to) ) {
          // print ("Input to send_email: $what $to <p>");
@@ -1003,11 +1058,12 @@ class IssueTrackerHelper
       $db->setQuery($query);
       $mdetails   = $db->loadRow();
 
-      // get settings from com_issuetracker parameters
-      $params = JComponentHelper::getParams('com_issuetracker');
-
       $SiteName   = $params->get('emailSiteName', '');
-      $from       = $params->get('emailFrom', '');
+      $fromadr    = $params->get('emailFrom', '');
+      if ( !JMailHelper::isEmailAddress( $fromadr)) {
+         $app->enqueueMessage('Invalid from address '.$fromadr);
+         return false;
+      }
       $sender     = $params->get('emailSender', '');
       $link       = $params->get('emailLink', '');
       $replyto    = $params->get('emailReplyto', '');
@@ -1028,12 +1084,12 @@ class IssueTrackerHelper
          $subject = $subprefix . ' ' . $subject;
 
       // $nbody     = sprintf( $msgprefix, $body, $msgpostfix, $SiteName, $sender, $from, $link);
-      $nbody     = $msgprefix . $body . $msgpostfix . '<br /><br />' . $sender . '<br />' . $from . '<br />'.  $link;
+      $nbody     = $msgprefix . $body . $msgpostfix . '<br /><br />' . $sender . '<br />' . $fromadr . '<br />'.  $link;
 
       // Clean the email data
-      $subject = JMailHelper::cleanSubject( $subject);
-      $body    = JMailHelper::cleanBody( $nbody);
-      $sender  = JMailHelper::cleanAddress( $sender);
+      $subject = JMailHelper::cleanSubject( $subject );
+      $body    = JMailHelper::cleanBody( $nbody );
+      $fromadr = JMailHelper::cleanAddress( $fromadr );
 
       //var_dump($subject);
       //var_dump($body);
@@ -1044,7 +1100,8 @@ class IssueTrackerHelper
       $mail->Encoding = 'base64';
       $mail->addRecipient($to);
       //$mail->setSender($sender);
-      $mail->setFrom($from,$sender,false);
+      $mail->setSender(array($fromadr, $sender));
+      // $mail->setFrom($fromadr,$sender,false);
 
       if ( !empty($replyto) ) $mail->addReplyTo(array($replyto,$replyname));
       $mail->setSubject($subject);
@@ -1066,7 +1123,12 @@ class IssueTrackerHelper
    {
       $app  = JFactory::getApplication();
 
-      // print ("<p>In send_adm_email $what ");
+      // get settings from com_issuetracker parameters
+      $params = JComponentHelper::getParams('com_issuetracker');
+
+      $logging   = $params->get('enablelogging', '0');
+      if ( $logging )
+         IssueTrackerHelperLog::dblog('Sending Admin Mail: '.$what.' Issue: '.$data['alias']);
 
       //get the message subject and body
       $query      = "SELECT subject, body FROM #__it_emails WHERE type = '".$what."' AND state = 1 ";
@@ -1074,11 +1136,8 @@ class IssueTrackerHelper
       $db->setQuery($query);
       $mdetails   = $db->loadRow();
 
-      // get settings from com_issuetracker parameters
-      $params = JComponentHelper::getParams('com_issuetracker');
-
       $SiteName   = $params->get('emailSiteName', '');
-      $from       = $params->get('emailFrom', '');
+      $fromadr    = $params->get('emailFrom', '');
       $sender     = $params->get('emailSender', '');
       $link       = $params->get('emailLink', '');
       $replyto    = $params->get('emailReplyto', '');
@@ -1096,9 +1155,9 @@ class IssueTrackerHelper
          $subject = $subprefix . ' ' . $subject;
 
       // Clean the email data
-      $subject = JMailHelper::cleanSubject( $subject);
-      $body    = JMailHelper::cleanBody( $body);
-      $sender  = JMailHelper::cleanAddress( $sender);
+      $subject = JMailHelper::cleanSubject( $subject );
+      $body    = JMailHelper::cleanBody( $body );
+      $fromadr = JMailHelper::cleanAddress( $fromadr );
 
       // var_dump($subject);
       // var_dump($body);
@@ -1133,7 +1192,8 @@ class IssueTrackerHelper
       $mail->addRecipient($recipient);
       if ( !empty($replyto) ) $mail->addReplyTo(array($replyto,$replyname));
       // $mail->setSender($sender);
-      $mail->setFrom($from,$sender,false);
+      $mail->setSender(array($fromadr, $sender));
+      // $mail->setFrom($fromadr,$sender,false);
       $mail->setSubject($subject);
       $mail->setBody($body);
 
@@ -1270,7 +1330,7 @@ class IssueTrackerHelper
             }
 
             // Collect the black or white list tags and attributes.
-            // Each list is cummulative.
+            // Each list is cumulative.
             if ($filterType == 'BL') {
                $blackList           = true;
                $blackListTags       = array_merge($blackListTags, $tempTags);
@@ -1318,60 +1378,79 @@ class IssueTrackerHelper
       return $text;
     }
 
-   /*
+   /**
+    * Adds an arbitrary CSS file.
     *
-    * Method used by back end attachments
+    * @param $path string The path to the file, in the format media://path/to/file
+    */
+   public static function addCSSfile($path)
+   {
+      self::$cssURLs[] = self::parsePath($path);
+   }
+
+   /*
+    * Method to add a css file.
     *
     */
-   function getManagerGroup($manager)
+   public static function addCSS($path)
    {
-      $group = array();
-      switch ($manager) {
-         case 'icon':
-         case 'iconspec1':
-         case 'iconspec2':
-            $group['f'] = 2;//File
-            $group['i'] = 1;//Image
-            $group['t'] = 'icon';//Text
-            $group['c'] = '&amp;tmpl=component';
-         break;
+      $url = self::parsePath($path);
+      JFactory::getDocument()->addStyleSheet($url);
+   }
 
-         case 'image':
-            $group['f'] = 2;//File
-            $group['i'] = 1;//Image
-            $group['t'] = 'image';//Text
-            $group['c'] = '&amp;tmpl=component';
-         break;
-
-         case 'filepreview':
-            $group['f'] = 3;
-            $group['i'] = 1;
-            $group['t'] = 'filename';
-            $group['c'] = '&amp;tmpl=component';
-         break;
-
-         case 'fileplay':
-            $group['f'] = 3;
-            $group['i'] = 0;
-            $group['t'] = 'filename';
-            $group['c'] = '&amp;tmpl=component';
-         break;
-
-         case 'filemultiple':
-            $group['f'] = 1;
-            $group['i'] = 0;
-            $group['t'] = 'filename';
-            $group['c'] = '';
-         break;
-
-         case 'file':
-         default:
-            $group['f'] = 1;
-            $group['i'] = 0;
-            $group['t'] = 'filename';
-            $group['c'] = '&amp;tmpl=component';
-         break;
+   /**
+    * Parse a fancy path definition into a path relative to the site's root,
+    * respecting template overrides, suitable for inclusion of media files.
+    * For example, media://com_foobar/css/test.css is parsed into
+    * media/com_foobar/css/test.css if no override is found, or
+    * templates/mytemplate/media/com_foobar/css/test.css if the current
+    * template is called mytemplate and there's a media override for it.
+    *
+    * The valid protocols are:
+    * media://    The media directory or a media override
+    * admin://    Path relative to administrator directory (no overrides)
+    * site://     Path relative to site's root (no overrides)
+    *
+    * @param string $path Fancy path
+    * @return string Parsed path
+    */
+   public static function parsePath($path)
+   {
+      $protoAndPath = explode('://', $path, 2);
+      if(count($protoAndPath) < 2) {
+         $protocol = 'media';
+      } else {
+         $protocol = $protoAndPath[0];
+         $path = $protoAndPath[1];
       }
-      return $group;
+
+      $url = JURI::root();
+
+      switch($protocol) {
+         case 'media':
+            // Do we have a media override in the template?
+            $pathAndParams = explode('?', $path, 2);
+            $altPath = JPATH_BASE.'/templates/'.JFactory::getApplication()->getTemplate().'/media/'.$pathAndParams[0];
+            if(file_exists($altPath)) {
+               $isAdmin = version_compare(JVERSION, '1.6.0', 'ge') ? (!JFactory::$application ? false : JFactory::getApplication()->isAdmin()) : JFactory::getApplication()->isAdmin();
+               $url .= $isAdmin ? 'administrator/' : '';
+               $url .= 'templates/'.JFactory::getApplication()->getTemplate().'/media/';
+            } else {
+               $url .= 'media/';
+            }
+            break;
+
+         case 'admin':
+            $url .= 'administrator/';
+            break;
+
+         default:
+         case 'site':
+            break;
+      }
+
+      $url .= $path;
+
+      return $url;
    }
 }

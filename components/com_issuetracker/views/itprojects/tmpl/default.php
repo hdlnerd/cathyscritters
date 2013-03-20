@@ -1,20 +1,26 @@
 <?php
 /*
  *
- * @Version       $Id: default.php 194 2012-05-02 19:52:10Z geoffc $
+ * @Version       $Id: default.php 696 2013-02-09 19:10:17Z geoffc $
  * @Package       Joomla Issue Tracker
  * @Subpackage    com_issuetracker
- * @Release       1.0.0
- * @Copyright     Copyright (C) 2011 - 2012 Macrotone Consulting Ltd. All rights reserved.
+ * @Release       1.3.0
+ * @Copyright     Copyright (C) 2011-2013 Macrotone Consulting Ltd. All rights reserved.
  * @License       GNU General Public License version 3 or later; see LICENSE.txt
  * @Contact       support@macrotoneconsulting.co.uk
- * @Lastrevision  $Date: 2012-05-02 20:52:10 +0100 (Wed, 02 May 2012) $
+ * @Lastrevision  $Date: 2013-02-09 19:10:17 +0000 (Sat, 09 Feb 2013) $
  *
  */
 
 // no direct access
 defined('_JEXEC') or die('Restricted access');
 JHtml::addIncludePath(JPATH_COMPONENT . '/helpers');
+
+if (! class_exists('IssueTrackerHelper')) {
+    require_once( JPATH_ADMINISTRATOR.DS.'components'.DS.'com_issuetracker'.DS.'helpers'.DS.'issuetracker.php');
+}
+
+IssueTrackerHelper::addCSS('media://com_issuetracker/css/issuetracker.css');
 
 $data = $this->data;
 $link = JRoute::_( "index.php?option=com_issuetracker&view=itprojects&id={$data->id}" );
@@ -69,10 +75,10 @@ $canEdit = $this->params->get('access-edit');
             <?php endif; ?>
 
             <dt><?php echo JText::_( 'COM_ISSUETRACKER_FIELD_PROJECT_NAME_LABEL' ); ?></dt>
-            <dd><?php echo $data->project_name; ?></dd>
+            <dd><?php echo $data->title; ?></dd>
 
             <dt><?php echo JText::_( 'COM_ISSUETRACKER_FIELD_PROJECT_DESCRIPTION_LABEL' ); ?></dt>
-            <dd><?php echo $data->project_description; ?></dd>
+            <dd><?php echo $data->description; ?></dd>
 
             <dt> <?php echo JText::_( 'COM_ISSUETRACKER_FIELD_START_DATE_LABEL' ); ?> </dt>
             <dd>

@@ -1,14 +1,13 @@
 <?php
-/*
- *
- * @Version       $Id: itprojects.php 389 2012-08-28 16:20:39Z geoffc $
+/**
+ * @Version       $Id: itprojects.php 689 2013-02-06 17:38:45Z geoffc $
  * @Package       Joomla Issue Tracker
  * @Subpackage    com_issuetracker
- * @Release       1.1.0
- * @Copyright     Copyright (C) 2011 - 2012 Macrotone Consulting Ltd. All rights reserved.
+ * @Release       1.3.0
+ * @Copyright     Copyright (C) 2011-2013 Macrotone Consulting Ltd. All rights reserved.
  * @License       GNU General Public License version 3 or later; see LICENSE.txt
  * @Contact       support@macrotoneconsulting.co.uk
- * @Lastrevision  $Date: 2012-08-28 17:20:39 +0100 (Tue, 28 Aug 2012) $
+ * @Lastrevision  $Date: 2013-02-06 17:38:45 +0000 (Wed, 06 Feb 2013) $
  *
  */
 
@@ -115,7 +114,6 @@ class IssueTrackerModelItprojects extends JModelAdmin
       jimport('joomla.filter.output');
 
       if (empty($table->id)) {
-
          // Set ordering to the last item if not set
          if (@$table->ordering === '') {
             $db = JFactory::getDbo();
@@ -123,7 +121,6 @@ class IssueTrackerModelItprojects extends JModelAdmin
             $max = $db->loadResult();
             $table->ordering = $max+1;
          }
-
       }
    }
 
@@ -137,6 +134,23 @@ class IssueTrackerModelItprojects extends JModelAdmin
     */
    public function save($data)
    {
+      // Initialise variables;
+      $dispatcher = JDispatcher::getInstance();
+      $table = $this->getTable();
+      $pk = (!empty($data['id'])) ? $data['id'] : (int) $this->getState($this->getName() . '.id');
+      $isNew = true;
+
+      // Load the row if saving an existing project.
+      if ($pk > 0) {
+         $table->load($pk);
+         $isNew = false;
+      }
+
+      // Set the new parent id if parent id not matched OR while New/Save as Copy .
+      if ($table->parent_id != $data['parent_id'] || $data['id'] == 0) {
+         $table->setLocation($data['parent_id'], 'last-child');
+      }
+
       // Set up access to default parameters
       $this->_params = JComponentHelper::getParams( 'com_issuetracker' );
 
@@ -156,80 +170,94 @@ class IssueTrackerModelItprojects extends JModelAdmin
 
       // Alter the title for save as copy
       if (JRequest::getVar('task') == 'save2copy') {
-         $pname = $this->_generateNewProjectName($data['project_name']);
-         $data['project_name'] = $pname;
+         list($pname, $alias) = $this->_generateNewProjectName($data['parent_id'], $data['alias'], $data['title']);
+         $data['title'] = $pname;
+         $data['alias'] = $alias;
       }
 
-      if (parent::save($data)) {
-         return true;
+      // Set parent id to the Root if it is not explicitly set.
+      $rootId = $table->getRootId();
+      if ($rootId === false) {
+         $rootId = $table->addRoot();
       }
+      if ( $data['parent_id'] == 0 ) $data['parent_id'] = $rootId;
 
-      return false;
-   }
-
-
-    /**
-      * Method to change the project name.
-      *
-      * @param string $title The title
-      * @return the modified title
-   */
-
-   private function _generateNewProjectName($title)
-   {
-      // Alter the title
-      $title .= ' (2)';
-      return $title;
-   }
-
-    /**
-    * Method to store a record
-    *
-    * @access  public
-    * @return  boolean  True on success
-    */
-   public function store($data)
-   {
-      // Set up access to default parameters
-      $this->_params = JComponentHelper::getParams( 'com_issuetracker' );
-
-      // Get default settings
-      $def_published = $this->_params->get('def_published', 0);
-
-      $row =& $this->getTable('itprojects','IssueTrackerTable');
-
-      // Ensure default published state is set:
-      if (empty($data['state'])) {
-         $data['state'] = $def_published;
-      }
-
-      $data['id'] = JRequest::getVar('id', '', 'post', 'double');
-      $date = JFactory::getDate();
-
-      // Set start date to today if not set.
-      if (empty($data['start_date'])) {
-         $data['start_date'] = "$date";
-      }
-
-      // Bind the form fields to the table
-      if (!$row->bind($data)) {
-         $this->setError($this->_db->getErrorMsg());
+      // Bind the data.
+      if (!$table->bind($data)) {
+         $this->setError($table->getError());
          return false;
       }
 
-      // Make sure the record is valid
-      if (!$row->check()) {
-         $this->setError($this->_db->getErrorMsg());
+      // Bind the rules.
+      if (isset($data['rules'])) {
+         $rules = new JAccessRules($data['rules']);
+         $table->setRules($rules);
+      }
+
+      // Check the data.
+      if (!$table->check()) {
+         $this->setError($table->getError());
          return false;
       }
 
-      // Store the web link table to the database
-      if (!$row->store()) {
-         $this->setError( $row->getErrorMsg() );
+      // Trigger the onContentBeforeSave event.
+      $result = $dispatcher->trigger($this->event_before_save, array($this->option . '.' . $this->name, &$table, $isNew));
+      if (in_array(false, $result, true)) {
+         $this->setError($table->getError());
          return false;
       }
+
+      if (!$table->store()) {
+         return false;
+      }
+
+      // Trigger the onContentAfterSave event.
+      $dispatcher->trigger($this->event_after_save, array($this->option . '.' . $this->name, &$table, $isNew));
+
+      // Rebuild the path for the project:
+      if (!$table->rebuildPath($table->id)) {
+         $this->setError($table->getError());
+         return false;
+      }
+
+      // Rebuild the paths of the project's children:
+      if (!$table->rebuild($table->id, $table->lft, $table->level, $table->path)) {
+         $this->setError($table->getError());
+         return false;
+      }
+
+      $this->setState($this->getName() . '.id', $table->id);
+
+      // Clear the cache
+      // $this->cleanCache();
+
       return true;
    }
+
+
+   /**
+    * Method to change the project name.
+    *
+    * @param string $title The title
+    * @return the modified title
+    */
+
+   private function _generateNewProjectName($parent_id, $alias, $title)
+   {
+      // Alter the title
+      // $title .= ' (2)';
+      // return $title;
+
+      // Alter the title & alias
+      $table = $this->getTable();
+      while ($table->load(array('alias' => $alias, 'parent_id' => $parent_id))) {
+         $title = JString::increment($title);
+         $alias = JString::increment($alias, 'dash');
+      }
+
+      return array($title, $alias);
+   }
+
 
    /**
     * Method to delete one or more records.
@@ -266,7 +294,7 @@ class IssueTrackerModelItprojects extends JModelAdmin
             }
 
             // Check if there are any subprojects
-            $query  = 'SELECT c.id, c.project_name, COUNT( s.parent_id ) AS numcat';
+            $query  = 'SELECT c.id, c.title, COUNT( s.parent_id ) AS numcat';
             $query .= ' FROM #__it_projects AS c' ;
             $query .= ' LEFT JOIN #__it_projects AS s ON s.parent_id = c.id' ;
             $query .= ' WHERE c.id IN ( '.implode(',',$pks).' )' ;
@@ -287,7 +315,7 @@ class IssueTrackerModelItprojects extends JModelAdmin
                if ($row->numcat == 0 || $row->id == $defproject ) {
                   $cida[] = (int) $row->id;
                } else {
-                  $err_cat[] = $row->project_name;
+                  $err_cat[] = $row->title;
                }
             }
 
@@ -337,5 +365,56 @@ class IssueTrackerModelItprojects extends JModelAdmin
          $app->enqueueMessage(JText::_('COM_ISSUETRACKER_DELETE_MODE_UNKNOWN_MSG'),'error');
          return false;
       }
+   }
+
+   /**
+   * Method rebuild the entire nested set tree.
+   *
+   * @return  boolean  False on failure or error, true otherwise.
+   *
+   * @since   1.6
+   */
+   public function rebuild()
+   {
+      // Get an instance of the table object.
+      $table = $this->getTable();
+
+      if (!$table->rebuild()) {
+         $this->setError($table->getError());
+         return false;
+      }
+
+      // Clear the cache
+     // $this->cleanCache();
+
+      return true;
+   }
+
+   /**
+    * Method to save the reordered nested set tree.
+    * First we save the new order values in the lft values of the changed ids.
+    * Then we invoke the table rebuild to implement the new ordering.
+    *
+    * @param   array    $idArray    An array of primary key ids.
+    * @param   integer  $lft_array  The lft value
+    *
+    * @return  boolean  False on failure or error, True otherwise
+    *
+    * @since   1.6
+    */
+   public function saveorder($idArray = null, $lft_array = null)
+   {
+      // Get an instance of the table object.
+      $table = $this->getTable();
+
+      if (!$table->saveorder($idArray, $lft_array)) {
+         $this->setError($table->getError());
+         return false;
+      }
+
+      // Clear the cache
+      //    $this->cleanCache();
+
+      return true;
    }
 }

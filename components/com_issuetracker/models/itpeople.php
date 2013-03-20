@@ -2,14 +2,14 @@
 /*
  * Issue Tracker Model for Issue Tracker Component
  *
- * @Version       $Id: itpeople.php 260 2012-06-21 17:41:24Z geoffc $
+ * @Version       $Id: itpeople.php 696 2013-02-09 19:10:17Z geoffc $
  * @Package       Joomla Issue Tracker
  * @Subpackage    com_issuetracker
- * @Release       1.2.0
- * @Copyright     Copyright (C) 2011 - 2012 Macrotone Consulting Ltd. All rights reserved.
+ * @Release       1.3.0
+ * @Copyright     Copyright (C) 2011-2013 Macrotone Consulting Ltd. All rights reserved.
  * @License       GNU General Public License version 3 or later; see LICENSE.txt
  * @Contact       support@macrotoneconsulting.co.uk
- * @Lastrevision  $Date: 2012-06-21 18:41:24 +0100 (Thu, 21 Jun 2012) $
+ * @Lastrevision  $Date: 2013-02-09 19:10:17 +0000 (Sat, 09 Feb 2013) $
  *
  */
 
@@ -48,16 +48,14 @@ class IssueTrackerModelItpeople extends JModel{
       $query->select(
          $this->getState(
             'list.select',
-            't1.id, t1.person_name, t1.person_email, t1.person_role, ' .
-            't1.username, t1.assigned_project, t1.created_on, ' .
-            't1.created_by, t1.modified_on, t1.modified_by'
+            't1.*'
          )
       );
 
       $query->from('#__it_people AS t1');
 
       // Join over the it_projects table.
-      $query->select('t2.project_name AS project_name, t2.id AS project_id');
+      $query->select('t2.title AS project_name, t2.id AS project_id');
       $query->join('LEFT', '#__it_projects AS t2 ON t2.id = t1.assigned_project');
 
       // Outer join over the it_roles table.

@@ -1,16 +1,18 @@
 <?php
 /*
  *
- * @Version       $Id: view.html.php 393 2012-08-29 15:19:43Z geoffc $
+ * @Version       $Id: view.html.php 724 2013-02-22 15:53:06Z geoffc $
  * @Package       Joomla Issue Tracker
  * @Subpackage    com_issuetracker
- * @Release       1.2.1
- * @Copyright     Copyright (C) 2011 - 2012 Macrotone Consulting Ltd. All rights reserved.
+ * @Release       1.3.0
+ * @Copyright     Copyright (C) 2011-2013 Macrotone Consulting Ltd. All rights reserved.
  * @License       GNU General Public License version 3 or later; see LICENSE.txt
  * @Contact       support@macrotoneconsulting.co.uk
- * @Lastrevision  $Date: 2012-08-29 16:19:43 +0100 (Wed, 29 Aug 2012) $
+ * @Lastrevision  $Date: 2013-02-22 15:53:06 +0000 (Fri, 22 Feb 2013) $
  *
  */
+
+defined( '_JEXEC' ) or die( 'Restricted access' );
 
 jimport( 'joomla.application.component.view');
 
@@ -25,14 +27,9 @@ class IssueTrackerViewItpeoplelist extends JView
    protected $print;
 
    function display($tpl = null){
-      $app =& JFactory::getApplication();
-      /*
-      $params =& JComponentHelper::getParams( 'com_issuetracker' );
-      $params =& $app->getParams( 'com_issuetracker' );
-      $dummy = $params->get( 'dummy_param', 1 );
-      */
+      $app     = JFactory::getApplication();
       $params  = $app->getParams();
-      $this->assignRef('params'  , $params  );
+      $this->assignRef('params'  , $params );
 
       //Escape strings for HTML output
       $this->pageclass_sfx = htmlspecialchars($params->get('pageclass_sfx'));

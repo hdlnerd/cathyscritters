@@ -1,14 +1,14 @@
 <?php
 /*
  *
- * @Version       $Id: itprioritylist.php 284 2012-07-06 13:51:19Z geoffc $
+ * @Version       $Id: itprioritylist.php 669 2013-01-04 14:39:25Z geoffc $
  * @Package       Joomla Issue Tracker
  * @Subpackage    com_issuetracker
- * @Release       1.2.0
- * @Copyright     Copyright (C) 2011 - 2012 Macrotone Consulting Ltd. All rights reserved.
+ * @Release       1.2.3
+ * @Copyright     Copyright (C) 2011-2013 Macrotone Consulting Ltd. All rights reserved.
  * @License       GNU General Public License version 3 or later; see LICENSE.txt
  * @Contact       support@macrotoneconsulting.co.uk
- * @Lastrevision  $Date: 2012-07-06 14:51:19 +0100 (Fri, 06 Jul 2012) $
+ * @Lastrevision  $Date: 2013-01-04 14:39:25 +0000 (Fri, 04 Jan 2013) $
  *
  */
 
@@ -135,7 +135,7 @@ class IssuetrackerModelItprioritylist extends JModelList
          if (stripos($search, 'id:') === 0) {
             $query->where('a.id = '.(int) substr($search, 3));
          } else {
-            $search = $db->Quote('%'.$db->getEscaped($search, true).'%');
+            $search = $db->Quote('%'.$db->escape($search, true).'%');
                 $query->where('( a.priority_name LIKE '.$search.'  OR  a.description LIKE '.$search.' )');
          }
       }
@@ -144,7 +144,7 @@ class IssuetrackerModelItprioritylist extends JModelList
       $orderCol   = $this->state->get('list.ordering');
       $orderDirn  = $this->state->get('list.direction');
         if ($orderCol && $orderDirn) {
-          $query->order($db->getEscaped($orderCol.' '.$orderDirn));
+          $query->order($db->escape($orderCol.' '.$orderDirn));
         }
 
       return $query;

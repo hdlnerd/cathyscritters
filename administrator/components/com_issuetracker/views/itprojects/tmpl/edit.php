@@ -1,14 +1,14 @@
 <?php
 /*
  *
- * @Version       $Id: edit.php 195 2012-05-02 19:54:34Z geoffc $
+ * @Version       $Id: edit.php 689 2013-02-06 17:38:45Z geoffc $
  * @Package       Joomla Issue Tracker
  * @Subpackage    com_issuetracker
- * @Release       1.1.0
- * @Copyright     Copyright (C) 2011 - 2012 Macrotone Consulting Ltd. All rights reserved.
+ * @Release       1.3.0
+ * @Copyright     Copyright (C) 2011-2013 Macrotone Consulting Ltd. All rights reserved.
  * @License       GNU General Public License version 3 or later; see LICENSE.txt
  * @Contact       support@macrotoneconsulting.co.uk
- * @Lastrevision  $Date: 2012-05-02 20:54:34 +0100 (Wed, 02 May 2012) $
+ * @Lastrevision  $Date: 2013-02-06 17:38:45 +0000 (Wed, 06 Feb 2013) $
  *
  */
 
@@ -36,33 +36,39 @@ JHtml::_('behavior.formvalidation');
          <legend><?php echo JText::_('JDETAILS'); ?></legend>
          <ul class="adminformlist">
 
-         <li><?php echo $this->form->getLabel('project_name'); ?>
-         <?php echo $this->form->getInput('project_name'); ?></li>
+            <li><?php echo $this->form->getLabel('title'); ?>
+            <?php echo $this->form->getInput('title'); ?></li>
 
-         <li><?php echo $this->form->getLabel('project_description'); ?>
-         <div class="clr"></div>
-         <?php echo $this->form->getInput('project_description'); ?></li>
+            <li><?php echo $this->form->getLabel('alias'); ?>
+            <?php echo $this->form->getInput('alias'); ?></li>
 
-         <li><?php echo $this->form->getLabel('parent_id'); ?>
-         <?php echo $this->form->getInput('parent_id'); ?></li>
+            <li><?php echo $this->form->getLabel('parent_id'); ?>
+            <?php echo $this->form->getInput('parent_id'); ?></li>
 
-         <li><?php echo $this->form->getLabel('start_date'); ?>
-         <?php echo $this->form->getInput('start_date'); ?></li>
+            <li><?php echo $this->form->getLabel('access'); ?>
+            <?php echo $this->form->getInput('access'); ?></li>
 
-         <li><?php echo $this->form->getLabel('target_end_date'); ?>
-         <?php echo $this->form->getInput('target_end_date'); ?></li>
+            <li><?php echo $this->form->getLabel('description'); ?>
+            <div class="clr"></div>
+            <?php echo $this->form->getInput('description'); ?></li>
 
-         <li><?php echo $this->form->getLabel('actual_end_date'); ?>
-         <?php echo $this->form->getInput('actual_end_date'); ?></li>
+            <li><?php echo $this->form->getLabel('start_date'); ?>
+            <?php echo $this->form->getInput('start_date'); ?></li>
 
-         <li><?php echo $this->form->getLabel('state'); ?>
-         <?php echo $this->form->getInput('state'); ?></li>
+            <li><?php echo $this->form->getLabel('target_end_date'); ?>
+            <?php echo $this->form->getInput('target_end_date'); ?></li>
 
-         <li><?php echo $this->form->getLabel('checked_out'); ?>
-         <?php echo $this->form->getInput('checked_out'); ?></li>
+            <li><?php echo $this->form->getLabel('actual_end_date'); ?>
+            <?php echo $this->form->getInput('actual_end_date'); ?></li>
 
-         <li><?php echo $this->form->getLabel('checked_out_time'); ?>
-         <?php echo $this->form->getInput('checked_out_time'); ?></li>
+            <li><?php echo $this->form->getLabel('state'); ?>
+            <?php echo $this->form->getInput('state'); ?></li>
+
+            <li><?php echo $this->form->getLabel('checked_out'); ?>
+            <?php echo $this->form->getInput('checked_out'); ?></li>
+
+            <li><?php echo $this->form->getLabel('checked_out_time'); ?>
+            <?php echo $this->form->getInput('checked_out_time'); ?></li>
 
          </ul>
       </fieldset>
@@ -71,6 +77,20 @@ JHtml::_('behavior.formvalidation');
    <div class="width-40 fltlft">
       <?php echo $this->loadTemplate('audit_details');?>
    </div>
+   <div class="clr"></div>
+
+   <?php if ($this->canDo->get('core.admin')): ?>
+      <div  class="width-100 fltlft">
+         <?php echo JHtml::_('sliders.start', 'permissions-sliders-'.$this->item->id, array('useCookie'=>1)); ?>
+
+         <?php echo JHtml::_('sliders.panel', JText::_('COM_ISSUETRACKER_PROJECT_FIELDSET_RULES'), 'access-rules'); ?>
+            <fieldset class="panelform">
+               <?php echo $this->form->getLabel('rules'); ?>
+               <?php echo $this->form->getInput('rules'); ?>
+            </fieldset>
+         <?php echo JHtml::_('sliders.end'); ?>
+      </div>
+   <?php endif; ?>
 
    <input type="hidden" name="task" value="" />
    <?php echo JHtml::_('form.token'); ?>

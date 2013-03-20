@@ -1,14 +1,14 @@
 <?php
 /*
  *
- * @Version       $Id: form.php 385 2012-08-28 15:16:26Z geoffc $
+ * @Version       $Id: form.php 721 2013-02-20 19:41:01Z geoffc $
  * @Package       Joomla Issue Tracker
  * @Subpackage    com_issuetracker
- * @Release       1.1.0
- * @Copyright     Copyright (C) 2011 - 2012 Macrotone Consulting Ltd. All rights reserved.
+ * @Release       1.3.0
+ * @Copyright     Copyright (C) 2011-2013 Macrotone Consulting Ltd. All rights reserved.
  * @License       GNU General Public License version 3 or later; see LICENSE.txt
  * @Contact       support@macrotoneconsulting.co.uk
- * @Lastrevision  $Date: 2012-08-28 16:16:26 +0100 (Tue, 28 Aug 2012) $
+ * @Lastrevision  $Date: 2013-02-20 19:41:01 +0000 (Wed, 20 Feb 2013) $
  *
  */
 defined('_JEXEC') or die;
@@ -54,6 +54,9 @@ class IssuetrackerModelForm extends IssuetrackerModelItissues
       $this->setState('params', $params);
 
       $this->setState('layout', JRequest::getCmd('layout'));
+
+      $pid = JRequest::getCmd('pid');
+      $this->setState('project_value', $pid);
    }
 
    /**
@@ -117,8 +120,9 @@ class IssuetrackerModelForm extends IssuetrackerModelItissues
             if ($user->username == $value->created_by ) {
                $value->params->set('access-edit', true);
             }
-            if ($userId == $value->identified_by_person_id ) {
-               $value->params->set('access-edit', true);
+            $person_id = IssueTrackerHelper::get_itpeople_id($user->id);
+            if ($person_id == $value->identified_by_person_id ) {
+                $value->params->set('access-edit', true);
             }
          // Now add check if issue admin
          elseif ( IssueTrackerHelper::isIssueAdmin($userId) ) {
@@ -140,9 +144,8 @@ class IssuetrackerModelForm extends IssuetrackerModelItissues
 //            $value->params->set('access-view', in_array($value->access, $groups));
 //         }  else {
 //                  $value->params->set('access-view', in_array($value->access, $groups) && in_array($value->category_access, $groups));
-//              }
+//         }
       }
-
 
       // Check edit state permission.
       if ($itemId) {
@@ -150,6 +153,11 @@ class IssuetrackerModelForm extends IssuetrackerModelItissues
          $value->params->set('access-change', $user->authorise('core.edit.state', $asset));
       } else {
          // New item.
+         // IF called from the projects list the pid will be set.
+         $pid = $this->getState('project_value');
+         if ( !empty($pid) )
+            $value->related_project_id = $pid;
+
 //         $catId = (int) $this->getState('issue.catid');
 //         if ($catId) {
 //            $value->params->set('access-change', $user->authorise('core.edit.state', 'com_issuetracker.category.'.$catId));

@@ -1,21 +1,21 @@
 <?php
 /*
  *
- * @Version       $Id: dbtasks.php 387 2012-08-28 15:17:58Z geoffc $
+ * @Version       $Id: dbtasks.php 705 2013-02-10 19:49:30Z geoffc $
  * @Package       Joomla Issue Tracker
  * @Subpackage    com_issuetracker
- * @Release       1.2.0
- * @Copyright     Copyright (C) 2011 - 2012 Macrotone Consulting Ltd. All rights reserved.
+ * @Release       1.3.0
+ * @Copyright     Copyright (C) 2011-2013 Macrotone Consulting Ltd. All rights reserved.
  * @License       GNU General Public License version 3 or later; see LICENSE.txt
  * @Contact       support@macrotoneconsulting.co.uk
- * @Lastrevision  $Date: 2012-08-28 16:17:58 +0100 (Tue, 28 Aug 2012) $
+ * @Lastrevision  $Date: 2013-02-10 19:49:30 +0000 (Sun, 10 Feb 2013) $
  *
  */
 
 // Protect from unauthorized access
 defined('_JEXEC') or die('Restricted Access');
 
-class IssueTrackerModelDbtasks extends JModel
+class IssueTrackerModelDbtasks extends JModelLegacy
 {
 
    public function addsampledata()
@@ -48,6 +48,27 @@ class IssueTrackerModelDbtasks extends JModel
             // Call add projects separately
             $db->setQuery('CALL #__create_sample_projects');
             $res = $db->query();
+/*
+            // Update patent id to be root id
+            $query = "SELECT id from `#__it_projects` WHERE title = 'Root'";
+            $db->setQuery($query);
+            $rid = $db->loadResult();
+
+             // Loop for each of the 5 records.
+            for ($i=3; $i<=7; $i++) {
+               $lft = $rgt + 1;
+               $rgt = $rgt + 2;
+               $query = "UPDATE `#__it_projects` SET lft = '".$lft."', rgt = '".$rgt."' parent_id = '".$rid."' WHERE id = '".$i."'";
+               $db->setQuery($query);
+               $db->execute();
+            }
+
+            // Now update root node.
+            $rgt++;
+            $query = "UPDATE `#__it_projects` SET rgt = '".$rgt."' WHERE id = '".$rid."'";
+            $db->setQuery($query);
+            $db->execute();
+*/
             // Now add people having modified the used super id.
             // We generally use 2->18 but with the Super User using one of these we use 19 instead.
             // The anonymous user will normally be id=1 but it the super user is using it it will be id=2.
@@ -179,6 +200,7 @@ class IssueTrackerModelDbtasks extends JModel
             // Now add the issues
             $db->setQuery('CALL #__create_sample_issues');
             $res = $db->query();
+
             // Finally update the issues with our revised person_id.
             $db->setQuery("UPDATE #__it_issues set identified_by_person_id = 19 where identified_by_person_id = ".$super_id);
             $db->query();
@@ -207,12 +229,40 @@ class IssueTrackerModelDbtasks extends JModel
             }
             return false;
          }
+/*
+         // Get root id
+         $query = "SELECT id from `#__it_projects` WHERE title = 'Root'";
+         $db->setQuery($query);
+         $rid = $db->loadResult();
 
+         // Get root rgt value and populate our projects.
+         $query = "SELECT rgt from `#__it_projects` WHERE id = '".$rid."'";
+         $db->setQuery($query);
+         $rgt = $db->loadResult();
+
+         // Loop for each of the 5 records.
+         for ($i=3; $i<=7; $i++) {
+            $lft = $rgt + 1;
+            $rgt = $rgt + 2;
+            $query = "UPDATE `#__it_projects` SET lft = '".$lft."', rgt = '".$rgt."' parent_id = '".$rid."' WHERE id = '".$i."'";
+            $db->setQuery($query);
+            $db->execute();
+         }
+
+         // Now update root node.
+         $rgt++;
+         $query = "UPDATE `#__it_projects` SET rgt = '".$rgt."' WHERE id = '".$rid."'";
+         $db->setQuery($query);
+         $db->execute();
+*/
          // Now update the staff field in it_people
          $db->setQuery("UPDATE #__it_people set staff = 1 WHERE user_id IN (SELECT distinct assigned_to_person_id FROM #__it_issues)");
          $db->query();
          return true;
       }
+
+      // Now rebuild the projects table
+      $this->rebuildTable();
 
       $db->setQuery('OPTIMIZE TABLE '.$db->nameQuote('#__it_issues'));
       $db->query();
@@ -245,7 +295,7 @@ class IssueTrackerModelDbtasks extends JModel
       // Double Check that it is indeed our sample users in the range.  Should be sufficient to check for three users.
       // If the super user was created with a low id then subsequent users will follow on, and hence if they later load our component and try adding
       // the sample data it will fail, but they may try and remove it, perhaps by accident!
-      $query = "SELECT COUNT(*) from `#__it_people` where person_name in ('Thomas Cobley','Peter Davy','John Gilpin') AND id between 2 AND 19";
+      $query = "SELECT COUNT(*) from `#__it_people` where person_name in ('Thomas Cobley','Peter Davy','John Gilpin') AND id between 2 AND 18";
       $db->setQuery($query);
       $result = $db->loadResult();
       if ( $result != 3 ) {
@@ -254,13 +304,13 @@ class IssueTrackerModelDbtasks extends JModel
       }
 
       // Check that the default project is not one of the sample projects.
-      if ( $defproject >2 && $defproject < 11 ) {
+      if ( $defproject >2 && $defproject < 10 ) {
          $app->enqueueMessage(JText::_('COM_ISSUETRACKER_ERROR_DEFPROJECT_ASSIGNMENT'),'error');
          return false;
       }
 
       // Check if they have created any issues of their own and/or assigned people or issues to any of the samples
-      $query = "SELECT COUNT(*) from `#__it_issues` where related_project_id between 2 AND 10 AND id > 28";
+      $query = "SELECT COUNT(*) from `#__it_issues` where related_project_id between 2 AND 9 AND id > 28";
       $db->setQuery($query);
       $result = $db->loadResult();
 
@@ -279,7 +329,7 @@ class IssueTrackerModelDbtasks extends JModel
       $db->setQuery($query);
       $anon_id = $db->loadResult();
 
-      $query = "SELECT COUNT(*) from `#__it_people` where assigned_project between 2 AND 6 AND id > ";
+      $query = "SELECT COUNT(*) from `#__it_people` where assigned_project between 3 AND 7 AND id > ";
       if ( $super_id <= 18 ) {
          $query .= '19 AND id != '.$super_id;
       } else {
@@ -326,12 +376,15 @@ class IssueTrackerModelDbtasks extends JModel
          $db->query();
          $db->setQuery("delete from `#__it_people` where id >1 AND id < 20 AND id NOT IN (".$super_id.",".$anon_id.")");
          $db->query();
-         $db->setQuery("delete from `#__it_projects` where id > 1 AND id < 7");
+         $db->setQuery("delete from `#__it_projects` where id > 2 AND id < 8");
          $db->query();
       } else {
          $db->setQuery("CALL #__remove_it_sample_data");
          $db->query();
       }
+
+      // Only need to rebuild since we are removing entries.
+      $this->rebuildTable();
 
       $db->setQuery('OPTIMIZE TABLE '.$db->nameQuote('#__it_issues'));
       $db->query();
@@ -370,5 +423,29 @@ class IssueTrackerModelDbtasks extends JModel
       $db->query();
       $db->setQuery('OPTIMIZE TABLE '.$db->nameQuote('#__it_people'));
       $db->query();
+   }
+
+
+   /* Routines for rebuilding projects under a Nested table.
+    *
+    */
+   function rebuildTable()
+   {
+      // Get model
+      // $att = JModel::getInstance('itprojects','IssueTrackerModel');
+
+      // Get an instance of the table object.
+      $table = JTable::getInstance('Itprojects', 'IssueTrackerTable');
+
+      if (!$table->rebuild()) {
+         $this->setError($table->getError());
+         return false;
+      }
+
+      // Clear the cache
+      // $this->cleanCache();
+
+      return true;
+
    }
 }

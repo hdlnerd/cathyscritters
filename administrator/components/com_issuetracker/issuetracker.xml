@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension type="component" version="2.5.0" method="upgrade">
 <name>Issue Tracker</name>
-<creationDate>September 2012</creationDate>
+<creationDate>February 2013</creationDate>
 <author>Macrotone Consulting Ltd</author>
 <authorEmail>support@macrotone.co.uk</authorEmail>
 <authorUrl>http://www.macrotoneconsulting.co.uk</authorUrl>
-<copyright>Copyright (C) 2012 Macrotone Consulting Ltd. All rights reserved.</copyright>
+<copyright>Copyright (C) 2011-2013 Macrotone Consulting Ltd. All rights reserved.</copyright>
 <license>GNU/GPL v3 or later.</license>
-<version>1.2.2</version>
+<version>1.3.0</version>
 
 <description>COM_ISSUETRACKER_XML_DESCRIPTION</description>
 
@@ -55,15 +55,15 @@
 
 
    <administration>
-	<menu img="components/com_issuetracker/images/16/issues.png" link="option=com_issuetracker">COM_ISSUETRACKER_ADMIN_MENU_TITLE</menu>
+   <menu view="CPanel" img="../media/com_issuetracker/images/16/issues.png" link="option=com_issuetracker">COM_ISSUETRACKER_ADMIN_MENU_TITLE</menu>
 
         <submenu>
-	    <menu view="CPanel" alt="IssueTracker/CPanel" img="components/com_issuetracker/images/16/cpanel.png" link="option=com_issuetracker">COM_ISSUETRACKER_ADMIN_MENU_CPANEL</menu>
-	    <menu view="Issues" alt="IssueTracker/Issues" img="components/com_issuetracker/images/16/issues.png" link="option=com_issuetracker&amp;view=itissueslist">COM_ISSUETRACKER_ADMIN_MENU_ISSUES</menu>
-	    <menu view="People" alt="IssueTracker/People" img="components/com_issuetracker/images/16/users.png" link="option=com_issuetracker&amp;view=itpeoplelist">COM_ISSUETRACKER_ADMIN_MENU_PEOPLE</menu>
-	    <menu view="Projects" alt="IssueTracker/Projects" img="components/com_issuetracker/images/16/projects.png" link="option=com_issuetracker&amp;view=itprojectslist">COM_ISSUETRACKER_ADMIN_MENU_PROJECTS</menu>
+       <menu view="CPanel" alt="IssueTracker/CPanel" img="../media/com_issuetracker/images/16/cpanel.png" link="option=com_issuetracker">COM_ISSUETRACKER_ADMIN_MENU_CPANEL</menu>
+       <menu view="Issues" alt="IssueTracker/Issues" img="../media/com_issuetracker/images/16/issues.png" link="option=com_issuetracker&amp;view=itissueslist">COM_ISSUETRACKER_ADMIN_MENU_ISSUES</menu>
+       <menu view="People" alt="IssueTracker/People" img="../media/com_issuetracker/images/16/users.png" link="option=com_issuetracker&amp;view=itpeoplelist">COM_ISSUETRACKER_ADMIN_MENU_PEOPLE</menu>
+       <menu view="Projects" alt="IssueTracker/Projects" img="../media/com_issuetracker/images/16/projects.png" link="option=com_issuetracker&amp;view=itprojectslist">COM_ISSUETRACKER_ADMIN_MENU_PROJECTS</menu>
 	    <menu view="Support" alt="IssueTracker/Support" img="class:info" link="option=com_issuetracker&amp;view=support">COM_ISSUETRACKER_ADMIN_MENU_SUPPORT</menu>
-	    <menu view="Documentation" alt="IssueTracker/Documentation" img="components/com_issuetracker/images/16/documentation.png" link="option=com_issuetracker&amp;view=documentation">COM_ISSUETRACKER_ADMIN_MENU_DOCUMENTATION</menu>
+       <menu view="Documentation" alt="IssueTracker/Documentation" img="../media/com_issuetracker/images/16/documentation.png" link="option=com_issuetracker&amp;view=documentation">COM_ISSUETRACKER_ADMIN_MENU_DOCUMENTATION</menu>
 	</submenu>
 		
 	<files folder="admin">
@@ -76,7 +76,6 @@
 		<folder>controllers</folder>
 		<folder>views</folder>
       <folder>classes</folder>
-		<folder>images</folder>
 		<folder>helpers</folder>
 		<folder>help</folder>
 		<folder>plugins</folder>

@@ -1,14 +1,14 @@
 <?php
 /*
  *
- * @Version       $Id: edit.php 445 2012-09-10 14:12:23Z geoffc $
+ * @Version       $Id: edit.php 721 2013-02-20 19:41:01Z geoffc $
  * @Package       Joomla Issue Tracker
  * @Subpackage    com_issuetracker
- * @Release       1.2.1
- * @Copyright     Copyright (C) 2011 - 2012 Macrotone Consulting Ltd. All rights reserved.
+ * @Release       1.3.0
+ * @Copyright     Copyright (C) 2011-2013 Macrotone Consulting Ltd. All rights reserved.
  * @License       GNU General Public License version 3 or later; see LICENSE.txt
  * @Contact       support@macrotoneconsulting.co.uk
- * @Lastrevision  $Date: 2012-09-10 15:12:23 +0100 (Mon, 10 Sep 2012) $
+ * @Lastrevision  $Date: 2013-02-20 19:41:01 +0000 (Wed, 20 Feb 2013) $
  *
  */
 defined('_JEXEC') or die;
@@ -23,10 +23,17 @@ JFactory::getLanguage()->load('com_issuetracker', JPATH_ADMINISTRATOR.'/componen
 
 $user = JFactory::getUser();
 
+if (! class_exists('IssueTrackerHelper')) {
+    require_once( JPATH_ADMINISTRATOR.DS.'components'.DS.'com_issuetracker'.DS.'helpers'.DS.'issuetracker.php');
+}
+
+IssueTrackerHelper::addCSS('media://com_issuetracker/css/issuetracker.css');
 
 // Create shortcut to parameters.
 $parameters = $this->state->get('params');
 
+$allow_attachment = $parameters->get('enable_attachments', 0);
+$allow_private    = $parameters->get('allow_private_issues');
 // Uncomment out to view what form fields are available
 //echo '<pre>';var_dump($this->form);'</pre>';
 ?>
@@ -47,7 +54,7 @@ $parameters = $this->state->get('params');
 </h1>
 <?php endif; ?>
 
-<form action="<?php echo JRoute::_('index.php?option=com_issuetracker&view=itissues&id='.(int) $this->item->id); ?>" method="post" name="adminForm" id="adminForm" class="form-validate">
+<form action="<?php echo JRoute::_('index.php?option=com_issuetracker&view=itissues&id='.(int) $this->item->id); ?>" method="post" name="adminForm" id="adminForm" enctype="multipart/form-data" class="form-validate">
 
    <div class="formelm-buttons">
       <button type="button" onclick="Joomla.submitbutton('itissues.save')">
@@ -60,8 +67,14 @@ $parameters = $this->state->get('params');
 
    <?php $intro = $parameters->get('create_intro',''); if ( !empty($intro) && empty($this->item->id) ) { echo '<br />'.$intro.'<br /><br />'; } ?>
 
+   <?php if ( $allow_private && !empty($this->item->id) ) : ?>
+      <fieldset>
+         <?php if ($this->item->public) echo '<br/>'.JText::_('COM_ISSUETRACKER_PUBNOTE_PUBLIC_MSG').'<br/>'; else echo '<br/>'.JText::_('COM_ISSUETRACKER_PUBNOTE_PRIVATE_MSG').'<br/>'; ?>
+      </fieldset>
+   <?php endif; ?>
+
    <fieldset>
-      <legend><?php if (empty($this->item->id)) { echo JText::_('COM_ISSUETRACKER_FORM_CREATE_ISSUE'); } else { echo JText::_('COM_ISSUETRACKER_FORM_EDIT_ISSUE').' '.$this->item->alias; } ?></legend>
+      <legend><?php if (empty($this->item->id)) echo JText::_('COM_ISSUETRACKER_FORM_CREATE_ISSUE');  else  echo JText::_('COM_ISSUETRACKER_FORM_EDIT_ISSUE').' '.$this->item->alias;  ?></legend>
 
          <div class="formelm">
              <?php echo $this->form->getLabel('alias'); ?>
@@ -111,8 +124,16 @@ $parameters = $this->state->get('params');
       </fieldset>
    <?php endif; ?>
 
-   <fieldset>
-      <legend><?php echo JText::_('COM_ISSUETRACKER_ISSUE_DETAILS_LEGEND'); ?></legend>
+   <?php if ($parameters->get('show_details_section',0)) : ?>
+      <fieldset>
+         <legend><?php echo JText::_('COM_ISSUETRACKER_ISSUE_DETAILS_LEGEND'); ?></legend>
+
+         <?php if ($parameters->get('show_visibility', 0)) : ?>
+         <div class="formelm">
+            <?php echo $this->form->getLabel('public'); ?>
+            <?php echo $this->form->getInput('public'); ?>
+         </div>
+         <?php endif; ?>
 
          <?php if ($parameters->get('show_identified_by', 0)) : ?>
          <div class="formelm">
@@ -126,10 +147,12 @@ $parameters = $this->state->get('params');
             <?php echo $this->form->getInput('identified_date'); ?>
          </div>
 
+         <?php if ($parameters->get('show_project_name', 0)) : ?>
          <div class="formelm">
             <?php echo $this->form->getLabel('related_project_id'); ?>
             <?php echo $this->form->getInput('related_project_id'); ?>
          </div>
+         <?php endif; ?>
 
          <div class="formelm">
              <?php echo $this->form->getLabel('issue_type'); ?>
@@ -141,12 +164,13 @@ $parameters = $this->state->get('params');
              <?php echo $this->form->getInput('priority'); ?>
          </div>
 
-         <div class="formelm">
+         <div class="btn-group">
              <?php echo $this->form->getLabel('notify'); ?>
-             <!-- ?php echo JHTML::_('select.booleanlist', 'notify', 'class="inputbox"', $this->form->getInput('notify')); ? -->
              <?php echo $this->form->getInput('notify'); ?>
          </div>
-   </fieldset>
+      </fieldset>
+   <?php endif; ?>
+
 
    <?php if ( !(empty($this->item->id)) || ($parameters->get('issues_admin', 0) == 1 ) ) : ?>
       <fieldset>
@@ -227,6 +251,8 @@ $parameters = $this->state->get('params');
       </fieldset>
    <?php endif; ?>
 
+   <?php if ($allow_attachment) echo $this->loadTemplate('attachment'); ?>
+
    <?php if ($parameters->get('show_product_req', 0)) echo $this->loadTemplate('product_details'); ?>
 
    <?php if ($user->guest) echo $this->loadTemplate('user_details'); ?>
@@ -244,6 +270,7 @@ $parameters = $this->state->get('params');
    <input type="hidden" name="return" value="<?php echo $this->return_page;?>" />
    <input type="hidden" name="id" value="<?php echo $this->item->id; ?>" />
    <input type="hidden" name="issue_id" value="<?php echo $this->item->id; ?>" />
+   <input type="hidden" name="project_value" value="<?php echo $this->pid; ?>" />
 
    <?php echo JHtml::_( 'form.token' ); ?>
 </form>

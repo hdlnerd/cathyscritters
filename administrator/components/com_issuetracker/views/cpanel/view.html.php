@@ -1,14 +1,14 @@
 <?php
 /*
  *
- * @Version       $Id: view.html.php 234 2012-06-07 17:27:15Z geoffc $
+ * @Version       $Id: view.html.php 681 2013-02-04 19:52:44Z geoffc $
  * @Package       Joomla Issue Tracker
  * @Subpackage    com_issuetracker
- * @Release       1.2.0
- * @Copyright     Copyright (C) 2011 - 2012 Macrotone Consulting Ltd. All rights reserved.
+ * @Release       1.3.0
+ * @Copyright     Copyright (C) 2011-2013 Macrotone Consulting Ltd. All rights reserved.
  * @License       GNU General Public License version 3 or later; see LICENSE.txt
  * @Contact       support@macrotoneconsulting.co.uk
- * @Lastrevision  $Date: 2012-06-07 18:27:15 +0100 (Thu, 07 Jun 2012) $
+ * @Lastrevision  $Date: 2013-02-04 19:52:44 +0000 (Mon, 04 Feb 2013) $
  *
  */
 
@@ -21,7 +21,7 @@ jimport('joomla.application.component.view');
 // import Joomla controlleradmin library
 //jimport('joomla.application.component.controlleradmin');
 
-class IssueTrackerViewCPanel extends JView
+class IssueTrackerViewCPanel extends JViewLegacy
 {
    //public $tmpl;
    function display($tpl = null)

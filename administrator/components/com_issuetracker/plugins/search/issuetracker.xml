@@ -2,13 +2,13 @@
 <extension version="2.5" type="plugin" group="search" method="upgrade">
 
 	<name>Search - Issue Tracker</name>
-	<creationDate>January 2012</creationDate>
+	<creationDate>February 2013</creationDate>
 	<author>Macrotone Consulting Ltd</author>
 	<authorEmail>info@macrotoneconsulting.co.uk</authorEmail>
 	<authorUrl>http://www.macrotoneconsulting.co.uk</authorUrl>
 	<copyright>All rights reserved.</copyright>
 	<license>GPL 2</license>
-	<version>1.0</version>
+	<version>1.3.0</version>
 	<description>Search Plugin for Macrotone Issue Tracker</description>
 	
 	<files>

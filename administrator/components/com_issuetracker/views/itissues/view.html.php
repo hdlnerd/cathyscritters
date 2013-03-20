@@ -1,14 +1,14 @@
 <?php
 /*
  *
- * @Version       $Id: view.html.php 322 2012-08-20 13:14:58Z geoffc $
+ * @Version       $Id: view.html.php 688 2013-02-05 17:41:09Z geoffc $
  * @Package       Joomla Issue Tracker
  * @Subpackage    com_issuetracker
- * @Release       1.1.0
- * @Copyright     Copyright (C) 2011 - 2012 Macrotone Consulting Ltd. All rights reserved.
+ * @Release       1.3.0
+ * @Copyright     Copyright (C) 2011-2013 Macrotone Consulting Ltd. All rights reserved.
  * @License       GNU General Public License version 3 or later; see LICENSE.txt
  * @Contact       support@macrotoneconsulting.co.uk
- * @Lastrevision  $Date: 2012-08-20 14:14:58 +0100 (Mon, 20 Aug 2012) $
+ * @Lastrevision  $Date: 2013-02-05 17:41:09 +0000 (Tue, 05 Feb 2013) $
  *
  */
 
@@ -27,7 +27,7 @@ if (! class_exists('IssueTrackerHelper')) {
  * @package       Joomla.Components
  * @subpackage    Issue Tracker
  */
-class IssueTrackerViewItissues extends JView
+class IssueTrackerViewItissues extends JViewLegacy
 {
    protected $state;
    protected $item;
@@ -41,6 +41,11 @@ class IssueTrackerViewItissues extends JView
       $this->state   = $this->get('State');
       $this->item    = $this->get('Item');
       $this->form    = $this->get('Form');
+
+      if ( $this->item->id != 0 ) {
+         $this->attachment    = $this->check_attachments();
+      }
+
       $this->canDo   = IssueTrackerHelper::getActions($this->item->id);
 
       // Check for errors.
@@ -51,6 +56,31 @@ class IssueTrackerViewItissues extends JView
 
       $this->addToolbar();
       parent::display($tpl);
+   }
+
+   /**
+    * Check if any attachments and get details.
+    * This code should be in the model. Move when convenient.
+    */
+
+   function check_attachments()
+   {
+      $issue_id = $this->item->alias;
+      print("Issue No = $issue_id<p>");
+
+      $db = JFactory::getDbo();
+      $query = "SELECT count(*) FROM `#__it_attachment` WHERE issue_id = '".$issue_id."'";
+      $db->setQuery($query);
+      $cnt = $db->loadResult();
+
+      if ( $cnt == 0 ) {
+         return false;
+      } else {
+         $query = "SELECT * FROM `#__it_attachment` WHERE issue_id = '".$issue_id."'";
+         $db->setQuery($query);
+         $attachment = $db->loadObjectList();
+         return $attachment;
+      }
    }
 
    /**

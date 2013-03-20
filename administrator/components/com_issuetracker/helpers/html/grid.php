@@ -4,21 +4,36 @@
  * @copyright  Copyright (C) 2005 - 2010 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE.txt
  *
- *
- * @Version       $Id: grid.php 317 2012-08-14 17:34:17Z geoffc $
+ * @Version       $Id: grid.php 724 2013-02-22 15:53:06Z geoffc $
  * @Package       Joomla Issue Tracker
  * @Subpackage    com_issuetracker
- * @Release       1.2.0
+ * @Release       1.3.0
  * @Copyright     Copyright (C) 2011 - 2012 Macrotone Consulting Ltd. All rights reserved.
  * @License       GNU General Public License version 3 or later; see LICENSE.txt
  * @Contact       support@macrotoneconsulting.co.uk
- * @Lastrevision  $Date: 2012-08-14 18:34:17 +0100 (Tue, 14 Aug 2012) $
+ * @Lastrevision  $Date: 2013-02-22 15:53:06 +0000 (Fri, 22 Feb 2013) $
  *
  */
 
+defined( '_JEXEC' ) or die( 'Restricted access' );
 
-include_once(JPATH_ROOT . DS . 'libraries' . DS . 'joomla' . DS . 'html' . DS . 'html' . DS . 'jgrid.php');
+if(!defined('DS')){
+   define('DS',DIRECTORY_SEPARATOR);
+}
+
+// File moved location in Joomal 3.0
+$filename = JPATH_ROOT . DS . 'libraries' . DS . 'joomla' . DS . 'html' . DS . 'html' . DS . 'jgrid.php';
+$filenamea = JPATH_ROOT . DS . 'libraries' . DS . 'joomla' . DS . 'html' . DS . 'jgrid.php';
+
+if (file_exists($filename)) {
+  include_once($filename);
+} else {
+  include_once($filenamea);
+}
+
+// include_once(JPATH_ROOT . DS . 'libraries' . DS . 'joomla' . DS . 'html' . DS . 'html' . DS . 'jgrid.php');
 //jimport('joomla.html.html.jgrid');
+
 class IssuetrackerGrid extends JHtmlJGrid
 {
 

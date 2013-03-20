@@ -1,14 +1,14 @@
 <?php
 /*
  *
- * @Version       $Id: default.php 204 2012-05-07 16:40:58Z geoffc $
+ * @Version       $Id: default.php 696 2013-02-09 19:10:17Z geoffc $
  * @Package       Joomla Issue Tracker
  * @Subpackage    com_issuetracker
- * @Release       1.0.0
- * @Copyright     Copyright (C) 2011 - 2012 Macrotone Consulting Ltd. All rights reserved.
+ * @Release       1.3.0
+ * @Copyright     Copyright (C) 2011-2013 Macrotone Consulting Ltd. All rights reserved.
  * @License       GNU General Public License version 3 or later; see LICENSE.txt
  * @Contact       support@macrotoneconsulting.co.uk
- * @Lastrevision  $Date: 2012-05-07 17:40:58 +0100 (Mon, 07 May 2012) $
+ * @Lastrevision  $Date: 2013-02-09 19:10:17 +0000 (Sat, 09 Feb 2013) $
  *
  */
 
@@ -16,6 +16,12 @@
 defined('_JEXEC') or die('Restricted access');
 
 JHtml::addIncludePath(JPATH_COMPONENT . '/helpers');
+
+if (! class_exists('IssueTrackerHelper')) {
+    require_once( JPATH_ADMINISTRATOR.DS.'components'.DS.'com_issuetracker'.DS.'helpers'.DS.'issuetracker.php');
+}
+
+IssueTrackerHelper::addCSS('media://com_issuetracker/css/issuetracker.css');
 
 $data = $this->data;
 $link = JRoute::_( "index.php?option=com_issuetracker&view=itpeople&id={$data->id}" );

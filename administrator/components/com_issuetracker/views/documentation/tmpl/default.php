@@ -1,23 +1,25 @@
 <?php
 /*
  *
- * @Version       $Id: default.php 207 2012-05-10 17:22:24Z geoffc $
+ * @Version       $Id: default.php 681 2013-02-04 19:52:44Z geoffc $
  * @Package       Joomla Issue Tracker
  * @Subpackage    com_issuetracker
- * @Release       1.1.0
- * @Copyright     Copyright (C) 2011 - 2012 Macrotone Consulting Ltd. All rights reserved.
+ * @Release       1.3.0
+ * @Copyright     Copyright (C) 2011-2013 Macrotone Consulting Ltd. All rights reserved.
  * @License       GNU General Public License version 3 or later; see LICENSE.txt
  * @Contact       support@macrotoneconsulting.co.uk
- * @Lastrevision  $Date: 2012-05-10 18:22:24 +0100 (Thu, 10 May 2012) $
+ * @Lastrevision  $Date: 2013-02-04 19:52:44 +0000 (Mon, 04 Feb 2013) $
  *
  */
 
 if (!defined('_JEXEC')) die('Direct Access to this location is not allowed.');
 
+$db   = JFactory::getDBO();
+$sql  = "SELECT version FROM ".$db->quoteName('#__it_meta')." WHERE type='component'";
+$db->setQuery( $sql);
+$version = $db->loadResult();
+
 ?>
-<table class="adminlist">
-  <tr>
-    <td>
 <style type="text/css">
 div.docs,div.docs p,div.docs ul li,div.docs ol li {
    text-align: left;
@@ -47,10 +49,13 @@ div.docs h5,span.h5 {
    font-weight: bold;
 }
 </style>
-<div class="docs">
 
-<h1>Issue Tracker</h1>
-<h2>Support site</h2>
+<table class="adminlist">
+  <tr>
+    <td>
+      <div class="docs">
+         <h1>Issue Tracker</h1>
+         <h2>Support site</h2>
 <ol>
 Details of the FAQ and other sources of information are provided upon the Support tab above.
 </ol>
@@ -96,8 +101,8 @@ Details of the FAQ and other sources of information are provided upon the Suppor
          usual way.<br />
          <li>Go to the Extension Menu</li>
          <li>Click on the Manage tab</li>
-         <li>Scroll through the list until you find the Issue Tracker component or change the type scroll list to components and scroll through the now shorter list until you find the Password Control component</li>
-            <li>Click on the check box next to the Issue Tracker Control entry</li>
+         <li>Scroll through the list until you find the Issue Tracker component or change the type scroll list to components and scroll through the now shorter list until you find the Issue Tracker component</li>
+            <li>Click on the check box next to the Issue Tracker entry</li>
             <li>Click on the Uninstall image in the top right hand corner.</li>
       </ul>
       </li>
@@ -166,7 +171,7 @@ Details of the FAQ and other sources of information are provided upon the Suppor
 <div class="small" style="text-align: center;">Copyright &copy;
 <?php echo date('Y');?> G S Chapman - Macrotone Consulting Ltd.<br />
 Distributed under the terms of the GNU General Public License.</div>
-</div>
+    </div>
 
   </tr>
 </table>

@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS `#__it_meta` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
 
-INSERT INTO `#__it_meta` (version, type) values ("1.2.2", "component");
+INSERT INTO `#__it_meta` (version, type) values ("1.3.0", "component");
 
 CREATE TABLE IF NOT EXISTS `#__it_status` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'The system generated unique identifier for the issue status.',
@@ -72,10 +72,16 @@ CREATE TABLE IF NOT EXISTS `#__it_types` (
 
 CREATE TABLE IF NOT EXISTS `#__it_projects` (
   `id` int UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'The system generated unique identifier for the project.',
+  `asset_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'FK to the #__assets table.',
   `parent_id` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT 'Link to parent project id.',
-  `project_name` varchar(255) NOT NULL COMMENT 'The unique name of the project.',
-  `alias` varchar(10) DEFAULT NULL COMMENT 'Project Alias.  Used to mask primary key of issue from random selection.',
-  `project_description` varchar(4000) DEFAULT NULL COMMENT 'A full description of the project.',  
+  `title` varchar(255) NOT NULL COMMENT 'The unique name of the project.',
+  `alias` varchar(255) DEFAULT NULL COMMENT 'Project Alias.  Used to mask primary key of issue from random selection.',
+  `description` varchar(4000) DEFAULT NULL COMMENT 'A full description of the project.',  
+  `lft` INT(11) NOT NULL DEFAULT '0' COMMENT 'Nested table left',
+  `rgt` int(11) NOT NULL DEFAULT '0' COMMENT 'Nested table right',
+  `level` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'Nested table level.',
+  `access` tinyint(3) UNSIGNED NOT NULL DEFAULT '0' COMMENT 'Required for nested table.',
+  `path` VARCHAR(255) NOT NULL DEFAULT '' COMMENT 'Required for nested table.',  
   `state` TINYINT(4) DEFAULT '0' COMMENT 'State of the specific record.  i.e.  Published, archived, trashed etc.',
   `ordering` int(11) NOT NULL DEFAULT '0' COMMENT 'Order in which categories are presented.',
   `checked_out` INT(11) NOT NULL DEFAULT '0' COMMENT 'Checked out indicator.  User id of user editing the record.',
@@ -87,7 +93,8 @@ CREATE TABLE IF NOT EXISTS `#__it_projects` (
   `created_by` varchar(255) NOT NULL COMMENT 'Audit Column: The user who created the record.',
   `modified_on` datetime DEFAULT NULL COMMENT 'Audit Column: Date the record was last modified.',
   `modified_by` varchar(255) DEFAULT NULL COMMENT 'Audit Column: The user who last modified the record.',
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `idx_left_right` (`lft`,`rgt`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=11 COMMENT='All projects currently underway.';
 
 CREATE TABLE IF NOT EXISTS `#__it_people` (
@@ -113,7 +120,7 @@ CREATE TABLE IF NOT EXISTS `#__it_people` (
   `modified_by` varchar(255) DEFAULT NULL COMMENT 'Audit Column: The user who last modified the record.',
   PRIMARY KEY (`id`),
   UNIQUE KEY `#__it_people_userid_uk` (`user_id`),
-  UNIQUE KEY `#__it_people_name_uk` (`person_name`),
+  UNIQUE KEY `#__it_people_name_uk` (`person_name`,`person_email`),
   UNIQUE KEY `#__it_people_username_uk` (`username`),
   KEY `#__it_people_project_fk` (`assigned_project`),
   KEY `#__it_people_role_fk` (`person_role`),
@@ -133,13 +140,14 @@ CREATE TABLE IF NOT EXISTS `#__it_issues` (
   `assigned_to_person_id` int NULL COMMENT 'The person that the issue is assigned to.',
   `issue_type` int(11) DEFAULT '1' NOT NULL COMMENT 'The issue type.  i.e. defect etc.',
   `status` int(11) NOT NULL COMMENT 'The current status of the issue.',
+  `public` tinyint(3) NOT NULL DEFAULT '1',
   `state` tinyint(4) NOT NULL DEFAULT '0' COMMENT 'State of the specific record.  i.e.  Published, archived, trashed etc.',
   `checked_out` INT(11) NOT NULL DEFAULT '0' COMMENT 'Checked out indicator.  User id of user editing the record.',
   `checked_out_time` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT 'Time and date when the record was checked out.',
   `ordering` int(11) NOT NULL DEFAULT '0' COMMENT 'Order in which issues are presented.',
   `priority` int(11) NOT NULL COMMENT 'The priority of the issue. How important it is to get resolved.',
   `target_resolution_date` datetime DEFAULT NULL COMMENT 'The date on which the issue is planned to be resolved.',
-  `progress` varchar(4000) DEFAULT NULL COMMENT 'Any progress notes on the issue resolution.',
+  `progress` mediumtext DEFAULT NULL COMMENT 'Any progress notes on the issue resolution.',
   `actual_resolution_date` datetime DEFAULT NULL COMMENT 'The date the issue was actually resolved.',
   `resolution_summary` varchar(4000) DEFAULT NULL COMMENT 'The description of the resolution of the issue.',
   `created_on` datetime NOT NULL COMMENT 'Audit Column: Date the record was created.',
@@ -153,6 +161,10 @@ CREATE TABLE IF NOT EXISTS `#__it_issues` (
   KEY `#__it_issues_status_fk` (`status`),
   KEY `#__it_issues_types_fk` (`issue_type`),
   KEY `#__it_issues_priority_fk` (`priority`),
+  KEY `idx_checkout` (`checked_out`),
+  KEY `idx_state` (`state`),
+  KEY `idx_createdby` (`created_by`),
+  KEY `idx_alias` (`alias`),
   CONSTRAINT `#__it_issues_priority_fk` FOREIGN KEY (`priority`) REFERENCES `#__it_priority` (`id`),
   CONSTRAINT `#__it_issues_assigned_to_fk` FOREIGN KEY (`assigned_to_person_id`) REFERENCES `#__it_people` (`user_id`),
   CONSTRAINT `#__it_issues_identified_by_fk` FOREIGN KEY (`identified_by_person_id`) REFERENCES `#__it_people` (`id`),
@@ -177,7 +189,41 @@ CREATE TABLE IF NOT EXISTS `#__it_emails` (
  `modified_by` varchar(255) DEFAULT NULL COMMENT 'Audit Column: The user who last modified the record.',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=11 COMMENT='Email message templates for Issue Tracker notifications.';
+
+CREATE TABLE IF NOT EXISTS `#__it_issues_log` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT COMMENT 'Primary Key',
+  `priority` int(11) DEFAULT NULL,
+  `message` varchar(512) DEFAULT NULL,
+  `date` datetime DEFAULT NULL,
+  `category` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `idx_category_date_priority` (`category`,`date`,`priority`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Log table for various messages for Issue Tracker.';
  
+CREATE TABLE IF NOT EXISTS `#__it_attachment` (
+ `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'The system generated unique identifier for the attachment.',
+ `issue_id` VARCHAR(10)  NOT NULL COMMENT 'Foreign key to associated issue',
+ `uid` int(11) NULL COMMENT 'User id of the user attaching the file',
+ `title` VARCHAR(255)  NOT NULL COMMENT 'Title for attachment',
+ `description` MEDIUMTEXT NOT NULL COMMENT 'Description of the file attachment',
+ `filepath` MEDIUMTEXT NOT NULL COMMENT 'Path to the file in the system',
+ `filename` VARCHAR(255)  NOT NULL COMMENT 'Original name of the file attachment',
+ `hashname` text NOT NULL COMMENT 'Hash of file name and date string',
+ `filetype` VARCHAR(255)  NOT NULL DEFAULT 'application/octet-stream' COMMENT 'Type of file attachment',
+ `size` INT(10)  NOT NULL COMMENT 'Size of file attachment',
+ `ordering` int(11) NOT NULL DEFAULT '0' COMMENT 'Order in which issues are presented.',
+ `state` tinyint(4) NOT NULL DEFAULT '0' COMMENT 'State of the specific record.  i.e.  Published, archived, trashed etc.',
+ `checked_out` INT(11) NOT NULL DEFAULT '0' COMMENT 'Checked out indicator.  User id of user editing the record.',
+ `checked_out_time` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT 'Time and date when the record was checked out.',
+ `created_on` datetime NOT NULL COMMENT 'Audit Column: Date the record was created.',
+ `created_by` varchar(255) NOT NULL COMMENT 'Audit Column: The user who created the record.',
+ `modified_on` datetime DEFAULT NULL COMMENT 'Audit Column: Date the record was last modified.',
+ `modified_by` varchar(255) DEFAULT NULL COMMENT 'Audit Column: The user who last modified the record.',
+ PRIMARY KEY (`id`),
+ KEY `#__it_attachment_issue_id_fk` (`issue_id`),
+  CONSTRAINT `#__it_attachment_issue_id_fk` FOREIGN KEY (`issue_id`) REFERENCES `#__it_issues` (`alias`) 
+ ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 COMMENT='Attachments for raised issues.';
+  
 INSERT INTO `#__it_status`(`id`,`status_name`,`description`) 
 VALUES (1,'Closed','Used when an issue is completed and no further change related to the issue is expected.')
 , (2,'In-Progress','The issue is being actively worked by an individual.')

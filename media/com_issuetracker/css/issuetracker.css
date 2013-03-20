@@ -1,14 +1,13 @@
 /*
 @package     Joomla
 @subpackage  com_issuetracker
-@copyright   Copyright (C) 2012 G S Chapman. Macrotone Consulting Ltd. All rights reserved.
+@copyright   Copyright (C) 2011-2013 G S Chapman. Macrotone Consulting Ltd. All rights reserved.
 @license     GNU General Public License Version 3, or later http://www.gnu.org/licenses/gpl.html
 */
 
 @media print 
 {
 #toolbartools {display:none; visibility:hidden;}
-td.problemlistbuttonarea { border: none;}
 }
 
 /*************************/
@@ -16,122 +15,546 @@ td.problemlistbuttonarea { border: none;}
 /*************************/
 .pagetitle {font-weight: bold; font-size: 150%; padding: 7px 0px;}
 
+
+/*************************************************************************/
+/* Following taken from adminlist.css to handle footer of lists.         */
+/* Otherwise we have to include the adminlist.css file in our templates. */
+/* Need to ensure this is still true for J3.x                            */
+/*************************************************************************/
+.list-footer div.limit select#limit {
+      width: 50px;
+ }
+   
+ /* ++++++++++++++  pagination  ++++++++++++++ */
+   
+ .list-footer {
+     margin: 10px 0;
+     padding: 10px 0 10px 0;
+     text-align: center;
+ }
+   
+ table .list-footer ul {
+     list-style-type: none;
+     margin: 0 !important;
+     padding: 0;
+     text-align: left;
+     border: solid 0 #ccc;
+     float: left;
+ }
+   
+ .list-footer li {
+     display: inline;
+     padding: 2px 5px !important;
+     text-align: left;
+     border: solid 0 #eee;
+     margin: 0 2px;
+     font-size: 11px;
+ }
+   
+ .list-footer li.pagination-start,
+ .list-footer li.pagination-next,
+ .list-footer li.pagination-end,
+ .list-footer li.pagination-prev {
+     border: 0;
+ }
+   
+ .list-footer li.pagination-start ,
+ .list-footer li.pagination-start span {
+     padding: 4px;
+ }
+   
+ p.counter {
+     font-weight: bold;
+ }
+ 
+/***********************************/
+/* Table settings                  */
+/* Adminlist - old standard        */
+/* Used in versions prior to 1.2.2 */
+/***********************************/ 
+table.itstyle {
+      width: 99%;
+      border-spacing: 1px;
+      background-color: #f3f3f3;
+      color: #666;
+      font-size: 11px;
+}
+  
+table.itstyle td,
+table.itstyle th {
+      padding: 4px !important;
+      font-size: 11px;
+}
+  
+table.itstyle thead th {
+      text-align: center;
+      background: #f7f7f7;
+      color: #666;
+      border-bottom: 1px solid #CCC;
+      border-left: 1px solid #fff;
+}
+  
+table.itstyle thead th.left {
+      text-align: left;
+}
+  
+table.itstyle thead a:hover {
+      text-decoration: none;
+}
+  
+table.itstyle thead th img {
+      vertical-align: middle;
+      padding-left: 3px;
+}
+  
+table.itstyle tbody th {
+      font-weight: bold;
+}
+  
+table.itstyle th a img {
+      border: 0;
+}
+  
+table.itstyle tbody tr {
+      background-color: #fff;
+      text-align: left;
+}
+  
+table.itstyle tbody tr.row0:hover td,
+table.itstyle tbody tr.row1:hover td {
+      background-color: #e8f6fe;
+}
+  
+table.itstyle tbody tr td {
+      background: #fff;
+      border: 1px solid #fff;
+}
+  
+table.itstyle tbody tr.row1 td {
+      background: #f0f0f0;
+      border-top: 1px solid #FFF;
+}
+  
+table.itstyle tfoot tr {
+      text-align: center;
+      color: #333;
+}
+  
+table.itstyle tfoot td,
+table.itstyle tfoot th {
+      background-color: #f7f7f7;
+      border-top: 1px solid #999;
+      text-align: center;
+}
+  
+table.itstyle td.order {
+      text-align: center;
+      white-space: nowrap;
+      width: 200px;
+}
+  
+table.itstyle td.order span {
+      float: left;
+      width: 20px;
+      text-align: center;
+      background-repeat: no-repeat;
+      height: 13px;
+}
+  
+table.itstyle .pagination {
+      display: inline-block;
+      padding: 0;
+      margin: 0 auto;
+}
+  
+/*********************************************/
+/* Tree indentation & nesting                */ 
+/* Up to 10 levels deep so don't go crazy :-) */
+/*********************************************/
+table.itstyle td.indent-4        { padding-left: 4px; }
+table.itstyle td.indent-19    { padding-left: 19px; }
+table.itstyle td.indent-34    { padding-left: 34px; }
+table.itstyle td.indent-49    { padding-left: 49px; }
+table.itstyle td.indent-64    { padding-left: 64px; }
+table.itstyle td.indent-79    { padding-left: 79px; }
+table.itstyle td.indent-94    { padding-left: 94px; }
+table.itstyle td.indent-109    { padding-left: 109px; }
+table.itstyle td.indent-124    { padding-left: 124px; }
+table.itstyle td.indent-139    { padding-left: 139px; }
+  
+table.itstyle tr td.btns a {
+     text-decoration: underline;
+}
+/******************************/
+/* Table adminlist style ends */
+/******************************/
+
 /*************************/
-/* Table settings        */
+/* Table look and feel   */
+/* Blue theme            */
+/*************************/
+
+table.itbluestyle table, 
+table.itbluestyle td, 
+table.itbluestyle th {
+	border-collapse:collapse;
+	margin:0;
+	padding:0;
+}
+
+table.itbluestyle {
+	border: none;
+        font: .9em/1.2em Georgia, "Times New Roman", Times, serif; 
+}
+
+table.itbluestyle table caption {
+	background-color: transparent;
+	background-repeat: repeat-x;
+	background-position: bottom left;
+	text-align:left;
+	font-size:150%;
+	text-transform:uppercase;
+	line-height: 30px;
+	letter-spacing:0px;	
+}
+
+table.itbluestyle td, 
+table.itbluestyle th{	
+	vertical-align:top;
+	font-weight:normal;	
+}
+
+table.itbluestyle thead {
+	border-left:1px solid #2293FF;	
+}
+
+table.itbluestyle thead th {
+	background: #bddfff;
+	color: #FFFFFF;
+	font-size: 125%;
+        font-weight: bold;
+	border-top:1px solid #2293FF;
+	border-right:1px solid #2293FF;
+	padding: 4px 0.4em 4px 0.4em;	
+}
+
+table.itbluestyle tfoot td, 
+table.itbluestyle tfoot th {
+	border-top:1px solid #2293FF;
+	border-right: none;
+	font-weight: bolder;
+	font-size: 110%;
+	padding: 0.4em 0.5em 0.4em 0.5em;
+        background-color: #bddfff;
+        text-align: center;
+}
+
+table.itbluestyle tbody tr.row0 td,
+table.itbluestyle tbody th {
+	background-color: #D9ECFF;
+	border-right:1px solid #2293FF;
+	border-left:1px solid #2293FF;
+	padding: 0.4em 0.5em 0.4em 0.5em;
+        word-wrap: break-word;
+}
+
+table.itbluestyle tbody tr th, 
+table.itbluestyle tbody tr.row1 td{
+	background-color: #BDDFFF;
+	border-right:1px solid #2293FF;
+	border-left:1px solid #2293FF;
+	padding: 0.4em 0.5em 0.4em 0.5em;
+        word-wrap: break-word;
+}
+
+table.itbluestyle tbody th{	
+	font-weight: bold;	
+	border-left:1px solid #2293FF
+}
+
+table.itbluestyle a:link, 
+table.itbluestyle a:visited, 
+table.itbluestyle a:active {	
+	color:#444F66;
+	background-color: transparent;
+	text-decoration: underline;
+}
+
+table.itbluestyle a:hover {
+	text-decoration:none;
+	background-color: #1E90FF;
+	color: #FFFFFF;
+}
+/*************************/
+/* Table blue style ends */
 /*************************/
 
 
-/**********************************/
-/* Look and feel of control panel */
-/**********************************/
-button.cpanel {cursor: pointer; font-size: 10px; border: 1px solid silver; padding: 0px 2px; margin: 0px 1px;}
-span.delete  {background-color: #efefef; height: 12px; cursor: pointer; color: #F00; font-size: 8px; border: 1px solid silver; padding: 1px 3px; margin: 0px; margin-right: 5px !important; vertical-align: top;}
-a.cpanel, select.cpanel, option.cpanel, input.cpanel {font-weight: normal; font-size: 100%;}
-input.cpanel, select.cpanel {border: 1px solid silver;}
-.cpanelicon {vertical-align:middle; height:24px; margin: 5px;}
-/*div.cpanelinfo {width: 300px; float: right; border: 1px solid transparent; padding: 10px 10px; margin: 0px 10px; background-color: #34568E; color: #fff;}*/
-div.cpanelinfobox {width: 300px; float: right; border: 1px solid #aaa; background-color: #fff; margin: 0px 10px;}
-div.cpanelinfoheader {font-size: 150%; padding: 7px; margin-bottom: 5px; border-bottom: 1px solid #aaa; background-color: #efefef;}
-div.cpanelinfo {padding: 10px 7px; margin: 0px 10px; color: #555;}
-div.cpanelinfotext {}
-span.cpanelinfotextlabel {font-weight: bold;}
+/*************************/
+/* Table look and feel   */
+/* Alternative  theme    */
+/*************************/
+table.italtstyle { 
+   border-collapse: collapse; 
+   border: 1px solid #839E99; 
+   background: #f1f8ee; 
+   font: .9em/1.2em Georgia, "Times New Roman", Times, serif; 
+   color: #033; 
+}
+
+table.italtstyle caption { 
+   font-size: 1.3em; 
+   font-weight: bold; 
+   text-align: left; 
+   padding: 1em 4px; 
+}
+
+table.italtstyle td, 
+table.italtstyle th { 
+   padding: 3px 3px .75em 3px; 
+   line-height: 1.3em;
+}
+
+table.italtstyle th { 
+   background: #839E99; 
+   color: #fff; 
+   font-weight: bold; 
+   text-align: left; 
+   padding-right: .5em; 
+   vertical-align: top;
+}
+
+table.italtstyle thead th { 
+   background: #2C5755; 
+   text-align: center;
+}
+
+table.italtstyle tr.row0 td { 
+   background: #f1f8ee;
+   word-wrap: break-word;
+}
+
+table.italtstyle tr.row0 th { 
+   background: #2C5755;
+}
+
+table.italtstyle tr.row1 td { 
+   background: #DBE6DD;
+   word-wrap: break-word;
+}
+
+table.italtstyle tr.row1 th { 
+   background: #6E8D88;
+}
+
+table.italtstyle td a, 
+table.italtstyle td a:link { 
+   color: #325C91;
+}
+
+table.italtstyle td a:visited { 
+   color: #466C8E;
+}
+
+table.italtstyle td a:hover, 
+table.italtstyle td a:focus { 
+   color: #1E4C94;
+}
+
+table.italtstyle th a, 
+table.italtstyle td a:active { 
+   color: #fff;
+}
+
+table.italtstyle tfoot th, 
+table.italtstyle tfoot td { 
+   background: #2C5755; 
+   color: #fff;
+}
+
+table.italtstyle th + td { 
+   padding-left: .5em;
+}
+
+.list-footer div.limit {
+     float: left;
+     line-height: 22px;
+     margin: 0 10px;
+ }
+   
+ 
+/*************************/
+/* Table alt style ends  */
+/*************************/
 
 
-/****************************************/
-/* Look and feel of admin control panel */
-/****************************************/
-table.configCheckTable {border: none; border-collapse: collapse; width: 100%;}
-.greenResult {width: 15px; color: #00FF00; font-weight: bold; font-size: 125%; text-align: center;}
-.redResult     {width: 15px; color: #FF0000; font-weight: bold; font-size: 125%; text-align: center;}
-.warnResult     {width: 15px; color: #0000FF; font-weight: bold; font-size: 125%; text-align: center;}
-.configCheckResultText {}
-.configCheckResultRow {}
+/***************************************/
+/* Sample style for front end formelm */
+/***************************************/
+div.formelm label {
+    display: block;
+    float: left;
+    width: 200px;
+}
+ 
+div.formelm input {
+    margin: 0 0 3px 0;
+}
 
-/****************************/
-/* Look and feel of toolbar */
-/****************************/
-table.toolbartable {right:0px; border-collapse: collapse;}
-button.toolbar {border: 1px solid transparent; cursor: pointer; font-size: 10px; padding: 0px; margin: 0px 5px; background: none;}
-button.toolbar:hover { border: 1px solid #aaa; background-color: #efefef;}
-.toolbaricon {vertical-align:middle; height:24px;}
-.toolbarmessage{font-weight: bold; vertical-align: bottom; padding: 5px 0px;}
-td.problemlistbuttonarea { /*border: 1px solid #aaa;*/ border-bottom: none; width: 10%; /*background-color: #fff;*/ padding: 1px 10px;}
+/* 
+.formelm .inputbox { 
+    border-color:#CCCCCC #E7E7E7 #E7E7E7; 
+    border-radius:2px; 
+    border-right:1px solid #E7E7E7; 
+    border-style:solid; 
+    border-width:1px; 
+    box-shadow:0 1px 6px #F0F0F0 inset; 
+    color:#111111; 
+    font:12px/18px Arial,Helvetica,sans-serif; 
+    height:16px; padding:6px; }
+*/
+/***************************************/
+/* Sample style for front end FieldDev */
+/***************************************/
+/*  Remove comments for new style for single item display.
+.fieldDiv body {
+        font-family:arial, verdana, sans-serif;
+        font-size:0.8em;
+        background:#8be;
+        color:#fff;
+}
+.fieldDiv legend  {
+        font-size:14px; 
+        background:#FAFAFA; 
+        border:1px solid #C3C3C3; 
+        border-radius:0 0 3px 3px; 
+        position:relative; 
+        width:auto; 
+        padding:2px 10px;
+}
+.fieldDiv dl {
+        font-weight: bold;
+}
+.fieldDiv dt {
+        font-weight: bold;
+        letter-spacing: 2px;
+        color: #bf2c22;
+}
+.fieldDiv dd {
+        color: #5454d4;
+}
+*/
+/**************************/
+/* FieldDiv settings end. */
+/**************************/
 
+/**************************/
+/* Button icons extracted from Bootstrap. */
+/**************************/
+.btn {
+  display: inline-block;
+  padding-top: 4px;
+  padding-right: 12px;
+  padding-bottom: 4px;
+  padding-left: 12px;
+  margin-bottom: 0px;
+  font-size: 14px;
+  line-height: 20px;
+  color: #333333;
+  text-align: center;
+  text-shadow: 0px 1px 1px rgba(255, 255, 255, 0.75);
+  vertical-align: middle;
+  cursor: pointer;
+  background-color: #f5f5f5;
+  background-image: #ffffff;
+  background-repeat: repeat-x;
+  border-top-width: 1px;
+  border-right-width-value: 1px;
+  border-bottom-width: 1px;
+  border-left-width-value: 1px;
+  border-top-style: solid;
+  border-right-style-value: solid;
+  border-bottom-style: solid;
+  border-left-style-value: solid;
+  border-image-source: none;
+  border-image-slice: 100% 100% 100% 100%;
+  border-image-width: 1 1 1 1;
+  border-image-outset: 0 0 0 0;
+  border-image-repeat: stretch stretch;
+  border-top-color: rgba(0, 0, 0, 0.1);
+  border-right-color-value: rgba(0, 0, 0, 0.1);
+  border-left-color-value: rgba(0, 0, 0, 0.1);
+  border-bottom-color: #b3b3b3;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
+  border-bottom-left-radius: 4px;
+  box-shadow: 0px 1px 0px rgba(255, 255, 255, 0.2) inset, 0px 1px 2px rgba(0, 0, 0, 0.05);
+}
 
-/*********************************/
-/* Look and feel of problem list */
-/*********************************/
-select.list, option.list, input.list {font-weight: normal; font-size: 100%; color: #555;}
-table.problemlist {width: 100%; border: 1px solid #efefef; border-collapse: collapse; background-color: #ffffff; font-size: 12px;}
-table.problemlist th {background-color: #efefef; border-bottom: 1px solid #aaa;}
-div.problemlistwrapper {border: 1px solid #aaa;}
-td.problemlist, th.problemlist {text-align: left; color: #333; padding: 1px 4px;}
-td.problemlist {border: 1px solid #efefef; font-weight: normal;}
-tr.problemlistrow:hover{ background-color: #efefef; cursor: pointer;}
-a.listhead {font-weight: bold; /*text-decoration: underline;*/ color: #333;}
-td.pagination  div  span {text-align:center !important; margin: 5px 0px;}
-td.pagination select {font-weight: normal;}
-.counter{display: none;}
-.sortpointer {width: 10px; margin: 1px 0px; margin-left: 1px;}
+.btn-info {
+  color: #ffffff;
+  text-shadow: 0px -1px 0px rgba(0, 0, 0, 0.25);
+  background-color: #49afcd;
+  background-image: #5bc0de;
+  background-repeat: repeat-x;
+  border-top-color: rgba(0, 0, 0, 0.1);
+  border-right-color-value: rgba(0, 0, 0, 0.1);
+  border-bottom-color: rgba(0, 0, 0, 0.25);
+  border-left-color-value: rgba(0, 0, 0, 0.1);
+}
+/* Added for form notify radio buttons. */
+.btn-group {display:inline-block; margin-left: 5px; }
+.btn-group.radio label { margin-left: 5px; margin-right: 5px; }
 
+/*
+.ittable .icon-folder-open {
+width:16px;
+background-position:-408px -120px;
+}
+.ittable .icon-white {
+background-image:url(../img/glyphicons-halflings-white.png);
+}
+*/
 
-/********************************/
-/* Look and feel of detail form */
-/********************************/
-#problem_form{width: 100%; }
-div.problemdetailform {width: 100%;}
-div.problemhead {background: #efefef; font-weight: bold; padding: 3px 5px 3px 5px; }
-span.problemheadleft{ float: left; left: 0px;}
-span.problemheadright{ float: right; right: 0px;}
-div.probleminformation {position: relative; width:100%; border: none; margin-bottom: 15px; border: 1px solid silver; background-color: #fff;}
-div.problemcolumn {width: 48%; height: 100%; border: 1px solid silver; margin: 0px; padding: 5px; background-color: #fff;}
-div.problemcolumnleft {float: left;}
-div.problemcolumnright {float: right;}
-div.problemcolumnhead {background-color: #efefef; font-weight: bold; margin-bottom: 5px;}
-div.problemcolumndetail { }
-div.problemcolumndetailfield {width: 100%; margin: 3px;}
-.problemfieldname {font-weight: bold; margin: 3px;}
-a.detail, select.detail, option.detail, input.detail {font-weight: normal; font-size: 100%;}
-input.detail, select.detail {border: 1px solid silver; margin: 0px;}
-div.problemnote{border-top: 1px solid silver; background: #fafafa;}
-.notetext {padding: 5px 10px;}
-.problemtext{width: 99.5%; height: 100px; background: #fff;}
-div.hite {width: 100%; height: 175px; margin-bottom: 30px;}
-div.problemtextunder {height: 2.0em;}
-div.problemtextunderleft {width: 50%; float: left;}
-span.attachtext {float: right; top: -10px; margin-right: 0px;}
-input.fileupload {border: 1px solid silver; background-color: #fff; margin: 0px;}
-/*.phpcode{ white-space: normal;}*/
-
-
-/********************************/
-/* Look and feel of search form */
-/********************************/
-#searchFormId { border: 1px solid silver; background-color: #fff;}
-.searchtable td{padding: 3px 10px;}
-a.hh_search, select.hh_search, option.hh_search, input.hh_search {font-weight: normal; font-size: 100%;}
-input.hh_search, select.hh_search {border: 1px solid silver;}
-
-
-/****************************/
-/* Look and feel of reports */
-/****************************/
-.totals{border-top: 1px solid silver; font-weight: bold;}
-table.reporttable {width: 100%; border: 1px solid silver; border-collapse: collapse;}
-table.reporttable th {background-color: #efefef;}
-.charttitle{ font-weight: bold; margin: 25px 0px; text-align: center; border: 1px solid silver;}
-
-
-/*********************************/
-/* Look and feel of in/out board */
-/*********************************/
-#inouttitle{font-weight: bold; padding: 3px 0px; margin-bottom: 3px;}
-table.userlist {width: 100%; border: 1px solid silver; border-collapse: collapse; background-color: #fff;}
-table.userlist td {text-align: center; border: 1px solid silver; }
-.userstatusicon {vertical-align:middle; height:16px; margin: auto auto;}
-
-
-/**********************/
-/* Template overrides */
-/**********************/
-div.limit {text-align: center;} /*sets the 'Display #' to center over the pagination */
+/*******************************************/
+/* Editor Styles Starts Here               */ 
+/* Theses are experiemental at this stage! */
+/*******************************************/
+/*
+#editor-xtd-buttons { padding-top:5px; }
+.formelm { float:none; padding:0px 5px 0px 5px; position:relative; display:block; overflow:hidden; margin-bottom:10px; }
+.formelm-area { color:#000000; font-size:10px; padding:3px 0; width:12em; text-transform:uppercase; position:relative; display:block; }
+.formelm-area label{ color:#000000; float:left; font-size:10px; padding:3px 0; width:12em; text-transform:uppercase; }
+.formelm-buttons { float:right; margin-bottom:10px; margin-top:-40px; position:inline; }
+.formelm label { color: #000000; float: left; font-size: 10px; padding: 3px ; text-transform: uppercase; vertical-align: top; width: 14em; }
+.formelm .inputbox { border-color:#CCCCCC #E7E7E7 #E7E7E7; border-radius:2px; border-right:1px solid #E7E7E7; border-style:solid; border-width:1px; box-shadow:0 1px 6px #F0F0F0 inset; color:#111111; font:12px/18px Arial,Helvetica,sans-serif; height:16px; padding:6px; }
+.button2-left { float:left; margin-left:5px; background:#FFFFFF; border:1px solid #DBDBDB; border-radius:3px; color:#333333; cursor:pointer; display:block; font-size:12px; font-family:BebasNeue,Arial,sans-serif; height:29px !important; line-height:31px; margin:0 5px 3px 2px; padding:0 16px; font-weight:normal; }
+.edit form#adminForm fieldset { border:1px solid #DDDDDD; }
+.edit form#adminForm fieldset { margin:10px 0 15px; padding:20px 15px; }
+.edit form#adminForm  legend { font-size:14px; background:#FAFAFA; border:1px solid #C3C3C3; border-radius:0 0 3px 3px; position:relative; width:auto; padding:2px 10px; }
+fieldset { border:0 solid #CCCCCC; }
+fieldset { border:1px solid; margin:10px 0; padding:15px 0; }
+fieldset a { font-weight:normal; }
+fieldset .legend { font-size:18px; }
+div.mceEditor { padding-top:2px; position:relative; }
+jform_language-lbl { color:#000000; float:left; font-size:10px; padding:3px 0; width:12em; text-transform:uppercase; }
+span.wf_editor_toggle { cursor:pointer; display:block; line-height:20px; background:#FAFAFA; border:1px solid #C3C3C3; border-radius:0 0 3px 3px; position:relative; width:70px; padding:5px; text-align:center; font-size:12px; font-family: BebasNeue,Arial,sans-serif; }
+/* Calendar Display Fix Starts */
+.calendar .button { display:table-cell !important; float:none !important; }
+/* Calendar Display Fix Ends*/
+.formelm input[type="password"],
+.formelm input[type="text"],
+.formelm input[type="email"],
+.formelm input[type="www"],
+.formelm input[type="tel"],
+.formelm input[type="url"],
+.formelm input[type="search"],
+.formelm select,
+.formelm .inputbox { width:20%; float:none; }
+.formelm .button2-left { width: auto;}
+.formelm .fltlft { float:none; }
+*/
+/**************************/
+/* Editor Style Ends Here */
+/**************************/

@@ -1,19 +1,21 @@
 <?php
 /*
  *
- * @Version       $Id: itprojects.php 197 2012-05-04 16:10:32Z geoffc $
+ * @Version       $Id: itprojects.php 689 2013-02-06 17:38:45Z geoffc $
  * @Package       Joomla Issue Tracker
  * @Subpackage    com_issuetracker
- * @Release       1.1.0
- * @Copyright     Copyright (C) 2011 - 2012 Macrotone Consulting Ltd. All rights reserved.
+ * @Release       1.3.0
+ * @Copyright     Copyright (C) 2011-2013 Macrotone Consulting Ltd. All rights reserved.
  * @License       GNU General Public License version 3 or later; see LICENSE.txt
  * @Contact       support@macrotoneconsulting.co.uk
- * @Lastrevision  $Date: 2012-05-04 17:10:32 +0100 (Fri, 04 May 2012) $
+ * @Lastrevision  $Date: 2013-02-06 17:38:45 +0000 (Wed, 06 Feb 2013) $
  *
  */
 
 // No direct access
 defined( '_JEXEC' ) or die( 'Restricted access' );
+
+jimport('joomla.database.tablenested');
 
 /**
  * Issue Tracker Table
@@ -21,15 +23,15 @@ defined( '_JEXEC' ) or die( 'Restricted access' );
  * @package       Joomla.Components
  * @subpackage    Issue Tracker
  */
-class IssueTrackerTableItprojects extends JTable
+class IssueTrackerTableItprojects extends JTableNested
 {
    var $id                    = null;       // Primary Key
    var $parent_id             = null;
-   var $project_name          = null;
+   var $title                 = null;
    var $alias                 = null;
-   var $project_description   = null;
+   var $description           = null;
    var $state                 = null;
-   var $ordering              = null;
+//   var $ordering              = null;
    var $checked_out           = null;
    var $checked_out_time      = null;
    var $start_date            = null;
@@ -45,10 +47,10 @@ class IssueTrackerTableItprojects extends JTable
     *
     * @param object Database connector object
     */
-    function __construct(&$db)
-    {
-       parent::__construct('#__it_projects', 'id', $db);
-    }
+   function __construct(&$db)
+   {
+      parent::__construct('#__it_projects', 'id', $db);
+   }
 
    function check()
    {
@@ -58,19 +60,57 @@ class IssueTrackerTableItprojects extends JTable
       }
 
       // Data validation code
-      if (trim($this->project_name) == '') {
+      if (trim($this->title) == '') {
          $this->setError(JText::_('COM_ISSUETRACKER_WARNING_PROVIDE_VALID_PROJECT_NAME'));
          return false;
       }
 
 /*
-      if (!empty($this->project_description)) {
+      if (!empty($this->description)) {
          // Only process if not empty
-         $this->project_description = JFilterOutput::cleanText($this->project_description);
+         $this->description = JFilterOutput::cleanText($this->description);
       }
 */
+
+      $this->alias = trim($this->alias);
+      if (empty($this->alias)) {
+         $this->alias = $this->title;
+      }
+
+      $this->alias = JApplication::stringURLSafe($this->alias);
+      if (trim(str_replace('-', '', $this->alias)) == '') {
+         $this->alias = JFactory::getDate()->format('Y-m-d-H-i-s');
+      }
+
+
       return parent::check();
    }
+
+   /**
+    * Add the root node to an empty table.
+    *
+    * @return    integer  The id of the new root node.
+    */
+   public function addRoot()
+   {
+       $db = JFactory::getDbo();
+       $sql = 'INSERT INTO `#__it_projects` '
+           . ' SET parent_id = 0'
+           . ', lft = 0'
+           . ', rgt = 1'
+           . ', level = 0'
+           . ', title = '.$db->quote( 'Root' )
+           . ', description = '.$db->quote( 'Root' )
+           . ', alias = '.$db->quote( 'Root' )
+           . ', access = 1'
+           . ', path = '.$db->quote( '' )
+           ;
+       $db->setQuery( $sql );
+       $db->query();
+
+       return $db->insertid();
+   }
+
 
    /**
      * Overrides JTable::store to set modified data and user id.
@@ -89,22 +129,20 @@ class IssueTrackerTableItprojects extends JTable
         // Set up audit fields in here, and app defaults in the model.
         if ($this->id) {
             // Existing item
-            $this->modified_on   = $date->toMySQL();
+            $this->modified_on   = $date->toSql();
             $this->modified_by   = $user->get('username');
         } else {
             // New issue. An issue created_on and created_by field can not be set by the user,
-
-            $this->created_on = $date->toMySQL();
+            $this->created_on = $date->toSql();
             $this->created_by = $user->get('username');
-
         }
 
         // Verify that the alias is unique
-//        $table = JTable::getInstance('Itprojects','IssueTrackerTable');
-//        if ($table->load(array('alias'=>$this->alias, 'parent_id'=>$this->parent_id)) && ($table->id != $this->id || $this->id==0)) {
-//           $this->setError(JText::_('COM_ISSUETRACKER_ERROR_UNIQUE_ALIAS'));
-//           return false;
-//        }
+        $table = JTable::getInstance('Itprojects','IssueTrackerTable');
+        if ($table->load(array('alias'=>$this->alias, 'parent_id'=>$this->parent_id)) && ($table->id != $this->id || $this->id==0)) {
+           $this->setError(JText::_('COM_ISSUETRACKER_ERROR_UNIQUE_ALIAS'));
+           return false;
+        }
 
         return parent::store($updateNulls);
     }
@@ -188,4 +226,20 @@ class IssueTrackerTableItprojects extends JTable
         $this->setError('');
         return true;
     }
+
+   /**
+    * Method to delete a node and, optionally, its child nodes from the table.
+    *
+    * @param   integer  $pk        The primary key of the node to delete.
+    * @param   boolean  $children  True to delete child nodes, false to move them up a level.
+    *
+    * @return  boolean  True on success.
+    *
+    * @see     http://docs.joomla.org/JTableNested/delete
+    * @since   2.5
+    */
+   public function delete($pk = null, $children = false)
+   {
+      return parent::delete($pk, $children);
+   }
 }

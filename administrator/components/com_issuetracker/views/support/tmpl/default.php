@@ -1,14 +1,14 @@
 <?php
 /*
  *
- * @Version       $Id: default.php 204 2012-05-07 16:40:58Z geoffc $
+ * @Version       $Id: default.php 681 2013-02-04 19:52:44Z geoffc $
  * @Package       Joomla Issue Tracker
  * @Subpackage    com_issuetracker
- * @Release       1.1.0
- * @Copyright     Copyright (C) 2011 - 2012 Macrotone Consulting Ltd. All rights reserved.
+ * @Release       1.3.0
+ * @Copyright     Copyright (C) 2011-2013 Macrotone Consulting Ltd. All rights reserved.
  * @License       GNU General Public License version 3 or later; see LICENSE.txt
  * @Contact       support@macrotoneconsulting.co.uk
- * @Lastrevision  $Date: 2012-05-07 17:40:58 +0100 (Mon, 07 May 2012) $
+ * @Lastrevision  $Date: 2013-02-04 19:52:44 +0000 (Mon, 04 Feb 2013) $
  *
  */
 
@@ -21,7 +21,7 @@ defined('_JEXEC') or die('Restricted access');
 <p style="margin-left: 4px;">
    <?php echo JText::_('COM_ISSUETRACKER_SUPPORT_INFO'); ?>:
 </p>
-<table class="adminlist">
+<table class="ittable">
    <tr>
       <td style="width: 10px;">
          1.
@@ -85,7 +85,7 @@ defined('_JEXEC') or die('Restricted access');
 <table class="adminlist">
    <tr>
       <td style="width: 10px;">
-         <img src="components/com_issuetracker/images/16/mail.png" alt="mail" />
+         <img src="../media/com_issuetracker/images/16/mail.png" alt="mail" />
       </td>
       <td>
          <a href="http://macrotoneconsulting.co.uk/index.php/Create-an-account.html" target="_blank"><?php echo JText::_('COM_ISSUETRACKER_REGISTER'); ?></a>
@@ -93,7 +93,7 @@ defined('_JEXEC') or die('Restricted access');
    </tr>
    <tr>
       <td>
-         <img src="components/com_issuetracker/images/16/rss.png" alt="rss" />
+         <img src="../media/com_issuetracker/images/16/rss.png" alt="rss" />
       </td>
       <td>
          <a href="http://www.macrotoneconsulting.co.uk/index.php/12/feed.html" target="_blank"><?php echo JText::_('COM_ISSUETRACKER_RSS'); ?></a>

@@ -1,16 +1,19 @@
 <?php
 /*
  *
- * @Version       $Id: coloriser.php 105 2012-04-12 10:30:48Z geoffc $
+ * @Version       $Id: coloriser.php 724 2013-02-22 15:53:06Z geoffc $
  * @Package       Joomla Issue Tracker
  * @Subpackage    com_issuetracker
- * @Release       1.0.1
- * @Copyright     Copyright (C) 2011 - 2012 Macrotone Consulting Ltd. All rights reserved.
+ * @Release       1.2.3
+ * @Copyright     Copyright (C) 2011-2013 Macrotone Consulting Ltd. All rights reserved.
  * @License       GNU General Public License version 3 or later; see LICENSE.txt
  * @Contact       support@macrotoneconsulting.co.uk
- * @Lastrevision  $Date: 2012-04-12 11:30:48 +0100 (Thu, 12 Apr 2012) $
+ * @Lastrevision  $Date: 2013-02-22 15:53:06 +0000 (Fri, 22 Feb 2013) $
  *
  */
+
+defined( '_JEXEC' ) or die( 'Restricted access' );
+
 class IssueTrackerChangelogColoriser
 {
    public static function colorise($file, $onlyLast = false)
@@ -61,6 +64,7 @@ class IssueTrackerChangelogColoriser
                break;
          }
       }
+      if (!empty($ret)) $ret .= "</ul>";
 
       return $ret;
    }

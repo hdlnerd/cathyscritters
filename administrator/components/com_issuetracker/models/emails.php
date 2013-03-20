@@ -1,14 +1,14 @@
 <?php
 /*
  *
- * @Version       $Id: emails.php 293 2012-07-16 12:12:26Z geoffc $
+ * @Version       $Id: emails.php 669 2013-01-04 14:39:25Z geoffc $
  * @Package       Joomla Issue Tracker
  * @Subpackage    com_issuetracker
- * @Release       1.2.0
- * @Copyright     Copyright (C) 2011 - 2012 Macrotone Consulting Ltd. All rights reserved.
+ * @Release       1.2.3
+ * @Copyright     Copyright (C) 2011-2013 Macrotone Consulting Ltd. All rights reserved.
  * @License       GNU General Public License version 3 or later; see LICENSE.txt
  * @Contact       support@macrotoneconsulting.co.uk
- * @Lastrevision  $Date: 2012-07-16 13:12:26 +0100 (Mon, 16 Jul 2012) $
+ * @Lastrevision  $Date: 2013-01-04 14:39:25 +0000 (Fri, 04 Jan 2013) $
  *
  */
 
@@ -116,7 +116,7 @@ class IssueTrackerModelEmails extends JModelList
             $query->where('a.id = '.(int) substr($search, 3));
          }
          else {
-            $search = $db->Quote('%'.$db->getEscaped($search, true).'%');
+            $search = $db->Quote('%'.$db->escape($search, true).'%');
             $query->where('( a.type LIKE '.$search.'  OR  a.description LIKE '.$search.' )');
          }
       }
@@ -125,7 +125,7 @@ class IssueTrackerModelEmails extends JModelList
       $orderCol   = $this->state->get('list.ordering');
       $orderDirn  = $this->state->get('list.direction');
       if ($orderCol && $orderDirn) {
-         $query->order($db->getEscaped($orderCol.' '.$orderDirn));
+         $query->order($db->escape($orderCol.' '.$orderDirn));
       }
 
       return $query;

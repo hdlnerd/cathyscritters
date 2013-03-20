@@ -1,14 +1,14 @@
 <?php
 /*
  *
- * @Version       $Id: itissues.php 362 2012-08-27 13:33:33Z geoffc $
+ * @Version       $Id: itissues.php 712 2013-02-18 15:57:02Z geoffc $
  * @Package       Joomla Issue Tracker
  * @Subpackage    com_issuetracker
- * @Release       1.2.0
- * @Copyright     Copyright (C) 2011 - 2012 Macrotone Consulting Ltd. All rights reserved.
+ * @Release       1.3.0
+ * @Copyright     Copyright (C) 2011-2013 Macrotone Consulting Ltd. All rights reserved.
  * @License       GNU General Public License version 3 or later; see LICENSE.txt
  * @Contact       support@macrotoneconsulting.co.uk
- * @Lastrevision  $Date: 2012-08-27 14:33:33 +0100 (Mon, 27 Aug 2012) $
+ * @Lastrevision  $Date: 2013-02-18 15:57:02 +0000 (Mon, 18 Feb 2013) $
  *
  */
 
@@ -35,6 +35,7 @@ class IssueTrackerTableItissues extends JTable
    var $issue_type               = null;
    var $status                   = null;
    var $state                    = null;
+   var $public                   = null;
    var $checked_out              = null;
    var $checked_out_time         = null;
    var $ordering                 = null;
@@ -114,30 +115,23 @@ class IssueTrackerTableItissues extends JTable
          $this->issue_summary = JFilterOutput::cleanText($this->issue_summary);
       }
 /*
-      // Clean up keywords -- eliminate extra spaces between phrases
-      // and cr (\r) and lf (\n) characters from string
       if (!empty($this->issue_description)) {
          // Only process if not empty
          $this->issue_description = JFilterOutput::cleanText($this->issue_description);
       }
 
-      // Clean up keywords -- eliminate extra spaces between phrases
-      // and cr (\r) and lf (\n) characters from string
       if (!empty($this->resolution_summary)) {
          // Only process if not empty
          $this->resolution_summary = JFilterOutput::cleanText($this->resolution_summary);
       }
-*/
 
-      // Clean up keywords -- eliminate extra spaces between phrases
-      // and cr (\r) and lf (\n) characters from string
       if (!empty($this->progress)) {
          // Only process if not empty
          // $this->progress = JFilterOutput::cleanText($this->progress);
          $this->progress = strip_tags($this->progress, '<p><br>');
       }
+*/
 
-      // return true;
       //If there is an ordering column and this is a new row then get the next ordering value
       if (property_exists($this, 'ordering') && $this->id == 0) {
          $this->ordering = self::getNextOrder();
@@ -162,11 +156,11 @@ class IssueTrackerTableItissues extends JTable
 
       // Set up audit fields in here, and app defaults in the model.
       if ($this->id) {  // Existing item
-         $this->modified_on   = $date->toMySQL();
+         $this->modified_on   = $date->toSql();
          $this->modified_by   = $user->get('username');
       } else {
          // New issue. An issue created_on and created_by field can not be set by the user,
-         $this->created_on = $date->toMySQL();
+         $this->created_on = $date->toSql();
          $this->created_by = $user->get('username');
       }
 

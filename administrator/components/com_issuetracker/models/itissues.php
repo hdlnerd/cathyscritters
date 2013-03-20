@@ -1,14 +1,14 @@
 <?php
 /*
  *
- * @Version       $Id: itissues.php 459 2012-09-12 09:14:46Z geoffc $
+ * @Version       $Id: itissues.php 689 2013-02-06 17:38:45Z geoffc $
  * @Package       Joomla Issue Tracker
  * @Subpackage    com_issuetracker
- * @Release       1.2.2
- * @Copyright     Copyright (C) 2011 - 2012 Macrotone Consulting Ltd. All rights reserved.
+ * @Release       1.3.0
+ * @Copyright     Copyright (C) 2011-2013 Macrotone Consulting Ltd. All rights reserved.
  * @License       GNU General Public License version 3 or later; see LICENSE.txt
  * @Contact       support@macrotoneconsulting.co.uk
- * @Lastrevision  $Date: 2012-09-12 10:14:46 +0100 (Wed, 12 Sep 2012) $
+ * @Lastrevision  $Date: 2013-02-06 17:38:45 +0000 (Wed, 06 Feb 2013) $
  *
  */
 
@@ -157,11 +157,18 @@ class IssueTrackerModelItissues extends JModelAdmin
       $def_assignee  = $this->_params->get('def_assignee', 0);
 
       if ( $data['id'] == 0) {
-         $this->_setdefaults($data);
          $new = 1;
       } else {
          $new = 0;
          $data['alias'] = JRequest::getVar('alias');
+      }
+
+      // Check defaults all set correctly.
+      $this->_setdefaults($data);
+
+      // Ensure published state is not set if private issue.
+      if ( $data['public'] == 1 && $data['state'] == 1 ) {
+         $data['state'] = 0;
       }
 
       // If assigned_to field is empty set it to default assignee if it is valid, NULL otherwise.
@@ -219,8 +226,6 @@ class IssueTrackerModelItissues extends JModelAdmin
       if ( ! IssueTrackerHelper::check_assignee($def_assignee) )
          $def_assignee = NULL;
 
-//      $data['id']                = JRequest::getVar('id', '', 'post', 'double');
-
       // Set up our audit fields.   Created audit fields are set up in the it_issues view.
       $user = JFactory::getUser();
       $date = JFactory::getDate();
@@ -238,9 +243,15 @@ class IssueTrackerModelItissues extends JModelAdmin
       if (empty($data['issue_type'])) { $data['issue_type'] = $def_type; }
 
       // If status is closed and actual resolution date is not set, then set it.
-      if ($data['status'] == $closed_status && empty($data['actual_resolution_date']) ) { $data['actual_resolution_date'] = "$date"; }
-      // If status is not closed set actual_resoltion_date to null
-      if ($data['status'] != $closed_status) { $data['actual_resolution_date'] = ""; }
+      if ($data['status'] == $closed_status ) {
+         // Check time elements on date fields
+         $this->checktime($data['actual_resolution_date']);
+         if ( empty($data['actual_resolution_date']) )  $data['actual_resolution_date'] = "$date";
+      } else {
+         // If status is not closed set actual_resolution_date to null
+         $data['actual_resolution_date'] = "";
+      }
+
       // If identified date is empty set it to today.
       if (empty($data['identified_date'])) { $data['identified_date'] = "$date"; }
       // If identified by field is empty them set it to the current user.  Need to get the id field from the it_people table for the current $user->id.
@@ -294,14 +305,42 @@ class IssueTrackerModelItissues extends JModelAdmin
       // If priority not set set it to Low
       if (empty($data['priority']) ) { $data['priority'] = $def_priority; }
 
+      // Check time elements on identified date fields
+      if ( $data['status'] == $open_status)
+         $this->checktime($data['identified_date']);
+
       return;
    }
 
-    /**
-      * Method to change the issue summary.
-      *
-      * @param string $title The title
-      * @return the modified title
+   /*
+    * Method to cludge the time element on a date where the time element is missing.
+    * typically this is the situation where the 'calendar JForm driopo down has been used.
+    *
+    * Note that often the hour has actually been set with an offset for the time zone applied
+    * so it is only the minutes and seconds beinfg zero that we can check.
+    * There is a small chance that the time was exactly on the hour but that is hopefully rare.
+    *
+    */
+   private function checktime( & $idate)
+   {
+      if ( empty( $idate ) ) return;
+
+      $cdate = JFactory::getDate();
+
+      if ( substr($idate, 0, 5) != '00/00' ) {
+         if ( substr($idate, 14, 5) == '00:00') {
+            $string = $cdate->toFormat('%H:%M:%S');
+            $idate = substr($idate,0,11).$string;
+         }
+      }
+      return;
+   }
+
+   /**
+    * Method to change the issue summary.
+    *
+    * @param string $title The title
+    * @return the modified title
    */
 
    private function _generateNewSummary($title)
@@ -327,62 +366,6 @@ class IssueTrackerModelItissues extends JModelAdmin
       return $title;
    }
 */
-   /**
-    * Method to store a record
-    *
-    * @access  public
-    * @return  boolean  True on success
-    */
-   public function store($data)
-   {
-      $this->_setdefaults($data);
-
-      $data['id'] = JRequest::getVar('id', '', 'post', 'double');
-
-      // Determine whether insert or an update
-      if ($data['id'] > 0 ) {
-         $new = 0;
-         $cur_issue_no = $data['alias'];
-      } else {
-         $new = 1;
-      }
-      $cur_issue_no = $data['alias'];
-
-      // If assigned_to field is empty set it to default assignee if it is valid, NULL otherwise.
-      if (empty($data['assigned_to_person_id']) || $data['assigned_to_person_id'] == 0) {
-         // Check default assignee
-         if ( $def_assignee ) {
-            $data['assigned_to_person_id'] = $def_assignee;
-         } else {
-            $data['assigned_to_person_id'] = NULL;
-         }
-      }
-
-      $row           = & $this->getTable();
-
-      // Bind the form fields to the table
-      if (!$row->bind($data)) {
-         $this->setError($this->_db->getErrorMsg());
-         return false;
-      }
-
-      // Make sure the record is valid
-      if (!$row->check()) {
-         $this->setError($this->_db->getErrorMsg());
-         return false;
-      }
-
-      // Store record in the database
-      if (!$row->store()) {
-         $this->setError( $row->getError() );
-         return false;
-      }
-
-      // Use new message notifications
-      IssueTrackerHelper::prepare_messages( $data, '0', $new);
-
-      return true;
-   }
 
    /**
     * Method to test whether a record can be deleted.
@@ -428,11 +411,13 @@ class IssueTrackerModelItissues extends JModelAdmin
          // Delete mode disabled.  Should give a message as well.
          $app->enqueueMessage(JText::_('COM_ISSUETRACKER_DELETE_MODE_DISABLED_MSG'));
          return false;
-      } else if ( $delmode == 1 || $delmode == 2 )
-      {
+      } else if ( $delmode == 1 || $delmode == 2 ) {
          // Iterate the items to delete each one.
          foreach ($pks as $i => $pk)
          {
+            // Remove attachments if any.
+            $this->delete_attachments($pk);
+
             if (!$row->delete( $pk )) {
                $this->setError( $row->getError() );
                return false;
@@ -472,7 +457,6 @@ class IssueTrackerModelItissues extends JModelAdmin
       return $str;
    }
 
-
    /**
     * Method to get User's default defined project
     * @return object with data
@@ -491,7 +475,6 @@ class IssueTrackerModelItissues extends JModelAdmin
     * Method to get Project target end date
     * @return object with data
     */
-
    public function getProjectTargetDate($projectid)
    {
       // Load the data
@@ -501,4 +484,23 @@ class IssueTrackerModelItissues extends JModelAdmin
 
       return $penddate;
    }
+
+   /**
+    * Method to remove any attachments associated with the issue.
+    */
+   private function delete_attachments($issue)
+   {
+      $query  = "SELECT count(*) FROM `#__it_attachment` WHERE issue_id = ";
+      $query .= "(SELECT alias FROM `#__it_issues` WHERE id = '".$issue."')";
+      $this->_db->setQuery( $query );
+      $delcnt = $this->_db->loadResult();
+
+      if ( $delcnt > 0 ) {
+         $query  = "DELETE FROM `#__it_attachment` WHERE issue_id = ";
+         $query .= "(SELECT alias FROM `#__it_issues` WHERE id = '".$issue."')";
+         $this->_db->setQuery( $query );
+         $delcnt = $this->_db->loadResult();
+      }
+   }
+
 }

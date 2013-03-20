@@ -1,14 +1,14 @@
 <?php
 /*
  *
- * @Version       $Id: default.php 288 2012-07-16 12:07:08Z geoffc $
+ * @Version       $Id: default.php 681 2013-02-04 19:52:44Z geoffc $
  * @Package       Joomla Issue Tracker
  * @Subpackage    com_issuetracker
- * @Release       1.0.0
- * @Copyright     Copyright (C) 2011 - 2012 Macrotone Consulting Ltd. All rights reserved.
+ * @Release       1.3.0
+ * @Copyright     Copyright (C) 2011-2013 Macrotone Consulting Ltd. All rights reserved.
  * @License       GNU General Public License version 3 or later; see LICENSE.txt
  * @Contact       support@macrotoneconsulting.co.uk
- * @Lastrevision  $Date: 2012-07-16 13:07:08 +0100 (Mon, 16 Jul 2012) $
+ * @Lastrevision  $Date: 2013-02-04 19:52:44 +0000 (Mon, 04 Feb 2013) $
  *
  */
 
@@ -16,12 +16,14 @@ defined('_JEXEC') or die('Restricted access');
 
 JHtml::_('behavior.tooltip');
 JHTML::_('script','system/multiselect.js',false,true);
-$user = JFactory::getUser();
-$userId  = $user->get('id');
+$user       = JFactory::getUser();
+$userId     = $user->get('id');
 $listOrder  = $this->state->get('list.ordering');
 $listDirn   = $this->state->get('list.direction');
 $canOrder   = $user->authorise('core.edit.state', 'com_issuetracker');
 $saveOrder  = $listOrder == 'a.ordering';
+
+require_once dirname(__FILE__).'/coloriser.php';
 ?>
 
 <form action="<?php echo JRoute::_('index.php?option=com_issuetracker&view=itprioritylist'); ?>" method="post" name="adminForm" id="adminForm">
@@ -32,19 +34,18 @@ $saveOrder  = $listOrder == 'a.ordering';
          <button type="submit"><?php echo JText::_('JSEARCH_FILTER_SUBMIT'); ?></button>
          <button type="button" onclick="document.id('filter_search').value='';this.form.submit();"><?php echo JText::_('JSEARCH_FILTER_CLEAR'); ?></button>
       </div>
+
       <div class="filter-select fltrt">
-
-
-                <select name="filter_published" class="inputbox" onchange="this.form.submit()">
-                    <option value=""><?php echo JText::_('JOPTION_SELECT_PUBLISHED');?></option>
-                    <?php echo JHtml::_('select.options', JHtml::_('jgrid.publishedOptions'), "value", "text", $this->state->get('filter.state'), true);?>
-                </select>
-
+          <select name="filter_published" class="inputbox" onchange="this.form.submit()">
+             <option value=""><?php echo JText::_('JOPTION_SELECT_PUBLISHED');?></option>
+             <?php echo JHtml::_('select.options', JHtml::_('jgrid.publishedOptions'), "value", "text", $this->state->get('filter.state'), true);?>
+          </select>
       </div>
    </fieldset>
+
    <div class="clr"> </div>
 
-   <table class="adminlist">
+   <table class="ittable table-striped">
       <thead>
          <tr>
             <th width="1%">
@@ -52,44 +53,45 @@ $saveOrder  = $listOrder == 'a.ordering';
             </th>
 
             <th class='left'>
-            <?php echo JHtml::_('grid.sort',  'COM_ISSUETRACKER_PRIORITY_NAME', 'a.priority_name', $listDirn, $listOrder); ?>
+               <?php echo JHtml::_('grid.sort',  'COM_ISSUETRACKER_PRIORITY_NAME', 'a.priority_name', $listDirn, $listOrder); ?>
             </th>
 
             <th class='left'>
-            <?php echo JHTML::_('grid.sort', JText::_( 'COM_ISSUETRACKER_RANKING' ), 'a.ranking', $listDirn, $listOrder); ?>
+               <?php echo JHTML::_('grid.sort', JText::_( 'COM_ISSUETRACKER_RANKING' ), 'a.ranking', $listDirn, $listOrder); ?>
             </th>
 
             <th class='left'>
-            <?php echo JHTML::_('grid.sort', JText::_( 'COM_ISSUETRACKER_RESPONSE_TIME' ), 'a.response_time', $listDirn, $listOrder); ?>
+               <?php echo JHTML::_('grid.sort', JText::_( 'COM_ISSUETRACKER_RESPONSE_TIME' ), 'a.response_time', $listDirn, $listOrder); ?>
             </th>
 
             <th class='left'>
-            <?php echo JHTML::_('grid.sort', JText::_( 'COM_ISSUETRACKER_RESOLUTION_TIME' ), 'a.resolution_time', $listDirn, $listOrder); ?>
+               <?php echo JHTML::_('grid.sort', JText::_( 'COM_ISSUETRACKER_RESOLUTION_TIME' ), 'a.resolution_time', $listDirn, $listOrder); ?>
             </th>
 
             <th class='left'>
-            <?php echo JHtml::_('grid.sort',  'COM_ISSUETRACKER_DESCRIPTION', 'a.description', $listDirn, $listOrder); ?>
+               <?php echo JHtml::_('grid.sort',  'COM_ISSUETRACKER_DESCRIPTION', 'a.description', $listDirn, $listOrder); ?>
             </th>
 
+            <?php if (isset($this->items[0]->state)) { ?>
+               <th width="5%">
+                  <?php echo JHtml::_('grid.sort',  'JPUBLISHED', 'a.state', $listDirn, $listOrder); ?>
+               </th>
+            <?php } ?>
 
-                <?php if (isset($this->items[0]->state)) { ?>
-            <th width="5%">
-               <?php echo JHtml::_('grid.sort',  'JPUBLISHED', 'a.state', $listDirn, $listOrder); ?>
-            </th>
-                <?php } ?>
-                <?php if (isset($this->items[0]->ordering)) { ?>
-            <th width="10%">
-               <?php echo JHtml::_('grid.sort',  'JGRID_HEADING_ORDERING', 'a.ordering', $listDirn, $listOrder); ?>
-               <?php if ($canOrder && $saveOrder) :?>
-                  <?php echo JHtml::_('grid.order',  $this->items, 'filesave.png', 'itprioritylist.saveorder'); ?>
-               <?php endif; ?>
-            </th>
-                <?php } ?>
-                <?php if (isset($this->items[0]->id)) { ?>
-                <th width="1%" class="nowrap">
-                    <?php echo JHtml::_('grid.sort',  'JGRID_HEADING_ID', 'a.id', $listDirn, $listOrder); ?>
-                </th>
-                <?php } ?>
+            <?php if (isset($this->items[0]->ordering)) { ?>
+               <th width="10%">
+                  <?php echo JHtml::_('grid.sort',  'JGRID_HEADING_ORDERING', 'a.ordering', $listDirn, $listOrder); ?>
+                  <?php if ($canOrder && $saveOrder) :?>
+                     <?php echo JHtml::_('grid.order',  $this->items, 'filesave.png', 'itprioritylist.saveorder'); ?>
+                  <?php endif; ?>
+               </th>
+            <?php } ?>
+
+            <?php if (isset($this->items[0]->id)) { ?>
+               <th width="1%" class="nowrap">
+                  <?php echo JHtml::_('grid.sort',  'JGRID_HEADING_ID', 'a.id', $listDirn, $listOrder); ?>
+               </th>
+            <?php } ?>
          </tr>
       </thead>
       <tfoot>
@@ -107,26 +109,29 @@ $saveOrder  = $listOrder == 'a.ordering';
          $canCheckin = $user->authorise('core.manage',      'com_issuetracker');
          $canChange  = $user->authorise('core.edit.state',  'com_issuetracker');
          ?>
-         <tr class="row<?php echo $i % 2; ?>">
+         <!-- tr class="row<?php echo $i % 2; ?>" -->
+         <tr>
             <td class="center">
                <?php echo JHtml::_('grid.id', $i, $item->id); ?>
             </td>
 
             <td>
-            <?php if (isset($item->checked_out) && $item->checked_out) : ?>
-               <?php echo JHtml::_('jgrid.checkedout', $i, $item->editor, $item->checked_out_time, 'itprioritylist.', $canCheckin); ?>
-            <?php endif; ?>
-            <?php if ($canEdit) : ?>
-               <a href="<?php echo JRoute::_('index.php?option=com_issuetracker&task=itpriority.edit&id='.(int) $item->id); ?>">
-               <?php echo $this->escape($item->priority_name); ?></a>
-            <?php else : ?>
-               <?php echo $this->escape($item->priority_name); ?>
-            <?php endif; ?>
+               <?php if (isset($item->checked_out) && $item->checked_out) : ?>
+                  <?php echo JHtml::_('jgrid.checkedout', $i, $item->editor, $item->checked_out_time, 'itprioritylist.', $canCheckin); ?>
+               <?php endif; ?>
+               <?php if ($canEdit) : ?>
+                  <a href="<?php echo JRoute::_('index.php?option=com_issuetracker&task=itpriority.edit&id='.(int) $item->id); ?>">
+                  <?php echo $this->escape($item->priority_name); ?></a>
+               <?php else : ?>
+                  <?php echo $this->escape($item->priority_name); ?>
+               <?php endif; ?>
             </td>
 
-            <td>
-              <?php echo $item->ranking; ?>
-            </td>
+            <!-- td -->
+              <!-- ?php echo $item->ranking; ? -->
+            <!-- /td -->
+
+            <?php echo IssueTrackerPriorityColoriser::colortext($item->ranking, $item->ranking); ?>
 
             <td>
               <?php echo $item->response_time; ?>
@@ -140,12 +145,13 @@ $saveOrder  = $listOrder == 'a.ordering';
                <?php echo $item->description; ?>
             </td>
 
-                <?php if (isset($this->items[0]->state)) { ?>
-                <td class="center">
-                   <?php echo JHtml::_('jgrid.published', $item->state, $i, 'itprioritylist.', $canChange, 'cb'); ?>
-                </td>
-                <?php } ?>
-                <?php if (isset($this->items[0]->ordering)) { ?>
+            <?php if (isset($this->items[0]->state)) { ?>
+               <td class="center">
+                  <?php echo JHtml::_('jgrid.published', $item->state, $i, 'itprioritylist.', $canChange, 'cb'); ?>
+               </td>
+            <?php } ?>
+
+            <?php if (isset($this->items[0]->ordering)) { ?>
                 <td class="order">
                    <?php if ($canChange) : ?>
                       <?php if ($saveOrder) :?>
@@ -163,14 +169,15 @@ $saveOrder  = $listOrder == 'a.ordering';
                       <?php echo $item->ordering; ?>
                    <?php endif; ?>
                 </td>
-                <?php } ?>
-                <?php if (isset($this->items[0]->id)) { ?>
-            <td class="center">
-               <?php echo (int) $item->id; ?>
-            </td>
-                <?php } ?>
+            <?php } ?>
+
+            <?php if (isset($this->items[0]->id)) { ?>
+               <td class="center">
+                  <?php echo (int) $item->id; ?>
+               </td>
+            <?php } ?>
          </tr>
-         <?php endforeach; ?>
+      <?php endforeach; ?>
       </tbody>
    </table>
 
@@ -182,5 +189,3 @@ $saveOrder  = $listOrder == 'a.ordering';
       <?php echo JHtml::_('form.token'); ?>
    </div>
 </form>
-
-

@@ -1,14 +1,14 @@
 <?php
 /*
  *
- * @Version       $Id: issuetracker.php 207 2012-05-10 17:22:24Z geoffc $
+ * @Version       $Id: issuetracker.php 741 2013-02-27 16:33:26Z geoffc $
  * @Package       Joomla Issue Tracker
  * @Subpackage    com_issuetracker
- * @Release       1.1.0
- * @Copyright     Copyright (C) 2011 - 2012 Macrotone Consulting Ltd. All rights reserved.
+ * @Release       1.3.0
+ * @Copyright     Copyright (C) 2011-2013 Macrotone Consulting Ltd. All rights reserved.
  * @License       GNU General Public License version 3 or later; see LICENSE.txt
  * @Contact       support@macrotoneconsulting.co.uk
- * @Lastrevision  $Date: 2012-05-10 18:22:24 +0100 (Thu, 10 May 2012) $
+ * @Lastrevision  $Date: 2013-02-27 16:33:26 +0000 (Wed, 27 Feb 2013) $
  *
  */
 
@@ -49,6 +49,8 @@ class plgFinderIssuetracker extends FinderIndexerAdapter
     *
     * @var    string
     * @since  2.5
+    *
+    * Check this !
     */
    protected $layout = 'itissues';
 
@@ -119,7 +121,7 @@ class plgFinderIssuetracker extends FinderIndexerAdapter
    {
       if ($context == 'com_issuetracker.itissues')
       {
-         $id = $table->issue_id;
+         $id = $table->id;
       }
       elseif ($context == 'com_finder.index')
       {
@@ -232,6 +234,12 @@ class plgFinderIssuetracker extends FinderIndexerAdapter
       {
          $this->itemStateChange($pks, $value);
       }
+
+      // We only want to handle project here
+      if ($context == 'com_issuetracker.itprojects')
+      {
+         $this->itemStateChange($pks, $value);
+      }
       // Handle when the plugin is disabled
       if ($context == 'com_plugins.plugin' && $value === 0)
       {
@@ -264,13 +272,14 @@ class plgFinderIssuetracker extends FinderIndexerAdapter
       $item->params = JComponentHelper::getParams('com_issuetracker', true);
       $item->params->merge($registry);
 
-      $registry = new JRegistry;
-      $registry->loadString($item->metadata);
-      $item->metadata = $registry;
+//      $registry = new JRegistry;
+//      $registry->loadString($item->metadata);
+//      $item->metadata = $registry;
 
       // Trigger the onContentPrepare event.
       $item->summary = FinderIndexerHelper::prepareContent($item->summary, $item->params);
       $item->body = FinderIndexerHelper::prepareContent($item->body, $item->params);
+      // Could enable progress & resolution summary - Options?
 
       // Build the necessary route and path information.
       $item->url = $this->getURL($item->id, $this->extension, $this->layout);
@@ -296,14 +305,26 @@ class plgFinderIssuetracker extends FinderIndexerAdapter
 //      $item->addInstruction(FinderIndexer::META_CONTEXT, 'metaauthor');
 //      $item->addInstruction(FinderIndexer::META_CONTEXT, 'author');
 //      $item->addInstruction(FinderIndexer::META_CONTEXT, 'created_by_alias');
+/*
+      // Handle the issue progress data.    This cimmented out doesnot make much difference.
+      if ($item->params->get('show_progress', true))
+      {
+         $item->addInstruction(FinderIndexer::META_CONTEXT, 'progress');
+      }
 
+      // Handle the issue resolution summary.
+      if ($item->params->get('show_resolution', true))
+      {
+         $item->addInstruction(FinderIndexer::META_CONTEXT, 'resolution');
+      }
+*/
       // Translate the state. Articles should only be published if the category is published.
       $item->state = $this->translateState($item->state, $item->cat_state);
 
       // Add the type taxonomy data.
       $item->addTaxonomy('Type', 'Issue');
 
-      // Add the author taxonomy data.
+      // Add the author taxonomy data.   What about the identified by field?
       if (!empty($item->author) || !empty($item->created_by_alias))
       {
          $item->addTaxonomy('Author', !empty($item->created_by_alias) ? $item->created_by_alias : $item->author);
@@ -312,7 +333,7 @@ class plgFinderIssuetracker extends FinderIndexerAdapter
       // Add the category taxonomy data.
       $item->addTaxonomy('Project', $item->category, $item->cat_state, $item->cat_access);
 
-      // Add the language taxonomy data.
+      // Add the language taxonomy data.   Ready for v2.0
       $item->addTaxonomy('Language', $item->language);
 
       // Get content extras.
@@ -333,6 +354,8 @@ class plgFinderIssuetracker extends FinderIndexerAdapter
    {
       // Load dependent classes.
       include_once JPATH_SITE . '/components/com_issuetracker/helpers/route.php';
+
+      // Add parameters checks here
 
       return true;
    }
@@ -360,16 +383,29 @@ class plgFinderIssuetracker extends FinderIndexerAdapter
       $sql->select('a.publish_up AS publish_start_date, a.publish_down AS publish_end_date');
       $sql->select('c.title AS category, c.published AS cat_state, c.access AS cat_access');
 */
-      $sql->select('a.id AS id, a.issue_summary AS title, a.issue_description as body');
-      $sql->select('a.issue_description as summary');
-      $sql->select('a.related_project_id as catid, a.created_on as start_date, a.created_by');
-      $sql->select('a.ordering, a.modified_on as modified, a.modified_by');
-      $sql->select('a.identified_date AS publish_start_date, 1 as access, 1 as state');
-      $sql->select('c.project_name as category, c.published as cat_state, 1 as cat_access');
+      $sql->select('a.id AS id, a.alias, a.issue_summary AS title, a.issue_description AS body');
+      $sql->select('a.issue_description AS summary');
+      $sql->select('a.progress AS progress');
+      $sql->select('a.resolution_summary AS resolution');
+      $sql->select('a.related_project_id AS catid, a.created_on AS start_date, a.created_by');
+      $sql->select('a.ordering, a.modified_on AS modified, a.modified_by');
+      $sql->select('a.identified_date AS publish_start_date, 1 AS access, a.state AS state');
+      $sql->select('c.project_name AS category, c.state AS cat_state, 1 AS cat_access');
+
+      // Above only returns the sub-category of the project- would need to expand out whole name using sql
 
       // Handle the alias CASE WHEN portion of the query
-      // Issues do not have an alias so use the title (issue_summary) instead
-      // This also puts the alias and catid and itemIdon the back of teh route in the finder_links table.
+      // This also puts the alias and catid and itemId on the back of the route in the finder_links table.
+
+      $case_when_item_alias = ' CASE WHEN ';
+      $case_when_item_alias .= $sql->charLength('a.alias');
+      $case_when_item_alias .= ' THEN ';
+      $a_id = $sql->castAsChar('a.id');
+      $case_when_item_alias .= $sql->concatenate(array($a_id, 'a.alias'), ':');
+      $case_when_item_alias .= ' ELSE ';
+      $case_when_item_alias .= $a_id.' END as slug';
+      $sql->select($case_when_item_alias);
+
 /*
       $case_when_item_alias = ' CASE WHEN ';
       $case_when_item_alias .= $sql->charLength('a.issue_summary');
@@ -377,10 +413,12 @@ class plgFinderIssuetracker extends FinderIndexerAdapter
       $a_id = $sql->castAsChar('a.id');
       $case_when_item_alias .= $sql->concatenate(array($a_id, 'a.issue_summary'), ':');
       $case_when_item_alias .= ' ELSE ';
-      $case_when_item_alias .= $a_id.' END as slug';
+      $case_when_item_alias .= $a_id.' END AS slug';
       $sql->select($case_when_item_alias);
 */
-      $sql->select('a.id AS slug');
+//      $sql->select('a.id AS slug');
+
+      $sql->where('a.state = 1');          // Prevents unpublished issues being put in Finder index.
 
       $case_when_category_alias = ' CASE WHEN ';
       $case_when_category_alias .= $sql->charLength('c.project_name');
@@ -392,6 +430,7 @@ class plgFinderIssuetracker extends FinderIndexerAdapter
       $sql->select($case_when_category_alias);
 
       $sql->select('u.username AS author');
+
       $sql->from('#__it_issues AS a');
       $sql->join('LEFT', '#__it_projects AS c ON c.id = a.related_project_id');
       $sql->join('LEFT', '#__it_people AS u ON u.id = a.identified_by_person_id');

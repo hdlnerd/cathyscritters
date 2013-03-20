@@ -1,14 +1,14 @@
 <?php
 /*
  *
- * @Version       $Id: issuetracker.php 215 2012-05-15 12:45:50Z geoffc $
+ * @Version       $Id: issuetracker.php 741 2013-02-27 16:33:26Z geoffc $
  * @Package       Joomla Issue Tracker
  * @Subpackage    com_issuetracker
- * @Release       1.1.0
- * @Copyright     Copyright (C) 2011 - 2012 Macrotone Consulting Ltd. All rights reserved.
+ * @Release       1.3.0
+ * @Copyright     Copyright (C) 2011-2013 Macrotone Consulting Ltd. All rights reserved.
  * @License       GNU General Public License version 3 or later; see LICENSE.txt
  * @Contact       support@macrotoneconsulting.co.uk
- * @Lastrevision  $Date: 2012-05-15 13:45:50 +0100 (Tue, 15 May 2012) $
+ * @Lastrevision  $Date: 2013-02-27 16:33:26 +0000 (Wed, 27 Feb 2013) $
  *
  */
 

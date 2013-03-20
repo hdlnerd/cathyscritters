@@ -1,14 +1,14 @@
 <?php
 /*
  *
- * @Version       $Id: itprojectslist.php 284 2012-07-06 13:51:19Z geoffc $
+ * @Version       $Id: itprojectslist.php 689 2013-02-06 17:38:45Z geoffc $
  * @Package       Joomla Issue Tracker
  * @Subpackage    com_issuetracker
- * @Release       1.2.0
- * @Copyright     Copyright (C) 2011 - 2012 Macrotone Consulting Ltd. All rights reserved.
+ * @Release       1.3.0
+ * @Copyright     Copyright (C) 2011-2013 Macrotone Consulting Ltd. All rights reserved.
  * @License       GNU General Public License version 3 or later; see LICENSE.txt
  * @Contact       support@macrotoneconsulting.co.uk
- * @Lastrevision  $Date: 2012-07-06 14:51:19 +0100 (Fri, 06 Jul 2012) $
+ * @Lastrevision  $Date: 2013-02-06 17:38:45 +0000 (Wed, 06 Feb 2013) $
  *
  */
 
@@ -41,11 +41,17 @@ class IssueTrackerModelItprojectslist extends JModelList
             $config['filter_fields'] = array(
                 'id', 'a.id',
                 'ordering', 'a.ordering',
+                'lft', 'a.lft',
+                'rgt', 'a.rgt',
+                'level', 'a.level',
+                'access', 'a.access',
+                'alias', 'a.alias',
                 'state', 'a.state',
-                'project_name', 'a.project_name',
-                'project_description', 'a.project_description',
+                'path', 'a.path',
+                'title', 'a.title',
+                'description', 'a.description',
                 'parent_id', 'a.parent_id',
-                'parent_project_name', 'a.parent_project_name',
+                'parent_title', 'a.parent_title',
                 'start_date', 'a.start_date',
                 'target_end_date', 'a.target_end_date',
                 'actual_end_date', 'a.actual_end_date',
@@ -73,12 +79,15 @@ class IssueTrackerModelItprojectslist extends JModelList
       $published = $app->getUserStateFromRequest($this->context.'.filter.state', 'filter_published', '', 'string');
       $this->setState('filter.state', $published);
 
+      $level = $this->getUserStateFromRequest($this->context.'.filter.level', 'filter_level', 0, 'int');
+      $this->setState('filter.level', $level);
+
       // Load the parameters.
       $params = JComponentHelper::getParams('com_issuetracker');
       $this->setState('params', $params);
 
       // List state information.
-      parent::populateState('a.project_name', 'asc');
+      parent::populateState('a.lft', 'asc');
    }
 
    /**
@@ -123,7 +132,7 @@ class IssueTrackerModelItprojectslist extends JModelList
       $query->from('`#__it_projects` AS a');
 
       // Join over the it_projects table (itself) to resolve parent project name.
-      $query->select('b.project_name AS parent_project_name');
+      $query->select('b.title AS parent_title');
       $query->join('LEFT', '#__it_projects AS b ON b.id = a.parent_id');
 
       $query->select('c.countid AS countid');
@@ -144,6 +153,13 @@ class IssueTrackerModelItprojectslist extends JModelList
          $query->where('(a.state IN (0, 1))');
       }
 
+      // Ignore the root entry.
+      $query->where('a.level > 0');
+
+      // Filter on the level.
+      if ($level = $this->getState('filter.level')) {
+         $query->where('a.level <= '.(int) $level);
+      }
 
       // Filter by search in title
       $search = $this->getState('filter.search');
@@ -151,62 +167,23 @@ class IssueTrackerModelItprojectslist extends JModelList
          if (stripos($search, 'id:') === 0) {
             $query->where('a.id = '.(int) substr($search, 3));
          } else {
-            $search = $db->Quote('%'.$db->getEscaped($search, true).'%');
-                $query->where('( a.project_name LIKE '.$search.'  OR  a.project_description LIKE '.$search.' )');
+            $search = $db->Quote('%'.$db->escape($search, true).'%');
+            $query->where('( a.title LIKE '.$search.'  OR  a.description LIKE '.$search.' )');
          }
       }
 
       // Add the list ordering clause.
       $orderCol   = $this->state->get('list.ordering');
       $orderDirn  = $this->state->get('list.direction');
-      if ($orderCol == 'a.ordering' || $orderCol == 'parent_project_name') {
-         $orderCol = 'parent_project_name '.$orderDirn.', a.ordering';
-      }
-      $query->order($db->getEscaped($orderCol.' '.$orderDirn));
 
-//        if ($orderCol && $orderDirn) {
-//          $query->order($db->getEscaped($orderCol.' '.$orderDirn));
-//        }
+      $query->order($db->escape($orderCol.' '.$orderDirn));
 
       return $query;
    }
 
-   public function orderup()
-   {
-      $app = JFactory::getApplication('administrator');
-
-      $cid = JRequest::getVar('cid');
-
-      $row =& JTable::getInstance('itprojects', 'IssueTrackerTable');
-      $row->load( $cid[0]);
-      $row->move( -1, 'parent_id = ' . $this->_data->parent_id);
-      $row->reorder( 'parent_id = ' . $this->_data->parent_id);
-
-      $msg = JText::_('COM_ISSUETRACKER_NEW_ORDERING_SAVED');
-
-      $app->redirect('index.php?option=com_issuetracker&view=itprojectslist', $msg);
-   }
-
-   public function orderdown()
-   {
-      $app = JFactory::getApplication('administrator');
-
-      $cid = JRequest::getVar('cid');
-
-      $row =& JTable::getInstance('itprojects', 'IssueTrackerTable');
-      $row->load( $cid[0]);
-      $row->move( 1, 'parent_id = ' . $this->_data->parent_id);
-      $row->reorder( 'parent_id = ' . $this->_data->parent_id);
-
-      $msg = JText::_('COM_ISSUETRACKER_NEW_ORDERING_SAVED');
-
-      $app->redirect('index.php?option=com_issuetracker&view=itprojectslist', $msg);
-   }
-
-
    public function projectsTree( $row = NULL)
    {
-      $db = & JFactory::getDBO();
+      $db = JFactory::getDBO();
 
       if ( isset($row->id)) {
          $idCheck = ' WHERE id != '.( int )$row->id;
@@ -219,7 +196,8 @@ class IssueTrackerModelItprojectslist extends JModelList
       }
 
       $query = "SELECT * FROM #__it_projects {$idCheck}";
-      $query.=" ORDER BY parent_id, ordering";
+      // $query.=" ORDER BY parent_id, ordering";
+      $query.=" ORDER BY lft";
       $db->setQuery($query);
 
       $rows = $db->loadObjectList();
@@ -237,7 +215,7 @@ class IssueTrackerModelItprojectslist extends JModelList
 
       $options = array ();
       foreach ($list as $entry) {
-         $options[] = JHTML::_( 'select.option', $entry->id, $entry->project_name);
+         $options[] = JHTML::_( 'select.option', $entry->id, $entry->title);
       }
       return $options;
    }
@@ -253,9 +231,9 @@ class IssueTrackerModelItprojectslist extends JModelList
          foreach ($children[$id] as $this->_data) {
             $id = $this->_data->id;
             if ( $this->_data->parent_id == 0 ) {
-               $txt = $this->_data->project_name;
+               $txt = $this->_data->title;
             } else {
-               $txt = '&nbsp;-&nbsp;' . $this->_data->project_name;
+               $txt = '&nbsp;-&nbsp;' . $this->_data->title;
             }
 
             $pt = $this->_data->parent_id;

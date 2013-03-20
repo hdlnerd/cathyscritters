@@ -1,14 +1,14 @@
 <?php
 /*
  *
- * @Version       $Id: default.php 288 2012-07-16 12:07:08Z geoffc $
+ * @Version       $Id: default.php 681 2013-02-04 19:52:44Z geoffc $
  * @Package       Joomla Issue Tracker
  * @Subpackage    com_issuetracker
- * @Release       1.0.0
- * @Copyright     Copyright (C) 2011 - 2012 Macrotone Consulting Ltd. All rights reserved.
+ * @Release       1.3.0
+ * @Copyright     Copyright (C) 2011-2013 Macrotone Consulting Ltd. All rights reserved.
  * @License       GNU General Public License version 3 or later; see LICENSE.txt
  * @Contact       support@macrotoneconsulting.co.uk
- * @Lastrevision  $Date: 2012-07-16 13:07:08 +0100 (Mon, 16 Jul 2012) $
+ * @Lastrevision  $Date: 2013-02-04 19:52:44 +0000 (Mon, 04 Feb 2013) $
  *
  */
 
@@ -43,7 +43,7 @@ $saveOrder  = $listOrder == 'a.ordering';
    </fieldset>
    <div class="clr"> </div>
 
-   <table class="adminlist">
+   <table class="ittable table-striped">
       <thead>
          <tr>
             <th width="1%">

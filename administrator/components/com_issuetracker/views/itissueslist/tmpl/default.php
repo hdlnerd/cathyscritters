@@ -1,14 +1,14 @@
 <?php
 /*
  *
- * @Version       $Id: default.php 412 2012-09-04 12:11:39Z geoffc $
+ * @Version       $Id: default.php 681 2013-02-04 19:52:44Z geoffc $
  * @Package       Joomla Issue Tracker
  * @Subpackage    com_issuetracker
- * @Release       1.2.1
- * @Copyright     Copyright (C) 2011 - 2012 Macrotone Consulting Ltd. All rights reserved.
+ * @Release       1.3.0
+ * @Copyright     Copyright (C) 2011-2013 Macrotone Consulting Ltd. All rights reserved.
  * @License       GNU General Public License version 3 or later; see LICENSE.txt
  * @Contact       support@macrotoneconsulting.co.uk
- * @Lastrevision  $Date: 2012-09-04 13:11:39 +0100 (Tue, 04 Sep 2012) $
+ * @Lastrevision  $Date: 2013-02-04 19:52:44 +0000 (Mon, 04 Feb 2013) $
  *
  */
 
@@ -32,6 +32,19 @@ $show_created_by = $this->state->params->get('show_created_by_headings');
 $show_created_on = $this->state->params->get('show_created_on_headings');
 $show_modified_by = $this->state->params->get('show_modified_by_headings');
 $show_modified_on = $this->state->params->get('show_modified_on_headings');
+
+$show_start_date = $this->state->params->get('show_identified_date_headings');
+$show_close_date = $this->state->params->get('show_close_date_headings');
+
+$allow_private = $this->state->params->get('allow_private_issues');
+
+require_once dirname(__FILE__).'/coloriser.php';
+
+// website root directory
+$_root = JURI::root();
+$image_yes = $_root . "administrator/templates/bluestork/images/admin/tick.png";
+$image_no  = $_root . "administrator/templates/bluestork/images/admin/publish_x.png";
+
 ?>
 
 <form action="<?php echo JRoute::_('index.php?option=com_issuetracker&view=itissueslist'); ?>" method="post" name="adminForm" id="adminForm">
@@ -50,7 +63,7 @@ $show_modified_on = $this->state->params->get('show_modified_on_headings');
             </select>
          <?php endif; ?>
 
-        <?php if ($show_identifier == 1 ) : ?>
+         <?php if ($show_identifier == 1 ) : ?>
            <select name="filter_identifier" class="inputbox" onchange="this.form.submit()">
               <?php echo JHtml::_('select.options', IssueTrackerHelper::getIdentifyingPeople(), 'value', 'text', $this->state->get('filter.identifier'));?>
             </select>
@@ -80,7 +93,7 @@ $show_modified_on = $this->state->params->get('show_modified_on_headings');
    </fieldset>
    <div class="clr"> </div>
 
-   <table class="adminlist">
+   <table class="ittable table-striped">
       <thead>
          <tr>
             <th width="1%">
@@ -121,6 +134,26 @@ $show_modified_on = $this->state->params->get('show_modified_on_headings');
                   <?php echo JHtml::_('grid.sort',  'JPUBLISHED', 'a.state', $listDirn, $listOrder); ?>
                </th>
             <?php } ?>
+
+            <?php if ($allow_private == 1 ) : ?>
+               <?php if (isset($this->items[0]->public)) { ?>
+                  <th width="3%">
+                     <?php echo JHtml::_('grid.sort',  JText::_( 'COM_ISSUETRACKER_FIELD_PUBLIC') , 'a.public', $listDirn, $listOrder); ?>
+                  </th>
+               <?php } ?>
+            <?php endif; ?>
+
+            <?php if ($show_start_date == 1 ) : ?>
+               <th class='left'>
+                  <?php echo JHTML::_('grid.sort', JText::_( 'COM_ISSUETRACKER_FIELD_IDENTIFIED_DATE' ), 'a.identified_date', $listDirn, $listOrder); ?>
+               </th>
+            <?php endif; ?>
+
+            <?php if ($show_close_date == 1 ) : ?>
+               <th class='left'>
+                  <?php echo JHTML::_('grid.sort', JText::_( 'COM_ISSUETRACKER_FIELD_CLOSE_DATE' ), 'a.actual_resolution_date', $listDirn, $listOrder); ?>
+               </th>
+            <?php endif; ?>
 
             <?php if ($show_created_by == 1 ) : ?>
                <th class='left'>
@@ -169,6 +202,7 @@ $show_modified_on = $this->state->params->get('show_modified_on_headings');
             </td>
          </tr>
       </tfoot>
+
       <tbody>
       <?php foreach ($this->items as $i => $item) :
          $ordering   = ($listOrder == 'a.ordering');
@@ -177,7 +211,8 @@ $show_modified_on = $this->state->params->get('show_modified_on_headings');
          $canCheckin = $user->authorise('core.manage',      'com_issuetracker');
          $canChange  = $user->authorise('core.edit.state',  'com_issuetracker');
          ?>
-         <tr class="row<?php echo $i % 2; ?>">
+         <!-- tr class="row<?php echo $i % 2; ?>" -->
+         <tr>
             <td class="center">
                <?php echo JHtml::_('grid.id', $i, $item->id); ?>
             </td>
@@ -216,15 +251,39 @@ $show_modified_on = $this->state->params->get('show_modified_on_headings');
             <td>
                <?php echo $item->type_name; ?>
             </td>
-            <td>
-               <?php echo $item->priority_name; ?>
-            </td>
+
+            <!-- td -->
+               <!-- ?php echo $item->priority_name; ? -->
+            <!-- /td -->
+            <?php echo IssueTrackerPriorityColoriser::colortext($item->priority_name, $item->ranking); ?>
 
             <?php if (isset($this->items[0]->state)) { ?>
                <td class="center">
                   <?php echo JHtml::_('jgrid.published', $item->state, $i, 'itissueslist.', $canChange, 'cb'); ?>
                </td>
             <?php } ?>
+
+           <?php if ($allow_private == 1 ) : ?>
+               <td align="center">
+                  <?php if ($item->public == 1) {
+                     echo "<img src='" . $image_yes . "' width='16' height='16' border='0' />";
+                  } else {
+                      echo "<img src='" . $image_no . "' width='16' height='16' border='0' />";
+                  } ?>
+               </td>
+            <?php endif; ?>
+
+            <?php if ($show_start_date == 1 ) : ?>
+               <td>
+                  <?php echo $item->identified_date; ?>
+               </td>
+            <?php endif; ?>
+            <?php if ($show_close_date == 1 ) : ?>
+               <td>
+                  <?php if ( $item->actual_resolution_date == "0000-00-00 00:00:00" ) { echo ""; } else { echo $item->actual_resolution_date; } ?>
+                  <!-- ?php echo $item->actual_resolution_date; ? -->
+               </td>
+            <?php endif; ?>
 
             <?php if ($show_created_by == 1 ) : ?>
                <td>

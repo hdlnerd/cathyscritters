@@ -1,17 +1,21 @@
 <?php
 /*
  *
- * @Version       $Id: issuetrackertype.php 194 2012-05-02 19:52:10Z geoffc $
+ * @Version       $Id: issuetrackertype.php 669 2013-01-04 14:39:25Z geoffc $
  * @Package       Joomla Issue Tracker
  * @Subpackage    com_issuetracker
- * @Release       1.1.0
- * @Copyright     Copyright (C) 2011 - 2012 Macrotone Consulting Ltd. All rights reserved.
+ * @Release       1.2.3
+ * @Copyright     Copyright (C) 2011-2013 Macrotone Consulting Ltd. All rights reserved.
  * @License       GNU General Public License version 3 or later; see LICENSE.txt
  * @Contact       support@macrotoneconsulting.co.uk
- * @Lastrevision  $Date: 2012-05-02 20:52:10 +0100 (Wed, 02 May 2012) $
+ * @Lastrevision  $Date: 2013-01-04 14:39:25 +0000 (Fri, 04 Jan 2013) $
  *
  */
 defined('_JEXEC') or die('Restricted access');
+
+if(!defined('DS')){
+   define('DS',DIRECTORY_SEPARATOR);
+}
 
 if (! class_exists('IssueTrackerHelper')) {
     require_once( JPATH_ADMINISTRATOR.DS.'components'.DS.'com_issuetracker'.DS.'helpers'.DS.'issuetracker.php');

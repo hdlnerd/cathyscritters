@@ -1,11 +1,37 @@
-<?php die() ?>
+<?php defined( '_JEXEC' ) or die( 'Restricted access' ); die() ?>
+Issue Tracker 1.3.0
+================================================================================
++ Add log facility for Issue Tracker messages to a database table.
++ Set the time element to the current time for the identified date and actual resolution date when the calendar drop down is used.
++ Add colour coding for issue priorities in back end.
++ Add public/private flag to issues table.
++ Change project table to be a nested structure.
++ Permit frontend css overrides from template directory.
++ Control display of individual audit fields in issue list display.
++ Add identified date and actual resolution date to option display fields in Admin Issue list.
++ Add requested ability on Issue creation form to restrict projects that may be chosen.
++ Add requested option to be able to hide the Issue Details section on the issue creation form.
++ Add filters for status, priority and issue type to front end issues list display.
++ Change Issue progress field from Varchar(4000) to Mediumtext.
++ Add issue attachments facility.
+- Removed duplicate images directory from install script as they are now centralised in media directory.
+~ Complete changes to routine calls to meet PHP Strict Standards.
+# Correct the update of actual resolution time when closing an issue in the back end.
+# Correct coding error where the wrong issues were being selected for the issue list display.
+# Fix problem when a newly registered user has previously raised issues as a guest, and unregistered users are configured.
+# Add language string for Menu descriptions.
+# Correct checks for user to edit their own issue in the front end.
+# Correct installation error when Mysqli database connection configured.
+# Correct menu for single project view to expand out project selection list.
+# Correct situation where FE issue not saved for a guest user when the supplied (guest) username is already in use.
+
 Issue Tracker 1.2.2
 ================================================================================
-+ Added option to make display of Unassigned issues inControl Panel optional.
++ Added option to make display of Unassigned issues in Control Panel optional.
+# Correct update server definition to use 'extension' rather than 'collection'.
+# Fix checking of default assignee which was preventing the saving of issues if the default was used.
 ~ Changed ordering display in Issue Summary report in Control Panel to be by the project ordering column ascending.
 ~ Changed default ordering of issue list in administrator to be descending rather than ascending.
-~ Correct update server definition to use 'extension' rather than 'collection'.
-~ Fix checking of default assignee which was preventing the saving of issues if the default was used.
 
 Issue Tracker 1.2.1
 ================================================================================

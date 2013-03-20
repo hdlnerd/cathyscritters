@@ -1,14 +1,14 @@
 <?php
 /*
  *
- * @Version       $Id: edit.php 392 2012-08-29 15:18:25Z geoffc $
+ * @Version       $Id: edit.php 688 2013-02-05 17:41:09Z geoffc $
  * @Package       Joomla Issue Tracker
  * @Subpackage    com_issuetracker
- * @Release       1.2.1
- * @Copyright     Copyright (C) 2011 - 2012 Macrotone Consulting Ltd. All rights reserved.
+ * @Release       1.3.0
+ * @Copyright     Copyright (C) 2011-2013 Macrotone Consulting Ltd. All rights reserved.
  * @License       GNU General Public License version 3 or later; see LICENSE.txt
  * @Contact       support@macrotoneconsulting.co.uk
- * @Lastrevision  $Date: 2012-08-29 16:18:25 +0100 (Wed, 29 Aug 2012) $
+ * @Lastrevision  $Date: 2013-02-05 17:41:09 +0000 (Tue, 05 Feb 2013) $
  *
  */
 
@@ -17,6 +17,12 @@ defined('_JEXEC') or die('Restricted access' );
 
 JHtml::_('behavior.tooltip');
 JHtml::_('behavior.formvalidation');
+
+// Create shortcut to parameters.
+$parameters = $this->state->get('params');
+
+$allow_attachment = $parameters->get('enable_attachments', 0);
+$allow_private    = $parameters->get('allow_private_issues');
 
 // echo "<pre>";var_dump($this->item);echo "</pre>";
 ?>
@@ -34,6 +40,13 @@ JHtml::_('behavior.formvalidation');
 
 <form action="<?php echo JRoute::_('index.php?option=com_issuetracker&layout=edit&id='.(int) $this->item->id); ?>" method="post" name="adminForm" id="type-form" class="form-validate">
    <div class="width-100 fltlft">
+
+      <?php if ( ! $allow_private && $this->item->public == 0 ) : ?>
+         <fieldset>
+            <?php if ($this->item->public) echo '<br/>'.JText::_('COM_ISSUETRACKER_PUBNOTE_WARNING_MSG').'<br/>'; ?>
+         </fieldset>
+      <?php endif; ?>
+
       <fieldset class="adminform">
          <legend><?php echo JText::_('JDETAILS').' - Issue: '.$this->item->alias; ?></legend>
          <ul class="adminformlist">
@@ -57,6 +70,8 @@ JHtml::_('behavior.formvalidation');
 
          </ul>
       </fieldset>
+
+      <?php if ( !empty($this->attachment) ) echo $this->loadTemplate('attachments'); ?>
 
       <fieldset class="adminform">
          <legend><?php echo JText::_( 'COM_ISSUETRACKER_PROGRESS_INFORMATION' ); ?></legend>

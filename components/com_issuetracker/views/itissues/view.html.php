@@ -1,16 +1,18 @@
 <?php
 /*
  *
- * @Version       $Id: view.html.php 322 2012-08-20 13:14:58Z geoffc $
+ * @Version       $Id: view.html.php 724 2013-02-22 15:53:06Z geoffc $
  * @Package       Joomla Issue Tracker
  * @Subpackage    com_issuetracker
- * @Release       1.2.0
- * @Copyright     Copyright (C) 2011 - 2012 Macrotone Consulting Ltd. All rights reserved.
+ * @Release       1.3.0
+ * @Copyright     Copyright (C) 2011-2013 Macrotone Consulting Ltd. All rights reserved.
  * @License       GNU General Public License version 3 or later; see LICENSE.txt
  * @Contact       support@macrotoneconsulting.co.uk
- * @Lastrevision  $Date: 2012-08-20 14:14:58 +0100 (Mon, 20 Aug 2012) $
+ * @Lastrevision  $Date: 2013-02-22 15:53:06 +0000 (Fri, 22 Feb 2013) $
  *
  */
+
+defined( '_JEXEC' ) or die( 'Restricted access' );
 
 jimport( 'joomla.application.component.view');
 
@@ -32,14 +34,16 @@ class IssueTrackerViewItissues extends JView
 
       // Get model data.
       $state = $this->get('State');
-      // $item = $this->get('Item');
 
-      // $this->get('Data');
       $data    = $this->get('Item');
       $this->assignRef('data', $data);
 
       $this->form    = $this->get('Form');
       $this->print   = JRequest::getBool('print');
+
+     if ( $data->id != 0 ) {
+         $this->attachment    = $this->check_attachments($data);
+      }
 
       // Create a shortcut to the parameters.
       $params  = $app->getParams();
@@ -61,13 +65,37 @@ class IssueTrackerViewItissues extends JView
    }
 
    /**
+    * Check if any attachments and get details.
+    * This code should be in the model. Move when convenient.
+    */
+
+   function check_attachments($data)
+   {
+      $issue_id = $data->alias;
+
+      $db = JFactory::getDbo();
+      $query = "SELECT count(*) FROM `#__it_attachment` WHERE issue_id = '".$issue_id."'";
+      $db->setQuery($query);
+      $cnt = $db->loadResult();
+
+      if ( $cnt == 0 ) {
+         return false;
+      } else {
+         $query = "SELECT * FROM `#__it_attachment` WHERE issue_id = '".$issue_id."'";
+         $db->setQuery($query);
+         $attachment = $db->loadObjectList();
+         return $attachment;
+      }
+   }
+
+   /**
     * Prepares the document
     */
    protected function _prepareDocument($data)
    {
       $app        = JFactory::getApplication();
       $menus      = $app->getMenu();
-//      $pathway    = $app->getPathway();
+      $pathway    = $app->getPathway();
       $title      = null;
 
       // Because the application sets a default page title,
@@ -86,7 +114,13 @@ class IssueTrackerViewItissues extends JView
       }
       $this->document->setTitle($title);
 
-      $pathway = $app->getPathWay();
+      // Special case to trap situation where we are called from the projects list links.
+      if ( strpos($menu->link, 'itprojectslist') ) {
+         $ntitle = JText::_('COM_ISSUETRACKER_PROJECT_ISSUEDETAIL_TITLE');
+         $this->document->setTitle($ntitle);
+         $this->params->set('page_heading', $ntitle);
+      }
+
       $pathway->addItem('Issue '.$data->alias, '');
 
    }

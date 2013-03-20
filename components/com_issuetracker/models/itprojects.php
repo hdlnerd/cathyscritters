@@ -2,14 +2,14 @@
 /*
  * Issue Tracker Model for Issue Tracker Component
  *
- * @Version       $Id: itprojects.php 260 2012-06-21 17:41:24Z geoffc $
+ * @Version       $Id: itprojects.php 669 2013-01-04 14:39:25Z geoffc $
  * @Package       Joomla Issue Tracker
  * @Subpackage    com_issuetracker
  * @Release       1.2.0
- * @Copyright     Copyright (C) 2011 - 2012 Macrotone Consulting Ltd. All rights reserved.
+ * @Copyright     Copyright (C) 2011-2013 Macrotone Consulting Ltd. All rights reserved.
  * @License       GNU General Public License version 3 or later; see LICENSE.txt
  * @Contact       support@macrotoneconsulting.co.uk
- * @Lastrevision  $Date: 2012-06-21 18:41:24 +0100 (Thu, 21 Jun 2012) $
+ * @Lastrevision  $Date: 2013-01-04 14:39:25 +0000 (Fri, 04 Jan 2013) $
  *
  */
 

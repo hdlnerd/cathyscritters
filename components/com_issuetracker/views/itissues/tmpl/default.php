@@ -1,14 +1,14 @@
 <?php
 /*
  *
- * @Version       $Id: default.php 322 2012-08-20 13:14:58Z geoffc $
+ * @Version       $Id: default.php 702 2013-02-10 19:47:59Z geoffc $
  * @Package       Joomla Issue Tracker
  * @Subpackage    com_issuetracker
- * @Release       1.2.0
- * @Copyright     Copyright (C) 2011 - 2012 Macrotone Consulting Ltd. All rights reserved.
+ * @Release       1.3.0
+ * @Copyright     Copyright (C) 2011-2013 Macrotone Consulting Ltd. All rights reserved.
  * @License       GNU General Public License version 3 or later; see LICENSE.txt
  * @Contact       support@macrotoneconsulting.co.uk
- * @Lastrevision  $Date: 2012-08-20 14:14:58 +0100 (Mon, 20 Aug 2012) $
+ * @Lastrevision  $Date: 2013-02-10 19:47:59 +0000 (Sun, 10 Feb 2013) $
  *
  */
 
@@ -18,11 +18,17 @@ $data = $this->data;
 
 JHtml::addIncludePath(JPATH_COMPONENT . '/helpers');
 
-// Or in view.
-// JHTML::stylesheet('components/com_issuetracker/assets/issuetracker.css' );
+if (! class_exists('IssueTrackerHelper')) {
+    require_once( JPATH_ADMINISTRATOR.DS.'components'.DS.'com_issuetracker'.DS.'helpers'.DS.'issuetracker.php');
+}
+
+IssueTrackerHelper::addCSS('media://com_issuetracker/css/issuetracker.css');
 
 $link = JRoute::_( "index.php?option=com_issuetracker&view=itissues&id={$data->id}" );
 // $canEdit = $this->params->get('access-edit');
+
+$allow_attachments = $this->params->get('enable_attachments', 0);
+
 $canEdit = $data->params->get('access-edit');
 ?>
 
@@ -107,6 +113,9 @@ $canEdit = $data->params->get('access-edit');
             <?php endif; ?>
           </dl>
       </fieldset>
+
+
+      <?php if ( $allow_attachments && !empty($this->attachment) ) echo $this->loadTemplate('attachments'); ?>
 
       <fieldset>
          <legend><?php echo JText::_('COM_ISSUETRACKER_ISSUE_PROGRESS_LEGEND'); ?></legend>

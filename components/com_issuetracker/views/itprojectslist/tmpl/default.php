@@ -1,14 +1,14 @@
 <?php
 /*
  *
- * @Version       $Id: default.php 393 2012-08-29 15:19:43Z geoffc $
+ * @Version       $Id: default.php 749 2013-02-27 17:29:56Z geoffc $
  * @Package       Joomla Issue Tracker
  * @Subpackage    com_issuetracker
- * @Release       1.2.1
- * @Copyright     Copyright (C) 2011 - 2012 Macrotone Consulting Ltd. All rights reserved.
+ * @Release       1.3.0
+ * @Copyright     Copyright (C) 2011-2013 Macrotone Consulting Ltd. All rights reserved.
  * @License       GNU General Public License version 3 or later; see LICENSE.txt
  * @Contact       support@macrotoneconsulting.co.uk
- * @Lastrevision  $Date: 2012-08-29 16:19:43 +0100 (Wed, 29 Aug 2012) $
+ * @Lastrevision  $Date: 2013-02-27 17:29:56 +0000 (Wed, 27 Feb 2013) $
  *
  */
 
@@ -23,8 +23,28 @@ $numCols = 0;
 /** custom css **/
 $document = JFactory::getDocument();
 $document->addStyleSheet('media/system/css/adminlist.css');
-$canEdit = $this->params->get('access-edit');
 
+if (! class_exists('IssueTrackerHelper')) {
+    require_once( JPATH_ADMINISTRATOR.DS.'components'.DS.'com_issuetracker'.DS.'helpers'.DS.'issuetracker.php');
+}
+
+IssueTrackerHelper::addCSS('media://com_issuetracker/css/issuetracker.css');
+
+$canEdit = $this->params->get('access-edit');
+$canCreateIssue = false;
+if(JFactory::getUser()->authorise('core.create', 'com_issuetracker')) {
+   $canCreateIssue = true;
+}
+
+/*
+$catURL = JRoute::_('index.php?option=com_issuetracker&view=itissueslist');
+$newIssueURL = JRoute::_('index.php?option=com_issuetracker&view=form&layout=edit');
+// Add separately for situation where JRoute changes field order.  Why?
+$catURL .= "&pid=";
+$newIssueURL .= "&pid=";
+*/
+$catURL = JRoute::_('index.php?option=com_issuetracker&view=itissueslist&pid=');
+$newIssueURL = JRoute::_('index.php?option=com_issuetracker&view=form&layout=edit&pid=');
 ?>
 
 <div class="edit item-page<?php echo $this->pageclass_sfx; ?>">
@@ -77,14 +97,14 @@ function tableOrdering( order, dir, task )
 </script>
 
 <form action="<?php echo JRoute::_('index.php?option=com_issuetracker&view=itprojectslist');?>" method="post" name="adminForm" id="adminForm">
-   <table class="adminlist">
+   <table class="<?php echo $this->params->get('tableclass_sfx','adminlist'); ?>">
       <thead>
          <tr>
             <th class="fieldDiv fieldLabel"><?php $numCols++; ?>
                <?php echo JHTML::_( 'grid.sort', JText::_('COM_ISSUETRACKER_PROJECT_NAME'), 'project_name', $this->sortDirection, $this->sortColumn); ?>
             </th>
             <th class="fieldDiv fieldLabel"><?php $numCols++; ?>
-               <?php echo JHTML::_( 'grid.sort', JText::_('COM_ISSUETRACKER_PROJECT_DESCRIPTION'), 'project_description', $this->sortDirection, $this->sortColumn); ?>
+               <?php echo JHTML::_( 'grid.sort', JText::_('COM_ISSUETRACKER_PROJECT_DESCRIPTION'), 'description', $this->sortDirection, $this->sortColumn); ?>
             </th>
             <th class="fieldDiv fieldLabel"><?php $numCols++; ?>
                <?php echo JHTML::_( 'grid.sort', JText::_('COM_ISSUETRACKER_START_DATE'), 'start_date', $this->sortDirection, $this->sortColumn); ?>
@@ -97,12 +117,16 @@ function tableOrdering( order, dir, task )
             <th class="fieldDiv fieldLabel"><?php $numCols++; ?>
                <?php echo JHTML::_( 'grid.sort', JText::_('COM_ISSUETRACKER_ACTUAL_END_DATE'), 'actual_end_date', $this->sortDirection, $this->sortColumn); ?>
             </th>
+            <th><?php $numCols++; ?>
+               <!-- Temp place holder for action buttons -->
+               <?php echo JText::_( 'COM_ISSUETRACKER_ISSUES_HEADER' ); ?>
+            </th>
             <?php if ($this->params->get('show_audit_fields', 0)) : ?>
                <th class="fieldDiv fieldLabel"><?php $numCols++; ?>
                   <?php echo JHTML::_( 'grid.sort', JText::_('COM_ISSUETRACKER_CREATED_ON'), 'created_on', $this->sortDirection, $this->sortColumn); ?>
                </th>
                <th class="fieldDiv fieldLabel"><?php $numCols++; ?>
-                  <?php echo JHTML::_( 'grid.sort', JText::_('COM_ISSUETRACKER_CRAETED_BY'), 'created_by', $this->sortDirection, $this->sortColumn); ?>
+                  <?php echo JHTML::_( 'grid.sort', JText::_('COM_ISSUETRACKER_CREATED_BY'), 'created_by', $this->sortDirection, $this->sortColumn); ?>
                </th>
                <th class="fieldDiv fieldLabel"><?php $numCols++; ?>
                   <?php echo JHTML::_( 'grid.sort', JText::_('COM_ISSUETRACKER_MODIFIED_ON'), 'modified_on', $this->sortDirection, $this->sortColumn); ?>
@@ -128,9 +152,12 @@ function tableOrdering( order, dir, task )
       </tfoot>
 
       <tbody>
-         <?php foreach($this->data as $dataItem): ?>
+         <?php if (count($this->data) ) { foreach($this->data as $i => $dataItem): ?>
+         <?php if(JFactory::getUser()->authorise('core.create', 'com_issuetracker.itprojects.'.$dataItem->project_id)) {
+           $canCreateIssue = true; } ?>
          <?php $link = JRoute::_( "index.php?option=com_issuetracker&view=itprojects&id={$dataItem->project_id}" ); ?>
-         <tr>
+         <tr class="row<?php echo $i % 2; ?>" >
+         <!-- tr -->
             <td class="fieldDiv fieldValue">
                <?php if ($this->params->get('show_linked_child_detail', 0)) : ?>
                   <span title="<?php echo JText::_( 'COM_ISSUETRACKER_VIEW_PROJECT' );?>::<?php echo $this->escape($dataItem->project_name); ?>">
@@ -139,7 +166,7 @@ function tableOrdering( order, dir, task )
                <?php else: echo $dataItem->project_name; endif; ?>
             </td>
             <td class="fieldDiv fieldValue">
-               <?php echo $dataItem->project_description; ?>
+               <?php echo $dataItem->description; ?>
             </td>
             <td class="fieldDiv fieldValue">
                <?php if ( !empty($dataItem->start_date) && $dataItem->start_date != "0000-00-00 00:00:00" ) echo JHTML::_('date', $dataItem->start_date, JText::_('DATE_FORMAT_LC4')); ?>
@@ -152,6 +179,20 @@ function tableOrdering( order, dir, task )
             <td class="fieldDiv fieldValue">
                <?php if ( !empty($dataItem->actual_end_date) && $dataItem->actual_end_date != "0000-00-00 00:00:00" ) echo JHTML::_('date', $dataItem->actual_end_date, JText::_('DATE_FORMAT_LC4')); ?>
             </td>
+
+            <td>
+               <a class="btn btn-success btn-small" href="<?php echo $catURL.$dataItem->project_id ?>">
+                  <i class="icon-folder-open icon-white"></i>
+                  <?php echo JText::_('COM_ISSUETRACKER_PROJECTS_VIEWISSUES') ?>
+               </a>
+               <?php if($canCreateIssue): ?><br/>
+                  <a class="btn btn-success btn-small" href="<?php echo $newIssueURL.$dataItem->project_id ?>">
+                     <i class="icon-file icon-white"></i>
+                     <?php echo JText::_('COM_ISSUETRACKER_PROJECTS_BUTTON_NEWISSUE') ?>
+                  </a>
+               <?php endif; ?>
+            </td>
+
             <?php if ($this->params->get('show_audit_fields', 0)) : ?>
                <td class="fieldDiv fieldValue">
                   <?php if ( !empty($dataItem->created_on) && $dataItem->created_on != "0000-00-00 00:00:00" ) echo JHTML::_('date', $dataItem->created_on, JText::_('DATE_FORMAT_LC4')); ?>
@@ -173,6 +214,13 @@ function tableOrdering( order, dir, task )
             <?php endif; ?>
          </tr>
          <?php endforeach; ?>
+         <?php } else { ?>
+         <tr>
+            <td>
+               <?php echo JText::_('COM_ISSUETRACKER_NO_DATA_FOUND_MSG'); ?>
+            </td>
+         </tr>
+         <?php } ?>
       <tbody>
    </table>
 

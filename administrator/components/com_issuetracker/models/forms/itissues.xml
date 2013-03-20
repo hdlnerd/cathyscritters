@@ -17,7 +17,7 @@
       <field name="issue_description" type="editor"
          label="COM_ISSUETRACKER_FIELD_ISSUE_DESCRIPTION_LABEL"
          description="COM_ISSUETRACKER_FIELD_ISSUE_DESCRIPTION_DESC"
-         rows="3" cols="80" maxlength="4000" hide="articlesanywhere,readmore,pagebreak,article"
+         rows="3" cols="80" maxlength="4000" hide="articlesanywhere,modulesanywhere,tabs,tabber,readmore,pagebreak,article"
 	      required="true" buttons="true"
 	      filter="safehtml" /> 
 

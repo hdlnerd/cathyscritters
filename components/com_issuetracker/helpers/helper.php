@@ -1,14 +1,14 @@
 <?php
 /*
  *
- * @Version       $Id: helper.php 406 2012-09-04 11:42:35Z geoffc $
+ * @Version       $Id: helper.php 691 2013-02-06 17:39:55Z geoffc $
  * @Package       Joomla Issue Tracker
  * @Subpackage    com_issuetracker
- * @Release       1.2.1
- * @Copyright     Copyright (C) 2011 - 2012 Macrotone Consulting Ltd. All rights reserved.
+ * @Release       1.3.0
+ * @Copyright     Copyright (C) 2011-2013 Macrotone Consulting Ltd. All rights reserved.
  * @License       GNU General Public License version 3 or later; see LICENSE.txt
  * @Contact       support@macrotoneconsulting.co.uk
- * @Lastrevision  $Date: 2012-09-04 12:42:35 +0100 (Tue, 04 Sep 2012) $
+ * @Lastrevision  $Date: 2013-02-06 17:39:55 +0000 (Wed, 06 Feb 2013) $
  *
  */
 
@@ -63,7 +63,7 @@ class IssueTrackerHelperSite
          $db = JFactory::getDBO();
 
           //build the list of categories
-         $query = 'SELECT a.project_name AS text, a.id AS value, a.parent_id as parentid';
+         $query = 'SELECT a.title AS text, a.id AS value, a.parent_id as parentid';
          $query .= ' FROM #__it_projects AS a';
          $query .= ' WHERE a.state = 1';
          $query .= ' ORDER BY a.ordering';

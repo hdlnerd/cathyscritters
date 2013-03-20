@@ -2,14 +2,14 @@
 /*
  * Issue Tracker Model for Issue Tracker Component
  *
- * @Version       $Id: itpeoplelist.php 394 2012-08-29 15:20:14Z geoffc $
+ * @Version       $Id: itpeoplelist.php 713 2013-02-18 18:15:53Z geoffc $
  * @Package       Joomla Issue Tracker
  * @Subpackage    com_issuetracker
- * @Release       1.2.1
- * @Copyright     Copyright (C) 2011 - 2012 Macrotone Consulting Ltd. All rights reserved.
+ * @Release       1.3.0
+ * @Copyright     Copyright (C) 2011-2013 Macrotone Consulting Ltd. All rights reserved.
  * @License       GNU General Public License version 3 or later; see LICENSE.txt
  * @Contact       support@macrotoneconsulting.co.uk
- * @Lastrevision  $Date: 2012-08-29 16:20:14 +0100 (Wed, 29 Aug 2012) $
+ * @Lastrevision  $Date: 2013-02-18 18:15:53 +0000 (Mon, 18 Feb 2013) $
  *
  */
 
@@ -90,16 +90,14 @@ class IssueTrackerModelItpeoplelist extends JModel
       $query->select(
          $this->getState(
             'list.select',
-            't1.id, t1.person_name, t1.person_email, t1.person_role, ' .
-            't1.username, t1.assigned_project, t1.created_on, ' .
-            't1.created_by, t1.modified_on, t1.modified_by'
+            't1.*'
          )
       );
 
       $query->from('#__it_people AS t1');
 
       // Join over the it_projects table.
-      $query->select('t2.project_name AS project_name, t2.id AS project_id');
+      $query->select('t2.title AS project_name, t2.id AS project_id');
       $query->join('LEFT', '#__it_projects AS t2 ON t2.id = t1.assigned_project');
 
       // Outer join over the it_roles table.
@@ -121,11 +119,11 @@ class IssueTrackerModelItpeoplelist extends JModel
       // default field for records list
       $default_order_field = 'id';
       // Array of allowable order fields
-       $allowedOrders = explode(',', 'id,person_name,person_email,person_role,username,assigned_project,project_name,created_on,created_by,modified_on,modified_by'); // array('id', 'ordering', 'published');
+       $allowedOrders = explode(',', 'id,person_name,person_email,person_role,username,assigned_project,title,project_name,created_on,created_by,modified_on,modified_by'); // array('id', 'ordering', 'published');
 
       // retrive ordering info
-      $filter_order = $app->getUserStateFromRequest('com_issuetrackerfilter_order', 'filter_order', $default_order_field);
-      $filter_order_Dir = strtoupper($app->getUserStateFromRequest('com_issuetrackerfilter_order_Dir', 'filter_order_Dir', 'ASC'));
+      $filter_order = $app->getUserStateFromRequest('com_issuetracker.filter_order', 'filter_order', $default_order_field);
+      $filter_order_Dir = strtoupper($app->getUserStateFromRequest('com_issuetracker.filter_order_Dir', 'filter_order_Dir', 'ASC'));
 
        // validate the order direction, must be ASC or DESC
        if ($filter_order_Dir != 'ASC' && $filter_order_Dir != 'DESC') {
@@ -137,8 +135,18 @@ class IssueTrackerModelItpeoplelist extends JModel
          $filter_order = $default_order_field;
        }
 
-      $prefix = 't1';
-       // return the ORDER BY clause
+       $prefix = 't1';
+       switch ( $filter_order ) {
+          case 'title':
+          case 'project_name':
+             $prefix = 't2';
+             break;
+          case 'role_name';
+             $prefix = 't3';
+             break;
+       }
+
+      // return the ORDER BY clause
        return " ORDER BY {$prefix}.`{$filter_order}` {$filter_order_Dir}";
    }
 

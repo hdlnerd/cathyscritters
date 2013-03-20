@@ -1,14 +1,14 @@
 <?php
 /*
  *
- * @Version       $Id: itprojectslist.php 394 2012-08-29 15:20:14Z geoffc $
+ * @Version       $Id: itprojectslist.php 748 2013-02-27 17:29:05Z geoffc $
  * @Package       Joomla Issue Tracker
  * @Subpackage    com_issuetracker
- * @Release       1.2.1
- * @Copyright     Copyright (C) 2011 - 2012 Macrotone Consulting Ltd. All rights reserved.
+ * @Release       1.3.0
+ * @Copyright     Copyright (C) 2011-2013 Macrotone Consulting Ltd. All rights reserved.
  * @License       GNU General Public License version 3 or later; see LICENSE.txt
  * @Contact       support@macrotoneconsulting.co.uk
- * @Lastrevision  $Date: 2012-08-29 16:20:14 +0100 (Wed, 29 Aug 2012) $
+ * @Lastrevision  $Date: 2013-02-27 17:29:05 +0000 (Wed, 27 Feb 2013) $
  *
  */
 
@@ -81,10 +81,11 @@ class IssueTrackerModelItprojectslist extends JModel{
    private function _buildQuery()
    {
       // use alias t1 for easier JOINs writing
-      $query = 'SELECT t1.id AS project_id, t1.parent_id, t1.project_name, t1.alias, t1.project_description, ' .
-                 't1.state, t1.ordering, t1.checked_out, t1.checked_out_time, t1.start_date, t1.target_end_date, t1.actual_end_date, ' .
-                 't1.created_on, t1.created_by, t1.modified_on, t1.modified_by';
-      $query .= ' FROM `#__it_projects` t1 ';
+      $query  = 'SELECT t1.id AS project_id, t1.parent_id, t1.title AS project_name, t1.alias, t1.description, ';
+      $query .= 't1.state, t1.lft, t1.rgt, t1.level, t1.access, t1.checked_out, t1.checked_out_time, t1.start_date, ';
+      $query .= 't1.target_end_date, t1.actual_end_date, ';
+      $query .= 't1.created_on, t1.created_by, t1.modified_on, t1.modified_by ';
+      $query .= 'FROM `#__it_projects` t1 ';
       $query .= $this->_buildQueryWhere() . $this->_buildQueryOrderBy();
       return $query;
    }
@@ -98,13 +99,13 @@ class IssueTrackerModelItprojectslist extends JModel{
        $app = JFactory::getApplication();
 
       // default field for records list
-      $default_order_field = 't1.`parent_id`, t1.`ordering`';
+      $default_order_field = 't1.`lft`';
       // Array of allowable order fields
-       $allowedOrders = explode(',', 'project_name,project_description,state,start_date,target_end_date,actual_end_date,created_on,created_by,modified_on,modified_by');
+       $allowedOrders = explode(',', 'title,description,state,start_date,target_end_date,actual_end_date,created_on,created_by,modified_on,modified_by');
 
       // retrive ordering info
-      $filter_order = $app->getUserStateFromRequest('com_issuetrackerfilter_order', 'filter_order', $default_order_field);
-      $filter_order_Dir = strtoupper($app->getUserStateFromRequest('com_issuetrackerfilter_order_Dir', 'filter_order_Dir', 'ASC'));
+      $filter_order = $app->getUserStateFromRequest('com_issuetracker.filter_order', 'filter_order', $default_order_field);
+      $filter_order_Dir = strtoupper($app->getUserStateFromRequest('com_issuetracker.filter_order_Dir', 'filter_order_Dir', 'ASC'));
 
        // validate the order direction, must be ASC or DESC
        if ($filter_order_Dir != 'ASC' && $filter_order_Dir != 'DESC') {
@@ -125,19 +126,34 @@ class IssueTrackerModelItprojectslist extends JModel{
    {
       $app = JFactory::getApplication();
 
-      $where = ' WHERE ( t1.`state`=1) ';
+      // Do not display the root node.
+      $where = ' WHERE ( t1.`state`=1 AND t1.`level` > 0 ) ';
 
       $search = $app->getUserStateFromRequest('com_issuetrackersearch', 'search', '');
 
+      // Get params
+      $params =    $app->getParams();
+      $projids    = $params->get('project_ids', array());  // It is an array even if there is only one element!
+
+      if ( ! empty($projids) && $projids[0] != "" ) {
+         // Check if we have 0 in our array, if so ignore the where clause inclusion.
+         $pids = implode(',', $projids);                   // Put in a form suitable for our query.
+         if ( substr($pids, 0, 1) == ',')  $pids = substr($pids,1);   // Check that first character is not a comma.
+         if (strncmp($pids, '0',1 ) != 0) {
+            $where .= ' AND t1.`id` IN ('.$pids.')';
+         }
+      }
+
       if (!$search) return $where;
 
-      $allowedSearch = explode(',', 'project_name,created_by,modified_by');
+      $allowedSearch = explode(',', 'title,project_name,created_by,modified_by');
       $wheres = '';
       foreach($allowedSearch as $field){
          if (!$field) return '';
          $wheres .= " OR (t1.`$field` LIKE '%" . addSlashes($search) . "%') ";
       }
       $where .= " AND ( " . substr($wheres, 4) . ") ";
+
       return $where;
    }
 
@@ -163,11 +179,23 @@ class IssueTrackerModelItprojectslist extends JModel{
     */
    public function getTotal()
    {
-      $db = JFactory::getDBO();
-//      $recordSet =& $this->getTable('itprojects');
-//      $db->setQuery( 'SELECT COUNT(*) FROM `#__it_projects` WHERE ' . (isset($recordSet->state)?'`state`':'1') . ' = 1' );
-      $db->setQuery( 'SELECT COUNT(*) FROM `#__it_projects` WHERE state = 1' );
+      $app = JFactory::getApplication();
 
+      $db = JFactory::getDBO();
+      $query   = $db->getQuery(true);
+
+      $query->select(' COUNT(*) ');
+      $query->from('#__it_projects AS t1');
+
+      $where = $this->_buildQueryWhere();
+      if ( empty($where) ) {
+         // No where clause required.
+      } else {
+         $query .= $where;
+      }
+
+      $db->setQuery($query);
+      $db->query();
       return $db->loadResult();
    }
 

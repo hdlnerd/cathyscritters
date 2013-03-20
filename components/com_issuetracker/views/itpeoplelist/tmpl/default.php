@@ -1,14 +1,14 @@
 <?php
 /*
  *
- * @Version       $Id: default.php 393 2012-08-29 15:19:43Z geoffc $
+ * @Version       $Id: default.php 701 2013-02-10 15:51:13Z geoffc $
  * @Package       Joomla Issue Tracker
  * @Subpackage    com_issuetracker
- * @Release       1.2.1
- * @Copyright     Copyright (C) 2011 - 2012 Macrotone Consulting Ltd. All rights reserved.
+ * @Release       1.3.0
+ * @Copyright     Copyright (C) 2011-2013 Macrotone Consulting Ltd. All rights reserved.
  * @License       GNU General Public License version 3 or later; see LICENSE.txt
  * @Contact       support@macrotoneconsulting.co.uk
- * @Lastrevision  $Date: 2012-08-29 16:19:43 +0100 (Wed, 29 Aug 2012) $
+ * @Lastrevision  $Date: 2013-02-10 15:51:13 +0000 (Sun, 10 Feb 2013) $
  *
  */
 
@@ -24,6 +24,12 @@ $numCols = 0;
 /** custom css **/
 $document = JFactory::getDocument();
 $document->addStyleSheet('media/system/css/adminlist.css');
+
+if (! class_exists('IssueTrackerHelper')) {
+    require_once( JPATH_ADMINISTRATOR.DS.'components'.DS.'com_issuetracker'.DS.'helpers'.DS.'issuetracker.php');
+}
+
+IssueTrackerHelper::addCSS('media://com_issuetracker/css/issuetracker.css');
 
 $canEdit = $this->params->get('access-edit');
 ?>
@@ -78,7 +84,7 @@ function tableOrdering( order, dir, task )
 </script>
 
 <form action="<?php echo JRoute::_('index.php?option=com_issuetracker&view=itpeoplelist');?>" method="post" name="adminForm" id="adminForm">
-   <table class="adminlist">
+   <table class="<?php echo $this->params->get('tableclass_sfx','adminlist'); ?>">
       <thead>
          <tr>
             <th class="fieldDiv fieldLabel"><?php $numCols++; ?>
@@ -116,7 +122,7 @@ function tableOrdering( order, dir, task )
                   <?php echo JHTML::_( 'grid.sort', JText::_('COM_ISSUETRACKER_MODIFIED_BY'), 'modified_by', $this->sortDirection, $this->sortColumn); ?>
                </th>
             <?php endif; ?>
-            <?php if ($this->params->get('show_issue_id', 0)) : ?>
+            <?php if ($this->params->get('show_people_id', 0)) : ?>
                <th class="fieldDiv fieldLabel"><?php $numCols++; ?>
                   <?php echo JHTML::_( 'grid.sort', JText::_('COM_ISSUETRACKER_PERSON_ID'), 'id', $this->sortDirection, $this->sortColumn); ?>
                </th>
@@ -133,9 +139,9 @@ function tableOrdering( order, dir, task )
       </tfoot>
 
       <tbody>
-         <?php foreach($this->data as $dataItem): ?>
+         <?php if (count($this->data) ) { foreach($this->data as $i => $dataItem): ?>
          <?php $link = JRoute::_( "index.php?option=com_issuetracker&view=itpeople&id={$dataItem->id}" ); ?>
-         <tr>
+         <tr class="row<?php echo $i % 2; ?>" >
              <td class="fieldDiv fieldValue">
                <?php if ($this->params->get('show_linked_child_detail', 0)) : ?>
                   <span title="<?php echo JText::_( 'COM_ISSUETRACKER_VIEW_PERSON' );?>::<?php echo $this->escape($dataItem->person_name); ?>">
@@ -184,6 +190,13 @@ function tableOrdering( order, dir, task )
             <?php endif; ?>
          </tr>
          <?php endforeach; ?>
+         <?php } else { ?>
+         <tr>
+            <td>
+               <?php echo JText::_('COM_ISSUETRACKER_NO_DATA_FOUND_MSG'); ?>
+            </td>
+         </tr>
+         <?php } ?>
       <tbody>
    </table>
 

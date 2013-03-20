@@ -1,14 +1,14 @@
 <?php
 /*
  *
- * @Version       $Id: view.html.php 203 2012-05-05 17:39:45Z geoffc $
+ * @Version       $Id: view.html.php 669 2013-01-04 14:39:25Z geoffc $
  * @Package       Joomla Issue Tracker
  * @Subpackage    com_issuetracker
- * @Release       1.1.0
- * @Copyright     Copyright (C) 2011 - 2012 Macrotone Consulting Ltd. All rights reserved.
+ * @Release       1.2.3
+ * @Copyright     Copyright (C) 2011-2013 Macrotone Consulting Ltd. All rights reserved.
  * @License       GNU General Public License version 3 or later; see LICENSE.txt
  * @Contact       support@macrotoneconsulting.co.uk
- * @Lastrevision  $Date: 2012-05-05 18:39:45 +0100 (Sat, 05 May 2012) $
+ * @Lastrevision  $Date: 2013-01-04 14:39:25 +0000 (Fri, 04 Jan 2013) $
  *
  */
 
@@ -23,7 +23,7 @@ jimport( 'joomla.application.component.view' );
  * @package       Joomla.Components
  * @subpackage    Issuetracker
  */
-class IssuetrackerViewItroles extends JView
+class IssuetrackerViewItroles extends JViewLegacy
 {
    protected $state;
    protected $item;

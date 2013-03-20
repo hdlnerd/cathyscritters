@@ -1,14 +1,14 @@
 <?php
 /*
  *
- * @Version       $Id: icon.php 440 2012-09-10 10:33:15Z geoffc $
+ * @Version       $Id: icon.php 738 2013-02-27 15:06:09Z geoffc $
  * @Package       Joomla Issue Tracker
  * @Subpackage    com_issuetracker
- * @Release       1.2.1
- * @Copyright     Copyright (C) 2011 - 2012 Macrotone Consulting Ltd. All rights reserved.
+ * @Release       1.3.0
+ * @Copyright     Copyright (C) 2011-2013 Macrotone Consulting Ltd. All rights reserved.
  * @License       GNU General Public License version 3 or later; see LICENSE.txt
  * @Contact       support@macrotoneconsulting.co.uk
- * @Lastrevision  $Date: 2012-09-10 11:33:15 +0100 (Mon, 10 Sep 2012) $
+ * @Lastrevision  $Date: 2013-02-27 15:06:09 +0000 (Wed, 27 Feb 2013) $
  *
  */
 
@@ -34,7 +34,7 @@ class JHtmlIcon
 
       $url = 'index.php?option=com_issuetracker&task=itissues.add&return='.base64_encode($uri).'&a_id=0';
 
-      if ($params->get('show_icons')) {
+      if ($params->get('show_icons') || $params->get('showl_icons')) {
          $text = JHtml::_('image','system/new.png', JText::_('JNEW'), NULL, true);
       } else {
          $text = JText::_('JNEW').'&#160;';
@@ -64,7 +64,7 @@ class JHtmlIcon
 
       $status  = 'width=400,height=350,menubar=yes,resizable=yes';
 
-      if ($params->get('show_icons')) {
+      if ($params->get('show_icons') || $params->get('showl_icons')) {
          $text = JHtml::_('image','system/emailButton.png', JText::_('JGLOBAL_EMAIL'), NULL, true);
       } else {
          $text = '&#160;'.JText::_('JGLOBAL_EMAIL');
@@ -159,7 +159,7 @@ class JHtmlIcon
       $status  = 'status=no,toolbar=no,scrollbars=yes,titlebar=no,menubar=no,resizable=yes,width=640,height=480,directories=no,location=no';
 
       // checks template image directory for image, if non found default are loaded
-      if ($params->get('show_icons')) {
+      if ($params->get('show_icons') || $params->get('showl_icons')) {
          $text = JHtml::_('image','system/printButton.png', JText::_('JGLOBAL_PRINT'), NULL, true);
       } else {
          $text = JText::_('JGLOBAL_ICON_SEP') .'&#160;'. JText::_('JGLOBAL_PRINT') .'&#160;'. JText::_('JGLOBAL_ICON_SEP');
@@ -175,7 +175,7 @@ class JHtmlIcon
    static function print_screen($article, $params, $attribs = array())
    {
       // checks template image directory for image, if non found default are loaded
-      if ($params->get('show_icons')) {
+      if ($params->get('show_icons') || $params->get('showl_icons') ) {
          $text = JHtml::_('image','system/printButton.png', JText::_('JGLOBAL_PRINT'), NULL, true);
       } else {
          $text = JText::_('JGLOBAL_ICON_SEP') .'&#160;'. JText::_('JGLOBAL_PRINT') .'&#160;'. JText::_('JGLOBAL_ICON_SEP');

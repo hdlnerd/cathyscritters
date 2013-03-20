@@ -1,3 +1,6 @@
+
+DROP TABLE IF EXISTS `#__it_attachment`;
+DROP TABLE IF EXISTS `#__it_issues_log`;
 DROP TABLE IF EXISTS `#__it_issues`;
 DROP TABLE IF EXISTS `#__it_people`;
 DROP TABLE IF EXISTS `#__it_projects`;

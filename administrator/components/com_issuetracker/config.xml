@@ -59,7 +59,9 @@
          key_field="value" value_field="priority"
          query="SELECT id AS value, priority_name AS priority FROM #__it_priority"/>
 						
-      <field name="def_published" type="radio" default="0" label="COM_ISSUETRACKER_CONFIG_DEFAULT_PUBLISHED_LABEL" 
+      <field name="def_published" type="radio" default="0" 
+         class="btn-group"
+         label="COM_ISSUETRACKER_CONFIG_DEFAULT_PUBLISHED_LABEL" 
 	      description="COM_ISSUETRACKER_CONFIG_DEFAULT_PUBLISHED_DESC">
 	      <option value="0">JUNPUBLISHED</option>
 	      <option value="1">JPUBLISHED</option>
@@ -70,13 +72,17 @@
 	      key_field="value" value_field="itype"
          query="SELECT id AS value, type_name AS itype FROM #__it_types"/>
          
-      <field name="allow_fe_edit" type="radio" default="1" label="COM_ISSUETRACKER_CONFIG_ALLOW_FE_EDITING_LABEL" 
+      <field name="allow_fe_edit" type="radio" default="1" 
+         class="btn-group"
+         label="COM_ISSUETRACKER_CONFIG_ALLOW_FE_EDITING_LABEL" 
          description="COM_ISSUETRACKER_CONFIG_ALLOW_FE_EDITING_DESC">
          <option value="0">JNO</option>
          <option value="1">JYES</option>
       </field>   
 
-      <field name="wysiwyg_editor" type="radio" default="0" label="COM_ISSUETRACKER_CONFIG_WYSIWYG_EDITOR_LABEL" 
+      <field name="wysiwyg_editor" type="radio" default="0" 
+         class="btn-group"
+         label="COM_ISSUETRACKER_CONFIG_WYSIWYG_EDITOR_LABEL" 
          description="COM_ISSUETRACKER_CONFIG_WYSIWYG_EDITOR_DESC">
          <option value="0">JNO</option>
          <option value="1">JYES</option>
@@ -142,42 +148,60 @@
 	      <option value="Z">Z</option>
       </field>
 	    
-      <field name="show_summary_rep" type="radio" default="0" label="COM_ISSUETRACKER_CONFIG_SHOW_SUMMARY_REP_LABEL" 
+      <field name="show_summary_rep" type="radio" default="0" 
+         class="btn-group"
+         label="COM_ISSUETRACKER_CONFIG_SHOW_SUMMARY_REP_LABEL" 
 	      description="COM_ISSUETRACKER_CONFIG_SHOW_SUMMARY_REP_DESC">
 	      <option value="0">JNO</option>
 	      <option value="1">JYES</option>
       </field>
 
-      <field name="show_unassigned_rep" type="radio" default="0" label="COM_ISSUETRACKER_CONFIG_SHOW_UNASSIGNED_REP_LABEL" 
+      <field name="show_unassigned_rep" type="radio" default="0" 
+         class="btn-group"
+         label="COM_ISSUETRACKER_CONFIG_SHOW_UNASSIGNED_REP_LABEL" 
          description="COM_ISSUETRACKER_CONFIG_SHOW_UNASSIGNED_REP_DESC">
          <option value="0">JNO</option>
          <option value="1">JYES</option>
       </field>
 
-      <field name="show_product_req" type="radio" default="0" label="COM_ISSUETRACKER_CONFIG_SHOW_PRODUCT_REQ_LABEL" 
+      <field name="show_product_req" type="radio" default="0" 
+         class="btn-group"
+         label="COM_ISSUETRACKER_CONFIG_SHOW_PRODUCT_REQ_LABEL" 
 	      description="COM_ISSUETRACKER_CONFIG_SHOW_PRODUCT_REQ_DESC">
 	      <option value="0">JNO</option>
 	      <option value="1">JYES</option>
       </field>
 
-      <field name="create_new_person" type="radio" default="0" label="COM_ISSUETRACKER_CONFIG_CREATE_NEW_PERSON_LABEL" 
+      <field name="create_new_person" type="radio" default="0" 
+         class="btn-group"
+         label="COM_ISSUETRACKER_CONFIG_CREATE_NEW_PERSON_LABEL" 
          description="COM_ISSUETRACKER_CONFIG_CREATE_NEW_PERSON_DESC">
          <option value="0">JNO</option>
          <option value="1">JYES</option>
       </field>
 
-      <field name="auto_generate_username" type="radio" default="0" label="COM_ISSUETRACKER_CONFIG_AUTO_GENERATE_USERNAME_LABEL" 
+      <field name="auto_generate_username" type="radio" default="0" 
+         class="btn-group"
+         label="COM_ISSUETRACKER_CONFIG_AUTO_GENERATE_USERNAME_LABEL" 
          description="COM_ISSUETRACKER_CONFIG_AUTO_GENERATE_USERNAME_DESC">
          <option value="0">JNO</option>
          <option value="1">JYES</option>
       </field>
 
-     <field name="create_intro" type="textarea"   
+      <field name="create_intro" type="textarea"   
           default="Please supply a short title that describes your issue, and in the description box provide as much detail as possible to enable us to try and quickly resolve your problem." 
           label="COM_ISSUETRACKER_CREATE_INTRO_TEXT_LABEL" 
           description="COM_ISSUETRACKER_CREATE_INTRO_TEXT_DESC" 
           rows="5" 
           cols="50" />
+
+      <field name="allow_private_issues" type="radio" default="0" 
+         class="btn-group"
+         label="COM_ISSUETRACKER_FIELD_SHOW_VISIBILITY_LABEL" 
+         description="COM_ISSUETRACKER_FIELD_SHOW_VISIBILITY_DESC">
+         <option value="0">JNO</option>
+         <option value="1">JYES</option>
+      </field>
 	    
    </fieldset>
 
@@ -204,7 +228,8 @@
 	      type="plugins"
 	      folder="captcha"
 	      default=""
-	      label="COM_ISSUETRACKER_CONFIG_FIELD_CAPTCHA_LABEL"
+         class="btn-group"
+         label="COM_ISSUETRACKER_CONFIG_FIELD_CAPTCHA_LABEL"
 	      description="COM_ISSUETRACKER_CONFIG_FIELD_CAPTCHA_DESC"
 	      filter="cmd" >
 	      <option value="">JOPTION_USE_DEFAULT</option>
@@ -307,67 +332,89 @@
          description="COM_ISSUETRACKER_CONFIG_MESSAGE_EMAIL_NOTIFICATION_MESSAGE_POSTFIX_DESC" 
          rows="5" cols="50" filter="safehtml" />
  
-       <field name="email_notify" type="radio" default="0" label="COM_ISSUETRACKER_CONFIG_EMAIL_NOTIFICATIONS_LABEL" 
+       <field name="email_notify" type="radio" default="0" 
+          class="btn-group"
+          label="COM_ISSUETRACKER_CONFIG_EMAIL_NOTIFICATIONS_LABEL" 
           description="COM_ISSUETRACKER_CONFIG_EMAIL_NOTIFICATIONS_DESC">
           <option value="0">JNO</option>
          <option value="1">JYES</option>
        </field>
 
-       <field name="def_notify" type="radio" default="0" label="COM_ISSUETRACKER_CONFIG_EMAIL_DEFAULT_NOTIFICATION_SETTING_LABEL" 
+       <field name="def_notify" type="radio" default="0" 
+         class="btn-group"
+         label="COM_ISSUETRACKER_CONFIG_EMAIL_DEFAULT_NOTIFICATION_SETTING_LABEL" 
           description="COM_ISSUETRACKER_CONFIG_EMAIL_DEFAULT_NOTIFICATION_SETTING_DESC">
-         <option value="0">JUNPUBLISHED</option>
-         <option value="1">JPUBLISHED</option>
+         <option value="0">JNO</option>
+         <option value="1">JYES</option>
        </field>
 
-      <field name="send_user_msg_new" type="radio" default="0" label="COM_ISSUETRACKER_CONFIG_USER_NEW_MSG_LABEL" 
+      <field name="send_user_msg_new" type="radio" default="0" 
+         class="btn-group"
+         label="COM_ISSUETRACKER_CONFIG_USER_NEW_MSG_LABEL" 
          description="COM_ISSUETRACKER_CONFIG_USER_NEW_MSG_DESC">
          <option value="0">JNO</option>
          <option value="1">JYES</option>
       </field>
 
-      <field name="send_user_msg_update" type="radio" default="0" label="COM_ISSUETRACKER_CONFIG_USER_UPD_MSG_LABEL" 
+      <field name="send_user_msg_update" type="radio" default="0" 
+         class="btn-group"
+         label="COM_ISSUETRACKER_CONFIG_USER_UPD_MSG_LABEL" 
          description="COM_ISSUETRACKER_CONFIG_USER_UPD_MSG_DESC">
          <option value="0">JNO</option>
          <option value="1">JYES</option>
       </field>
  
-       <field name="send_user_msg_close" type="radio" default="0" label="COM_ISSUETRACKER_CONFIG_USER_CLOSE_MSG_LABEL" 
+       <field name="send_user_msg_close" type="radio" default="0" 
+          class="btn-group"
+          label="COM_ISSUETRACKER_CONFIG_USER_CLOSE_MSG_LABEL" 
           description="COM_ISSUETRACKER_CONFIG_USER_CLOSE_MSG_DESC">
           <option value="0">JNO</option>
           <option value="1">JYES</option>
        </field>
 
-      <field name="send_ass_msg_new" type="radio" default="0" label="COM_ISSUETRACKER_CONFIG_ASS_NEW_MSG_LABEL" 
+      <field name="send_ass_msg_new" type="radio" default="0" 
+         class="btn-group"
+         label="COM_ISSUETRACKER_CONFIG_ASS_NEW_MSG_LABEL" 
          description="COM_ISSUETRACKER_CONFIG_ASS_NEW_MSG_DESC">
          <option value="0">JNO</option>
          <option value="1">JYES</option>
       </field>
 
-      <field name="send_ass_msg_update" type="radio" default="0" label="COM_ISSUETRACKER_CONFIG_ASS_UPD_MSG_LABEL" 
+      <field name="send_ass_msg_update" type="radio" default="0" 
+         class="btn-group"
+         label="COM_ISSUETRACKER_CONFIG_ASS_UPD_MSG_LABEL" 
          description="COM_ISSUETRACKER_CONFIG_ASS_UPD_MSG_DESC">
          <option value="0">JNO</option>
          <option value="1">JYES</option>
       </field>
  
-       <field name="send_ass_msg_close" type="radio" default="0" label="COM_ISSUETRACKER_CONFIG_ASS_CLOSE_MSG_LABEL" 
+       <field name="send_ass_msg_close" type="radio" default="0" 
+          class="btn-group"
+          label="COM_ISSUETRACKER_CONFIG_ASS_CLOSE_MSG_LABEL" 
           description="COM_ISSUETRACKER_CONFIG_ASS_CLOSE_MSG_DESC">
           <option value="0">JNO</option>
           <option value="1">JYES</option>
        </field>
 
-      <field name="send_adm_msg_new" type="radio" default="0" label="COM_ISSUETRACKER_CONFIG_ADM_NEW_MSG_LABEL" 
+      <field name="send_adm_msg_new" type="radio" default="0" 
+         class="btn-group"
+         label="COM_ISSUETRACKER_CONFIG_ADM_NEW_MSG_LABEL" 
          description="COM_ISSUETRACKER_CONFIG_ADM_NEW_MSG_DESC">
          <option value="0">JNO</option>
          <option value="1">JYES</option>
       </field>
 
-      <field name="send_adm_msg_update" type="radio" default="0" label="COM_ISSUETRACKER_CONFIG_ADM_UPD_MSG_LABEL" 
+      <field name="send_adm_msg_update" type="radio" default="0" 
+         class="btn-group"
+         label="COM_ISSUETRACKER_CONFIG_ADM_UPD_MSG_LABEL" 
          description="COM_ISSUETRACKER_CONFIG_ADM_UPD_MSG_DESC">
          <option value="0">JNO</option>
          <option value="1">JYES</option>
       </field>
  
-       <field name="send_adm_msg_close" type="radio" default="0" label="COM_ISSUETRACKER_CONFIG_ADM_CLOSE_MSG_LABEL" 
+       <field name="send_adm_msg_close" type="radio" default="0" 
+          class="btn-group"
+          label="COM_ISSUETRACKER_CONFIG_ADM_CLOSE_MSG_LABEL" 
           description="COM_ISSUETRACKER_CONFIG_ADM_CLOSE_MSG_DESC">
           <option value="0">JNO</option>
           <option value="1">JYES</option>
@@ -394,6 +441,26 @@
          default="0"
          label="COM_ISSUETRACKER_FIELD_CONFIG_IDENTIFIED_BY_LABEL"
          description="COM_ISSUETRACKER_FIELD_CONFIG_IDENTIFIED_BY_DESC" >
+         <option value="0">JHIDE</option>
+         <option value="1">JSHOW</option>
+      </field>
+
+      <field name="show_identified_date_headings"
+         type="radio"
+         class="btn-group"
+         default="0"
+         label="COM_ISSUETRACKER_FIELD_CONFIG_IDENTIFIED_DATE_LABEL"
+         description="COM_ISSUETRACKER_FIELD_CONFIG_IDENTIFIED_DATE_DESC" >
+         <option value="0">JHIDE</option>
+         <option value="1">JSHOW</option>
+      </field>
+
+      <field name="show_close_date_headings"
+         type="radio"
+         class="btn-group"
+         default="0"
+         label="COM_ISSUETRACKER_FIELD_CONFIG_ACTUAL_RESOLUTION_DATE_LABEL"
+         description="COM_ISSUETRACKER_FIELD_CONFIG_ACTUAL_RESOLUTION_DATE_DESC" >
          <option value="0">JHIDE</option>
          <option value="1">JSHOW</option>
       </field>
@@ -437,11 +504,424 @@
          <option value="0">JHIDE</option>
          <option value="1">JSHOW</option>
       </field>
-
    </fieldset>
 
-   <fieldset name="permissions" label="JCONFIG_PERMISSIONS_LABEL" description="JCONFIG_PERMISSIONS_DESC">
-      
+   <fieldset name="frontend" addfieldpath="/administrator/components/com_issuetracker/models/fields"
+      label="COM_ISSUETRACKER_CONFIG_FRONTEND_TITLE" description="COM_ISSUETRACKER_CONFIG_FRONTEND_DESC" >
+      <field name="show_details_section" type="radio" default="1" class="btn-group"
+         label="COM_ISSUETRACKER_FIELD_HIDE_DETAIL_LABEL"
+         description="COM_ISSUETRACKER_FIELD_HIDE_DETAIL_DESC" >
+         <option value="0">JHIDE</option>
+         <option value="1">JSHOW</option>
+      </field>
+ 
+      <field name="show_project_name" type="radio" default="1" class="btn-group"
+         label="COM_ISSUETRACKER_FIELD_SHOW_PROJECT_NAME_LABEL"
+         description="COM_ISSUETRACKER_FIELD_SHOW_PROJECT_NAME_DESC" >
+         <option value="0">JHIDE</option>
+         <option value="1">JSHOW</option>
+      </field>
+
+      <field name="show_visibility" type="radio" default="1" class="btn-group"
+          label="COM_ISSUETRACKER_FIELD_SHOW_VISIBILITY_LABEL"
+          description="COM_ISSUETRACKER_FIELD_SHOW_VISIBILITY_DESC" >
+          <option value="0">JHIDE</option>
+          <option value="1">JSHOW</option>
+       </field>
+
+       <field type="spacer" name="spacera" label="COM_ISSUETRACKER_LIST_ICON_DISPLAY_OPTIONS" 
+          description="COM_ISSUETRACKER_LIST_ICON_DISPLAY_OPTIONS_DESC" />
+
+       <field name="show_linked_child_detail" type="radio" class="btn-group"
+          description="COM_ISSUETRACKER_FIELD_SHOW_LINKED_CHILD_DESC"
+          label="COM_ISSUETRACKER_FIELD_SHOW_LINKED_CHILD_LABEL"
+          default="0" >
+          <option value="0">JHIDE</option>
+          <option value="1">JSHOW</option>
+       </field>
+
+       <field name="showl_icons"
+          type="radio" default="0" class="btn-group"
+          label="JGLOBAL_SHOW_ICONS_LABEL"
+          description="JGLOBAL_SHOW_ICONS_DESC">
+          <option   value="0">JHIDE</option>
+          <option   value="1">JSHOW</option>
+       </field>
+
+       <field name="showl_print_icon" 
+          type="radio" default="0" class="btn-group"
+          label="JGLOBAL_SHOW_PRINT_ICON_LABEL"
+          description="JGLOBAL_SHOW_PRINT_ICON_DESC">
+          <option   value="0">JHIDE</option>
+          <option   value="1">JSHOW</option>
+       </field>
+
+       <field name="showl_email_icon"
+          type="radio" default="0" class="btn-group"
+          label="JGLOBAL_SHOW_EMAIL_ICON_LABEL"
+          description="JGLOBAL_SHOW_EMAIL_ICON_DESC">
+          <option   value="0">JHIDE</option>
+          <option   value="1">JSHOW</option>
+       </field>
+
+       <field type="spacer" name="spacerb" label="COM_ISSUETRACKER_ISSUE_LIST_DISPLAY_OPTIONS" 
+          description="COM_ISSUETRACKER_ISSUE_LIST_DISPLAY_OPTIONS_DESC" />
+
+       <field name="showl_issue_description" type="radio" class="btn-group"
+          description="COM_ISSUETRACKER_FIELD_SHOW_DESC_DESC"
+          label="COM_ISSUETRACKER_FIELD_SHOW_DESC_LABEL"
+          default="1">
+          <option value="0">JHIDE</option>
+          <option value="1">JSHOW</option>
+       </field>
+
+       <field name="showl_identified_by" type="radio" class="btn-group"
+          description="COM_ISSUETRACKER_FIELD_SHOW_IDENTIFIER_DESC"
+          label="COM_ISSUETRACKER_FIELD_SHOW_IDENTIFIER_LABEL"
+          default="1">
+          <option value="0">JHIDE</option>
+          <option value="1">JSHOW</option>
+       </field>
+ 
+       <field name="showl_identified_date" type="radio" class="btn-group"
+          description="COM_ISSUETRACKER_FIELD_SHOW_IDENTIFIED_DATE_DESC"
+          label="COM_ISSUETRACKER_FIELD_SHOW_IDENTIFIED_DATE_LABEL"
+          default="1">
+          <option value="0">JHIDE</option>
+          <option value="1">JSHOW</option>
+       </field>
+
+       <field name="showl_project_name" type="radio" class="btn-group"
+          description="COM_ISSUETRACKER_FIELD_SHOW_PROJECT_NAME_DESC"
+          label="COM_ISSUETRACKER_FIELD_SHOW_PROJECT_NAME_LABEL"
+          default="1">
+          <option value="0">JHIDE</option>
+          <option value="1">JSHOW</option>
+       </field>
+
+       <field name="showl_issue_status" type="radio" class="btn-group"
+          description="COM_ISSUETRACKER_FIELD_SHOW_ISSUE_STATUS_DESC"
+          label="COM_ISSUETRACKER_FIELD_SHOW_ISSUE_STATUS_LABEL"
+          default="1">
+          <option value="0">JHIDE</option>
+          <option value="1">JSHOW</option>
+       </field>
+
+       <field name="showl_issue_priority" type="radio" class="btn-group"
+          description="COM_ISSUETRACKER_FIELD_SHOW_ISSUE_PRIORITY_DESC"
+          label="COM_ISSUETRACKER_FIELD_SHOW_ISSUE_PRIORITY_LABEL"
+          default="1">
+          <option value="0">JHIDE</option>
+          <option value="1">JSHOW</option>
+       </field>
+
+       <field name="showl_issue_id" type="radio" class="btn-group"
+          description="COM_ISSUETRACKER_FIELD_SHOW_ID_DESC"
+          label="COM_ISSUETRACKER_FIELD_SHOW_ID_LABEL"
+          default="0">
+          <option value="0">JHIDE</option>
+          <option value="1">JSHOW</option>
+       </field>
+
+       <field name="showl_issue_no" type="radio" class="btn-group"
+          description="COM_ISSUETRACKER_FIELD_SHOW_ISSUE_NO_DESC"
+          label="COM_ISSUETRACKER_FIELD_SHOW_ISSUE_NO_LABEL"
+          default="1">
+          <option value="0">JHIDE</option>
+          <option value="1">JSHOW</option>
+       </field>
+
+       <field name="showl_staff_details" type="radio" class="btn-group"
+          description="COM_ISSUETRACKER_FIELD_SHOW_STAFF_DETAILS_DESC"
+          label="COM_ISSUETRACKER_FIELD_SHOW_STAFF_DETAILS_LABEL"
+          default="0">
+          <option value="0">JHIDE</option>
+          <option value="1">JSHOW</option>
+       </field>
+
+       <field name="showl_progress_field" type="radio" class="btn-group"
+          description="COM_ISSUETRACKER_FIELD_SHOW_PROGRESS_DESC"
+          label="COM_ISSUETRACKER_FIELD_SHOW_PROGRESS_LABEL"
+          default="0">
+          <option value="0">JHIDE</option>
+          <option value="1">JSHOW</option>
+       </field>
+
+       <field name="showl_actual_res_date" type="radio" class="btn-group"
+          description="COM_ISSUETRACKER_FIELD_SHOW_ACTUAL_RES_DATE_DESC"
+          label="COM_ISSUETRACKER_FIELD_SHOW_ACTUAL_RES_DATE_LABEL"
+          default="0">
+          <option value="0">JHIDE</option>
+          <option value="1">JSHOW</option>
+       </field>
+
+       <field name="showl_resolution_field" type="radio" class="btn-group"
+          description="COM_ISSUETRACKER_FIELD_SHOW_RESOLUTION_DESC"
+          label="COM_ISSUETRACKER_FIELD_SHOW_RESOLUTION_LABEL"
+          default="1">
+          <option value="0">JHIDE</option>
+          <option value="1">JSHOW</option>
+       </field>
+
+       <field name="showl_target_date_field" type="radio" class="btn-group"
+          description="COM_ISSUETRACKER_FIELD_SHOW_TARGET_DATE_DESC"
+          label="COM_ISSUETRACKER_FIELD_SHOW_TARGET_DATE_LABEL"
+          default="0">
+          <option value="0">JHIDE</option>
+          <option value="1">JSHOW</option>
+       </field>
+
+       <field name="showl_audit_fields" type="radio" class="btn-group"
+          description="COM_ISSUETRACKER_FIELD_SHOW_AUDIT_RECS_ALT_DESC"
+          label="COM_ISSUETRACKER_FIELD_SHOW_AUDIT_RECS_LABEL"
+          default="0">
+          <option value="0">JHIDE</option>
+          <option value="1">JSHOW</option>
+       </field>
+         
+       <field name="showl_audit_createdon_field" type="radio" class="btn-group"
+          description="COM_ISSUETRACKER_FIELD_SHOW_AUDIT_CREATEDON_DESC"
+          label="COM_ISSUETRACKER_FIELD_SHOW_AUDIT_CREATEDON_LABEL"
+          default="0">
+          <option value="0">JHIDE</option>
+          <option value="1">JSHOW</option>
+       </field>
+         
+       <field name="showl_audit_createdby_field" type="radio" class="btn-group"
+          description="COM_ISSUETRACKER_FIELD_SHOW_AUDIT_CREATEDBY_DESC"
+          label="COM_ISSUETRACKER_FIELD_SHOW_AUDIT_CREATEDBY_LABEL"
+          default="0">
+          <option value="0">JHIDE</option>
+          <option value="1">JSHOW</option>
+       </field>
+         
+       <field name="showl_audit_modifiedon_field" type="radio" class="btn-group"
+          description="COM_ISSUETRACKER_FIELD_SHOW_AUDIT_MODIFIEDON_DESC"
+          label="COM_ISSUETRACKER_FIELD_SHOW_AUDIT_MODIFIEDON_LABEL"
+          default="0">
+          <option value="0">JHIDE</option>
+          <option value="1">JSHOW</option>
+       </field>
+         
+       <field name="showl_audit_modifiedby_field" type="radio" class="btn-group"
+          description="COM_ISSUETRACKER_FIELD_SHOW_AUDIT_MODIFIEDBY_DESC"
+          label="COM_ISSUETRACKER_FIELD_SHOW_AUDIT_MODIFIEDBY_LABEL"
+          default="0">
+          <option value="0">JHIDE</option>
+          <option value="1">JSHOW</option>
+       </field>
+       
+       <field type="spacer" name="spacerc" label="COM_ISSUETRACKER_FILTER_DISPLAY_OPTIONS"
+          description="COM_ISSUETRACKER_FILTER_DISPLAY_OPTIONS_DESC" />
+
+       <field name="showl_type_filter" type="radio" class="btn-group"
+          description="COM_ISSUETRACKER_FIELD_SHOW_TYPE_FILTER_DESC"
+          label="COM_ISSUETRACKER_FIELD_SHOW_TYPE_FILTER_LABEL"
+          default="1">
+          <option value="0">JHIDE</option>
+          <option value="1">JSHOW</option>
+       </field>
+       <field name="showl_priority_filter" type="radio" class="btn-group"
+           description="COM_ISSUETRACKER_FIELD_SHOW_PRIORITY_FILTER_DESC"
+           label="COM_ISSUETRACKER_FIELD_SHOW_PRIORITY_FILTER_LABEL"
+           default="1">
+           <option value="0">JHIDE</option>
+           <option value="1">JSHOW</option>
+        </field>
+        <field name="showl_status_filter" type="radio" class="btn-group"
+           description="COM_ISSUETRACKER_FIELD_SHOW_STATUS_FILTER_DESC"
+           label="COM_ISSUETRACKER_FIELD_SHOW_STATUS_FILTER_LABEL"
+           default="1">
+           <option value="0">JHIDE</option>
+           <option value="1">JSHOW</option>
+        </field>
+
+       <field type="spacer" name="spacerd" label="COM_ISSUETRACKER_CHILD_DISPLAY_OPTIONS" 
+          description="COM_ISSUETRACKER_CHILD_DISPLAY_OPTIONS_DESC" />
+
+       <field name="show_icons" type="radio" default="0" class="btn-group"
+          label="JGLOBAL_SHOW_ICONS_LABEL"
+          description="JGLOBAL_SHOW_ICONS_DESC">
+          <option  value="0">JHIDE</option>
+          <option  value="1">JSHOW</option>
+       </field>
+
+       <field name="show_print_icon" type="radio" default="0" class="btn-group"
+          label="JGLOBAL_SHOW_PRINT_ICON_LABEL"
+          description="JGLOBAL_SHOW_PRINT_ICON_DESC">
+          <option  value="0">JHIDE</option>
+          <option  value="1">JSHOW</option>
+       </field>
+
+       <field name="show_email_icon" type="radio" default="0" class="btn-group"
+          label="JGLOBAL_SHOW_EMAIL_ICON_LABEL"
+          description="JGLOBAL_SHOW_EMAIL_ICON_DESC">
+          <option  value="0">JHIDE</option>
+          <option  value="1">JSHOW</option>
+       </field>
+
+       <field name="show_issue_description" type="radio" class="btn-group"
+          description="COM_ISSUETRACKER_FIELD_SHOW_DESC_DESC"
+          label="COM_ISSUETRACKER_FIELD_SHOW_DESC_LABEL"
+          default="1">
+          <option value="0">JHIDE</option>
+          <option value="1">JSHOW</option>
+       </field>
+
+       <field name="show_identified_by" type="radio" class="btn-group"
+          description="COM_ISSUETRACKER_FIELD_SHOW_IDENTIFIER_DESC"
+          label="COM_ISSUETRACKER_FIELD_SHOW_IDENTIFIER_LABEL"
+          default="1">
+          <option value="0">JHIDE</option>
+          <option value="1">JSHOW</option>
+       </field>
+ 
+       <field name="show_identified_date" type="radio" class="btn-group"
+          description="COM_ISSUETRACKER_FIELD_SHOW_IDENTIFIED_DATE_DESC"
+          label="COM_ISSUETRACKER_FIELD_SHOW_IDENTIFIED_DATE_LABEL"
+          default="1">
+          <option value="0">JHIDE</option>
+          <option value="1">JSHOW</option>
+       </field>
+
+       <field name="show_project_name" type="radio" class="btn-group"
+          description="COM_ISSUETRACKER_FIELD_SHOW_PROJECT_NAME_DESC"
+          label="COM_ISSUETRACKER_FIELD_SHOW_PROJECT_NAME_LABEL"
+          default="1">
+          <option value="0">JHIDE</option>
+          <option value="1">JSHOW</option>
+       </field>
+
+       <field name="show_issue_status" type="radio" class="btn-group"
+          description="COM_ISSUETRACKER_FIELD_SHOW_ISSUE_STATUS_DESC"
+          label="COM_ISSUETRACKER_FIELD_SHOW_ISSUE_STATUS_LABEL"
+          default="1">
+          <option value="0">JHIDE</option>
+          <option value="1">JSHOW</option>
+       </field>
+
+       <field name="show_issue_priority" type="radio" class="btn-group"
+          description="COM_ISSUETRACKER_FIELD_SHOW_ISSUE_PRIORITY_DESC"
+          label="COM_ISSUETRACKER_FIELD_SHOW_ISSUE_PRIORITY_LABEL"
+          default="1">
+          <option value="0">JHIDE</option>
+          <option value="1">JSHOW</option>
+       </field>
+
+       <field name="show_issue_id" type="radio" class="btn-group"
+          description="COM_ISSUETRACKER_FIELD_SHOW_ID_DESC"
+          label="COM_ISSUETRACKER_FIELD_SHOW_ID_LABEL"
+          default="0">
+          <option value="0">JHIDE</option>
+          <option value="1">JSHOW</option>
+       </field>
+
+       <field name="show_issue_no" type="radio" class="btn-group"
+          description="COM_ISSUETRACKER_FIELD_SHOW_ISSUE_NO_DESC"
+          label="COM_ISSUETRACKER_FIELD_SHOW_ISSUE_NO_LABEL"
+          default="1">
+          <option value="0">JHIDE</option>
+          <option value="1">JSHOW</option>
+       </field>
+
+       <field name="show_staff_details" type="radio" class="btn-group"
+          description="COM_ISSUETRACKER_FIELD_SHOW_STAFF_DETAILS_DESC"
+          label="COM_ISSUETRACKER_FIELD_SHOW_STAFF_DETAILS_LABEL"
+          default="0">
+          <option value="0">JHIDE</option>
+          <option value="1">JSHOW</option>
+       </field>
+
+       <field name="show_progress_field" type="radio" class="btn-group"
+          description="COM_ISSUETRACKER_FIELD_SHOW_PROGRESS_DESC"
+          label="COM_ISSUETRACKER_FIELD_SHOW_PROGRESS_LABEL"
+          default="0">
+          <option value="0">JHIDE</option>
+          <option value="1">JSHOW</option>
+       </field>
+
+       <field name="show_actual_res_date" type="radio" class="btn-group"
+          description="COM_ISSUETRACKER_FIELD_SHOW_ACTUAL_RES_DATE_DESC"
+          label="COM_ISSUETRACKER_FIELD_SHOW_ACTUAL_RES_DATE_LABEL"
+          default="0">
+          <option value="0">JHIDE</option>
+          <option value="1">JSHOW</option>
+       </field>
+
+       <field name="show_resolution_field" type="radio" class="btn-group"
+          description="COM_ISSUETRACKER_FIELD_SHOW_RESOLUTION_DESC"
+          label="COM_ISSUETRACKER_FIELD_SHOW_RESOLUTION_LABEL"
+          default="1">
+          <option value="0">JHIDE</option>
+          <option value="1">JSHOW</option>
+       </field>
+
+       <field name="show_target_date_field" type="radio" class="btn-group"
+          description="COM_ISSUETRACKER_FIELD_SHOW_TARGET_DATE_DESC"
+          label="COM_ISSUETRACKER_FIELD_SHOW_TARGET_DATE_LABEL"
+          default="0">
+          <option value="0">JHIDE</option>
+          <option value="1">JSHOW</option>
+       </field>
+
+       <field name="show_audit_fields" type="radio" class="btn-group"
+          description="COM_ISSUETRACKER_FIELD_SHOW_AUDIT_RECS_DESC"
+          label="COM_ISSUETRACKER_FIELD_SHOW_AUDIT_RECS_LABEL"
+          default="0">
+          <option value="0">JHIDE</option>
+          <option value="1">JSHOW</option>
+       </field>       
+   </fieldset>
+
+   <fieldset name="attachments" label="COM_ISSUETRACKER_CONFIG_ATTACHMENT_TITLE" description="COM_ISSUETRACKER_CONFIG_ATTACHMENT_DESC">
+      <field name="enable_attachments" type="radio" default="0" 
+         class="btn-group"
+         label="COM_ISSUETRACKER_ENABLE_ATTACHMENT_LABEL" 
+         description="COM_ISSUETRACKER_ENABLE_ATTCHMENT_DESC">
+         <option value="0">JNO</option>
+         <option value="1">JYES</option>
+      </field>
+
+     <field name="attachment_path" type="text"        
+         default="media/com_issuetracker/attachments" 
+         label="COM_ISSUETRACKER_CUSTOM_PATH_LABEL" 
+         size="50"
+         description="COM_ISSUETRACKER_CUSTOM_PATH_DESC" />
+
+      <field name="attachment_layout" type="list" default="icon" label="COM_ISSUETRACKER_ATTACHMENT_LAYOUT_LABEL" 
+         description="COM_ISSUETRACKER_ATTACHMENT_LAYOUT_DESC">
+         <option value="icon">COM_ISSUETRACKER_ICON_TEXT</option>
+         <option value="list">COM_ISSUETRACKER_LIST_TEXT</option>
+      </field>
+   
+      <field name="max_files" type="text" filter="integer" label="COM_ISSUETRACKER_MAXIMUM_FILES_LABEL" 
+         description="COM_ISSUETRACKER_MAXIMUM_FILES_DESC" 
+         default="3" />
+          
+      <field name="max_file_size" type="text" filter="integer" label="COM_ISSUETRACKER_MAXIMUM_FILE_SIZE_LABEL" 
+         description="COM_ISSUETRACKER_MAXIMUM_FILE_SIZE_DESC" 
+         default="2" />
+         
+      <field name="upload_extensions" type="text" size="50"
+         default="bmp,csv,doc,gif,ico,jpg,jpeg,odg,odp,ods,odt,pdf,png,ppt,swf,txt,xcf,xls,BMP,CSV,DOC,GIF,ICO,JPG,JPEG,ODG,ODP,ODS,ODT,PDF,PNG,PPT,SWF,TXT,XCF,XLS"
+         label="COM_ISSUETRACKER_FIELD_LEGAL_EXTENSIONS_LABEL"
+         description="COM_TRACKER_FIELD_LEGAL_EXTENSIONS_DESC" />
+         
+   </fieldset> 
+
+   <fieldset name="logging" label="COM_ISSUETRACKER_LOGGING_LABEL" description="COM_ISSUETRACKER_LOGGING_DESC">      
+      <field name="enablelogging" 
+         type="radio"
+         class="btn-group"
+         default="0"
+         label="COM_ISSUETRACKER_FIELD_CONFIG_ENABLE_LOGGING_LABEL" 
+         description="COM_ISSUETRACKER_FIELD_CONFIG_ENABLE_LOGGING_DESC" >
+         <option value="0">JNO</option>
+         <option value="1">JYES</option>
+      </field>
+   </fieldset>
+
+   <fieldset name="permissions" label="JCONFIG_PERMISSIONS_LABEL" description="JCONFIG_PERMISSIONS_DESC">      
       <field name="rules" 
          type="rules" 
          label="JCONFIG_PERMISSIONS_LABEL" class="inputbox" validate="rules" 

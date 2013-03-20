@@ -1,14 +1,14 @@
 <?php
 /*
  *
- * @Version       $Id: itissueslist.php 454 2012-09-11 17:06:01Z geoffc $
+ * @Version       $Id: itissueslist.php 689 2013-02-06 17:38:45Z geoffc $
  * @Package       Joomla Issue Tracker
  * @Subpackage    com_issuetracker
- * @Release       1.2.2
- * @Copyright     Copyright (C) 2011 - 2012 Macrotone Consulting Ltd. All rights reserved.
+ * @Release       1.3.0
+ * @Copyright     Copyright (C) 2011-2013 Macrotone Consulting Ltd. All rights reserved.
  * @License       GNU General Public License version 3 or later; see LICENSE.txt
  * @Contact       support@macrotoneconsulting.co.uk
- * @Lastrevision  $Date: 2012-09-11 18:06:01 +0100 (Tue, 11 Sep 2012) $
+ * @Lastrevision  $Date: 2013-02-06 17:38:45 +0000 (Wed, 06 Feb 2013) $
  *
  */
 
@@ -45,12 +45,15 @@ class IssueTrackerModelItissueslist extends JModelList
                 'issue_summary', 'a.issue_summary',
                 'issue_description', 'a.issue_description',
                 'alias', 'a.alias',
-                'project_name', 't2.project_name',
+                'project_name', 't2.title',
                 'person_name', 't3.person_name',
                 'identifying_name', 't7.person_name',
                 'status', 'a.status',
+                'public', 'a.public',
                 'issue_type', 'a.issue_type',
                 'priority', 'a.priority',
+                'identified_date','a.identified_date',
+                'actual_resolution_date','a.actual_resolution_date',
                 'created_by','a.created_by',
                 'created_on','a.created_on',
                 'modified_by','a.modified_by',
@@ -168,7 +171,7 @@ class IssueTrackerModelItissueslist extends JModelList
       $query->from('`#__it_issues` AS a');
 
       // Join over the it_projects table.
-      $query->select('t2.project_name AS project_name, t2.id AS project_id');
+      $query->select('t2.title AS project_name, t2.id AS project_id');
       $query->join('LEFT', '#__it_projects AS t2 ON t2.id = a.related_project_id');
 
       // Join over the it_people table.
@@ -184,7 +187,7 @@ class IssueTrackerModelItissueslist extends JModelList
       $query->join('LEFT', '#__it_status AS t4 ON t4.id = a.status');
 
       // Join over the it_priority table.
-      $query->select('t5.priority_name AS priority_name');
+      $query->select('t5.priority_name AS priority_name, t5.ranking as ranking');
       $query->join('LEFT', '#__it_priority AS t5 ON t5.id = a.priority');
 
       // Join over the it_types table.
@@ -269,7 +272,7 @@ class IssueTrackerModelItissueslist extends JModelList
          if (stripos($search, 'id:') === 0) {
             $query->where('a.id = '.(int) substr($search, 3));
          } else {
-            $search = $db->Quote('%'.$db->getEscaped($search, true).'%');
+            $search = $db->Quote('%'.$db->escape($search, true).'%');
                 $query->where('( a.issue_summary LIKE '.$search.'  OR  a.issue_description LIKE '.$search.' OR a.progress LIKE '.$search.' OR a.resolution_summary LIKE '.$search.' OR a.alias LIKE '.$search.')');
          }
       }
@@ -278,7 +281,7 @@ class IssueTrackerModelItissueslist extends JModelList
       $orderCol   = $this->state->get('list.ordering');
       $orderDirn  = $this->state->get('list.direction');
         if ($orderCol && $orderDirn) {
-          $query->order($db->getEscaped($orderCol.' '.$orderDirn));
+          $query->order($db->escape($orderCol.' '.$orderDirn));
         }
 
       return $query;
@@ -293,7 +296,7 @@ class IssueTrackerModelItissueslist extends JModelList
    {
       $db = JFactory::getDBO();
 
-      $query  = "SELECT t1.id, t1.issue_summary, t2.project_name, t1.state, DATE_FORMAT( t1.identified_date, \"%d.%m.%Y\") AS issuedate ";
+      $query  = "SELECT t1.id, t1.issue_summary, t2.title as project_name, t1.state, DATE_FORMAT( t1.identified_date, \"%d.%m.%Y\") AS issuedate ";
       $query .= " ,t2.id AS project_id ";
       $query .= "FROM #__it_issues t1 ";
       $query .= "LEFT JOIN #__it_projects AS t2 ON t2.id = t1.related_project_id ";
@@ -315,7 +318,7 @@ class IssueTrackerModelItissueslist extends JModelList
       $db = JFactory::getDBO();
 
       $query  = "SELECT i.id, pr.priority_name AS priority, i.issue_summary, ";
-      $query .= "       p.person_name assignee, DATE_FORMAT(i.target_resolution_date, \"%d.%m.%Y\") AS target_resolution_date, r.project_name ";
+      $query .= "       p.person_name assignee, DATE_FORMAT(i.target_resolution_date, \"%d.%m.%Y\") AS target_resolution_date, r.title AS project_name ";
       $query .= " ,r.id as project_id ";
       $query .= "FROM `#__it_issues` i ";
       $query .= "RIGHT OUTER JOIN `#__it_people` p ";
@@ -345,7 +348,7 @@ class IssueTrackerModelItissueslist extends JModelList
    {
       $db = JFactory::getDBO();
 
-      $query  = "SELECT project_name, t2.id as project_id, ";
+      $query  = "SELECT title as project_name, t2.id as project_id, ";
       $query .= "   DATE_FORMAT( MIN(identified_date), \"%d.%m.%Y\") AS first_identified, ";
       $query .= "   DATE_FORMAT( MAX(actual_resolution_date), \"%d.%m.%Y\") AS last_closed, ";
       $query .= "   COUNT(t1.id) AS total_issues, ";
@@ -366,6 +369,7 @@ class IssueTrackerModelItissueslist extends JModelList
 
       $db->setQuery($query);
       $rows = $db->loadObjectList();
+
       $rows = IssueTrackerHelper::updateprojectname($rows);
 
       return $rows;
@@ -384,7 +388,7 @@ class IssueTrackerModelItissueslist extends JModelList
       $query .= "    pr.priority_name AS priority, ";
       $query .= "    i.issue_summary, ";
       $query .= "    DATE_FORMAT(i.target_resolution_date, \"%d.%m.%Y\") AS target_resolution_date, ";
-      $query .= "    r.project_name, ";
+      $query .= "    r.title AS project_name, ";
       $query .= "    r.id AS project_id, ";
       $query .= "    p.person_name AS identifiee ";
       $query .= "FROM #__it_issues i, ";

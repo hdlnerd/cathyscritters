@@ -1,14 +1,14 @@
 <?php
 /*
  *
- * @Version       $Id: edit.php 196 2012-05-02 19:59:40Z geoffc $
+ * @Version       $Id: edit.php 681 2013-02-04 19:52:44Z geoffc $
  * @Package       Joomla Issue Tracker
  * @Subpackage    com_issuetracker
- * @Release       1.1.0
- * @Copyright     Copyright (C) 2011 - 2012 Macrotone Consulting Ltd. All rights reserved.
+ * @Release       1.3.0
+ * @Copyright     Copyright (C) 2011-2013 Macrotone Consulting Ltd. All rights reserved.
  * @License       GNU General Public License version 3 or later; see LICENSE.txt
  * @Contact       support@macrotoneconsulting.co.uk
- * @Lastrevision  $Date: 2012-05-02 20:59:40 +0100 (Wed, 02 May 2012) $
+ * @Lastrevision  $Date: 2013-02-04 19:52:44 +0000 (Mon, 04 Feb 2013) $
  *
  */
 
@@ -52,12 +52,14 @@ JHtml::_('behavior.formvalidation');
          <div class="clr"></div>
          <?php echo $this->form->getInput('description'); ?></li>
 
-         <li>
-            <?php echo $this->form->getLabel('state'); ?>
-            <?php echo $this->form->getInput('state'); ?></li><li><?php echo $this->form->getLabel('checked_out'); ?>
-            <?php echo $this->form->getInput('checked_out'); ?></li><li><?php echo $this->form->getLabel('checked_out_time'); ?>
-            <?php echo $this->form->getInput('checked_out_time'); ?>
-         </li>
+         <li><?php echo $this->form->getLabel('state'); ?>
+            <?php echo $this->form->getInput('state'); ?></li>
+
+         <li><?php echo $this->form->getLabel('checked_out'); ?>
+            <?php echo $this->form->getInput('checked_out'); ?></li>
+
+         <li><?php echo $this->form->getLabel('checked_out_time'); ?>
+            <?php echo $this->form->getInput('checked_out_time'); ?></li>
 
          </ul>
       </fieldset>

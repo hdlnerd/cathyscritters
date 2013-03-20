@@ -1,14 +1,14 @@
 <?php
 /*
  *
- * @Version       $Id: view.html.php 74 2012-03-27 16:33:46Z geoffc $
+ * @Version       $Id: view.html.php 669 2013-01-04 14:39:25Z geoffc $
  * @Package       Joomla Issue Tracker
  * @Subpackage    com_issuetracker
- * @Release       1.0.0
- * @Copyright     Copyright (C) 2011 - 2012 Macrotone Consulting Ltd. All rights reserved.
+ * @Release       1.2.3
+ * @Copyright     Copyright (C) 2011-2013 Macrotone Consulting Ltd. All rights reserved.
  * @License       GNU General Public License version 3 or later; see LICENSE.txt
  * @Contact       support@macrotoneconsulting.co.uk
- * @Lastrevision  $Date: 2012-03-27 17:33:46 +0100 (Tue, 27 Mar 2012) $
+ * @Lastrevision  $Date: 2013-01-04 14:39:25 +0000 (Fri, 04 Jan 2013) $
  *
  */
 
@@ -18,7 +18,7 @@ defined('_JEXEC') or die('Restricted Access');
 // Load framework base classes
 jimport('joomla.application.component.view');
 
-class IssueTrackerViewDbtasks extends JView
+class IssueTrackerViewDbtasks extends JViewLegacy
 {
    function  display($tpl = null)
    {
@@ -42,7 +42,7 @@ class IssueTrackerViewDbtasks extends JView
       }
 
       // Shouldn't really do this here, but for the moment it will suffice.
-      $app =& JFactory::getApplication();
+      $app = JFactory::getApplication();
       $app->redirect('index.php?option=com_issuetracker', $msg);
       return;
    }

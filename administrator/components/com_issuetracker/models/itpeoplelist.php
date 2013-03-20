@@ -1,14 +1,14 @@
 <?php
 /*
  *
- * @Version       $Id: itpeoplelist.php 307 2012-08-13 10:30:05Z geoffc $
+ * @Version       $Id: itpeoplelist.php 697 2013-02-09 19:11:44Z geoffc $
  * @Package       Joomla Issue Tracker
  * @Subpackage    com_issuetracker
- * @Release       1.2.0
- * @Copyright     Copyright (C) 2011 - 2012 Macrotone Consulting Ltd. All rights reserved.
+ * @Release       1.2.3
+ * @Copyright     Copyright (C) 2011-2013 Macrotone Consulting Ltd. All rights reserved.
  * @License       GNU General Public License version 3 or later; see LICENSE.txt
  * @Contact       support@macrotoneconsulting.co.uk
- * @Lastrevision  $Date: 2012-08-13 11:30:05 +0100 (Mon, 13 Aug 2012) $
+ * @Lastrevision  $Date: 2013-02-09 19:11:44 +0000 (Sat, 09 Feb 2013) $
  *
  */
 
@@ -138,7 +138,7 @@ class IssueTrackerModelItpeoplelist extends JModelList
       $query->join('LEFT', '#__users AS uc ON uc.id=a.checked_out');
 
       // Outer join over the it_projects table since not every person has a project assignment.
-      $query->select('t2.project_name AS project_name, t2.id AS project_id');
+      $query->select('t2.title AS project_name, t2.id AS project_id');
       $query->join('LEFT OUTER', '#__it_projects AS t2 ON t2.id = a.assigned_project');
 
       // Outer join over the it_roles table.
@@ -159,7 +159,7 @@ class IssueTrackerModelItpeoplelist extends JModelList
          if (stripos($search, 'id:') === 0) {
             $query->where('a.id = '.(int) substr($search, 3));
          } else {
-            $search = $db->Quote('%'.$db->getEscaped($search, true).'%');
+            $search = $db->Quote('%'.$db->escape($search, true).'%');
                 $query->where('( a.person_name LIKE '.$search.'  OR  a.person_email LIKE '.$search.' OR a.username LIKE '.$search.')');
          }
       }
@@ -168,30 +168,9 @@ class IssueTrackerModelItpeoplelist extends JModelList
       $orderCol   = $this->state->get('list.ordering');
       $orderDirn  = $this->state->get('list.direction');
         if ($orderCol && $orderDirn) {
-          $query->order($db->getEscaped($orderCol.' '.$orderDirn));
+          $query->order($db->escape($orderCol.' '.$orderDirn));
         }
 
       return $query;
    }
-/*
-      $this->_data = IssueTrackerHelper::updateprojectname($this->_data);
-      return $this->_data;
-*/
-   /**
-    * Methods to get options arrays for published fields
-    * @return object with data
-    */
-/*
-   public function &getProject_id()
-   {
-      $db =& JFactory::getDBO();
-      $db->setQuery( 'SELECT id AS value `project_name` AS text FROM `#__it_projects` ORDER BY `id`');
-      $options = array();
-      foreach( $db->loadObjectList() as $r)
-      {
-         $options[] = JHTML::_('select.option',  $r->value, $r->text );
-      }
-      return $options;
-   }
-*/
 }

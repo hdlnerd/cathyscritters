@@ -1,14 +1,14 @@
 <?php
 /*
  *
- * @Version       $Id: view.html.php 197 2012-05-04 16:10:32Z geoffc $
+ * @Version       $Id: view.html.php 669 2013-01-04 14:39:25Z geoffc $
  * @Package       Joomla Issue Tracker
  * @Subpackage    com_issuetracker
- * @Release       1.1.0
- * @Copyright     Copyright (C) 2011 - 2012 Macrotone Consulting Ltd. All rights reserved.
+ * @Release       1.2.3
+ * @Copyright     Copyright (C) 2011-2013 Macrotone Consulting Ltd. All rights reserved.
  * @License       GNU General Public License version 3 or later; see LICENSE.txt
  * @Contact       support@macrotoneconsulting.co.uk
- * @Lastrevision  $Date: 2012-05-04 17:10:32 +0100 (Fri, 04 May 2012) $
+ * @Lastrevision  $Date: 2013-01-04 14:39:25 +0000 (Fri, 04 Jan 2013) $
  *
  */
 
@@ -27,7 +27,7 @@ if (! class_exists('IssueTrackerHelper')) {
  * @package       Joomla.Components
  * @subpackage    Issue Tracker
  */
-class IssueTrackerViewItprojects extends JView
+class IssueTrackerViewItprojects extends JViewLegacy
 {
    protected $state;
    protected $item;
@@ -41,6 +41,7 @@ class IssueTrackerViewItprojects extends JView
       $this->state   = $this->get('State');
       $this->item    = $this->get('Item');
       $this->form    = $this->get('Form');
+      $this->canDo   = IssueTrackerHelper::getActions($this->state->get('projects.component'));
 
       // Check for errors.
       if (count($errors = $this->get('Errors'))) {

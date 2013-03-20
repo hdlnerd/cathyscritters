@@ -2,14 +2,14 @@
 /**
  * sh404SEF support for com_issuetracker component.
  *
- * @Version       $Id: com_issuetracker.php 332 2012-08-20 19:00:51Z geoffc $
+ * @Version       $Id: com_issuetracker.php 669 2013-01-04 14:39:25Z geoffc $
  * @Package       Joomla Issue Tracker
  * @Subpackage    com_issuetracker
- * @Release       1.2.0
- * @Copyright     Copyright (C) 2011 - 2012 Macrotone Consulting Ltd. All rights reserved.
+ * @Release       1.2.3
+ * @Copyright     Copyright (C) 2011-2013 Macrotone Consulting Ltd. All rights reserved.
  * @License       GNU General Public License version 3 or later; see LICENSE.txt
  * @Contact       support@macrotoneconsulting.co.uk
- * @Lastrevision  $Date: 2012-08-20 20:00:51 +0100 (Mon, 20 Aug 2012) $
+ * @Lastrevision  $Date: 2013-01-04 14:39:25 +0000 (Fri, 04 Jan 2013) $
  *
  */
 defined( '_JEXEC' ) or die( 'Direct Access to this location is not allowed.' );
@@ -121,7 +121,7 @@ if(isset($controller)) {
 }
 
 // Need the id in the url since we will get called many times for different ids selected from the list views.
-// If we do not have it the Beez template open/close info truncates the id from the end of the url agter the .html text.
+// If we do not have it the Beez template open/close info truncates the id from the end of the url after the .html text.
 if(!empty($id) && $add_idname) {
    if(!empty($idname))  {
       if ($view == 'itissues' || $view == 'form' ) {

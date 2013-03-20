@@ -1,14 +1,14 @@
 <?php
 /*
  *
- * @Version       $Id: itissues.php 457 2012-09-12 09:13:59Z geoffc $
+ * @Version       $Id: itissues.php 731 2013-02-26 14:59:01Z geoffc $
  * @Package       Joomla Issue Tracker
  * @Subpackage    com_issuetracker
- * @Release       1.2.1
- * @Copyright     Copyright (C) 2011 - 2012 Macrotone Consulting Ltd. All rights reserved.
+ * @Release       1.3.0
+ * @Copyright     Copyright (C) 2011-2013 Macrotone Consulting Ltd. All rights reserved.
  * @License       GNU General Public License version 3 or later; see LICENSE.txt
  * @Contact       support@macrotoneconsulting.co.uk
- * @Lastrevision  $Date: 2012-09-12 10:13:59 +0100 (Wed, 12 Sep 2012) $
+ * @Lastrevision  $Date: 2013-02-26 14:59:01 +0000 (Tue, 26 Feb 2013) $
  *
  */
 
@@ -16,13 +16,16 @@
 defined('_JEXEC') or die('Restricted access');
 
 jimport('joomla.application.component.modelitem');
+if(!defined('DS')) define('DS', DIRECTORY_SEPARATOR);
 
 if (! class_exists('IssueTrackerHelper')) {
     require_once( JPATH_ADMINISTRATOR.DS.'components'.DS.'com_issuetracker'.DS.'helpers'.DS.'issuetracker.php');
 }
 
-// JLoader::register('Akismet', JPATH_ADMINISTRATOR.DS.'components'.DS.'com_issuetracker'.DS.'classes'.'Akismet.php');
-// JLoader::register('Akismet', dirname(__FILE__).'/../../../administrator/components/com_issuetracker/classes/Akismet.php');
+if (! class_exists('IssueTrackerHelperLog')) {
+    require_once( JPATH_ADMINISTRATOR.DS.'components'.DS.'com_issuetracker'.DS.'helpers'.DS.'log.php');
+}
+
 if (! class_exists('Akismet')) {
     require_once( JPATH_ADMINISTRATOR.DS.'components'.DS.'com_issuetracker'.DS.'classes'.DS.'Akismet.php');
 }
@@ -78,6 +81,10 @@ class IssuetrackerModelItissues extends JModelItem
       $offset = JRequest::getUInt('limitstart');
       $this->setState('list.offset', $offset);
 
+      // Get value if pid was specified.
+      $pid = JRequest::getCmd('project_value');
+      $this->setState('project_value', $pid);
+
       // Load the parameters.
       $params = $app->getParams();
       $this->setState('params', $params);
@@ -95,18 +102,14 @@ class IssuetrackerModelItissues extends JModelItem
       $query->select(
          $this->getState(
          'list.select',
-         't1.id, t1.asset_id, t1.alias, t1.issue_summary, t1.issue_description, t1.identified_by_person_id, ' .
-         't1.identified_date, t1.related_project_id, t1.assigned_to_person_id, t1.status, t1.state, t1.priority, ' .
-         't1.issue_type, ' .
-         't1.target_resolution_date, t1.progress, t1.actual_resolution_date, t1.resolution_summary, ' .
-         't1.created_on, t1.created_by, t1.modified_on, t1.modified_by'
+         't1.*'
          )
       );
 
       $query->from('#__it_issues AS t1');
 
       // Join over the it_projects table.
-      $query->select('t2.project_name AS project_name, t2.id AS project_id');
+      $query->select('t2.title AS project_name, t2.id AS project_id');
       $query->join('LEFT', '#__it_projects AS t2 ON t2.id = t1.related_project_id');
 
       // Join over the it_people table.
@@ -206,7 +209,8 @@ class IssuetrackerModelItissues extends JModelItem
                   if ($user->username == $data->created_by ) {
                      $data->params->set('access-edit', true);
                   }
-                  if ($userId == $data->identified_by_person_id ) {
+                  $person_id = IssueTrackerHelper::get_itpeople_id($user->id);
+                  if ($person_id == $data->identified_by_person_id ) {
                      $data->params->set('access-edit', true);
                   }
                // Now add check if issue admin
@@ -258,7 +262,7 @@ class IssuetrackerModelItissues extends JModelItem
       $db = JFactory::getDBO();
       // Now need to merge in to get the full project name.
 
-      $query = 'SELECT a.project_name AS text, a.id AS value, a.parent_id as parentid'
+      $query = 'SELECT a.title AS text, a.id AS value, a.parent_id as parentid'
          . ' FROM #__it_projects AS a';
       $db->setQuery( $query );
       $rows2 = $db->loadObjectList();
@@ -270,7 +274,7 @@ class IssuetrackerModelItissues extends JModelItem
 
       foreach ($tree as $key2) {
          if ($row->related_project_id == $key2->value) {
-            $row->project_name = $key2->text;
+            $row->title = $key2->text;
             break;    // Exit inner foreach since we have found out match.
          }
       }
@@ -348,19 +352,29 @@ class IssuetrackerModelItissues extends JModelItem
       if (empty($data['issue_type']))  { $data['issue_type'] = $def_type; }
 
       // If status is closed and actual resolution date is not set, then set it.
-      if ($data['status'] == $closed_status && empty($data['actual_resolution_date']) ) { $data['actual_resolution_date'] = "$date"; }
-      // If status is not closed set actual_resoltion_date to null
-      if ($data['status'] != $closed_status) { $data['actual_resolution_date'] = ""; }
+      if ($data['status'] == $closed_status ) {
+         // Check time elements on important date fields
+         $this->checktime($data['actual_resolution_date']);
+         if ( empty($data['actual_resolution_date']) ) $data['actual_resolution_date'] = "$date";
+      } else {
+         // If status is not closed set actual_resoltion_date to null
+         $data['actual_resolution_date'] = "";
+      }
+
+
       // If identified date is empty set it to today.
       if (empty($data['identified_date'])) { $data['identified_date'] = "$date"; }
-      // If identifed by field is empty set it to current user.  At this stage we do not know the guest user so set to default.
+
+      // If identified by field is empty set it to current user.  At this stage we do not know the guest user so set to default.
       if (empty($data['identified_by_person_id']) || $data['identified_by_person_id'] == 1) {
          if ( $user->guest ) {
             $data['identified_by_person_id'] = $def_identby;
          } else {
+          if (! IssueTrackerHelper::isIssueAdmin($user->id) )
             $data['identified_by_person_id'] = IssueTrackerHelper::get_itpeople_id($user->id);
          }
       }
+
       // If assigned_to field is empty set it to default assignee if it is valid, NULL otherwise.
       if (empty($data['assigned_to_person_id']) || $data['assigned_to_person_id'] == 0) {
          // Check default assignee
@@ -407,6 +421,34 @@ class IssuetrackerModelItissues extends JModelItem
       // If priority not set set it to Low
       if (empty($data['priority']) )   { $data['priority'] = $def_priority; }
 
+      // Check time elements on important date fields
+      if ( $data['status'] == $open_status)
+         $this->checktime($data['identified_date']);
+
+      return;
+   }
+
+   /*
+    * Method to cludge the time element on a date where the time element is missing.
+    * typically this is the situation where the 'calendar JForm drop down has been used.
+    *
+    * Note that often the hour has actually been set with an offset for the time zone applied
+    * so it is only the minutes and seconds beinfg zero that we can check.
+    * There is a small chance that the time was exactly on the hour but that is hopefully rare.
+    *
+    */
+   private function checktime( & $idate)
+   {
+      $cdate = JFactory::getDate();
+
+      if (empty($idate) ) return;
+
+      if ( substr($idate, 0, 5) != '00/00' ) {
+         if ( substr($idate, 14, 5) == '00:00') {
+            $string = $cdate->toFormat('%H:%M:%S');
+            $idate = substr($idate,0,11).$string;
+         }
+      }
       return;
    }
 
@@ -433,6 +475,7 @@ class IssuetrackerModelItissues extends JModelItem
       // Get parameters for new user creation.
       $this->_params = JComponentHelper::getParams( 'com_issuetracker' );
       $def_notify    = $this->_params->get('def_notify', 0);
+      $logging       = $this->_params->get('enableloggings', '0');
 
       // Find out if we are an issue administrator.
       $isadmin = 0;
@@ -453,40 +496,71 @@ class IssuetrackerModelItissues extends JModelItem
          }
       }
 
+      // Special case where issue details not display on form.
+      // Get the Menu parameters to determine which projects have been selected.
+      // Unless we are a Issue Administrator since we may be editing the issue.
+      $minput = JFactory::getApplication()->input;
+      $menuitemid = $minput->getInt( 'Itemid' ); // this returns the menu id number so we can reference parameters
+      $menu = JSite::getMenu();
+      if ($menuitemid) {
+         $menuparams = $menu->getParams( $menuitemid );
+         $projects = $menuparams->get('projects');
+      }
+
+      if ( $menuparams->get('show_details_section',0) == 0 ) {
+         if ( count($projects) == 1 && $projects[0] != 0 ) {
+            $data['related_project_id'] = $projects[0];
+         } else {
+            $data['related_project_id'] = $this->_params->get('def_project', 0);
+         }
+      }
+
+      $pid = $this->getState('project_value', '');
+      if ( !empty($pid) ) {
+         $data['related_project_id'] = $pid;
+      }
+
       // Ensure we capture id field which is outside the jform sub array.
       // Or the values that were not changable in the editor.
       $data['id']       = JRequest::getVar('id', '', 'post', 'double');
 
       if ( ! $data['id'] == 0 ) {
          $t2 = $data['id'];
-         if (empty($db)) {
+         if (empty($db))
             $db = JFactory::getDBO();
-            // Get original record.
-            $query  = "SELECT issue_summary, issue_description, status, priority from `#__it_issues` WHERE id = '".$t2."'";
-            $db->setQuery( $query );
-            $origrec = $db->loadRow();
-         }
+         // Get original record.
+         $query  = "SELECT issue_summary, issue_description, status, priority, identified_by_person_id from `#__it_issues` WHERE id = '".$t2."'";
+         $db->setQuery( $query );
+         $origrec = $db->loadRow();
 
-         if ( empty($data['status']) )
+         if ( ! isset($data['status']) )
             $data['status'] = $origrec[2];
          if (! isset($data['issue_summary']) )
             $data['issue_summary'] = $origrec[0];
          if ( ! isset($data['issue_description']) )
             $data['issue_description'] = $origrec[1];
-         if ( empty($data['priority']) )
+         if ( ! isset($data['priority']) )
             $data['priority'] = $origrec[3];
+         if ( ! isset($data['identified_by_person_id']) )
+            $data['identified_by_person_id'] = $origrec[4];
       } else {
-         if ( empty($data['status']) )     $data['status'] = '';
-         if ( empty($data['priority']) )   $data['priority'] = '';
+         if ( ! isset($data['status']) )     $data['status'] = '';
+         if ( ! isset($data['priority']) )   $data['priority'] = '';
+         if ( ! isset($data['identified_by_person_id']) )   $data['identified_by_person_id'] = '';
+      }
+
+      // If a private issue ensure published is not set.
+      if ( array_key_exists ('public', $data) && $data['public'] == 0 ) {
+         $data['state'] = 0;
       }
 
       // Ensure defaults are all set.
       $this->_setdefaults($data);
 
-     // Get date.
-     $date = JFactory::getDate();
+      // Get date.
+      $date = JFactory::getDate();
 
-     // Populate the progress field with user details if a guest.   A guest cannot edit existing issues.
+      // Populate the progress field with user details if a guest.   A guest cannot edit existing issues.
       if ($user->guest) {
          // Get details for email.
          $Name = $data['user_details']['name'];
@@ -509,11 +583,20 @@ class IssuetrackerModelItissues extends JModelItem
             $data['progress'] .= 'Notify: ' . JRequest::getVar('notify', '', 'post', 'double') . "<br />";
             $data['identified_by_person_id'] = $def_identby;
          } else {
-//            if(empty($Uname) && $autogenuname) $Uname = ucwords(str_replace(array('.','_','-','@'),'_',substr($Email,0,strpos($Email,'@'))));
             // If generate username use email as a base.
             if(empty($Uname) && $autogenuname) $Uname = ucwords(str_replace(array('.','_','-','@'),'_',substr($Email,0)));
             if ( $gnotify == 2) $gnotify = $def_notify;
             $identby = $this->create_new_person ( $Name, $Uname, $Email, $gnotify, $def_role);
+            if ( $identby == '' || $identby == 0 ) {
+               if ( $logging )
+                  IssueTrackerHelperLog::dblog('Error saving user: '.$Name.' Email: '.$Email.' Username: '.$Uname);
+               $identby = $this->_get_anon_user();
+               // Add details to progress field since we could not create the user.
+               if ( ! array_key_exists ('progress', $data) ) $data['progress'] = null;
+               $data['progress'] .= 'Reported By: ' . $data['user_details']['name'] . "<br />";
+               $data['progress'] .= 'Email: ' .  $data['user_details']['email'] . "<br />";
+               $data['progress'] .= 'Notify: ' . JRequest::getVar('notify', '', 'post', 'double') . "<br />";
+            }
             $data['identified_by_person_id'] = $identby;
          }
          $dumm = $input['jform']['user_details']['website'];
@@ -521,18 +604,27 @@ class IssuetrackerModelItissues extends JModelItem
             $data['progress'] .= 'Web Site: ' .  $dumm . "<br />";
          }
       } else {
+         // Just in case!
+         if ( empty($data['identified_by_person_id'] ) )
+            $data['identified_by_person_id'] =  IssueTrackerHelper::get_itpeople_id($user->id);
+
          // If a registered user is editing then capture the additional information.
-         $additional_data = $input['jform']['additional_info'];
-         $additional_data = JFilterOutput::cleanText($additional_data);
-         if ( ! empty($additional_data)) {
-            // Add some additional details in here such as user updating and date/time of update.
-            $data['issue_description'] .= '<br />' . $user->username. ' '.$date.': '.$additional_data;
+         if ( array_key_exists ('additional_info', $data) ) {
+            $additional_data = $input['jform']['additional_info'];
+            $additional_data = JFilterOutput::cleanText($additional_data);
+            if ( ! empty($additional_data)) {
+               // Add some additional details in here such as user updating and date/time of update.
+               $data['issue_description'] .= '<br />' . $user->username. ' '.$date.': '.$additional_data;
+            }
          }
 
          // Check if the notification request has changed.  Need to review this logic and make it more robust.
-         $notify = $data['notify'];
-         if ( $notify != 2 )
-            $this->_upd_user_notify($user->id, $notify );
+         // key will be blank if it is an issue update where field is not displayed.
+         if ( array_key_exists ('notify', $data) && $data['notify'] != '' ) {
+            $notify = $data['notify'];
+            if ( $notify != 2 )
+               $this->_upd_user_notify($user->id, $notify );
+         }
       }
 
       // Determine whether insert or an update
@@ -571,12 +663,14 @@ class IssuetrackerModelItissues extends JModelItem
       // Bind the form fields to the table
       if (!$row->bind($data)) {
          $this->setError($this->_db->getErrorMsg());
+         // Need to remove any saved attachments
          return false;
       }
 
       // Make sure the record is valid
       if (!$row->check()) {
          $this->setError($this->_db->getErrorMsg());
+         // Need to remove any saved attachments
          return false;
       }
 
@@ -590,14 +684,83 @@ class IssuetrackerModelItissues extends JModelItem
       $pk = $data['id'];
       $this->checkin($pk);
 
+      $rid = $data['id'];
+      // Handle the attachments if there are any.
+      $file = JRequest::getVar('attachedfile', '', 'files', 'array');
+      $emptyFile = true;
+      if ( !empty($file) ) {
+         if ( !empty($file['name'])) {
+            $emptyFile = false;
+         }
+      }
+
+//      if ( !$emptyFile && $perms['attachment'] ) {
+      if ( !$emptyFile ) {
+         // Perform file load in model.
+         require_once( JPATH_ADMINISTRATOR.DS.'components'.DS.'com_issuetracker'.DS.'models'.DS.'attachment.php');
+         $attmodel = new IssuetrackerModelAttachment();
+         $attachment = $attmodel->getItem();
+
+         $ndata = array();
+
+         jimport('joomla.utilities.date');
+         $jdate = new JDate();
+
+         $ndata['created_on']  = $jdate->toSql();
+//         $ndata['enabled']     = 1;
+         $ndata['issue_id']    = $data['alias'];
+         $ndata['uid']         = $user->id;
+         $ndata['title']       = $data['issue_summary'];
+         $ndata['state']       = 1;
+
+         if ( $user->guest) {
+            $ndata['created_by']  = $Name;
+         } else {
+            $ndata['created_by']  = $user->name;
+         }
+
+         $result = $attmodel->save($ndata);
+
+         if ( !$result) {
+            $app->enqueueMessage( $this->getError(), 'error' );
+         } else {
+            $app->enqueueMessage( JText::_('COM_ISSUETRACKER_MESSAGES_FILE_ATTACHMENT_SAVED'));
+         }
+      }
+
       IssueTrackerHelper::prepare_messages( $data, '1', $new);
-      // $app = JFactory::getApplication();
       $app->enqueueMessage( JText::_('COM_ISSUETRACKER_MESSAGES_ISSUE_SAVED') . $cur_issue_no );
 
       return true;
    }
 
-/**
+   /**
+    * Returns a reference to the a Table object, always creating it.
+    *
+    * @param   type  The table type to instantiate
+    * @param   string   A prefix for the table class name. Optional.
+    * @param   array Configuration array for model. Optional.
+    * @return  JTable   A database object
+    * @since   1.6
+    */
+   public function getTable($type = 'Itissues', $prefix = 'IssueTrackerTable', $config = array())
+   {
+      return JTable::getInstance($type, $prefix, $config);
+   }
+
+   /**
+    * Method to remove a row
+    *
+    * @param   pk       The id of the row to remove
+    */
+   public function delete($pk)
+   {
+      $row = $this->getTable();
+      print("Delete row $pk<p>");
+      $row->delete($pk);
+   }
+
+   /**
     * Method to checkin/unlock the issue
     *
     * @access   public
@@ -617,9 +780,9 @@ class IssuetrackerModelItissues extends JModelItem
       return false;
    }
 
-
    private function _upd_user_notify($user_id, $value )
    {
+      $app = JFactory::getApplication();
       if (empty($db)) { $db = JFactory::getDBO(); }
       $query = 'UPDATE `#__it_people` set email_notifications = '.$value.' WHERE id = '. $db->Quote($user_id);
       $db->setQuery($query);
@@ -663,6 +826,15 @@ class IssuetrackerModelItissues extends JModelItem
       return $id;
    }
 
+   private function _get_anon_user()
+   {
+      if (empty($db)) { $db = JFactory::getDBO(); }
+      $query = "SELECT id from `#__it_people` WHERE username = 'anon'";
+      $db->setQuery( $query );
+      $id = $db->loadResult();
+      return $id;
+   }
+
    private function _getPersonid($userid)
    {
       if (empty($db)) { $db = JFactory::getDBO(); }
@@ -696,10 +868,8 @@ class IssuetrackerModelItissues extends JModelItem
 
       //OK, filters have passed. Now check link count & words
       $wordList = explode("\r\n",$this->_params->get('word_list',''));
-      if (count($wordList) > 1)
-      {
-         foreach ($wordList as $word)
-         {
+      if (count($wordList) > 1) {
+         foreach ($wordList as $word) {
             if (stristr(JRequest::getString('issue_summary'), $word)) { return 1; }
             if (stristr(JRequest::getString('issue_description'), $word)) { return 1; }
             if (stristr(JRequest::getString('additional_info'), $word)) { return 1; }
@@ -782,9 +952,7 @@ class IssuetrackerModelItissues extends JModelItem
     */
    private function _getAkismet($input)
    {
-      // print ("In getAkismet routine <p>");
       $data = $input['jform'];
-      // echo "<pre>"; var_dump($data); echo "</pre>";
 
       $akismet = new Akismet($this->_params->get('site_url'), $this->_params->get('akismet_api_key'));
       if (!$akismet->isKeyValid()){
@@ -813,6 +981,7 @@ class IssuetrackerModelItissues extends JModelItem
       $akismet->setCommentType('comment');
       return $akismet;
    }
+
 /*
    public function getForm($data = array(), $loadData = true)
    {

@@ -1,14 +1,14 @@
 <?php
 /*
  *
- * @Version       $Id: itstatus.php 197 2012-05-04 16:10:32Z geoffc $
+ * @Version       $Id: itstatus.php 669 2013-01-04 14:39:25Z geoffc $
  * @Package       Joomla Issue Tracker
  * @Subpackage    com_issuetracker
  * @Release       1.1.0
- * @Copyright     Copyright (C) 2011 - 2012 Macrotone Consulting Ltd. All rights reserved.
+ * @Copyright     Copyright (C) 2011-2013 Macrotone Consulting Ltd. All rights reserved.
  * @License       GNU General Public License version 3 or later; see LICENSE.txt
  * @Contact       support@macrotoneconsulting.co.uk
- * @Lastrevision  $Date: 2012-05-04 17:10:32 +0100 (Fri, 04 May 2012) $
+ * @Lastrevision  $Date: 2013-01-04 14:39:25 +0000 (Fri, 04 Jan 2013) $
  *
  */
 
@@ -74,11 +74,11 @@ class IssueTrackerTableItstatus extends JTable
 
       // Set up audit fields in here, and app defaults in the model.
       if ($this->id) {  // Existing item
-         $this->modified_on   = $date->toMySQL();
+         $this->modified_on   = $date->toSql();
          $this->modified_by   = $user->get('username');
       } else {
          // New issue. An issue created_on and created_by field can not be set by the user,
-         $this->created_on = $date->toMySQL();
+         $this->created_on = $date->toSql();
          $this->created_by = $user->get('username');
       }
 

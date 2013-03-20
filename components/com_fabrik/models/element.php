@@ -147,7 +147,7 @@ class plgFabrik_Element extends FabrikPlugin
 	 *
 	 * @var array
 	 */
-	var $_imageExtensions = array('jpg', 'jpeg', 'gif', 'bmp', 'png');
+	protected $imageExtensions = array('jpg', 'jpeg', 'gif', 'bmp', 'png');
 
 	/**
 	 * Is the element in a detailed view?
@@ -161,7 +161,7 @@ class plgFabrik_Element extends FabrikPlugin
 	 *
 	 * @var array
 	 */
-	var $defaults = array();
+	public $defaults = array();
 
 	/**
 	 * The element's HTML ids based on $repeatCounter
@@ -239,6 +239,9 @@ class plgFabrik_Element extends FabrikPlugin
 	 * @var  string
 	 */
 	protected $fieldSize = '255';
+
+	/** @var string element error msg */
+	protected $elementError = '';
 
 	/**
 	 * Constructor
@@ -535,7 +538,7 @@ class plgFabrik_Element extends FabrikPlugin
 		$iconfile = $params->get('icon_file', '');
 
 		$cleanData = $iconfile === '' ? FabrikString::clean(strip_tags($data)) : $iconfile;
-		foreach ($this->_imageExtensions as $ex)
+		foreach ($this->imageExtensions as $ex)
 		{
 			$f = JPath::clean($cleanData . '.' . $ex);
 			$img = FabrikHelperHTML::image($cleanData . '.' . $ex, $view, $tmpl);
@@ -1061,7 +1064,7 @@ class plgFabrik_Element extends FabrikPlugin
 				 * was causing the default to be eval'd twice (no idea y) - add in check for 'return' into eval string
 				 * see http://fabrikar.com/forums/showthread.php?t=30859
 				 */
-				if (!stristr($default, 'return'))
+				if (is_string($default) && !stristr($default, 'return'))
 				{
 					$this->_default = $default;
 				}
@@ -1610,6 +1613,27 @@ class plgFabrik_Element extends FabrikPlugin
 	}
 
 	/**
+	 * Set and override element full name (used in pw element)
+	 *
+	 * @param   string  $name               Element name
+	 * @param   bool    $includeJoinString  Add join[joinid][] to element name (default true)
+	 * @param   bool    $useStep            Cconcat name with form's step element (true) or with '.' (false) default true
+	 * @param   bool    $incRepeatGroup     Include '[]' at the end of the name (used for repeat group elements) default true
+	 *
+	 * @return  void
+	 */
+
+	public function setFullName($name = '', $includeJoinString = true, $useStep = true, $incRepeatGroup = true)
+	{
+		$groupModel = $this->getGroup();
+		$formModel = $this->getFormModel();
+		$element = $this->getElement();
+		$key = $element->id . '.' . $groupModel->get('id') . '_' . $formModel->getId() . '_' . $includeJoinString . '_' . $useStep . '_'
+				. $incRepeatGroup;
+		$this->fullNames[$key] = $name;
+	}
+
+	/**
 	 * If already run then stored value returned
 	 *
 	 * @param   bool  $includeJoinString  add join[joinid][] to element name (default true)
@@ -1950,10 +1974,36 @@ class plgFabrik_Element extends FabrikPlugin
 		{
 			$c[] = 'fabrikHide';
 		}
+		else
+		{
+			// $$$ hugh - adding a class name for repeat groups, as per:
+			// http://fabrikar.com/forums/showthread.php?p=165128#post165128
+			// But as per my repsonse on that thread, if this turns out to be a performance
+			// hit, may take it out.  That said, I think having this class will make things
+			// easier for custom styling when the element ID isn't constant.
+			$groupModel = $this->getGroupModel();
+			if ($groupModel->canRepeat())
+			{
+				// $$$ hugh - decided don't need to differentiate between list / table type, saves getParams anyway
+				/*
+				$groupParams = $groupModel->getParams();
+				if ($groupParams->get('repeat_template', 'repeatgroup') == 'repeatgroup_table')
+				{
+					$c[] = 'fabrikRepeatGroupTable___' . $this->getFullName(false, true, false);
+				}
+				else
+				{
+					$c[] = 'fabrikRepeatGroupList___' . $this->getFullName(false, true, false);
+				}
+				*/
+				$c[] = 'fabrikRepeatGroup___' . $this->getFullName(false, true, false);
+			}
+		}
 		if ($element->error != '')
 		{
 			$c[] = 'fabrikError';
 		}
+
 		return implode(' ', $c);
 	}
 
@@ -4593,13 +4643,14 @@ FROM (SELECT DISTINCT $item->db_primary_key, $name AS value, $label AS label FRO
 	/**
 	 * Returns javascript which creates an instance of the class defined in formJavascriptClass()
 	 *
-	 * @param   int  $repeatCounter  repeat group counter
+	 * @param   int  $repeatCounter  Repeat group counter
 	 *
-	 * @return  string
+	 * @return  array
 	 */
 
 	public function elementJavascript($repeatCounter)
 	{
+		return array();
 	}
 
 	/**
@@ -4630,6 +4681,7 @@ FROM (SELECT DISTINCT $item->db_primary_key, $name AS value, $label AS label FRO
 		$opts->repeatCounter = $repeatCounter;
 		$opts->editable = ($this->canView() && !$this->canUse()) ? false : $this->isEditable();
 		$opts->value = $this->getValue($data, $repeatCounter);
+		$opts->label = $element->label;
 		$opts->defaultVal = $this->getDefaultValue($data);
 		$opts->inRepeatGroup = $this->getGroup()->canRepeat() == 1;
 		$validationEls = array();
@@ -5521,7 +5573,8 @@ FROM (SELECT DISTINCT $item->db_primary_key, $name AS value, $label AS label FRO
 		// Needed for ajax update (since we are calling this method via dispatcher element is not set)
 		$this->setId(JRequest::getInt('element_id'));
 		$this->getElement(true);
-		$cache = FabrikWorker::getCache();
+		$listModel = $this->getListModel();
+		$cache = FabrikWorker::getCache($listModel);
 		$search = JRequest::getVar('value');
 		echo $cache->call(array(get_class($this), 'cacheAutoCompleteOptions'), $this, $search);
 	}
@@ -6131,7 +6184,8 @@ FROM (SELECT DISTINCT $item->db_primary_key, $name AS value, $label AS label FRO
 			}
 
 			$html .= '</div>';
-			$onLoad = "Fabrik.inlineedit_$elementid = " . $this->elementJavascript($repeatCounter) . ";\n"
+			$elementJS = $this->elementJavascript($repeatCounter);
+			$onLoad = "Fabrik.inlineedit_$elementid = new " . $elementJS[0] . '("' . $elementJS[1] . '",' . json_encode($elementJS[2]) . ");\n"
 				. "Fabrik.inlineedit_$elementid.select();
 			Fabrik.inlineedit_$elementid.focus();
 			Fabrik.inlineedit_$elementid.token = '" . JSession::getFormToken() . "';\n";
@@ -6341,14 +6395,14 @@ FROM (SELECT DISTINCT $item->db_primary_key, $name AS value, $label AS label FRO
 	}
 
 	/**
-	 * unset the element models access
+	 * Unset the element models access
 	 *
 	 * @return  null
 	 */
 
 	public function clearAccess()
 	{
-		unset($this->access);
+		unset($this->_access);
 	}
 
 	/**

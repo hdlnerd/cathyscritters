@@ -1,14 +1,14 @@
 <?php
 /*
  *
- * @Version       $Id: view.html.php 414 2012-09-04 16:33:46Z geoffc $
+ * @Version       $Id: view.html.php 734 2013-02-26 16:46:37Z geoffc $
  * @Package       Joomla Issue Tracker
  * @Subpackage    com_issuetracker
- * @Release       1.2.1
- * @Copyright     Copyright (C) 2011 - 2012 Macrotone Consulting Ltd. All rights reserved.
+ * @Release       1.3.0
+ * @Copyright     Copyright (C) 2011-2013 Macrotone Consulting Ltd. All rights reserved.
  * @License       GNU General Public License version 3 or later; see LICENSE.txt
  * @Contact       support@macrotoneconsulting.co.uk
- * @Lastrevision  $Date: 2012-09-04 17:33:46 +0100 (Tue, 04 Sep 2012) $
+ * @Lastrevision  $Date: 2013-02-26 16:46:37 +0000 (Tue, 26 Feb 2013) $
  *
  */
 defined('_JEXEC') or die;
@@ -40,11 +40,16 @@ class IssueTrackerViewForm extends JView
       $app     = JFactory::getApplication();
       $user    = JFactory::getUser();
 
+      $buttons1 = 'articlesanywhere,modulesanywhere,tabs,tabber,image,pagebreak,readmore,article';
+      $buttons2 = 'articlesanywhere,modulesanywhere,tabs,tabber,pagebreak,readmore,image,article,toggle editor';
+      $buttons3 = 'articlesanywhere,modulesanywhere,tabs,tabber,pagebreak,readmore,article';
+
       // Get model data.
       $this->state      = $this->get('State');
       $this->item       = $this->get('Item');
       $this->form       = $this->get('Form');
       $this->print      = JRequest::getBool('print');
+      $this->pid        = $this->state->get('project_value');
 
       $viewonly         = 0;
 
@@ -90,11 +95,11 @@ class IssueTrackerViewForm extends JView
                // $this->state->params->set('show_product_req','0');
                // $this->form->setFieldAttribute('issue_summary',             'type',     'editor');
                // $this->form->setFieldAttribute('issue_summary',             'filter',   'safehtml');
-               // $this->form->setFieldAttribute('issue_summary',             'hide',     'articlesanywhere,image,pagebreak,readmore,article');
+               // $this->form->setFieldAttribute('issue_summary',             'hide',     $buttons1);
                // $this->form->setFieldAttribute('issue_description',         'readonly', 'true');
                // $this->form->setFieldAttribute('issue_description',         'type',     'editor');
                // $this->form->setFieldAttribute('issue_description',         'filter',   'safehtml');
-               // $this->form->setFieldAttribute('issue_description',         'hide',     'articlesanywhere,image,pagebreak,readmore,article');
+               // $this->form->setFieldAttribute('issue_description',         'hide',     $buttons1);
                $this->form->setFieldAttribute('additional_info',           'required', 'true');
                // $this->form->setFieldAttribute('additional_info',           'readonly', 'false');
                if ( $wysiwyg == 1 ) {
@@ -102,12 +107,12 @@ class IssueTrackerViewForm extends JView
                } else {
                   $this->form->setFieldAttribute('additional_info',           'type',     'textarea');
                }
-               // $this->form->setFieldAttribute('additional_info',           'hide',     'articlesanywhere,image,pagebreak,readmore,article');
+               // $this->form->setFieldAttribute('additional_info',           'hide',     $buttons1);
                $this->form->setFieldAttribute('additional_info',           'filter',   'safehtml');
                // $this->form->setFieldAttribute('resolution_summary',        'type',     'editor');
                // $this->form->setFieldAttribute('resolution_summary',        'filter',   'safehtml');
                // $this->form->setFieldAttribute('resolution_summary',        'readonly', 'true');
-               // $this->form->setFieldAttribute('resolution_summary',        'hide',     'articlesanywhere,image,pagebreak,readmore,article');
+               // $this->form->setFieldAttribute('resolution_summary',        'hide',     $buttons1);
                // Restrictive status to open or closed for the user editing only.
                // $this->form->setFieldAttribute('status',                 'type',     'issuetracker_r_status');
                $this->form->setFieldAttribute('identified_by_person_id',   'readonly', 'true');
@@ -131,22 +136,23 @@ class IssueTrackerViewForm extends JView
                // $this->form->setFieldAttribute('progress',                  'type',     'editor');
                // $this->form->setFieldAttribute('progress',                  'filter',   'safehtml');
                // $this->form->setFieldAttribute('progress',                  'buttons',  'false');
-               // $this->form->setFieldAttribute('progress',                  'hide',     'articlesanywhere,pagebreak,readmore,image,article,toggle editor');
+               // $this->form->setFieldAttribute('progress',                  'hide',     $buttons2);
             }
 
             if ( $isadmin ) {
                // Specific administrator only changable fields
+               $this->state->params->set('show_details_section','1');
                $this->state->params->set('admin_edit','1');
                $this->state->params->set('show_target_date_field','1');
                $this->form->setFieldAttribute('issue_summary',             'type',     'editor');
                $this->form->setFieldAttribute('issue_summary',             'filter',   'safehtml');
-               $this->form->setFieldAttribute('issue_summary',             'hide',     'articlesanywhere,pagebreak,image,readmore,article');
+               $this->form->setFieldAttribute('issue_summary',             'hide',     $buttons1);
                $this->form->setFieldAttribute('additional_info',           'type',     'hidden');
                $this->form->setFieldAttribute('additional_info',           'required', 'false');
                $this->form->setFieldAttribute('notify',                    'type',     'hidden');
                $this->form->setFieldAttribute('issue_description',         'type',     'editor');
                $this->form->setFieldAttribute('issue_description',         'filter',   'safehtml');
-               $this->form->setFieldAttribute('issue_description',         'hide',     'articlesanywhere,pagebreak,readmore,article');
+               $this->form->setFieldAttribute('issue_description',         'hide',     $buttons2);
                $this->form->setFieldAttribute('identified_by_person_id',   'type',     'issuetrackerperson');
                $this->form->setFieldAttribute('identified_date',           'type',     'calendar');
                $this->form->setFieldAttribute('identified_date',           'readonly', 'false');
@@ -157,7 +163,7 @@ class IssueTrackerViewForm extends JView
                $this->form->setFieldAttribute('priority',                  'type',     'issuetrackerpriority');
                $this->form->setFieldAttribute('resolution_summary',        'type',     'editor');
                $this->form->setFieldAttribute('resolution_summary',        'filter',   'safehtml');
-               $this->form->setFieldAttribute('resolution_summary',        'hide',     'articlesanywhere,pagebreak,readmore,article');
+               $this->form->setFieldAttribute('resolution_summary',        'hide',     $buttons3);
                $this->state->params->set('show_target_date_field','1');
                $this->form->setFieldAttribute('target_resolution_date',   'type',     'calendar');
                $this->state->params->set('show_actual_res_date','1');
@@ -175,7 +181,7 @@ class IssueTrackerViewForm extends JView
                $this->state->params->set('show_progress_field','1');
                $this->form->setFieldAttribute('progress', 'type',    'editor');
                $this->form->setFieldAttribute('progress', 'filter',  'safehtml');
-               $this->form->setFieldAttribute('progress', 'hide',    'articlesanywhere,pagebreak,readmore,article');
+               $this->form->setFieldAttribute('progress', 'hide',    $buttons3);
 
                // Required to prevent saving error
                $this->form->setFieldAttribute('product_version', 'required', 'false');
@@ -198,9 +204,9 @@ class IssueTrackerViewForm extends JView
                   $this->form->setFieldAttribute('issue_description',   'type', 'textarea');
                }
                $this->form->setFieldAttribute('issue_summary',       'filter',   'safehtml');
-               $this->form->setFieldAttribute('issue_summary',       'hide',     'articlesanywhere,pagebreak,image,readmore,article');
+               $this->form->setFieldAttribute('issue_summary',       'hide',     $buttons1);
                $this->form->setFieldAttribute('additional_info',     'type',     'hidden');
-               $this->form->setFieldAttribute('issue_description',   'hide',     'articlesanywhere,pagebreak,readmore,article');
+               $this->form->setFieldAttribute('issue_description',   'hide',     $buttons3);
                $this->form->setFieldAttribute('issue_description',   'readonly', 'false');
                $this->form->setFieldAttribute('issue_description',   'disabled', 'false');
                $this->form->setFieldAttribute('issue_description',   'required', 'true');
@@ -211,17 +217,18 @@ class IssueTrackerViewForm extends JView
 
             if ( $isadmin ) {
                // Allow admin to open and closed with all progress and resolution fields available
+               $this->state->params->set('show_details_section','1');
                $this->state->params->set('admin_edit','1');
                $this->state->params->set('show_product_req','0');
                $this->form->setFieldAttribute('notify',                    'type',     'hidden');
                $this->state->params->set('show_resolution_field','1');
                $this->form->setFieldAttribute('resolution_summary',        'type',     'editor');
                $this->form->setFieldAttribute('resolution_summary',        'filter',   'safehtml');
-               $this->form->setFieldAttribute('resolution_summary',        'hide',     'articlesanywhere,pagebreak,readmore,article');
+               $this->form->setFieldAttribute('resolution_summary',        'hide',     $buttons3);
                $this->state->params->set('show_progress_field','1');
                $this->form->setFieldAttribute('progress',                  'type',     'editor');
                $this->form->setFieldAttribute('progress',                  'filter',   'safehtml');
-               $this->form->setFieldAttribute('progress',                  'hide',     'articlesanywhere,pagebreak,readmore,article');
+               $this->form->setFieldAttribute('progress',                  'hide',     $buttons3);
                $this->state->params->set('show_target_date_field','1');
                $this->form->setFieldAttribute('target_resolution_date',    'type',     'calendar');
                $this->state->params->set('show_actual_res_date','1');
@@ -240,7 +247,7 @@ class IssueTrackerViewForm extends JView
                // $this->form->setFieldAttribute('issue_description', 'disabled', 'false');
                // $this->form->setFieldAttribute('issue_description', 'type', 'editor');
                // $this->form->setFieldAttribute('issue_description', 'filter', 'safehtml');
-               // $this->form->setFieldAttribute('issue_description', 'hide', 'articlesanywhere,pagebreak,readmore,article');
+               // $this->form->setFieldAttribute('issue_description', 'hide', $buttons3);
                $this->form->setFieldAttribute('additional_info',           'required', 'false');
                $this->form->setFieldAttribute('product_version',           'required', 'false');
                $this->form->setFieldAttribute('pdetails',                  'required', 'false');
@@ -260,7 +267,7 @@ class IssueTrackerViewForm extends JView
          $this->form->setFieldAttribute('issue_description', 'type', 'editor');
          $this->form->setFieldAttribute('issue_description', 'filter', 'safehtml');
          $this->form->setFieldAttribute('issue_description', 'buttons', 'false');
-         $this->form->setFieldAttribute('issue_description', 'hide', 'articlesanywhere,pagebreak,readmore,image,article,toggle editor');
+         $this->form->setFieldAttribute('issue_description', 'hide', $buttons2);
          $this->form->setFieldAttribute('identified_date', 'readonly', 'true');
          $this->form->setFieldAttribute('identified_date', 'disabled', 'true');
          $this->form->setFieldAttribute('alias', 'type', 'hidden');
@@ -291,11 +298,11 @@ class IssueTrackerViewForm extends JView
          $this->form->setFieldAttribute('resolution_summary', 'type', 'editor');
          $this->form->setFieldAttribute('resolution_summary', 'filter', 'safehtml');
          $this->form->setFieldAttribute('resolution_summary', 'buttons', 'false');
-         $this->form->setFieldAttribute('resolution_summary', 'hide', 'articlesanywhere,pagebreak,readmore,image,article,toggle editor');
+         $this->form->setFieldAttribute('resolution_summary', 'hide', $buttons2);
          $this->form->setFieldAttribute('progress', 'type', 'editor');
          $this->form->setFieldAttribute('progress', 'filter', 'safehtml');
          $this->form->setFieldAttribute('progress', 'buttons', 'false');
-         $this->form->setFieldAttribute('progress', 'hide', 'articlesanywhere,pagebreak,readmore,image,article,toggle editor');
+         $this->form->setFieldAttribute('progress', 'hide', $buttons2);
 
          $this->form->setFieldAttribute('target_resolution_date', 'required', 'false');
          $this->form->setFieldAttribute('target_resolution_date', 'readonly', 'true');
@@ -379,6 +386,13 @@ class IssueTrackerViewForm extends JView
          $title = JText::sprintf('JPAGETITLE', $title, $app->getCfg('sitename'));
       }
       $this->document->setTitle($title);
+
+      // Special case to trap situation where we are called from the projects list links.
+      if ( empty($menu) || strpos($menu->link, 'itprojectslist') ) {
+         $ntitle = JText::_('COM_ISSUETRACKER_PROJECT_FORM_CREATEISSUE_TITLE');
+         $this->document->setTitle($ntitle);
+         $this->parameters->set('page_heading', $ntitle);
+      }
 
       if (!empty($data->id)) {
          $pathway = $app->getPathWay();

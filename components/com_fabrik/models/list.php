@@ -796,7 +796,7 @@ class FabrikFEModelList extends JModelForm
 		$query = $this->_buildQuery();
 		JDEBUG ? $profiler->mark('query build end') : null;
 
-		$cache = FabrikWorker::getCache();
+		$cache = FabrikWorker::getCache($this);
 		$results = $cache->call(array(get_class($this), 'finesseData'), $this->getId(), $query, $this->limitStart, $this->limitLength, $this->outPutFormat);
 		$this->totalRecords = $results[0];
 		$this->_data = $results[1];
@@ -1179,8 +1179,14 @@ class FabrikFEModelList extends JModelForm
 		$tmpKey = '__pk_val';
 		$factedlinks = $params->get('factedlinks');
 
-		// Get a list of fabrik tables and ids for view table and form links
-		$linksToForms = $this->getLinksToThisKey();
+		// Get a list of fabrik lists and ids for view list and form links
+		$oldLinksToForms = $this->getLinksToThisKey();
+		$linksToForms = array();
+		foreach ($oldLinksToForms as $join)
+		{
+			$k = $join->list_id . '-' . $join->form_id . '-' . $join->element_id;
+			$linksToForms[$k] = $join;
+		}
 		$action = $app->isAdmin() ? 'task' : 'view';
 		$query = $db->getQuery(true);
 		$query->select('id, label, db_table_name')->from('#__{package}_lists');
@@ -1313,19 +1319,18 @@ class FabrikFEModelList extends JModelForm
 					$row->fabrik_actions['fabrik_delete'] = $this->deleteButton();
 				}
 				// Create columns containing links which point to tables associated with this table
-				$joinsToThisKey = $this->getJoinsToThisKey();
-				$f = 0;
-				$keys = isset($factedlinks->linkedlist) ? array_keys(JArrayHelper::fromObject($factedlinks->linkedlist)) : array();
-				for ($ii = 0; $ii < count($joinsToThisKey); $ii++)
+				$oldJoinsToThisKey = $this->getJoinsToThisKey();
+				$joinsToThisKey = array();
+				foreach ($oldJoinsToThisKey as $join)
 				{
-					if (!array_key_exists($f, $keys))
-					{
-						continue;
-					}
-					$join = $joinsToThisKey[$ii];
-					$linkedTable = $factedlinks->linkedlist->$keys[$f];
-					$popupLink = $factedlinks->linkedlist_linktype->$keys[$f];
-					$linkedListText = $factedlinks->linkedlisttext->$keys[$f];
+					$k = $join->list_id . '-' . $join->form_id . '-' . $join->element_id;
+					$joinsToThisKey[$k] = $join;
+				}
+				foreach ($joinsToThisKey as $f => $join)
+				{
+					$linkedTable = $factedlinks->linkedlist->$f;
+					$popupLink = $factedlinks->linkedlist_linktype->$f;
+					$linkedListText = $factedlinks->linkedlisttext->$f;
 					if ($linkedTable != '0')
 					{
 						$recordKey = $join->element_id . '___' . $linkedTable;
@@ -1356,33 +1361,27 @@ class FabrikFEModelList extends JModelForm
 					$f++;
 				}
 
-				$f = 0;
-
 				// Create columns containing links which point to forms assosciated with this table
-				foreach ($linksToForms as $join)
+				foreach ($linksToForms as $f => $join)
 				{
-					if (array_key_exists($f, $keys))
+					$linkedForm = $factedlinks->linkedform->$f;
+					$popupLink = $factedlinks->linkedform_linktype->$f;
+					/* $$$ hugh @TODO - rob, can you check this, I added this line,
+					 * but the logic applied for $val in the linked table code above seems to be needed?
+					* http://fabrikar.com/forums/showthread.php?t=9535
+					*/
+					$val = $pKeyVal;
+					if ($linkedForm !== '0')
 					{
-						$linkedForm = $factedlinks->linkedform->$keys[$f];
-						$popupLink = $factedlinks->linkedform_linktype->$keys[$f];
-						/* $$$ hugh @TODO - rob, can you check this, I added this line,
-						 * but the logic applied for $val in the linked table code above seems to be needed?
-						* http://fabrikar.com/forums/showthread.php?t=9535
-						*/
-						$val = $pKeyVal;
-						if ($linkedForm !== '0')
+						if (is_object($join))
 						{
-							if (is_object($join))
-							{
-								// $$$rob moved these two lines here as there were giving warnings since Hugh commented out the if ($element != '') {
-								$linkKey = @$join->db_table_name . '___' . @$join->name;
-								$gkey = $linkKey . '_form_heading';
-								$row2 = JArrayHelper::fromObject($row);
-								$linkLabel = $this->parseMessageForRowHolder($factedlinks->linkedformtext->$keys[$f], $row2);
-								$group[$i]->$gkey = $this->viewFormLink($popupLink, $join, $row, $linkKey, $val, false, $f);
-							}
+							// $$$rob moved these two lines here as there were giving warnings since Hugh commented out the if ($element != '') {
+							$linkKey = @$join->db_table_name . '___' . @$join->name;
+							$gkey = $linkKey . '_form_heading';
+							$row2 = JArrayHelper::fromObject($row);
+							$linkLabel = $this->parseMessageForRowHolder($factedlinks->linkedformtext->$f, $row2);
+							$group[$i]->$gkey = $this->viewFormLink($popupLink, $join, $row, $linkKey, $val, false, $f);
 						}
-						$f++;
 					}
 				}
 			}
@@ -4830,9 +4829,27 @@ class FabrikFEModelList extends JModelForm
 	{
 		if (!isset($this->_real_filter_action))
 		{
-			$form = $this->getFormModel();
+			// first, grab the list's setting as the default
 			$table = $this->getTable();
 			$this->_real_filter_action = $table->filter_action;
+
+			// Check to see if any list filter plugins require a Go button, like radius search
+			$pluginManager = FabrikWorker::getPluginManager();
+			$listPlugins = $pluginManager->getPlugInGroup('list');
+
+			$pluginManager->runPlugins('requireFilterSubmit', $this, 'list');
+			$res = $pluginManager->_data;
+			if (!empty($res))
+			{
+				if (in_array(1, $res))
+				{
+					$this->_real_filter_action = 'submitform';
+					return $this->_real_filter_action;
+				}
+			}
+
+			// No list plugins expressed a preference, so check for range filters
+			$form = $this->getFormModel();
 			$groups = $form->getGroupsHiarachy();
 			foreach ($groups as $groupModel)
 			{
@@ -5679,7 +5696,14 @@ class FabrikFEModelList extends JModelForm
 		$w = new FabrikWorker;
 		$session = JFactory::getSession();
 		$formModel = $this->getFormModel();
-		$linksToForms = $this->getLinksToThisKey();
+		//$linksToForms = $this->getLinksToThisKey();
+		$oldLinksToForms = $this->getLinksToThisKey();
+		$linksToForms = array();
+		foreach ($oldLinksToForms as $join)
+		{
+			$k = $join->list_id . '-' . $join->form_id . '-' . $join->element_id;
+			$linksToForms[$k] = $join;
+		}
 		$groups = $formModel->getGroupsHiarachy();
 		$groupHeadings = array();
 
@@ -5846,13 +5870,12 @@ class FabrikFEModelList extends JModelForm
 			}
 
 			$f = 0;
-			foreach ($linksToForms as $join)
+			foreach ($linksToForms as $key => $join)
 			{
 				if ($join === false)
 				{
 					continue;
 				}
-				$key = $join->list_id . '-' . $join->form_id . '-' . $join->element_id;
 				$linkedForm = $factedlinks->linkedform->$key;
 				if ($linkedForm != '0')
 				{
@@ -6511,7 +6534,12 @@ class FabrikFEModelList extends JModelForm
 			$tmp[] = $db->quoteName($k) . '=' . $val;
 		}
 		$db->setQuery(sprintf($fmtsql, implode(",", $tmp), $where));
-		return $db->query();
+		if (!$db->query())
+		{
+			throw new Exception($db->getErrorMsg());
+			return false;
+		}
+		return true;
 	}
 
 	/**
@@ -6554,6 +6582,7 @@ class FabrikFEModelList extends JModelForm
 		$db->setQuery(sprintf($fmtsql, implode(",", $fields), implode(",", $values)));
 		if (!$db->query())
 		{
+			throw new Exception($db->getErrorMsg());
 			return false;
 		}
 		$id = $db->insertid();
@@ -6795,7 +6824,7 @@ class FabrikFEModelList extends JModelForm
 
 	public function doCalculations()
 	{
-		$cache = FabrikWorker::getCache();
+		$cache = FabrikWorker::getCache($this);
 		$cache->call(array(get_class($this), 'cacheDoCalculations'), $this->getId());
 	}
 
@@ -8268,7 +8297,7 @@ class FabrikFEModelList extends JModelForm
 		if (!array_key_exists($col, $this->columnData))
 		{
 			$fbConfig = JComponentHelper::getParams('com_fabrik');
-			$cache = FabrikWorker::getCache();
+			$cache = FabrikWorker::getCache($this);
 			$res = $cache->call(array(get_class($this), 'columnData'), $this->getId(), $col, $distinct);
 			if (is_null($res))
 			{
