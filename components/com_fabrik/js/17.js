@@ -193,32 +193,34 @@ function popDurationPulldown () {
 	var url_dur='index.php?option=com_fabrik&format=raw&task=plugin.userAjax&method=getValidDurations';
 	
 	data_dur='base_package='+base_package+'&coupon_code='+coupon_code;
+	alert("Calling getValidDurations with:" + data_dur);
 	
 	//alert("Data to getValidDurations= "+url_dur+":::"+data_dur);
-	new Request(
-		{url: url_dur, method: 'post', 
-			onSuccess:
-			function(r){
-				//console.log("popDurationPulldown success AJAX call");
-				//console.log(r);
-				var r_array = JSON.parse(r);
-				//alert(r_array);
-				emptyDropdown ( $('cc1_critters_reservations___package_duration') );
-				fillDropdown ( $('cc1_critters_reservations___package_duration'), r_array );
-				$('cc1_critters_reservations___package_duration').set('disabled', '');
-				//for ( var count = 0; count < r_array.length; count++) {
-				//	console.log(r_array[count]);
-				//}
-			},
-			onRequest:
-			function(r){
-				//alert("Just requested.  Let's gray out duration.");
-				$('cc1_critters_reservations___package_duration').set('disabled', 'disabled');
-			},
-			onFailure:
-			function(r){
-				alert("popDurationPulldown failed AJAX call");
+	if (base_package > 0) {
+		new Request(
+			{url: url_dur, method: 'post', 
+				onSuccess:
+				function(r){
+					//console.log("popDurationPulldown success AJAX call");
+					//console.log(r);
+					var r_array = JSON.parse(r);
+					emptyDropdown ( $('cc1_critters_reservations___package_duration') );
+					fillDropdown ( $('cc1_critters_reservations___package_duration'), r_array );
+					$('cc1_critters_reservations___package_duration').set('disabled', '');
+					//for ( var count = 0; count < r_array.length; count++) {
+					//	console.log(r_array[count]);
+					//}
+				},
+				onRequest:
+				function(r){
+					//alert("Just requested.  Let's gray out duration.");
+					$('cc1_critters_reservations___package_duration').set('disabled', 'disabled');
+				},
+				onFailure:
+				function(r){
+					alert("popDurationPulldown failed AJAX call");
+				}
 			}
-		}
-	).send(data_dur);
+		).send(data_dur);
+	}
 }
