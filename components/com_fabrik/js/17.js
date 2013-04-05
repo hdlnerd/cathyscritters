@@ -193,7 +193,7 @@ function popDurationPulldown () {
 	var url_dur='index.php?option=com_fabrik&format=raw&task=plugin.userAjax&method=getValidDurations';
 	
 	data_dur='base_package='+base_package+'&coupon_code='+coupon_code;
-	alert("Calling getValidDurations with:" + data_dur);
+	//alert("Calling getValidDurations with:" + data_dur);
 	
 	//alert("Data to getValidDurations= "+url_dur+":::"+data_dur);
 	if (base_package > 0) {
