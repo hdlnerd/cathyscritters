@@ -90,6 +90,13 @@ function updatePrice () {
 	var numpics      = $('cc1_critters_reservations___reservations_photo_quantity').getValue();
 	var concrete     = $('cc1_critters_reservations___reservations_concrete_checked').getElements('input')[0].checked;
 	var travel       = 0;
+
+	//
+	// Needed for twilight discount
+	//
+	//var partydate    = $('cc1_critters_reservations___reservations_partydate').getValue();
+	//var partytime    = $('cc1_critters_reservations___reservations_partytime').getValue();
+
 	//alert(String($('cc1_critters_reservations___ishomeaddress').getElements('input')[1].checked));
   var party_elsewhere = $('cc1_critters_reservations___ishomeaddress').getElements('input')[1].checked;
 	var enable_submit = (base_package > 0) && (numponies >= 0) && (duration > 0);
@@ -158,6 +165,7 @@ function updatePrice () {
 				var url_pz='index.php?option=com_fabrik&format=raw&task=plugin.userAjax&method=calcPZBasePrice';
 	
 				data_pz='base_package='+base_package+'&duration='+duration+'&numponies='+numponies+'&pictures='+pictures+'&numpics='+numpics+'&concrete='+concrete+'&travel='+travel+'&cityfee='+cityfee;
+				//data_pz='base_package='+base_package+'&duration='+duration+'&numponies='+numponies+'&pictures='+pictures+'&numpics='+numpics+'&concrete='+concrete+'&travel='+travel+'&cityfee='+cityfee+'&partydate='+partydate+'&partytime='+partytime;
 	
 				//console.log("Data to calcPZBasePrice= "+url_pz+data_pz);
 				new Request(

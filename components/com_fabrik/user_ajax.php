@@ -68,6 +68,8 @@ class userAjax {
 		$concrete     = JRequest::getVar('concrete');
 		$travel       = JRequest::getVar('travel');
 		$cityfee      = JRequest::getVar('cityfee');
+		//$partydate    = JRequest::getVar('partydate');
+		//$partytime    = JRequest::getVar('partytime');
 
 		//Look up base petting zoo price
 		$tablename = 'cc1_critters_base_price';
@@ -127,6 +129,10 @@ class userAjax {
 				(($travel > 40) ? ($travel*1.5) : 0) +
 				$cityfee;
 		}
+		// 10% twilight discount calculations
+		//if ($partydate IN_SUMMER) and ($partytime LATER_THAN_6PM) {
+		//  $package_price = $package_price * 0.9
+		// }
 		error_log("--------------");
 		error_log("Computing price.", 0);
 		error_log("base = ".$base_price);
